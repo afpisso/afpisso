@@ -7,9 +7,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
-          'vendor-motion': ['framer-motion'],
+        manualChunks(id) {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('framer-motion')) {
+            return 'vendor-motion';
+          }
         },
       },
     },
