@@ -7,7 +7,11 @@ import GlitchStrokeText from './GlitchStrokeText';
 
 export default function CaseFiles() {
   const { t } = useLang();
-  const featured = cases.filter(c => c.featured);
+  // Public cases first, NDA-safe after — more content visible upfront
+  const VISIBILITY_ORDER = { public: 0, 'nda-safe': 1, 'password-protected': 2, 'coming-soon': 3, legacy: 4 };
+  const featured = [...cases.filter(c => c.featured)].sort(
+    (a, b) => (VISIBILITY_ORDER[a.visibility] ?? 9) - (VISIBILITY_ORDER[b.visibility] ?? 9)
+  );
 
   return (
     <section id="cases" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>

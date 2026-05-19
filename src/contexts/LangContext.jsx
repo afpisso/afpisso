@@ -4,6 +4,7 @@ const translations = {
   en: {
     nav: {
       status: 'Available',
+      statusSub: 'Freelance · Remote contracts',
       menu: 'MENU +',
       logoLabel: 'ByAndresFe — back to home',
       logoSub: 'Game UX / UI',
@@ -200,6 +201,7 @@ const translations = {
   es: {
     nav: {
       status: 'Disponible',
+      statusSub: 'Freelance · Contratos remotos',
       menu: 'MENU +',
       logoLabel: 'ByAndresFe — volver al inicio',
       logoSub: 'Game UX / UI',

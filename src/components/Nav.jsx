@@ -78,12 +78,17 @@ export default function Nav({ onMenuOpen }) {
         <div className="flex items-center gap-3">
           {/* Available pill — desktop only */}
           <div
-            aria-label={`Status: ${t.nav.status}`}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5"
+            aria-label={`Status: ${t.nav.status} — ${t.nav.statusSub}`}
+            className="hidden md:flex flex-col justify-center px-3 py-1.5"
             style={{ border: '1px solid var(--color-rule)' }}
           >
-            <div aria-hidden="true" className="pulse-dot w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-            <span className="sys-label">{t.nav.status}</span>
+            <div className="flex items-center gap-2">
+              <div aria-hidden="true" className="pulse-dot w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-accent)' }} />
+              <span className="sys-label">{t.nav.status}</span>
+            </div>
+            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '8px', letterSpacing: '0.1em', color: 'var(--color-fg-mute)', marginTop: '2px', paddingLeft: '14px' }}>
+              {t.nav.statusSub}
+            </span>
           </div>
 
           {/* Language switcher */}

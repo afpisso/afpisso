@@ -57,6 +57,26 @@ export default function Contact() {
               {ct.headline}
             </motion.p>
 
+            {/* Secondary CTA — LinkedIn */}
+            <motion.a
+              href={`https://${ct.linkedin}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn"
+              className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase mb-4"
+              style={{ fontFamily: MONO, color: 'var(--color-fg-mute)', textDecoration: 'none' }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--color-fg)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
+              onClick={() => analytics.linkedinClick('contact-section-cta')}
+            >
+              <span>Schedule a call on LinkedIn</span>
+              <span aria-hidden="true">↗</span>
+            </motion.a>
+
             <motion.a
               href={`mailto:${ct.email}`}
               aria-label={ct.cta}

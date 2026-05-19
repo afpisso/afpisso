@@ -95,6 +95,12 @@ function BootSequence({ onComplete }) {
   const [lines, setLines] = useState([]);
   const [done, setDone] = useState(false);
 
+  const skip = () => {
+    setDone(true);
+    sessionStorage.setItem('booted', '1');
+    setTimeout(onComplete, 300);
+  };
+
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -104,6 +110,7 @@ function BootSequence({ onComplete }) {
         clearInterval(interval);
         setTimeout(() => {
           setDone(true);
+          sessionStorage.setItem('booted', '1');
           setTimeout(onComplete, 400);
         }, 300);
       }
@@ -161,6 +168,35 @@ function BootSequence({ onComplete }) {
             </div>
           ))}
         </div>
+        {/* Skip button — appears after first line */}
+        {lines.length >= 1 && !done && (
+          <motion.button
+            onClick={skip}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            style={{
+              marginTop: '28px',
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '10px',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--color-fg-mute)',
+              background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.1)',
+              padding: '6px 14px',
+              cursor: 'pointer',
+              display: 'block',
+              marginLeft: 'auto',
+              transition: 'color 0.2s, border-color 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+            aria-label="Skip intro animation"
+          >
+            Skip →
+          </motion.button>
+        )}
       </div>
     </motion.div>
   );
@@ -207,14 +243,16 @@ function useActiveSection(ids) {
 
 export default function Hero() {
   const shouldReduce = useReducedMotion();
-  const [booted, setBooted] = useState(false);
+  const [booted, setBooted] = useState(
+    () => shouldReduce || sessionStorage.getItem('booted') === '1'
+  );
   const sectionRef = useRef(null);
   const { t } = useLang();
   const mouseRef = useMousePos();
   const activeSection = useActiveSection(Object.keys(SECTION_SHAPES));
   const currentShape = SECTION_SHAPES[activeSection] || 'sphere';
 
-  if (shouldReduce && !booted) setBooted(true);
+  // reducedMotion fallback handled in useState initializer above
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
