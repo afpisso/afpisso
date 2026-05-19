@@ -191,7 +191,7 @@ export const cases = [
     slug: 'the-walking-dead',
     title: 'The Walking Dead',
     role: 'UX/UI Designer',
-    platform: ['TBD'],
+    platform: ['Console / PC'],
     focus: 'Tension UX, survival feedback, HUD logic, risk communication',
     focusEs: 'UX de tensión, retroalimentación de supervivencia, lógica de HUD, comunicación de riesgo',
     status: 'NDA-SAFE',
@@ -202,9 +202,9 @@ export const cases = [
     category: 'games',
     headline: 'Designing UX/UI for tension, survival, and readable decisions under pressure.',
     description:
-      'The focus was helping players understand threat, resources, actions, and cooperation without losing the mood of the experience. Exact public title and publishable material TBD.',
+      'The focus was helping players understand threat, resources, actions, and cooperation without losing the mood of the experience. Case details are NDA-limited to design decisions and approach.',
     descriptionEs:
-      'El enfoque fue ayudar a los jugadores a entender amenazas, recursos, acciones y cooperación sin perder el tono de la experiencia. Título público exacto y material publicable por definir.',
+      'El enfoque fue ayudar a los jugadores a entender amenazas, recursos, acciones y cooperación sin perder el tono de la experiencia. Los detalles del caso están limitados por NDA a decisiones de diseño y enfoque.',
     tags: ['NDA-Safe', 'HUD Design', 'Survival UX', 'Tension', 'Feedback Systems'],
     cta: 'View NDA-safe breakdown',
     content: {
@@ -212,7 +212,7 @@ export const cases = [
         'A survival experience connected to The Walking Dead IP. My work focused on interface logic for threat communication, resource readability, and cooperative action feedback. Some details are intentionally simplified because of confidentiality. The focus here is the design problem, my role, and the type of decisions I helped shape.',
       quickFacts: {
         role: 'UX/UI Designer',
-        platform: 'TBD',
+        platform: 'Console / PC',
         status: 'In production / NDA',
         confidentiality: 'NDA-safe breakdown. Some details are intentionally redacted. Visual assets not available for public sharing.',
       },

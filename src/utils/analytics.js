@@ -15,9 +15,9 @@
  *   </script>
  *
  * ─── To enable Plausible ─────────────────────────────────────────────────────
- * Add to index.html <head>, replacing afpisso.com with your domain:
+ * Add to index.html <head>, replacing byandresfe.com with your domain:
  *
- *   <script defer data-domain="afpisso.com"
+ *   <script defer data-domain="byandresfe.com"
  *     src="https://plausible.io/js/script.js"></script>
  */
 

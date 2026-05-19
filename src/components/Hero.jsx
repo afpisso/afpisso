@@ -63,25 +63,32 @@ const bootLines = [
 
 function CountUp({ target, suffix = '' }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const inView = useInView(ref, { once: true, margin: '0px' });
   const [count, setCount] = useState(0);
   const numeric = parseInt(target, 10);
+  // Preserve any non-numeric trailing characters (e.g. '+') from the target string
+  const trailMatch = String(target).match(/[^0-9]+$/);
+  const trail = trailMatch ? trailMatch[0] : suffix;
 
   useEffect(() => {
     if (!inView || isNaN(numeric)) return;
-    const duration = 1800;
-    const startTime = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - (1 - progress) ** 3;
-      setCount(Math.round(eased * numeric));
-      if (progress < 1) requestAnimationFrame(tick);
-      else setCount(numeric);
-    };
-    requestAnimationFrame(tick);
+    // Small delay so entry animations finish before counter fires
+    const delay = setTimeout(() => {
+      const duration = 1800;
+      const startTime = performance.now();
+      const tick = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - (1 - progress) ** 3;
+        setCount(Math.round(eased * numeric));
+        if (progress < 1) requestAnimationFrame(tick);
+        else setCount(numeric);
+      };
+      requestAnimationFrame(tick);
+    }, 300);
+    return () => clearTimeout(delay);
   }, [inView, numeric]);
 
-  return <span ref={ref}>{isNaN(numeric) ? target : `${count}${suffix}`}</span>;
+  return <span ref={ref}>{isNaN(numeric) ? target : `${count}${trail}`}</span>;
 }
 
 function BootSequence({ onComplete }) {
