@@ -169,7 +169,7 @@ export default function About() {
                 onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               >
-                <span>Full profile</span>
+                <span>{t.about.fullProfile}</span>
                 <span aria-hidden="true">→</span>
               </Link>
             </motion.div>

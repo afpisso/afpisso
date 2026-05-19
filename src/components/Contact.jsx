@@ -73,7 +73,7 @@ export default function Contact() {
               onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               onClick={() => analytics.linkedinClick('contact-section-cta')}
             >
-              <span>Schedule a call on LinkedIn</span>
+              <span>{t.contact.linkedinCta}</span>
               <span aria-hidden="true">↗</span>
             </motion.a>
 
@@ -111,7 +111,7 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           >
-            <div className="sys-label mb-6" id="contact-channels-label">Contact channels</div>
+            <div className="sys-label mb-6" id="contact-channels-label">{t.contact.channelsLabel}</div>
             <nav aria-labelledby="contact-channels-label">
               {links.map((link, i) => (
                 <motion.a

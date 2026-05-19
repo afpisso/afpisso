@@ -58,6 +58,8 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src }) {
 }
 
 function DecisionBlock({ item, index }) {
+  const { t } = useLang();
+  const cp = t.casePage.sections;
   return (
     <motion.div
       className="relative p-6 mb-4"
@@ -70,15 +72,15 @@ function DecisionBlock({ item, index }) {
       <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: index === 0 ? ACCENT : RULE }} aria-hidden="true" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <div className="sys-label mb-2" style={{ color: ACCENT }}>Problem</div>
+          <div className="sys-label mb-2" style={{ color: ACCENT }}>{cp.problem}</div>
           <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{item.problem}</p>
         </div>
         <div>
-          <div className="sys-label mb-2" style={{ color: FG }}>Decision</div>
+          <div className="sys-label mb-2" style={{ color: FG }}>{cp.decision}</div>
           <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{item.decision}</p>
         </div>
         <div>
-          <div className="sys-label mb-2">Why it mattered</div>
+          <div className="sys-label mb-2">{cp.whyItMattered}</div>
           <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{item.why}</p>
         </div>
       </div>
@@ -148,8 +150,8 @@ export default function CasePage({ onMenuOpen }) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
         <div className="text-center">
-          <p style={{ fontFamily: MONO, color: DIM, marginBottom: 16 }}>Case not found.</p>
-          <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: ACCENT }}>← Back to work</Link>
+          <p style={{ fontFamily: MONO, color: DIM, marginBottom: 16 }}>{t.casePage.notFound}</p>
+          <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: ACCENT }}>{t.casePage.backToWork}</Link>
         </div>
       </div>
     );
@@ -239,15 +241,15 @@ export default function CasePage({ onMenuOpen }) {
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
               <div>
-                <div className="sys-label mb-1">Role</div>
+                <div className="sys-label mb-1">{t.casePage.metaRole}</div>
                 <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.role}</div>
               </div>
               <div>
-                <div className="sys-label mb-1">Platform</div>
+                <div className="sys-label mb-1">{t.casePage.metaPlatform}</div>
                 <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
               </div>
               <div>
-                <div className="sys-label mb-1">Year</div>
+                <div className="sys-label mb-1">{t.casePage.metaYear}</div>
                 <div style={{ fontFamily: MONO, fontSize: '12px', color: FG, fontVariantNumeric: 'tabular-nums' }}>{caseData.year}</div>
               </div>
               <ul className="flex flex-wrap gap-1.5 ml-auto" aria-label="Tags">
@@ -296,7 +298,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Executive summary</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.executiveSummary}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '15px', color: 'rgba(240,238,234,0.8)', lineHeight: 1.85 }}>
                     {content.summary}
                   </p>
@@ -313,7 +315,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Context</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.context}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.context}</p>
                 </motion.section>
               )}
@@ -328,7 +330,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>The challenge</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.challenge}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.challenge}</p>
                 </motion.section>
               )}
@@ -343,7 +345,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>My role</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.myRole}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.role}</p>
                 </motion.section>
               )}
@@ -358,7 +360,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Constraints</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.constraints}</SectionLabel>
                   <ul className="space-y-3">
                     {content.constraints.map((c, i) => (
                       <li key={i} className="flex gap-3 items-start">
@@ -380,7 +382,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>UX approach</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.uxApproach}</SectionLabel>
                   <div className="space-y-8">
                     {content.approach.map((item, i) => (
                       <motion.div
@@ -413,9 +415,9 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Key decisions</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.keyDecisions}</SectionLabel>
                   <p className="mb-8" style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85, maxWidth: '560px' }}>
-                    These are the design choices that shaped the most important UX outcomes of the project.
+                    {t.casePage.sections.keyDecisionsIntro}
                   </p>
                   {content.keyDecisions.map((item, i) => (
                     <DecisionBlock key={i} item={item} index={i} />
@@ -433,7 +435,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Deliverables</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.deliverables}</SectionLabel>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {content.deliverables.map((d, i) => (
                       <li key={i} className="flex gap-3 items-start py-2 border-b" style={{ borderColor: RULE }}>
@@ -455,7 +457,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Outcome</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.outcome}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.outcome}</p>
                 </motion.section>
               )}
@@ -470,7 +472,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>What I would check next</SectionLabel>
+                  <SectionLabel>{t.casePage.sections.nextSteps}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.nextSteps}</p>
                 </motion.section>
               )}
@@ -494,7 +496,7 @@ export default function CasePage({ onMenuOpen }) {
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = ACCENT}
                   >
-                    Contact me →
+                    {t.contact.contactMe}
                   </Link>
                   <Link
                     to="/work"
@@ -503,7 +505,7 @@ export default function CasePage({ onMenuOpen }) {
                     onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; e.currentTarget.style.color = FG; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = RULE; e.currentTarget.style.color = DIM; }}
                   >
-                    ← Back to work
+                    {t.casePage.backToWork}
                   </Link>
                 </div>
               </motion.section>
@@ -516,7 +518,7 @@ export default function CasePage({ onMenuOpen }) {
             >
               <div className="p-5 relative" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
                 <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: ACCENT }} aria-hidden="true" />
-                <div className="sys-label mb-4">Quick facts</div>
+                <div className="sys-label mb-4">{t.casePage.quickFacts}</div>
                 {content?.quickFacts && (
                   <dl className="space-y-4">
                     {Object.entries(content.quickFacts).filter(([k]) => k !== 'confidentiality').map(([key, val]) => (
@@ -530,7 +532,7 @@ export default function CasePage({ onMenuOpen }) {
                   </dl>
                 )}
                 <div className="mt-6 pt-5" style={{ borderTop: `1px solid ${RULE}` }}>
-                  <div className="sys-label mb-3">Platform</div>
+                  <div className="sys-label mb-3">{t.casePage.metaPlatform}</div>
                   <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(', ')}</div>
                 </div>
               </div>
@@ -544,7 +546,7 @@ export default function CasePage({ onMenuOpen }) {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = RULE}
                 >
-                  <div className="sys-label mb-1">← Prev</div>
+                  <div className="sys-label mb-1">{t.casePage.prev}</div>
                   <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{prevCase.title}</div>
                 </Link>
                 <Link
@@ -554,7 +556,7 @@ export default function CasePage({ onMenuOpen }) {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = RULE}
                 >
-                  <div className="sys-label mb-1">Next →</div>
+                  <div className="sys-label mb-1">{t.casePage.next}</div>
                   <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{nextCase.title}</div>
                 </Link>
               </div>

@@ -225,8 +225,7 @@ export default function ResumePage({ onMenuOpen }) {
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.languages}</h2>
                 <ul style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 2 }}>
-                  <li>Spanish — Native</li>
-                  <li>English — Professional</li>
+                  {r.languageList.map(l => <li key={l}>{l}</li>)}
                 </ul>
               </section>
             </motion.div>
@@ -255,7 +254,7 @@ export default function ResumePage({ onMenuOpen }) {
                 >
                   LinkedIn
                 </a>
-                <span>Colombia — Remote</span>
+                <span>{r.locationRemote}</span>
               </div>
             </motion.section>
           </div>

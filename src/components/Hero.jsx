@@ -463,7 +463,7 @@ export default function Hero() {
                 animate={booted ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.5, delay: 1.1 }}
               >
-                Current focus areas
+                {t.hero.focusAreasLabel}
               </motion.div>
               <ul className="flex flex-wrap gap-2" aria-labelledby="focus-label">
                 {t.hero.tags.map((tag, i) => (
