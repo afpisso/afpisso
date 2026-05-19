@@ -11,6 +11,7 @@ const EASE  = [0.32, 0.72, 0, 1];
 export default function ContactOverlay({ open, onClose }) {
   const { t, lang } = useLang();
   const ct = t.contact;
+  const co = t.contactOverlay;
   const [emailHover, setEmailHover] = useState(false); // kept for SweepFill active state
 
   useEffect(() => {
@@ -30,19 +31,19 @@ export default function ContactOverlay({ open, onClose }) {
       label: 'LinkedIn',
       value: ct.linkedin,
       href: `https://${ct.linkedin}`,
-      tag: lang === 'es' ? 'Profesional' : 'Professional',
+      tag: co.tagProfessional,
     },
     {
       label: 'Instagram',
       value: ct.instagram,
       href: `https://instagram.com/byandresfe`,
-      tag: lang === 'es' ? 'Creativo' : 'Creative',
+      tag: co.tagCreative,
     },
     {
       label: 'X / Twitter',
       value: ct.x,
       href: `https://x.com/byandresfe`,
-      tag: lang === 'es' ? 'Señal' : 'Signal',
+      tag: co.tagSignal,
     },
   ];
 
@@ -71,7 +72,7 @@ export default function ContactOverlay({ open, onClose }) {
             key="co-panel"
             role="dialog"
             aria-modal="true"
-            aria-label={lang === 'es' ? 'Panel de contacto' : 'Contact panel'}
+            aria-label="Contact panel"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -101,16 +102,16 @@ export default function ContactOverlay({ open, onClose }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                   <span style={{ width: 6, height: 6, background: '#ff2540', display: 'inline-block', flexShrink: 0 }} />
                   <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.16em', color: '#ff2540', textTransform: 'uppercase' }}>
-                    {lang === 'es' ? 'Señal de Contacto' : 'Signal Contact'}
+                    {co.signalContact}
                   </span>
                 </div>
                 <div style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: '0.06em', color: '#f5f5f3', lineHeight: 1 }}>
-                  {lang === 'es' ? 'CANAL DIRECTO' : 'DIRECT CHANNEL'}
+                  {co.directChannel}
                 </div>
               </div>
               <button
                 onClick={onClose}
-                aria-label={lang === 'es' ? 'Cerrar' : 'Close'}
+                aria-label="Close"
                 style={{
                   width: 38, height: 38, flexShrink: 0,
                   border: '1.5px solid rgba(255,255,255,0.18)',
@@ -131,11 +132,11 @@ export default function ContactOverlay({ open, onClose }) {
             {/* Primary CTA: email */}
             <div style={{ padding: '28px 28px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
               <div style={{ fontSize: 10, letterSpacing: '0.14em', color: 'rgba(245,245,243,0.4)', textTransform: 'uppercase', marginBottom: 12 }}>
-                {lang === 'es' ? 'Canal principal' : 'Primary channel'}
+                {co.primaryChannel}
               </div>
               <a
                 href={`mailto:${ct.email}`}
-                aria-label={lang === 'es' ? `Enviar correo a ${ct.email}` : `Send email to ${ct.email}`}
+                aria-label={`Send email to ${ct.email}`}
                 style={{
                   position: 'relative', overflow: 'hidden',
                   display: 'block',
@@ -153,7 +154,7 @@ export default function ContactOverlay({ open, onClose }) {
                   <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px' }}>
                     <span>{ct.email}</span>
                     <span style={{ fontSize: 10, letterSpacing: '0.16em', opacity: 0.75, textTransform: 'uppercase' }}>
-                      {lang === 'es' ? 'ESCRIBIR →' : 'WRITE →'}
+                      {co.writeCta}
                     </span>
                   </span>
                 </SweepFill>

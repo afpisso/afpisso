@@ -18,7 +18,7 @@ export default function WhatIDo() {
   const { label, headline, items } = t.whatIDo;
 
   return (
-    <section id="what-i-do" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="what-i-do" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section label */}
         <motion.div

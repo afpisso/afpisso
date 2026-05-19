@@ -7,7 +7,7 @@ export default function SystemsLab() {
   const sl = t.systemsLab;
 
   return (
-    <section id="systems" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="systems" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">

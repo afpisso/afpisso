@@ -19,7 +19,7 @@ export default function FieldNotes() {
   const { t, lang } = useLang();
 
   return (
-    <section id="notes" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="notes" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
         <div className="flex items-end justify-between mb-16 flex-wrap gap-6">

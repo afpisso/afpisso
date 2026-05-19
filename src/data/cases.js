@@ -14,6 +14,7 @@ export const cases = [
     featured: true,
     category: 'games',
     headline: 'Designing clarity, spatial feedback, and interface systems for a tactical VR experience.',
+    headlineEs: 'Diseño de claridad, retroalimentación espacial y sistemas de interfaz para una experiencia VR táctica.',
     description:
       'I worked on UX/UI systems, flows, and interface decisions for a VR adaptation of a trap-and-combat franchise. The focus was helping players read tactical information, understand what changed, and act without breaking immersion.',
     descriptionEs:
@@ -108,6 +109,7 @@ export const cases = [
     featured: true,
     category: 'games',
     headline: 'Designing readable progression and player decisions for a Dungeons & Dragons experience inside Fortnite.',
+    headlineEs: 'Diseño de progresión legible y decisiones del jugador para una experiencia de Dungeons & Dragons en Fortnite.',
     description:
       'The challenge was balancing fantasy, combat, progression, and clarity inside the UEFN ecosystem. My focus was making choices, routes, rewards, and player feedback easier to understand during a fast-paced experience.',
     descriptionEs:
@@ -201,6 +203,7 @@ export const cases = [
     featured: true,
     category: 'games',
     headline: 'Designing UX/UI for tension, survival, and readable decisions under pressure.',
+    headlineEs: 'Diseño de UX/UI para tensión, supervivencia y decisiones legibles bajo presión.',
     description:
       'The focus was helping players understand threat, resources, actions, and cooperation without losing the mood of the experience. Case details are NDA-limited to design decisions and approach.',
     descriptionEs:
@@ -286,6 +289,7 @@ export const cases = [
     featured: true,
     category: 'games',
     headline: 'Designing the UX/UI layer for a heist roguelike inside the Havoc Hotel universe.',
+    headlineEs: 'Diseño de la capa UX/UI para un roguelike de atraco en el universo de Havoc Hotel.',
     description:
       'My priority was making the risk, reward, and progression loop readable from run to run. The interface needed to support fast decisions, clear rewards, and repeated play.',
     descriptionEs:
@@ -373,6 +377,7 @@ export const cases = [
     featured: true,
     category: 'games',
     headline: 'Designing UX/UI for a co-op roguelike in Fortnite focused on progression, readability, and replayability.',
+    headlineEs: 'Diseño de UX/UI para un roguelike cooperativo en Fortnite centrado en progresión, legibilidad y rejugabilidad.',
     description:
       'The work focused on clarifying rewards, upgrades, difficulty scaling, and player choices across fast, repeatable runs.',
     descriptionEs:

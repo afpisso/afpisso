@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer
-      style={{ borderTop: '1px solid var(--color-rule)' }}
+      style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}
     >
       <div className="max-w-[1400px] mx-auto px-6 py-8 flex items-center justify-between flex-wrap gap-4">
         <Link to="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }} aria-label="ByAndresFe home">

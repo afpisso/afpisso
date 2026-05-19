@@ -66,7 +66,7 @@ export default function WorkPage({ onMenuOpen }) {
   const visible = cases.filter(c => matchFilter(active, c));
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
       <main>
@@ -195,7 +195,7 @@ export default function WorkPage({ onMenuOpen }) {
                           className="text-[12px] leading-relaxed mb-4"
                           style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}
                         >
-                          {c.description}
+                          {lang === 'es' && c.descriptionEs ? c.descriptionEs : c.description}
                         </p>
                         <div className="flex items-center gap-2 mt-3">
                           <span className="sys-label">{c.role}</span>

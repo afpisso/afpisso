@@ -62,7 +62,7 @@ export default function ResumePage({ onMenuOpen }) {
   useEffect(() => { analytics.resumeView(); }, []);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
       <main>

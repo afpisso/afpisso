@@ -320,7 +320,7 @@ export default function Hero() {
             <span className="sys-label">{t.hero.label}</span>
             <div className="flex items-center gap-2 ml-4">
               <div className="pulse-dot w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label" style={{ color: 'var(--color-accent)' }}>SIGNAL ACTIVE</span>
+              <span className="sys-label" style={{ color: 'var(--color-accent)' }}>{t.hero.signalActive}</span>
             </div>
           </motion.div>
 

@@ -14,7 +14,7 @@ export default function CaseFiles() {
   );
 
   return (
-    <section id="cases" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="cases" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section header */}
         <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
@@ -52,9 +52,7 @@ export default function CaseFiles() {
               className="text-base max-w-sm"
               style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
             >
-              Each project below represents a real design problem. Some are NDA-safe,
-              some are public case studies. The role and focus area describe where the
-              actual design work happened.
+              {t.caseFiles.descriptionShort}
             </p>
             <Link
               to="/work"

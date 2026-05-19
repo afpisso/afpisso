@@ -148,7 +148,7 @@ export default function CasePage({ onMenuOpen }) {
 
   if (!caseData) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
         <div className="text-center">
           <p style={{ fontFamily: MONO, color: DIM, marginBottom: 16 }}>{t.casePage.notFound}</p>
           <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: ACCENT }}>{t.casePage.backToWork}</Link>
@@ -161,7 +161,7 @@ export default function CasePage({ onMenuOpen }) {
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
 
@@ -230,7 +230,7 @@ export default function CasePage({ onMenuOpen }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             >
-              {caseData.headline}
+              {lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}
             </motion.p>
 
             {/* Meta row */}
@@ -486,7 +486,7 @@ export default function CasePage({ onMenuOpen }) {
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p className="mb-6" style={{ fontFamily: MONO, fontSize: '15px', color: 'rgba(240,238,234,0.8)', lineHeight: 1.8 }}>
-                  If my work fits your team or project, reaching out should take less than a minute.
+                  {t.casePage_cta.body}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link
@@ -570,7 +570,7 @@ export default function CasePage({ onMenuOpen }) {
               className="p-4 transition-all duration-200"
               style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
             >
-              <div className="sys-label mb-1">← Prev</div>
+              <div className="sys-label mb-1">{t.casePage.prev}</div>
               <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{prevCase.title}</div>
             </Link>
             <Link
@@ -578,7 +578,7 @@ export default function CasePage({ onMenuOpen }) {
               className="p-4 text-right transition-all duration-200"
               style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
             >
-              <div className="sys-label mb-1">Next →</div>
+              <div className="sys-label mb-1">{t.casePage.next}</div>
               <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{nextCase.title}</div>
             </Link>
           </div>

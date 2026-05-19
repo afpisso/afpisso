@@ -22,7 +22,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="contact" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
 

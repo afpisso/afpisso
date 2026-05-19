@@ -19,7 +19,7 @@ export default function HowIWork() {
   const { label, headline, body, steps } = t.howIWork;
 
   return (
-    <section id="how-i-work" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="how-i-work" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section label */}
         <motion.div

@@ -40,7 +40,7 @@ export default function AboutPage({ onMenuOpen }) {
   const photoY = useTransform(photoScroll, [0, 1], ['-6%', '6%']);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
       <main>
@@ -84,7 +84,7 @@ export default function AboutPage({ onMenuOpen }) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
             >
-              UX Lead · Game UX/UI Designer
+              {t.aboutPage.subheadline}
             </motion.p>
           </div>
         </section>

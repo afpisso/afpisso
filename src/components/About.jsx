@@ -30,7 +30,7 @@ export default function About() {
   const photoY = useTransform(photoScroll, [0, 1], ['-6%', '6%']);
 
   return (
-    <section id="about" className="py-28" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="about" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section label */}
         <motion.div

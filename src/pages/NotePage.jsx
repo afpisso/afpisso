@@ -130,6 +130,7 @@ const typeColors = {
 export default function NotePage({ onMenuOpen }) {
   const { slug }    = useParams();
   const { t, lang } = useLang();
+  const np = t.notePage;
 
   const meta    = fieldNotes.find((n) => n.slug === slug);
   const article = noteArticles?.[slug];
@@ -154,7 +155,7 @@ export default function NotePage({ onMenuOpen }) {
   // ── Not found or no content yet ──
   if (!meta || blocks.length === 0) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
         <Nav onMenuOpen={onMenuOpen} />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
@@ -162,12 +163,10 @@ export default function NotePage({ onMenuOpen }) {
               {meta ? 'COMING SOON' : '404'}
             </div>
             <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-dim)', margin: '16px 0 24px' }}>
-              {meta
-                ? (lang === 'es' ? 'Esta nota estará disponible pronto.' : 'This note will be available soon.')
-                : 'Note not found.'}
+              {meta ? np.comingSoon : np.notFound}
             </p>
             <Link to="/notes" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              ← {lang === 'es' ? 'Volver a Field Notes' : 'Back to Field Notes'}
+              ← {np.backToNotes}
             </Link>
           </div>
         </div>
@@ -179,7 +178,7 @@ export default function NotePage({ onMenuOpen }) {
   const typeStyle = typeColors[meta.type] || typeColors['Reference'];
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
       <main>
@@ -201,7 +200,7 @@ export default function NotePage({ onMenuOpen }) {
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-accent)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
               >
-                ← Field Notes
+                ← {np.fieldNotesLabel}
               </Link>
               <span style={{ color: 'var(--color-rule)', fontSize: '10px' }}>/</span>
               <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
@@ -283,14 +282,14 @@ export default function NotePage({ onMenuOpen }) {
                   <div style={{ border: '1px solid var(--color-rule)', padding: '18px', position: 'relative' }}>
                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} />
                     <div className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>
-                      {lang === 'es' ? 'Sobre esta nota' : 'About this note'}
+                      {np.aboutNote}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {[
-                        { label: 'ID',                                             value: meta.id },
-                        { label: lang === 'es' ? 'Tipo' : 'Type',                 value: meta.type },
-                        { label: lang === 'es' ? 'Lectura' : 'Read time',         value: meta.readTime },
-                        { label: lang === 'es' ? 'Categoría' : 'Category',        value: meta.category },
+                        { label: np.metaId,       value: meta.id },
+                        { label: np.metaType,     value: meta.type },
+                        { label: np.metaReadTime, value: meta.readTime },
+                        { label: np.metaCategory, value: meta.category },
                       ].map(({ label, value }) => (
                         <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                           <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
@@ -303,7 +302,7 @@ export default function NotePage({ onMenuOpen }) {
                   {/* Next note */}
                   {nextNote && nextNote.slug !== slug && (
                     <div>
-                      <div className="sys-label mb-3">{lang === 'es' ? 'Siguiente nota' : 'Next note'}</div>
+                      <div className="sys-label mb-3">{np.nextNote}</div>
                       <Link to={`/notes/${nextNote.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
                         <div
                           style={{ border: '1px solid var(--color-rule)', padding: '14px', transition: 'border-color 0.2s, background-color 0.2s' }}
@@ -338,15 +337,13 @@ export default function NotePage({ onMenuOpen }) {
             >
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
               <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
-                {lang === 'es' ? 'Field Notes' : 'Field Notes'}
+                {np.fieldNotesLabel}
               </p>
               <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(18px, 3vw, 26px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', marginBottom: '8px', lineHeight: 1.1 }}>
-                {lang === 'es' ? 'Recibe las próximas notas' : 'Get the next notes'}
+                {np.subscribeHeadline}
               </p>
               <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '12px', color: 'var(--color-fg-dim)', marginBottom: '20px', lineHeight: 1.7 }}>
-                {lang === 'es'
-                  ? 'Game UX, sistemas de UI, accesibilidad y decisiones de diseño. Sin spam.'
-                  : 'Game UX, UI systems, accessibility and design decisions. No spam.'}
+                {np.subscribeBody}
               </p>
               <form
                 onSubmit={e => { e.preventDefault(); const v = e.target.email.value; if (v) { window.open(`mailto:andresfe@byandresfe.com?subject=Subscribe%20Field%20Notes&body=${encodeURIComponent(v)}`, '_blank'); } }}
@@ -356,7 +353,7 @@ export default function NotePage({ onMenuOpen }) {
                   type="email"
                   name="email"
                   required
-                  placeholder={lang === 'es' ? 'tu@email.com' : 'your@email.com'}
+                  placeholder={np.subscribePlaceholder}
                   style={{
                     flex: '1 1 200px',
                     fontFamily: '"JetBrains Mono", monospace',
@@ -391,7 +388,7 @@ export default function NotePage({ onMenuOpen }) {
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                 >
-                  {lang === 'es' ? 'Suscribirse' : 'Subscribe'}
+                  {np.subscribeCta}
                 </button>
               </form>
             </motion.div>
@@ -407,14 +404,14 @@ export default function NotePage({ onMenuOpen }) {
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-fg)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
             >
-              ← {lang === 'es' ? 'Todas las notas' : 'All field notes'}
+              ← {np.allNotes}
             </Link>
             {nextNote && nextNote.slug !== slug && (
               <Link
                 to={`/notes/${nextNote.slug}`}
                 style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)', textDecoration: 'none' }}
               >
-                {lang === 'es' ? 'Siguiente' : 'Next note'} →
+                {np.nextNoteCta} →
               </Link>
             )}
           </div>
