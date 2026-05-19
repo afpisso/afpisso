@@ -70,11 +70,15 @@ const translations = {
     caseFiles: {
       label: 'Selected Work',
       headline: 'Case files.',
+      description: 'Each project below represents a real design problem. Some are NDA-safe breakdowns, some are public case studies. The role and focus area describe where the actual design work happened.',
       viewAll: 'View all work',
       openCase: 'Open case',
       metaRole: 'Role',
       metaYear: 'Year',
       metaFocus: 'Focus',
+      project: 'project',
+      projects: 'projects',
+      noProjects: 'No projects match this filter.',
     },
     systemsLab: {
       label: 'Systems Lab / Process',
@@ -297,11 +301,15 @@ const translations = {
     caseFiles: {
       label: 'Trabajo seleccionado',
       headline: 'Casos de estudio.',
+      description: 'Cada proyecto aquí representa un problema de diseño real. Algunos son análisis NDA-safe, otros son casos de estudio públicos. El rol y el área de enfoque describen dónde ocurrió el trabajo de diseño.',
       viewAll: 'Ver todo el trabajo',
       openCase: 'Abrir caso',
       metaRole: 'Rol',
       metaYear: 'Año',
       metaFocus: 'Enfoque',
+      project: 'proyecto',
+      projects: 'proyectos',
+      noProjects: 'Ningún proyecto coincide con este filtro.',
     },
     systemsLab: {
       label: 'Systems Lab / Proceso',

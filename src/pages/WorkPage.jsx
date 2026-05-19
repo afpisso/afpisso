@@ -109,9 +109,7 @@ export default function WorkPage({ onMenuOpen }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
-              Each project below represents a real design problem. Some are NDA-safe breakdowns,
-              some are public case studies. The role and focus area describe where the actual
-              design work happened.
+              {t.caseFiles.description}
             </motion.p>
           </div>
         </section>
@@ -144,7 +142,7 @@ export default function WorkPage({ onMenuOpen }) {
                   {f}
                 </button>
               ))}
-              <span className="sys-label self-center ml-2">{visible.length} project{visible.length !== 1 ? 's' : ''}</span>
+              <span className="sys-label self-center ml-2">{visible.length} {visible.length !== 1 ? t.caseFiles.projects : t.caseFiles.project}</span>
             </motion.div>
 
             {/* Grid */}
@@ -216,7 +214,7 @@ export default function WorkPage({ onMenuOpen }) {
             {visible.length === 0 && (
               <div className="py-24 text-center">
                 <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-mute)' }}>
-                  No projects match this filter.
+                  {t.caseFiles.noProjects}
                 </p>
               </div>
             )}

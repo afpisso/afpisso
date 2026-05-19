@@ -119,6 +119,7 @@ export default function DigitalAura() {
         inset: 0,
         pointerEvents: 'none',
         zIndex: 99998,
+        mixBlendMode: 'screen',
       }}
     />
   );
