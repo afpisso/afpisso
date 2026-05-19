@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Private routes — no need to crawl directly
+Disallow: /api/
+
+Sitemap: https://afpisso.com/sitemap.xml

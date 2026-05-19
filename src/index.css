@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─────────────────────────────────── */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg:    #080808;
+  --bg-2:  #0f0f0f;
+  --bg-3:  #141414;
+
+  /* Borders */
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+
+  /* Brand */
+  --red:     #d42b22;
+  --red-dim: rgba(212, 43, 34, 0.12);
+
+  /* Text */
+  --white:  #f0eeea;
+  --gray-1: #8a8a8a;
+  --gray-2: #555555;
+  --gray-3: #2a2a2a;
+
+  /* Elevation — consistent shadow scale */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.7), 0 4px 8px rgba(0,0,0,0.5);
+
+  /* Motion tokens — 150–300ms per UI/UX Pro Max §7 */
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   350ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ─── Reset — inside @layer base so Tailwind utilities can override it ── */
+@layer base {
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* ─── Base ───────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip; /* clip avoids creating a scroll container (unlike hidden), which could block wheel events */
+  touch-action: manipulation;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: rgba(245,245,243,0.2); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+
+/* ─── Selection ──────────────────────────────────────── */
+::selection { background: var(--color-accent); color: #0a0a0a; }
+
+/* ─── Focus (§1: focus-states) ───────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ─── Typography rules (§6) ─────────────────────────── */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Tabular nums for data/stats (§6: number-tabular) */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ─── Section scroll offset for fixed nav (§9: back-behavior) */
+section[id] {
+  scroll-margin-top: 72px;
+}
+
+/* ─── Grid background ────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ─── Scan line ──────────────────────────────────────── */
+@keyframes scanline {
+  0%   { top: -2px; }
+  100% { top: 100dvh; }
+}
+
+.scan-line {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 43, 34, 0.4), transparent);
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── Blink cursor ───────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.blink { animation: blink 1.2s step-end infinite; }
+
+/* ─── Pulse dot ──────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(2.8); opacity: 0;   }
+}
+.pulse-dot { position: relative; }
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse-ring 2.2s ease-out infinite;
+}
+
+/* ─── System label ───────────────────────────────────── */
+.sys-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-fg-dim);
+}
+
+/* Micro labels at 9px must be bold to hit legible stroke weight */
+.micro-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ─── Mono body text ─────────────────────────────────── */
+.mono-body {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  line-height: 1.75;
+  color: var(--color-fg-dim);
+}
+
+/* ─── Display heading (Bebas Neue) ───────────────────── */
+.display {
+  font-family: '"Bebas Neue", sans-serif';
+  letter-spacing: 0.005em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+/* Custom cursor removed — cursor:none blocks wheel scroll in Chrome */
+
+/* ─── Press feedback — scale 0.97 on active (Emil Kowalski) ─────── */
+button:active,
+a[href]:active,
+[role="button"]:active {
+  transform: scale(0.97);
+  transition: transform 100ms ease-out;
+}
+/* Don't apply to elements that already have Framer Motion whileTap */
+[data-framer-motion]:active {
+  transform: none;
+}
+
+/* ─── Smooth section fade-in via scroll (base) ──────── */
+[data-reveal] {
+  will-change: transform, opacity;
+}
+
+/* ─── Menu Overlay — design system tokens (DESIGN_SYSTEM.md) ─── */
+:root {
+  /* Menu-specific color tokens (distinct from existing site palette) */
+  --color-bg:      #0a0a0a;
+  --color-fg:      #f5f5f3;
+  --color-accent:  #ff2540;
+  --color-rule:    rgba(255, 255, 255, 0.11);
+  --color-fg-dim:  rgba(245, 245, 243, 0.55);
+  --color-fg-mute: rgba(245, 245, 243, 0.5);
+
+  /* Menu easing curves */
+  --ease-sweep: cubic-bezier(.76, 0, .2, 1);
+  --ease-snap:  cubic-bezier(.7,  0, .2, 1);
+  --ease-soft:  cubic-bezier(.2, .7, .2, 1);
+}
+
+/* Audio bars animation used by MenuOverlay */
+@keyframes bars {
+  0%   { transform: scaleY(0.3); }
+  100% { transform: scaleY(1);   }
+}
+
+/* Loading chip dot pulse on red sheet */
+@keyframes overlay-pulse {
+  from { opacity: 0.3; }
+  to   { opacity: 1;   }
+}
+
+/* MenuItem underline variant */
+@keyframes menu-underline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Panel glitch entry (scope A — production lock) */
+@keyframes panel-glitch-A {
+  0%   { transform: translate(0, 0);    filter: none; }
+  20%  { transform: translate(-6px, 2px); filter: hue-rotate(20deg); }
+  35%  { transform: translate(5px, -3px); filter: invert(0.08); }
+  50%  { transform: translate(-3px, 1px); }
+  70%  { transform: translate(2px, 0);  }
+  100% { transform: translate(0, 0);    filter: none; }
+}
+
+/* Scan line effect during glitch entry */
+@keyframes scan-A {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(110%);  }
+}
+
+
+/* ─── Marquee ────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Logo name glitch — chromatic aberration ─────── */
+/* ::before = red ghost  /  ::after = cyan ghost       */
+@keyframes glitch-r {
+  0%   { clip-path: inset(45% 0 48% 0); transform: translate(-4px, 0); }
+  25%  { clip-path: inset(12% 0 78% 0); transform: translate(3px, 0);  }
+  50%  { clip-path: inset(72% 0 8%  0); transform: translate(-3px, 0); }
+  75%  { clip-path: inset(30% 0 55% 0); transform: translate(4px, 0);  }
+  100% { clip-path: inset(45% 0 48% 0); transform: translate(-4px, 0); }
+}
+
+@keyframes glitch-b {
+  0%   { clip-path: inset(60% 0 22% 0); transform: translate(3px, 0);  }
+  25%  { clip-path: inset(8%  0 82% 0); transform: translate(-3px, 0); }
+  50%  { clip-path: inset(38% 0 42% 0); transform: translate(4px, 0);  }
+  75%  { clip-path: inset(80% 0 5%  0); transform: translate(-4px, 0); }
+  100% { clip-path: inset(60% 0 22% 0); transform: translate(3px, 0);  }
+}
+
+.logo-name {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-name::before,
+.logo-name::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s;
+}
+
+.logo-name.glitching::before {
+  color: #ff2540;
+  opacity: 0.8;
+  animation: glitch-r 0.22s steps(3) infinite;
+}
+
+.logo-name.glitching::after {
+  color: #00e5ff;
+  opacity: 0.55;
+  animation: glitch-b 0.22s steps(3) infinite;
+  animation-delay: 0.06s;
+}
+
+/* ─── Reduced motion (§1 + §7) ──────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .scan-line { display: none; }
+  .pulse-dot::before { animation: none; }
+  .blink { animation: none; opacity: 1; }
+  .logo-name::before,
+  .logo-name::after { display: none; }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
