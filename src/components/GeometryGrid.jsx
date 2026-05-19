@@ -172,13 +172,18 @@ export default function GeometryGrid({
     // Reduce particle count on mobile — visually equivalent, significantly cheaper
     const isMobile = window.innerWidth < 768;
     const N   = isMobile ? Math.min(particleCount, 600) : particleCount;
-    let w     = window.innerWidth;
-    let h     = window.innerHeight;
+    // Use parent container dimensions so the canvas fills the hero section exactly
+    const getSize = () => {
+      const p = canvas.parentElement;
+      return p
+        ? { w: p.offsetWidth, h: p.offsetHeight }
+        : { w: window.innerWidth, h: window.innerHeight };
+    };
+    let { w, h } = getSize();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
-      w = window.innerWidth;
-      h = window.innerHeight;
+      ({ w, h } = getSize());
       canvas.width  = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width  = w + 'px';
@@ -353,7 +358,7 @@ export default function GeometryGrid({
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+      style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
     />
   );
 }

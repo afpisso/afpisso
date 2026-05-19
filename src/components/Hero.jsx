@@ -274,7 +274,7 @@ export default function Hero() {
         className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden"
         style={{ paddingTop: '80px' }}
       >
-        {/* Background — GeometryGrid is fixed so it spans all sections */}
+        {/* Background — GeometryGrid is absolute within this section only */}
         {!shouldReduce && (
           <GeometryGrid
             mouseRef={mouseRef}
