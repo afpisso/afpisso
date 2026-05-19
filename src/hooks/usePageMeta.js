@@ -1,19 +1,17 @@
 import { useEffect } from 'react';
 
 const SITE_NAME = 'ByAndresFe';
+const BASE_URL = 'https://byandresfe.com';
 const DEFAULT_DESCRIPTION =
   'Portfolio of Andres Felipe Pisso, UX Lead and Game UX/UI Designer focused on clarity, feedback, systems, and better player experiences across games, products, VR, and interactive media.';
 
 /**
- * Sets document.title, meta[name="description"], og:title, og:description,
- * og:url, and link[rel="canonical"] for the current route.
+ * Sets document.title, meta tags, og/twitter, canonical, and optional
+ * Article JSON-LD schema for the current route.
  *
- * Call this at the top of any page component:
- *   usePageMeta({ title: 'Selected Work', description: 'Game UX/UI cases...' })
- *
- * @param {{ title?: string, description?: string }} options
+ * @param {{ title?: string, description?: string, article?: { datePublished?: string, dateModified?: string } }} options
  */
-export function usePageMeta({ title, description } = {}) {
+export function usePageMeta({ title, description, article } = {}) {
   useEffect(() => {
     const fullTitle = title
       ? `${title} — ${SITE_NAME}`
@@ -49,5 +47,41 @@ export function usePageMeta({ title, description } = {}) {
     // Canonical
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', url);
-  }, [title, description]);
+
+    // Article JSON-LD schema (Field Notes)
+    const schemaId = 'ld-json-article';
+    let existing = document.getElementById(schemaId);
+    if (article) {
+      const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: fullTitle,
+        description: desc,
+        url,
+        author: {
+          '@type': 'Person',
+          '@id': `${BASE_URL}/#person`,
+          name: 'Andres Felipe Pisso',
+          url: BASE_URL,
+        },
+        publisher: {
+          '@type': 'Person',
+          name: 'Andres Felipe Pisso',
+          url: BASE_URL,
+        },
+        datePublished: article.datePublished || undefined,
+        dateModified: article.dateModified || article.datePublished || undefined,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+      };
+      if (!existing) {
+        existing = document.createElement('script');
+        existing.type = 'application/ld+json';
+        existing.id = schemaId;
+        document.head.appendChild(existing);
+      }
+      existing.textContent = JSON.stringify(schema);
+    } else if (existing) {
+      existing.remove();
+    }
+  }, [title, description, article]);
 }

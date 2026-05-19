@@ -144,6 +144,7 @@ export default function NotePage({ onMenuOpen }) {
     description: meta
       ? (lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary)
       : '',
+    article: meta ? { datePublished: meta.date, dateModified: meta.date } : undefined,
   });
 
   // Next note in the list (circular)
@@ -322,6 +323,78 @@ export default function NotePage({ onMenuOpen }) {
                 </div>
               </motion.aside>
             </div>
+          </div>
+        </section>
+
+        {/* ── Email capture ────────────────────────────────── */}
+        <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-16">
+          <div className="max-w-[860px] mx-auto px-6">
+            <motion.div
+              style={{ border: '1px solid var(--color-rule)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
+              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
+                {lang === 'es' ? 'Field Notes' : 'Field Notes'}
+              </p>
+              <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(18px, 3vw, 26px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', marginBottom: '8px', lineHeight: 1.1 }}>
+                {lang === 'es' ? 'Recibe las próximas notas' : 'Get the next notes'}
+              </p>
+              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '12px', color: 'var(--color-fg-dim)', marginBottom: '20px', lineHeight: 1.7 }}>
+                {lang === 'es'
+                  ? 'Game UX, sistemas de UI, accesibilidad y decisiones de diseño. Sin spam.'
+                  : 'Game UX, UI systems, accessibility and design decisions. No spam.'}
+              </p>
+              <form
+                onSubmit={e => { e.preventDefault(); const v = e.target.email.value; if (v) { window.open(`mailto:andresfe@byandresfe.com?subject=Subscribe%20Field%20Notes&body=${encodeURIComponent(v)}`, '_blank'); } }}
+                style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}
+              >
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder={lang === 'es' ? 'tu@email.com' : 'your@email.com'}
+                  style={{
+                    flex: '1 1 200px',
+                    fontFamily: '"JetBrains Mono", monospace',
+                    fontSize: '12px',
+                    padding: '10px 14px',
+                    backgroundColor: 'rgba(255,255,255,0.04)',
+                    border: '1px solid var(--color-rule)',
+                    color: 'var(--color-fg)',
+                    outline: 'none',
+                    letterSpacing: '0.04em',
+                    minHeight: '40px',
+                  }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(255,37,64,0.4)'}
+                  onBlur={e => e.target.style.borderColor = 'var(--color-rule)'}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    fontFamily: '"JetBrains Mono", monospace',
+                    fontSize: '10px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    padding: '10px 20px',
+                    backgroundColor: 'var(--color-accent)',
+                    color: '#0a0a0a',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: 700,
+                    clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                >
+                  {lang === 'es' ? 'Suscribirse' : 'Subscribe'}
+                </button>
+              </form>
+            </motion.div>
           </div>
         </section>
 

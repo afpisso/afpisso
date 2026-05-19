@@ -74,8 +74,36 @@ export default function Nav({ onMenuOpen }) {
           </div>
         </Link>
 
-        {/* Right: lang switch + contact + MENU+ */}
+        {/* Right: nav links + lang switch + contact + MENU+ */}
         <div className="flex items-center gap-3">
+          {/* Desktop nav links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {[
+              { to: '/work', label: t.nav.work },
+              { to: '/notes', label: t.nav.notes },
+            ].map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                style={{
+                  fontFamily: '"JetBrains Mono", monospace',
+                  fontSize: '10px',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-fg-mute)',
+                  textDecoration: 'none',
+                  padding: '6px 12px',
+                  border: '1px solid transparent',
+                  transition: 'color 0.2s, border-color 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'transparent'; }}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
           {/* Available pill — desktop only */}
           <div
             aria-label={`Status: ${t.nav.status} — ${t.nav.statusSub}`}

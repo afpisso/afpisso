@@ -290,7 +290,10 @@ export default function Hero() {
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,37,64,0.04) 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
+          {/* Bottom fade — prevents particles overlapping CTAs */}
+          <div className="absolute bottom-0 left-0 right-0 h-64" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
+          {/* Left fade — protects text column from particle overlap */}
+          <div className="absolute inset-y-0 left-0 w-[55%]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, rgba(8,8,8,0.75) 35%, transparent 100%)' }} />
         </div>
 
         {/* Corner marks */}
