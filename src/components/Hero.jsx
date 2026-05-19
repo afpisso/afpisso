@@ -258,11 +258,10 @@ export default function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
 
-  const heroLines = [
-    { text: t.hero.headline1, outlined: false, delay: 0.2 },
-    { text: t.hero.headline2, outlined: true, delay: 0.38 },
-    { text: t.hero.headline3, outlined: false, delay: 0.55 },
-    { text: t.hero.headline4, outlined: true, delay: 0.72 },
+  const nameLines = [
+    { text: 'Andres', outlined: false, delay: 0.2 },
+    { text: 'Felipe', outlined: true,  delay: 0.36 },
+    { text: 'Pisso',  outlined: false, delay: 0.52 },
   ];
 
   return (
@@ -325,19 +324,19 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* H1 — masked reveals */}
-          <div className="mb-8">
+          {/* H1 — Name as protagonist */}
+          <div className="mb-6">
             <h1
               className="uppercase"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: 'clamp(3rem, 10vw, 8.5rem)',
-                lineHeight: 0.9,
-                letterSpacing: '0.005em',
+                fontSize: 'clamp(4.5rem, 14vw, 13rem)',
+                lineHeight: 0.88,
+                letterSpacing: '-0.01em',
               }}
             >
-              {heroLines.map((line, i) => (
-                <div key={i} style={{ overflow: 'hidden', paddingBottom: '0.05em' }}>
+              {nameLines.map((line, i) => (
+                <div key={i} style={{ overflow: 'hidden', paddingBottom: '0.04em' }}>
                   <motion.span
                     style={{
                       display: 'block',
@@ -345,7 +344,7 @@ export default function Hero() {
                     }}
                     initial={{ y: '110%' }}
                     animate={booted ? { y: 0 } : { y: '110%' }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: line.delay }}
+                    transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: line.delay }}
                   >
                     {line.outlined
                       ? <StrokeLine>{line.text}</StrokeLine>
@@ -357,20 +356,43 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* Separator */}
+          {/* Subtitle */}
           <motion.div
-            className="flex items-center gap-4 my-10"
+            className="flex items-start gap-5 mb-10"
+            initial={{ opacity: 0, y: 10 }}
+            animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.72 }}
+          >
+            <div
+              aria-hidden="true"
+              style={{ width: '2px', minHeight: '100%', alignSelf: 'stretch', backgroundColor: 'var(--color-accent)', flexShrink: 0, marginTop: '4px' }}
+            />
+            <p style={{
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: 'clamp(13px, 1.5vw, 16px)',
+              color: 'var(--color-fg-dim)',
+              lineHeight: 1.65,
+              maxWidth: '600px',
+              letterSpacing: '0.01em',
+            }}>
+              {t.hero.subtitle}
+            </p>
+          </motion.div>
+
+          {/* Handle / separator */}
+          <motion.div
+            className="flex items-center gap-4 mb-10"
             aria-hidden="true"
             initial={{ opacity: 0 }}
             animate={booted ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.3, delay: 0.9 }}
+            transition={{ duration: 0.3, delay: 0.88 }}
           >
             <motion.div
               style={{ backgroundColor: 'var(--color-rule)', height: '1px', transformOrigin: 'left' }}
-              className="max-w-xs w-full"
+              className="max-w-[180px] w-full"
               initial={{ scaleX: 0 }}
               animate={booted ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.92 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
             />
             <span className="sys-label whitespace-nowrap">@byandresfe</span>
           </motion.div>
@@ -382,18 +404,6 @@ export default function Hero() {
               animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
             >
-              <p
-                className="mb-4 leading-relaxed"
-                style={{
-                  fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: 'clamp(13px, 1.4vw, 15px)',
-                  color: 'var(--color-fg-dim)',
-                  maxWidth: '520px',
-                  lineHeight: 1.85,
-                }}
-              >
-                {t.hero.body}
-              </p>
               <p
                 className="mb-10"
                 style={{

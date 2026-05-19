@@ -17,10 +17,7 @@ const translations = {
     },
     hero: {
       label: 'UX Lead / Game UX/UI Designer',
-      headline1: 'Game UX/UI and product design',
-      headline2: 'for clearer systems,',
-      headline3: 'faster decisions,',
-      headline4: 'and better player experiences.',
+      subtitle: 'Game UX/UI and interface systems for clearer decisions and better player experiences.',
       body: 'I design interfaces, flows, and UX systems for games, digital products, and interactive experiences. My work sits between clarity, feedback, production, and player decision-making.',
       cta1: 'View selected work',
       cta2: 'Download resume',
@@ -214,10 +211,7 @@ const translations = {
     },
     hero: {
       label: 'UX Lead / Diseñador Game UX/UI',
-      headline1: 'UX/UI para juegos y producto digital',
-      headline2: 'con sistemas más claros,',
-      headline3: 'decisiones más rápidas',
-      headline4: 'y mejores experiencias de jugador.',
+      subtitle: 'UX/UI y sistemas de interfaz para decisiones más claras y mejores experiencias de jugador.',
       body: 'Diseño interfaces, flujos y sistemas UX para juegos, productos digitales y experiencias interactivas. Mi trabajo conecta claridad, retroalimentación, producción y toma de decisiones del jugador.',
       cta1: 'Ver trabajo seleccionado',
       cta2: 'Descargar CV',
