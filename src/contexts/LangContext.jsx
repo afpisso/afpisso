@@ -175,6 +175,9 @@ const translations = {
       links: ['Work', 'About', 'Resume', 'Notes', 'Contact'],
       copy: '© 2026 Andres Felipe Pisso',
       handle: '@byandresfe',
+      navWork: 'Work',
+      navConnect: 'Connect',
+      resume: 'Resume',
     },
     resume: {
       label: 'Resume',
@@ -441,6 +444,9 @@ const translations = {
       links: ['Trabajo', 'Sobre mí', 'CV', 'Notas', 'Contacto'],
       copy: '© 2026 Andres Felipe Pisso',
       handle: '@byandresfe',
+      navWork: 'Trabajo',
+      navConnect: 'Conectar',
+      resume: 'CV',
     },
     resume: {
       label: 'CV',

@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { fieldNotes } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
-import GlitchStrokeText from './GlitchStrokeText';
+import SectionHeading from './SectionHeading';
 
-const typeColors = {
-  'Deep Dive': { color: '#60a5fa', bg: 'rgba(59,130,246,0.08)' },
-  'Reference': { color: '#a3a3a3', bg: 'rgba(100,100,100,0.08)' },
-  'Framework': { color: '#c084fc', bg: 'rgba(192,132,252,0.08)' },
-  'Checklist': { color: '#4ade80', bg: 'rgba(34,197,94,0.08)' },
-  'Analysis': { color: '#fb923c', bg: 'rgba(251,146,60,0.08)' },
-  'Tools': { color: '#facc15', bg: 'rgba(234,179,8,0.08)' },
+// Normalised to the site's token system — no rainbow
+const TYPE_GLYPHS = {
+  'Deep Dive': '◈',
+  'Reference':  '◇',
+  'Framework':  '◆',
+  'Checklist':  '◉',
+  'Analysis':   '◎',
+  'Tools':      '⊕',
 };
 
 export default function FieldNotes() {
@@ -19,140 +20,169 @@ export default function FieldNotes() {
   const { t, lang } = useLang();
 
   return (
-    <section id="notes" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
+    <section
+      id="notes"
+      className="py-28"
+      style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}
+    >
       <div className="max-w-[1400px] mx-auto px-6">
+
         {/* Header */}
-        <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
-          <div>
-            <motion.div
-              className="flex items-center gap-4 mb-4"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{t.fieldNotes.label}</span>
-            </motion.div>
-            <motion.h2
-              className="uppercase"
-              style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(3.5rem, 6vw, 5.5rem)', color: 'var(--color-fg)', lineHeight: 0.9, letterSpacing: '0.02em' }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              {t.fieldNotes.headline.split(' ').slice(0, -1).join(' ')}<br />
-              <GlitchStrokeText stroke="1.5px rgba(240,238,234,0.5)">{t.fieldNotes.headline.split(' ').slice(-1)}</GlitchStrokeText>
-            </motion.h2>
-          </div>
+        <div className="mb-16">
+          <SectionHeading
+            label={t.fieldNotes.label.split('/')[0].trim()}
+            page="007"
+          />
           <motion.p
-            className="text-base max-w-xs"
+            className="text-base mt-10 max-w-md"
             style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.7 }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             {t.fieldNotes.description}
           </motion.p>
         </div>
 
-        {/* Notes grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
+        {/* Editorial list — each note is a horizontal row */}
+        <div>
           {fieldNotes.map((note, i) => {
-            const typeStyle = typeColors[note.type] || typeColors['Reference'];
             const isHovered = hovered === note.id;
+            const glyph = TYPE_GLYPHS[note.type] || '◇';
 
             return (
               <motion.article
                 key={note.id}
                 aria-label={note.title}
-                className="group"
-                style={{ backgroundColor: 'transparent' }}
-                initial={{ opacity: 0, y: 20 }}
+                className="group relative"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
                 onMouseEnter={() => setHovered(note.id)}
                 onMouseLeave={() => setHovered(null)}
               >
+                {/* Top border */}
                 <div
-                  className="h-full p-6 flex flex-col transition-all duration-200"
+                  className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300"
+                  style={{ backgroundColor: isHovered ? 'rgba(255,37,64,0.4)' : 'var(--color-rule)' }}
+                />
+
+                {/* Left accent pulse on hover */}
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-300"
                   style={{
-                    backgroundColor: isHovered ? 'rgba(18,4,7,0.62)' : 'rgba(8,8,8,0.42)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
+                    backgroundColor: 'var(--color-accent)',
+                    opacity: isHovered ? 1 : 0,
+                    transform: isHovered ? 'scaleY(1)' : 'scaleY(0)',
+                    transformOrigin: 'top',
                   }}
+                />
+
+                <Link
+                  to={`/notes/${note.slug}`}
+                  className="flex items-center gap-0 py-5 pl-5 pr-0 transition-colors duration-200"
+                  style={{
+                    textDecoration: 'none',
+                    backgroundColor: isHovered ? 'rgba(255,37,64,0.025)' : 'transparent',
+                  }}
+                  aria-label={`Read note: ${note.title}`}
+                  onFocus={() => setHovered(note.id)}
+                  onBlur={() => setHovered(null)}
                 >
-                  {/* Top row */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span
-                      className="text-[9px] font-bold tracking-widest uppercase px-2 py-1"
-                      style={{
-                        fontFamily: '"JetBrains Mono", monospace',
-                        color: typeStyle.color,
-                        backgroundColor: typeStyle.bg,
-                        border: `1px solid ${typeStyle.color}30`,
-                      }}
+                  {/* Note ID + glyph */}
+                  <div
+                    className="flex-shrink-0 w-28 hidden sm:block"
+                    style={{ fontFamily: '"JetBrains Mono", monospace' }}
+                  >
+                    <div
+                      className="text-[10px] tracking-widest"
+                      style={{ color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)', transition: 'color 0.2s' }}
                     >
-                      {note.type}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="sys-label">{note.readTime}</span>
-                      <div className="sys-label">/</div>
-                      <span className="sys-label">{note.category}</span>
+                      {note.id}
+                    </div>
+                    <div
+                      className="text-[14px] mt-0.5"
+                      style={{ color: isHovered ? 'var(--color-accent)' : 'var(--color-rule)', transition: 'color 0.25s' }}
+                      aria-hidden="true"
+                    >
+                      {glyph}
                     </div>
                   </div>
 
-                  {/* ID + Title */}
-                  <div className="mb-1">
-                    <span
-                      className="text-[10px] font-bold"
-                      style={{ color: 'var(--color-accent)', fontFamily: '"JetBrains Mono", monospace', opacity: 0.7, letterSpacing: '0.15em' }}
+                  {/* Title + type + summary */}
+                  <div className="flex-grow min-w-0 pr-6">
+                    <div className="flex items-center gap-3 mb-1 flex-wrap">
+                      <h3
+                        className="uppercase transition-colors duration-200"
+                        style={{
+                          fontFamily: '"Bebas Neue", sans-serif',
+                          fontSize: 'clamp(18px, 2vw, 24px)',
+                          lineHeight: 1.1,
+                          letterSpacing: '0.02em',
+                          color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.8)',
+                        }}
+                      >
+                        {lang === 'es' && note.titleEs ? note.titleEs : note.title}
+                      </h3>
+                      <span
+                        className="flex-shrink-0 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
+                        style={{
+                          fontFamily: '"JetBrains Mono", monospace',
+                          border: `1px solid ${isHovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)'}`,
+                          color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
+                        }}
+                      >
+                        {note.type}
+                      </span>
+                    </div>
+                    <p
+                      className="text-[12px] leading-relaxed line-clamp-2"
+                      style={{
+                        fontFamily: '"JetBrains Mono", monospace',
+                        color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
+                        transition: 'color 0.2s',
+                        maxWidth: '680px',
+                      }}
                     >
-                      {note.id}
-                    </span>
+                      {lang === 'es' && note.summaryEs ? note.summaryEs : note.summary}
+                    </p>
                   </div>
-                  <h3
-                    className="font-bold uppercase mb-4 transition-colors duration-200"
-                    style={{
-                      fontFamily: '"Bebas Neue", sans-serif',
-                      fontSize: 'clamp(18px, 2vw, 22px)',
-                      lineHeight: 1.2,
-                      color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.85)',
-                    }}
-                  >
-                    {lang === 'es' && note.titleEs ? note.titleEs : note.title}
-                  </h3>
 
-                  {/* Summary */}
-                  <p
-                    className="text-[13px] leading-relaxed flex-grow"
-                    style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}
+                  {/* Meta + CTA — right side */}
+                  <div
+                    className="flex-shrink-0 flex flex-col items-end gap-2 pl-4 border-l ml-4"
+                    style={{ borderColor: isHovered ? 'rgba(255,37,64,0.2)' : 'var(--color-rule)', transition: 'border-color 0.2s', minWidth: '120px' }}
                   >
-                    {lang === 'es' && note.summaryEs ? note.summaryEs : note.summary}
-                  </p>
+                    <div className="text-right">
+                      <div className="sys-label">{note.readTime}</div>
+                      <div className="sys-label mt-0.5" style={{ color: 'var(--color-fg-mute)' }}>{note.category}</div>
+                    </div>
+                    <div
+                      className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase transition-all duration-200"
+                      style={{
+                        fontFamily: '"JetBrains Mono", monospace',
+                        color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
+                        transform: isHovered ? 'translateX(2px)' : 'translateX(0)',
+                      }}
+                      aria-hidden="true"
+                    >
+                      <span>{t.fieldNotes.readNote}</span>
+                      <span>›</span>
+                    </div>
+                  </div>
+                </Link>
 
-                  {/* Read link */}
-                  <Link
-                    to={`/notes/${note.slug}`}
-                    className="flex items-center gap-2 mt-5 text-[10px] font-bold tracking-widest uppercase transition-colors duration-200"
-                    style={{
-                      fontFamily: '"JetBrains Mono", monospace',
-                      color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
-                    }}
-                    aria-label={`Read note: ${note.title}`}
-                    onFocus={() => setHovered(note.id)}
-                    onBlur={() => setHovered(null)}
-                  >
-                    <span>{t.fieldNotes.readNote}</span>
-                    <span aria-hidden="true" className={`transition-transform duration-200 ${isHovered ? 'translate-x-1' : ''}`}>{'>'}</span>
-                  </Link>
-                </div>
+                {/* Bottom border for last item */}
+                {i === fieldNotes.length - 1 && (
+                  <div className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
+                )}
               </motion.article>
             );
           })}
         </div>
+
       </div>
     </section>
   );

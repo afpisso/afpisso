@@ -1,58 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import { analytics } from '../utils/analytics';
 import ClientLogos from './ClientLogos';
 import GeometryGrid from './GeometryGrid';
+import { useScramble } from '../hooks/useScramble';
+import AudioBars from './AudioBars';
+import SectionTag from './SectionTag';
+import GlitchStrokeText from './GlitchStrokeText';
 
-const EASE = 'cubic-bezier(0.32, 0.72, 0, 1)';
-const DUR  = '0.3s';
-
-/**
- * Block-level stroke line with full-width red sweep on hover.
- * Used for hero outlined lines — avoids inline-block overflow issues
- * while covering the entire line text with the effect.
- */
-function StrokeLine({ children, stroke = '1.5px rgba(245,245,243,0.5)' }) {
-  const [active, setActive] = useState(false);
-  return (
-    <span
-      style={{ position: 'relative', display: 'block', overflow: 'hidden' }}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-    >
-      {/* z0 — stroke text, wraps naturally within container */}
-      <span style={{ display: 'block', WebkitTextStroke: stroke, color: 'transparent' }}>
-        {children}
-      </span>
-      {/* z1 — red fill sweeps left→right across full line width */}
-      <span aria-hidden="true" style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'var(--color-accent)',
-        transform: active ? 'scaleX(1)' : 'scaleX(0)',
-        transformOrigin: 'left center',
-        transition: `transform ${DUR} ${EASE}`,
-        zIndex: 1,
-        pointerEvents: 'none',
-      }} />
-      {/* z2 — dark solid text, clip-path reveals in sync with red */}
-      <span aria-hidden="true" style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
-        display: 'block',
-        color: '#0a0a0a',
-        zIndex: 2,
-        pointerEvents: 'none',
-        clipPath: active ? 'inset(0 -1% 0 -1%)' : 'inset(0 101% 0 -1%)',
-        transition: `clip-path ${DUR} ${EASE}`,
-      }}>
-        {children}
-      </span>
-    </span>
-  );
-}
 
 const bootLines = [
   'BYANDRESFE SYSTEM v2.6',
@@ -65,6 +22,7 @@ function CountUp({ target, suffix = '' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '0px' });
   const [count, setCount] = useState(0);
+  const shouldReduce = useReducedMotion();
   const numeric = parseInt(target, 10);
   // Preserve any non-numeric trailing characters (e.g. '+') from the target string
   const trailMatch = String(target).match(/[^0-9]+$/);
@@ -72,6 +30,8 @@ function CountUp({ target, suffix = '' }) {
 
   useEffect(() => {
     if (!inView || isNaN(numeric)) return;
+    // Skip animation entirely for reduced-motion users
+    if (shouldReduce) { setCount(numeric); return; }
     // Small delay so entry animations finish before counter fires
     const delay = setTimeout(() => {
       const duration = 1800;
@@ -86,7 +46,7 @@ function CountUp({ target, suffix = '' }) {
       requestAnimationFrame(tick);
     }, 300);
     return () => clearTimeout(delay);
-  }, [inView, numeric]);
+  }, [inView, numeric, shouldReduce]);
 
   return <span ref={ref}>{isNaN(numeric) ? target : `${count}${trail}`}</span>;
 }
@@ -136,6 +96,8 @@ function BootSequence({ onComplete }) {
             src="/logo-mark.png"
             alt=""
             aria-hidden="true"
+            width="56"
+            height="56"
             className="w-full h-full object-contain p-2"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
@@ -241,6 +203,69 @@ function useActiveSection(ids) {
   return active;
 }
 
+// Magnetic CTA — cursor attraction + whileTap scale feedback (Emil Kowalski)
+// Uses useMotionValue + useSpring for GPU-only animation, zero re-renders
+function MagneticCTA({ href, onClick, children, disabled }) {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.5 });
+  const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.5 });
+
+  const onMouseMove = useCallback((e) => {
+    if (disabled || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    x.set((e.clientX - cx) * 0.28);
+    y.set((e.clientY - cy) * 0.28);
+  }, [disabled, x, y]);
+
+  const onMouseLeave = useCallback((e) => {
+    x.set(0);
+    y.set(0);
+    // Reset background color — onMouseEnter sets it imperatively so we
+    // must clear it here too (Framer Motion style prop doesn't override
+    // inline styles set by the DOM event handler).
+    if (e?.currentTarget) {
+      e.currentTarget.style.backgroundColor = 'var(--color-accent)';
+    }
+  }, [x, y]);
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      onClick={onClick}
+      className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase"
+      style={{
+        fontFamily: '"JetBrains Mono", monospace',
+        backgroundColor: 'var(--color-accent)',
+        color: '#0a0a0a',
+        clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
+        x: springX,
+        y: springY,
+        willChange: 'transform',
+        display: 'inline-flex',
+        position: 'relative',
+        zIndex: 1,
+      }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#cc1f34')}
+      whileTap={{ scale: 0.97 }}
+    >
+      {children}
+      <motion.span
+        aria-hidden="true"
+        style={{ display: 'inline-block' }}
+        whileHover={{ x: 3 }}
+        transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      >→</motion.span>
+    </motion.a>
+  );
+}
+
 export default function Hero() {
   const shouldReduce = useReducedMotion();
   const [booted, setBooted] = useState(
@@ -255,14 +280,19 @@ export default function Hero() {
   // reducedMotion fallback handled in useState initializer above
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const contentOpacity = useTransform(scrollYProgress, [0.35, 0.9], [1, 0]);
 
+  // Staircase layout: each line shifts right + last line in accent red
   const nameLines = [
-    { text: 'Andres', outlined: false, delay: 0.2 },
-    { text: 'Felipe', outlined: true,  delay: 0.36 },
-    { text: 'Pisso',  outlined: false, delay: 0.52 },
+    { text: 'Andres', delay: 0.18, indent: '0',                              color: 'var(--color-fg)' },
+    { text: 'Felipe', delay: 0.30, indent: 'clamp(32px, 5vw, 96px)',         color: 'var(--color-fg)' },
+    { text: 'Pisso',  delay: 0.42, indent: 'clamp(64px, 10vw, 192px)',       color: 'var(--color-accent)' },
   ];
+
+  // Scramble effects — trigger once booted
+  const scrambleLabel  = useScramble(t.hero.label.toUpperCase(),  { duration: 900,  trigger: booted ? 1 : 0, delay: 400,  enabled: !shouldReduce });
+  const scrambleHandle = useScramble('@byandresfe',                { duration: 700,  trigger: booted ? 1 : 0, delay: 1000, enabled: !shouldReduce });
 
   return (
     <>
@@ -289,10 +319,10 @@ export default function Hero() {
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,37,64,0.04) 0%, transparent 70%)' }} />
-          {/* Bottom fade — prevents particles overlapping CTAs */}
-          <div className="absolute bottom-0 left-0 right-0 h-64" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
-          {/* Left fade — protects text column from particle overlap */}
-          <div className="absolute inset-y-0 left-0 w-[55%]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, rgba(8,8,8,0.75) 35%, transparent 100%)' }} />
+          {/* Bottom fade — prevents particles overlapping stats */}
+          <div className="absolute bottom-0 left-0 right-0 h-48" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
+          {/* Left fade — protects text column, fades cleanly to transparent */}
+          <div className="absolute inset-y-0 left-0 w-[48%] max-w-[760px]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 15%, rgba(8,8,8,0.6) 45%, transparent 100%)' }} />
         </div>
 
         {/* Corner marks */}
@@ -305,29 +335,23 @@ export default function Hero() {
         >
           {/* System label */}
           <motion.div
-            className="flex items-center gap-4 mb-12"
-            aria-hidden="true"
+            className="flex items-center gap-4 mb-12 flex-wrap"
             initial={{ opacity: 0, x: -16 }}
             animate={booted ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <motion.div
-              style={{ backgroundColor: 'var(--color-accent)', height: '1px' }}
-              initial={{ width: 0 }}
-              animate={booted ? { width: 48 } : { width: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            />
-            <span className="sys-label">{t.hero.label}</span>
-            <div className="flex items-center gap-2 ml-4">
-              <div className="pulse-dot w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
+            <SectionTag label={scrambleLabel} page="001" />
+            <div className="flex items-center gap-2 ml-2">
+              <AudioBars active={booted} color="var(--color-accent)" size={10} />
               <span className="sys-label" style={{ color: 'var(--color-accent)' }}>{t.hero.signalActive}</span>
             </div>
           </motion.div>
 
-          {/* H1 — Name as protagonist */}
+          {/* H1 — Name: staggered line reveal + scramble/chromatic on hover */}
           <div className="mb-6">
             <h1
               className="uppercase"
+              aria-label="Andres Felipe Pisso"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
                 fontSize: 'clamp(4.5rem, 14vw, 13rem)',
@@ -335,23 +359,28 @@ export default function Hero() {
                 letterSpacing: '-0.01em',
               }}
             >
-              {nameLines.map((line, i) => (
-                <div key={i} style={{ overflow: 'hidden', paddingBottom: '0.04em' }}>
-                  <motion.span
-                    style={{
-                      display: 'block',
-                      color: line.outlined ? 'transparent' : 'var(--color-fg)',
-                    }}
-                    initial={{ y: '110%' }}
-                    animate={booted ? { y: 0 } : { y: '110%' }}
-                    transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: line.delay }}
-                  >
-                    {line.outlined
-                      ? <StrokeLine>{line.text}</StrokeLine>
-                      : line.text
-                    }
-                  </motion.span>
-                </div>
+              {nameLines.map((line, lineIdx) => (
+                <motion.div
+                  key={lineIdx}
+                  style={{
+                    overflow: 'hidden',
+                    paddingBottom: '0.04em',
+                    display: 'block',
+                    paddingLeft: line.indent,
+                  }}
+                  initial={{ y: '110%', opacity: 0 }}
+                  animate={booted ? { y: 0, opacity: 1 } : { y: '110%', opacity: 0 }}
+                  transition={{
+                    duration: 0.72,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: line.delay,
+                  }}
+                >
+                  {/* Color wrapper — GlitchStrokeText inherits color from parent */}
+                  <span style={{ color: line.color, display: 'block' }}>
+                    <GlitchStrokeText>{line.text}</GlitchStrokeText>
+                  </span>
+                </motion.div>
               ))}
             </h1>
           </div>
@@ -394,7 +423,7 @@ export default function Hero() {
               animate={booted ? { scaleX: 1 } : { scaleX: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
             />
-            <span className="sys-label whitespace-nowrap">@byandresfe</span>
+            <span className="sys-label whitespace-nowrap" aria-label="@byandresfe">{scrambleHandle}</span>
           </motion.div>
 
           {/* Copy + CTAs + Focus tags */}
@@ -418,31 +447,23 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap gap-3">
-                <motion.a
+                <MagneticCTA
                   href="#cases"
-                  className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"
-                  style={{
-                    fontFamily: '"JetBrains Mono", monospace',
-                    backgroundColor: 'var(--color-accent)', color: '#0a0a0a',
-                    clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#cc1f34')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
                   onClick={() => analytics.heroCta(t.hero.cta1)}
-                  whileTap={{ scale: 0.97 }}
+                  disabled={shouldReduce}
                 >
                   {t.hero.cta1}
-                  <span aria-hidden="true">→</span>
-                </motion.a>
+                </MagneticCTA>
                 <motion.a
                   href="/resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase transition-all duration-200"
+                  className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase"
                   style={{
                     fontFamily: '"JetBrains Mono", monospace',
                     border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)',
                     clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
+                    transition: 'border-color 0.2s, color 0.2s',
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.color = 'var(--color-fg-dim)'; }}
@@ -494,10 +515,22 @@ export default function Hero() {
             animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.25 }}
           >
-            {t.trust.stats.map((stat) => (
-              <div key={stat.label}>
+            {t.trust.stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="relative pl-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.3 + i * 0.07 }}
+              >
+                {/* Left accent line */}
                 <div
-                  className="tabular mb-2"
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 bottom-0 w-[2px]"
+                  style={{ backgroundColor: 'var(--color-accent)', opacity: 0.5 }}
+                />
+                <div
+                  className="tabular mb-1.5"
                   style={{
                     fontFamily: '"Bebas Neue", sans-serif',
                     fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
@@ -509,7 +542,7 @@ export default function Hero() {
                   <CountUp target={stat.value} suffix="" />
                 </div>
                 <div className="sys-label">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </motion.div>

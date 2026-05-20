@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
+import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 
@@ -73,13 +74,12 @@ export default function WorkPage({ onMenuOpen }) {
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
             <motion.div
-              className="flex items-center gap-4 mb-8"
+              className="mb-8"
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{t.caseFiles.label}</span>
+              <SectionTag label={t.caseFiles.label} page="003" />
             </motion.div>
             <motion.h1
               className="uppercase mb-6"

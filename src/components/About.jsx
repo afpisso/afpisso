@@ -3,18 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import PhotoGridOverlay from './PhotoGridOverlay';
-
-function RevealLine({ delay = 0 }) {
-  return (
-    <motion.div
-      style={{ height: '1px', backgroundColor: 'var(--color-accent)', transformOrigin: 'left' }}
-      initial={{ scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay }}
-    />
-  );
-}
+import SectionHeading from './SectionHeading';
 
 export default function About() {
   const photoRef = useRef(null);
@@ -32,18 +21,13 @@ export default function About() {
   return (
     <section id="about" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
-        {/* Section label */}
-        <motion.div
-          className="flex items-center gap-4 mb-16"
-          aria-hidden="true"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <RevealLine />
-          <span className="sys-label whitespace-nowrap">{about.label}</span>
-        </motion.div>
+        {/* Section heading */}
+        <div className="mb-16">
+          <SectionHeading
+            label={about.label.split('/')[0].trim()}
+            page="004"
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20">
           {/* Left: photo + bio */}
@@ -111,8 +95,12 @@ export default function About() {
 
             {/* Core question */}
             <motion.div
-              className="mb-10 p-6 relative"
-              style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+              className="mb-10 p-6 relative glass"
+              style={{
+                border: '1px solid rgba(255,255,255,0.08)',
+                backgroundColor: 'rgba(8,8,8,0.42)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.4)',
+              }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -272,8 +260,12 @@ export default function About() {
 
         {/* Philosophy block */}
         <motion.div
-          className="p-8 md:p-12 relative"
-          style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+          className="p-8 md:p-12 relative glass"
+          style={{
+            border: '1px solid rgba(255,255,255,0.08)',
+            backgroundColor: 'rgba(8,8,8,0.42)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.4)',
+          }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

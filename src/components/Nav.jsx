@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import ContactOverlay from './ContactOverlay';
 import SweepFill from './SweepFill';
+import AudioBars from './AudioBars';
+import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
 
 export default function Nav({ onMenuOpen }) {
@@ -20,13 +22,23 @@ export default function Nav({ onMenuOpen }) {
 
   return (
     <>
+    {/* Skip-to-content link — visible on focus for keyboard users */}
+    <a
+      href="#home"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[300] focus:px-4 focus:py-2 focus:text-[11px] focus:uppercase focus:tracking-widest"
+      style={{ fontFamily: '"JetBrains Mono", monospace', backgroundColor: 'var(--color-accent)', color: '#0a0a0a' }}
+    >
+      Skip to content
+    </a>
+
     <motion.nav
       aria-label="Site navigation"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'border-b' : ''}`}
+      className={`fixed top-0 left-0 right-0 z-50 ${scrolled ? 'border-b' : ''}`}
       style={{
         backgroundColor: scrolled ? 'rgba(10,10,10,0.96)' : 'transparent',
         borderColor: 'var(--color-rule)',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        transition: 'background-color 0.3s, border-color 0.3s',
       }}
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -49,6 +61,8 @@ export default function Nav({ onMenuOpen }) {
               src="/logo-mark.png"
               alt=""
               aria-hidden="true"
+              width="40"
+              height="40"
               className="w-full h-full object-contain p-1"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -65,42 +79,51 @@ export default function Nav({ onMenuOpen }) {
             <div aria-hidden="true" className="absolute -bottom-[1px] -right-[1px] w-2 h-2" style={{ backgroundColor: 'var(--color-accent)' }} />
           </div>
           <div>
-            <div
-              style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '14px', letterSpacing: '0.22em', color: 'var(--color-fg)', lineHeight: 1 }}
+            <ScrambleText
+              style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '14px', letterSpacing: '0.22em', color: 'var(--color-fg)', lineHeight: 1, display: 'block' }}
+              duration={400}
             >
               ByAndresFe
-            </div>
+            </ScrambleText>
             <div className="sys-label" style={{ marginTop: '2px' }}>{t.nav.logoSub}</div>
           </div>
         </Link>
 
         {/* Right: nav links + lang switch + contact + MENU+ */}
         <div className="flex items-center gap-3">
-          {/* Desktop nav links */}
+          {/* Desktop nav links — NavLink provides active state via aria-current */}
           <div className="hidden lg:flex items-center gap-1">
             {[
               { to: '/work', label: t.nav.work },
               { to: '/notes', label: t.nav.notes },
             ].map(({ to, label }) => (
-              <Link
+              <NavLink
                 key={to}
                 to={to}
-                style={{
+                style={({ isActive }) => ({
                   fontFamily: '"JetBrains Mono", monospace',
                   fontSize: '10px',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-fg-mute)',
+                  color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                   textDecoration: 'none',
                   padding: '6px 12px',
-                  border: '1px solid transparent',
+                  border: `1px solid ${isActive ? 'rgba(255,37,64,0.35)' : 'transparent'}`,
                   transition: 'color 0.2s, border-color 0.2s',
+                })}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'var(--color-fg)';
+                  e.currentTarget.style.borderColor = 'var(--color-rule)';
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'transparent'; }}
+                onMouseLeave={e => {
+                  // Restore active or default style after hover
+                  const isActive = e.currentTarget.getAttribute('aria-current') === 'page';
+                  e.currentTarget.style.color = isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)';
+                  e.currentTarget.style.borderColor = isActive ? 'rgba(255,37,64,0.35)' : 'transparent';
+                }}
               >
-                {label}
-              </Link>
+                <ScrambleText duration={300}>{label}</ScrambleText>
+              </NavLink>
             ))}
           </div>
 
@@ -111,10 +134,10 @@ export default function Nav({ onMenuOpen }) {
             style={{ border: '1px solid var(--color-rule)' }}
           >
             <div className="flex items-center gap-2">
-              <div aria-hidden="true" className="pulse-dot w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-accent)' }} />
+              <AudioBars active={true} color="var(--color-accent)" size={10} />
               <span className="sys-label">{t.nav.status}</span>
             </div>
-            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '8px', letterSpacing: '0.1em', color: 'var(--color-fg-mute)', marginTop: '2px', paddingLeft: '14px' }}>
+            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--color-fg-mute)', marginTop: '2px', paddingLeft: '16px' }}>
               {t.nav.statusSub}
             </span>
           </div>
@@ -133,7 +156,7 @@ export default function Nav({ onMenuOpen }) {
               color: 'var(--color-fg-mute)',
               padding: '6px 10px',
               cursor: 'pointer',
-              minHeight: 34,
+              minHeight: 44,
               transition: 'border-color 0.2s, color 0.2s',
               textTransform: 'uppercase',
             }}
@@ -165,7 +188,7 @@ export default function Nav({ onMenuOpen }) {
           >
             <SweepFill active={contactHover} fillColor="var(--color-accent)" activeTextColor="#0a0a0a">
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: contactHover ? '#0a0a0a' : 'var(--color-accent)', transition: 'color 0.18s' }}>
-                <span className="hidden xs:inline sm:inline">{t.nav.contact}</span>
+                <ScrambleText className="hidden sm:inline" duration={280}>{t.nav.contact}</ScrambleText>
                 <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>◉</span>
               </span>
             </SweepFill>
@@ -188,7 +211,7 @@ export default function Nav({ onMenuOpen }) {
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
           >
-            {t.nav.menu}
+            <ScrambleText duration={260}>{t.nav.menu}</ScrambleText>
           </button>
         </div>
       </div>

@@ -5,6 +5,7 @@ import GlitchStrokeText from './GlitchStrokeText';
 import SweepFill from './SweepFill';
 import { CyberChevron, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
+import SectionTag from './SectionTag';
 
 const MONO = '"JetBrains Mono", monospace';
 const BEBAS = '"Bebas Neue", sans-serif';
@@ -28,9 +29,14 @@ export default function Contact() {
 
           {/* Left */}
           <div>
-            <motion.div className="flex items-center gap-4 mb-8" aria-hidden="true" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-              <div style={{ width: 32, height: 1, backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{ct.label}</span>
+            <motion.div
+              className="mb-8"
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <SectionTag label={ct.label} page="008" />
             </motion.div>
 
             <motion.h2
@@ -41,9 +47,9 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
-              {ct.ctaLine1}<br />
-              <GlitchStrokeText stroke="1.5px rgba(245,245,243,0.5)">{ct.ctaStroke}</GlitchStrokeText><br />
-              {ct.ctaLine3}
+              <GlitchStrokeText>{ct.ctaLine1}</GlitchStrokeText><br />
+              <GlitchStrokeText>{ct.ctaStroke}</GlitchStrokeText><br />
+              <GlitchStrokeText>{ct.ctaLine3}</GlitchStrokeText>
             </motion.h2>
 
             <motion.p
@@ -106,11 +112,19 @@ export default function Contact() {
 
           {/* Right: links */}
           <motion.div
+            className="glass p-8 relative"
+            style={{
+              border: '1px solid rgba(255,255,255,0.08)',
+              backgroundColor: 'rgba(8,8,8,0.38)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.4)',
+            }}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           >
+            {/* Top accent */}
+            <div aria-hidden="true" className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
             <div className="sys-label mb-6" id="contact-channels-label">{t.contact.channelsLabel}</div>
             <nav aria-labelledby="contact-channels-label">
               {links.map((link, i) => (

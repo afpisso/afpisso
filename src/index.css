@@ -179,17 +179,9 @@ section[id] {
 
 /* Custom cursor removed — cursor:none blocks wheel scroll in Chrome */
 
-/* ─── Press feedback — scale 0.97 on active (Emil Kowalski) ─────── */
-button:active,
-a[href]:active,
-[role="button"]:active {
-  transform: scale(0.97);
-  transition: transform 100ms ease-out;
-}
-/* Don't apply to elements that already have Framer Motion whileTap */
-[data-framer-motion]:active {
-  transform: none;
-}
+/* Press feedback handled per-component via Framer Motion whileTap.
+   Global rule removed — it conflicted with whileTap transforms and
+   couldn't be reliably overridden for animated elements. */
 
 /* ─── Smooth section fade-in via scroll (base) ──────── */
 [data-reveal] {
@@ -204,7 +196,7 @@ a[href]:active,
   --color-accent:  #ff2540;
   --color-rule:    rgba(255, 255, 255, 0.11);
   --color-fg-dim:  rgba(245, 245, 243, 0.55);
-  --color-fg-mute: rgba(245, 245, 243, 0.5);
+  --color-fg-mute: rgba(245, 245, 243, 0.62);
 
   /* Menu easing curves */
   --ease-sweep: cubic-bezier(.76, 0, .2, 1);
@@ -253,8 +245,8 @@ a[href]:active,
   to   { transform: translateX(-50%); }
 }
 
-/* ─── Logo name glitch — chromatic aberration ─────── */
-/* ::before = red ghost  /  ::after = cyan ghost       */
+/* ─── Chromatic aberration — nav logo (small, ±4px) ─── */
+/* ::before = red ghost  /  ::after = cyan ghost          */
 @keyframes glitch-r {
   0%   { clip-path: inset(45% 0 48% 0); transform: translate(-4px, 0); }
   25%  { clip-path: inset(12% 0 78% 0); transform: translate(3px, 0);  }
@@ -271,6 +263,27 @@ a[href]:active,
   100% { clip-path: inset(60% 0 22% 0); transform: translate(3px, 0);  }
 }
 
+/* ─── Chromatic aberration — display titles (large, ±7px) */
+/* Larger displacement so the RGB split reads on 40–100px Bebas  */
+@keyframes glitch-title-r {
+  0%   { clip-path: inset(42% 0 51% 0); transform: translate(-7px, 0); }
+  20%  { clip-path: inset(10% 0 76% 0); transform: translate(6px, 0);  }
+  40%  { clip-path: inset(68% 0 12% 0); transform: translate(-5px, 0); }
+  60%  { clip-path: inset(28% 0 60% 0); transform: translate(7px, 0);  }
+  80%  { clip-path: inset(78% 0 6%  0); transform: translate(-6px, 0); }
+  100% { clip-path: inset(42% 0 51% 0); transform: translate(-7px, 0); }
+}
+
+@keyframes glitch-title-b {
+  0%   { clip-path: inset(58% 0 24% 0); transform: translate(6px, 0);  }
+  20%  { clip-path: inset(5%  0 85% 0); transform: translate(-5px, 0); }
+  40%  { clip-path: inset(35% 0 48% 0); transform: translate(7px, 0);  }
+  60%  { clip-path: inset(82% 0 4%  0); transform: translate(-7px, 0); }
+  80%  { clip-path: inset(15% 0 72% 0); transform: translate(5px, 0);  }
+  100% { clip-path: inset(58% 0 24% 0); transform: translate(6px, 0);  }
+}
+
+/* Base class — nav logo + any .logo-name element */
 .logo-name {
   position: relative;
   display: inline-block;
@@ -284,8 +297,10 @@ a[href]:active,
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.08s;
+  white-space: nowrap;
 }
 
+/* Nav logo glitch (small displacement) */
 .logo-name.glitching::before {
   color: #ff2540;
   opacity: 0.8;
@@ -299,8 +314,79 @@ a[href]:active,
   animation-delay: 0.06s;
 }
 
+/* Display title glitch (large displacement) */
+.logo-name.glitching-title::before {
+  color: #ff2540;
+  opacity: 0.75;
+  animation: glitch-title-r 0.24s steps(4) infinite;
+}
+
+.logo-name.glitching-title::after {
+  color: #00e5ff;
+  opacity: 0.5;
+  animation: glitch-title-b 0.24s steps(4) infinite;
+  animation-delay: 0.05s;
+}
+
+/* ─── Grain / noise texture overlay ────────────────────
+   Fixed + pointer-events-none — never on scroll containers
+   (taste-skill §5 performance guardrails)               */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+}
+
+/* ─── Liquid glass — inner refraction border (taste §4) */
+/* Apply to any element with backdrop-filter for true glass depth */
+.glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.glass-hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 37, 64, 0.12);
+}
+
+/* ─── Spotlight border — CSS custom property approach ─
+   Set --sx/--sy via JS for the cursor-tracked spotlight  */
+.spotlight-card {
+  --sx: 50%;
+  --sy: 50%;
+  --spotlight-opacity: 0;
+}
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    280px circle at var(--sx) var(--sy),
+    rgba(255, 37, 64, 0.22),
+    transparent 65%
+  );
+  opacity: var(--spotlight-opacity);
+  transition: opacity 0.35s;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ─── Reduced motion (§1 + §7) ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+  body::before { display: none; }
   .scan-line { display: none; }
   .pulse-dot::before { animation: none; }
   .blink { animation: none; opacity: 1; }

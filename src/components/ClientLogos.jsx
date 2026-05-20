@@ -67,7 +67,7 @@ function LogoItem({ name, sub }) {
           fontFamily: '"Bebas Neue", sans-serif',
           fontSize: 'clamp(16px, 2vw, 21px)',
           letterSpacing: '0.06em',
-          color: glitching ? 'var(--color-fg)' : 'rgba(245,245,243,0.38)',
+          color: glitching ? 'var(--color-fg)' : 'rgba(245,245,243,0.62)',
           transition: 'color 0.12s',
           whiteSpace: 'nowrap',
           lineHeight: 1,
@@ -81,7 +81,7 @@ function LogoItem({ name, sub }) {
           fontSize: '7px',
           letterSpacing: '0.20em',
           textTransform: 'uppercase',
-          color: glitching ? 'var(--color-accent)' : 'rgba(245,245,243,0.14)',
+          color: glitching ? 'var(--color-accent)' : 'rgba(245,245,243,0.28)',
           transition: 'color 0.12s',
         }}
       >

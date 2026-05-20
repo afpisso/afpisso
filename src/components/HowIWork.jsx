@@ -1,18 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
-import { StepNumber, ScanReticle } from './CyberIcons';
-
-function RevealLine({ delay = 0 }) {
-  return (
-    <motion.div
-      style={{ height: '1px', backgroundColor: 'var(--color-accent)', transformOrigin: 'left' }}
-      initial={{ scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay }}
-    />
-  );
-}
+import { StepNumber } from './CyberIcons';
+import SectionHeading from './SectionHeading';
 
 export default function HowIWork() {
   const { t } = useLang();
@@ -21,40 +10,31 @@ export default function HowIWork() {
   return (
     <section id="how-i-work" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
-        {/* Section label */}
-        <motion.div
-          className="flex items-center gap-4 mb-16"
-          aria-hidden="true"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <ScanReticle size={13} color="var(--color-accent)" />
-          <RevealLine />
-          <span className="sys-label whitespace-nowrap">{label}</span>
-        </motion.div>
+        {/* Section heading */}
+        <div className="mb-16">
+          <SectionHeading label={label} page="005" />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Left: headline */}
+          {/* Left: supporting copy */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2
-              className="uppercase mb-8"
+            <p
+              className="mb-4"
               style={{
-                fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-                color: 'var(--color-fg)',
-                letterSpacing: '0.02em',
-                lineHeight: 1,
+                fontFamily: '"JetBrains Mono", monospace',
+                fontSize: '11px',
+                color: 'var(--color-accent)',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
               }}
             >
               {headline}
-            </h2>
+            </p>
             <p
               style={{
                 fontFamily: '"JetBrains Mono", monospace',

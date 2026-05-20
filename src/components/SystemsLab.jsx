@@ -1,6 +1,153 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
-import GlitchStrokeText from './GlitchStrokeText';
+import SectionHeading from './SectionHeading';
+import SpotlightCard from './SpotlightCard';
+
+function PrincipleRow({ p, i }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      className="relative flex items-start gap-6 py-7 border-t transition-colors duration-200"
+      style={{ borderColor: hovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)' }}
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Left accent — grows in on hover */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-300"
+        style={{
+          backgroundColor: 'var(--color-accent)',
+          opacity: hovered ? 1 : 0,
+          transform: hovered ? 'scaleY(1)' : 'scaleY(0)',
+          transformOrigin: 'top',
+        }}
+      />
+
+      {/* Number */}
+      <div className="flex-shrink-0 w-10 pt-1.5">
+        <div
+          className="text-[10px] tracking-widest transition-colors duration-200"
+          style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+          }}
+        >
+          {p.id}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-4 items-start pl-2">
+        <h3
+          className="uppercase transition-colors duration-200"
+          style={{
+            fontFamily: '"Bebas Neue", sans-serif',
+            fontSize: 'clamp(22px, 2vw, 28px)',
+            lineHeight: 1.05,
+            letterSpacing: '0.02em',
+            color: hovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.85)',
+          }}
+        >
+          {p.title}
+        </h3>
+        <p
+          className="text-[13px] leading-relaxed transition-colors duration-200"
+          style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            color: hovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
+          }}
+        >
+          {p.body}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+// Small glyph per module to add visual identity
+const MODULE_GLYPHS = {
+  'HUD Review':            '⊡',
+  'UI Systems':            '⊞',
+  'UI Components':         '⊟',
+  'Accessibility':         '◎',
+  'Player Onboarding':     '▷',
+  'LiveOps UX':            '◈',
+  'Figma Workflows':       '⊕',
+  'UEFN Workflows':        '◆',
+  'Documentation':         '≡',
+  'UX Components':         '⊠',
+  'UX Systems':            '⊞',
+  'Accessibility Reviews': '◎',
+  'LiveOps UX':            '◈',
+};
+
+function ModuleCard({ mod, i }) {
+  const [hovered, setHovered] = useState(false);
+  const glyph = MODULE_GLYPHS[mod.label] || '◇';
+  return (
+    <SpotlightCard>
+    <motion.div
+      className="relative p-5 flex flex-col justify-between transition-all duration-200 cursor-default overflow-hidden"
+      style={{
+        backgroundColor: hovered ? 'rgba(20,4,8,0.7)' : 'rgba(8,8,8,0.42)',
+        minHeight: '90px',
+        boxShadow: hovered
+          ? 'inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 16px rgba(0,0,0,0.4)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+      }}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
+      whileTap={{ scale: 0.97 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Background glyph — decorative, large, faint */}
+      <div
+        aria-hidden="true"
+        className="absolute right-3 bottom-1 text-[38px] leading-none transition-all duration-300 pointer-events-none select-none"
+        style={{
+          color: hovered ? 'rgba(255,37,64,0.08)' : 'rgba(255,255,255,0.04)',
+          fontFamily: 'monospace',
+          transform: hovered ? 'scale(1.1)' : 'scale(1)',
+        }}
+      >
+        {glyph}
+      </div>
+
+      {/* Tag */}
+      <div
+        className="text-[9px] font-bold tracking-widest uppercase mb-3 transition-colors duration-200"
+        style={{
+          fontFamily: '"JetBrains Mono", monospace',
+          color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.5)',
+        }}
+      >
+        {mod.tag}
+      </div>
+
+      {/* Label */}
+      <div
+        className="text-[12px] transition-colors duration-200"
+        style={{
+          fontFamily: '"JetBrains Mono", monospace',
+          color: hovered ? 'var(--color-fg)' : 'var(--color-fg-dim)',
+          lineHeight: 1.35,
+          letterSpacing: '0.01em',
+        }}
+      >
+        {mod.label}
+      </div>
+    </motion.div>
+    </SpotlightCard>
+  );
+}
 
 export default function SystemsLab() {
   const { t } = useLang();
@@ -10,39 +157,19 @@ export default function SystemsLab() {
     <section id="systems" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
-          <div>
-            <motion.div
-              className="flex items-center gap-4 mb-4"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{sl.label}</span>
-            </motion.div>
-            <motion.h2
-              className="text-4xl md:text-5xl font-black uppercase tracking-tight"
-              style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', lineHeight: 1.05 }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              {sl.principlesLabel.split(' ').slice(0, -1).join(' ') || sl.principlesLabel}<br />
-              <GlitchStrokeText stroke="1.5px rgba(240,238,234,0.5)">
-                {sl.principlesLabel.split(' ').slice(-1)[0]}
-              </GlitchStrokeText>
-            </motion.h2>
-          </div>
+        <div className="mb-16">
+          <SectionHeading
+            label={sl.label.split('/')[0].trim()}
+            title={sl.principlesLabel}
+            page="006"
+          />
           <motion.p
-            className="text-base self-end"
-            style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.8, maxWidth: '420px' }}
+            className="text-base mt-10"
+            style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.8, maxWidth: '520px' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
           >
             {sl.description}
           </motion.p>
@@ -51,38 +178,7 @@ export default function SystemsLab() {
         {/* Principles */}
         <div className="mb-20">
           {sl.principles.map((p, i) => (
-            <motion.div
-              key={p.id}
-              className="group flex items-start gap-6 py-7 border-t transition-colors duration-200"
-              style={{ borderColor: 'var(--color-rule)' }}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(212,43,34,0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--color-rule)')}
-            >
-              <div
-                className="text-[11px] font-bold pt-1 flex-shrink-0 w-8"
-                style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-accent)', opacity: 0.6 }}
-              >
-                {p.id}
-              </div>
-              <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                <h3
-                  className="text-xl font-bold uppercase"
-                  style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', fontSize: '16px', lineHeight: 1.3 }}
-                >
-                  {p.title}
-                </h3>
-                <p
-                  className="text-[14px] leading-relaxed"
-                  style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}
-                >
-                  {p.body}
-                </p>
-              </div>
-            </motion.div>
+            <PrincipleRow key={p.id} p={p} i={i} />
           ))}
           <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
         </div>
@@ -101,31 +197,7 @@ export default function SystemsLab() {
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
             {sl.modules.map((mod, i) => (
-              <motion.div
-                key={mod.label}
-                className="group p-5 transition-all duration-200 cursor-default"
-                style={{ backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
-                whileTap={{ scale: 0.97 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(18,4,7,0.62)')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(8,8,8,0.42)')}
-              >
-                <div
-                  className="text-[9px] font-bold tracking-widest uppercase mb-2"
-                  style={{ color: 'var(--color-accent)', fontFamily: '"JetBrains Mono", monospace', opacity: 0.7 }}
-                >
-                  {mod.tag}
-                </div>
-                <div
-                  className="text-[13px] font-semibold"
-                  style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg)', lineHeight: 1.3 }}
-                >
-                  {mod.label}
-                </div>
-              </motion.div>
+              <ModuleCard key={mod.label} mod={mod} i={i} />
             ))}
           </div>
         </div>
