@@ -22,10 +22,16 @@ export default function FieldNotes() {
   return (
     <section
       id="notes"
-      className="py-28"
-      style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}
+      className="py-28 relative"
+      style={{ borderTop: '1px solid var(--color-rule)' }}
     >
-      <div className="max-w-[1400px] mx-auto px-6">
+      {/* Mobile: solid bg */}
+      <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
+      {/* Desktop: content right, particles left */}
+      <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
+        background: 'linear-gradient(to left, #0a0a0a 0%, #0a0a0a 62%, rgba(10,10,10,0.6) 72%, transparent 82%)',
+      }} />
+      <div className="relative z-10 lg:max-w-[62%] lg:ml-auto px-6">
 
         {/* Header */}
         <div className="mb-16">

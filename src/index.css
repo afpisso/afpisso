@@ -188,14 +188,10 @@ section[id] {
   will-change: transform, opacity;
 }
 
-/* ─── Content visibility: defer below-fold layout cost ─
-   Skips layout/paint/compositing for off-screen sections.
-   contain-intrinsic-size reserves approx. space so the
-   scrollbar stays stable before the section is rendered.   */
-#cases, #what-i-do, #how-i-work, #notes, #about, #contact {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 700px;
-}
+/* content-visibility intentionally removed: sections now have transparent
+   backgrounds letting the fixed GeometryGrid canvas show through. The
+   paint containment that content-visibility implies would clip the fixed
+   canvas for sections that are near-viewport. */
 
 /* ─── Menu Overlay — design system tokens (DESIGN_SYSTEM.md) ─── */
 :root {

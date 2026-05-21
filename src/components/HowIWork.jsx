@@ -8,8 +8,14 @@ export default function HowIWork() {
   const { label, headline, body, steps } = t.howIWork;
 
   return (
-    <section id="how-i-work" className="py-28" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
-      <div className="max-w-[1400px] mx-auto px-6">
+    <section id="how-i-work" className="py-28 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
+      {/* Mobile: solid bg */}
+      <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
+      {/* Desktop: content left, particles right */}
+      <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
+        background: 'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 62%, rgba(10,10,10,0.6) 72%, transparent 82%)',
+      }} />
+      <div className="relative z-10 lg:max-w-[62%] lg:mr-auto px-6">
         {/* Section heading */}
         <div className="mb-16">
           <SectionHeading label={label} page="005" />

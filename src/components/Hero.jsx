@@ -164,15 +164,20 @@ function BootSequence({ onComplete }) {
   );
 }
 
-// Shape mapped to each homepage section by id
-const SECTION_SHAPES = {
-  home:    'logo',
-  cases:   'cube',
-  whatido: 'torus',
-  howiwork:'helix',
-  notes:   'wave',
-  about:   'logo',
-  contact: 'logo',
+// Shape + particle cloud offset per section.
+// offsetX: fraction of viewport width; positive = right, negative = left.
+// Section IDs must match the actual `id` attributes in each component.
+// Shape + particle cloud offset per section.
+// offsetX fraction of viewport: ±0.46 puts the cloud center at ~27%/73% of viewport,
+// squarely in the transparent zone created by the 62%→82% gradient in each section.
+const SECTION_CONFIG = {
+  'home':      { shape: 'logo',  offsetX:  0.18 },
+  'cases':     { shape: 'cube',  offsetX:  0.46 },  // content left  → particles right
+  'what-i-do': { shape: 'torus', offsetX: -0.46 },  // content right → particles left
+  'how-i-work':{ shape: 'helix', offsetX:  0.46 },  // content left  → particles right
+  'notes':     { shape: 'wave',  offsetX: -0.46 },  // content right → particles left
+  'about':     { shape: 'logo',  offsetX:  0.46 },  // content left  → particles right
+  'contact':   { shape: 'logo',  offsetX: -0.46 },  // content right → particles left
 };
 
 function useMousePos() {
@@ -274,8 +279,10 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const { t } = useLang();
   const mouseRef = useMousePos();
-  const activeSection = useActiveSection(Object.keys(SECTION_SHAPES));
-  const currentShape = SECTION_SHAPES[activeSection] || 'sphere';
+  const activeSection = useActiveSection(Object.keys(SECTION_CONFIG));
+  const sectionCfg    = SECTION_CONFIG[activeSection] ?? SECTION_CONFIG['home'];
+  const currentShape  = sectionCfg.shape;
+  const currentOffsetX = sectionCfg.offsetX;
 
   // reducedMotion fallback handled in useState initializer above
 
@@ -283,8 +290,8 @@ export default function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const contentOpacity = useTransform(scrollYProgress, [0.35, 0.9], [1, 0]);
 
-  // Pause the particle system when the hero is fully scrolled out of view
-  const heroInView = useInView(sectionRef, { amount: 0 });
+  // Particles are visible in every section (transparent backgrounds) — never pause
+  // based on scroll position. The canvas pauses automatically on document.hidden.
 
   // Staircase layout: each line shifts right + last line in accent red
   const nameLines = [
@@ -313,11 +320,11 @@ export default function Hero() {
             mouseRef={mouseRef}
             shape={currentShape}
             intensity={7}
-            offsetX={0.18}
+            offsetX={currentOffsetX}
             offsetY={0}
             rotX={0.20}
             spin={true}
-            paused={!heroInView}
+            paused={false}
           />
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
