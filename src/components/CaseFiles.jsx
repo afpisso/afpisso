@@ -312,7 +312,7 @@ export default function CaseFiles() {
         <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
         {/* Desktop: content left, particles right — gradient fades to transparent on the right */}
         <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 62%, rgba(10,10,10,0.6) 72%, transparent 82%)',
+          background: 'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 60%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.55) 70%, rgba(10,10,10,0.15) 78%, transparent 85%)',
         }} />
         <div className="relative z-10 lg:max-w-[62%] lg:mr-auto px-6">
 
