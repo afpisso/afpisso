@@ -283,6 +283,9 @@ export default function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const contentOpacity = useTransform(scrollYProgress, [0.35, 0.9], [1, 0]);
 
+  // Pause the particle system when the hero is fully scrolled out of view
+  const heroInView = useInView(sectionRef, { amount: 0 });
+
   // Staircase layout: each line shifts right + last line in accent red
   const nameLines = [
     { text: 'Andres', delay: 0.18, indent: '0',                              color: 'var(--color-fg)' },
@@ -314,7 +317,7 @@ export default function Hero() {
             offsetY={0}
             rotX={0.20}
             spin={true}
-            paused={false}
+            paused={!heroInView}
           />
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">

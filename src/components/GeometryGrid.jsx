@@ -147,22 +147,28 @@ export default function GeometryGrid({
   rotZ        = 0,
   spin        = true,
   paused      = false,
-  particleCount = 1600,
+  particleCount = 900,
 }) {
-  const canvasRef   = useRef(null);
+  const canvasRef    = useRef(null);
   // Keep mutable refs for props so the RAF loop always sees the latest value
   // without re-registering the effect.
-  const shapeRef    = useRef(shape);
-  const offsetRef   = useRef({ x: offsetX, y: offsetY });
-  const rotRef      = useRef({ x: rotX, y: rotY, z: rotZ, spin: spin ? 1 : 0 });
+  const shapeRef     = useRef(shape);
+  const offsetRef    = useRef({ x: offsetX, y: offsetY });
+  const rotRef       = useRef({ x: rotX, y: rotY, z: rotZ, spin: spin ? 1 : 0 });
   const intensityRef = useRef(intensity);
-  const pausedRef   = useRef(paused);
+  const pausedRef    = useRef(paused);
+  // Lets the paused-prop watcher restart the loop if the tab was hidden while paused
+  const startLoopRef = useRef(null);
 
   useEffect(() => { shapeRef.current = shape; },             [shape]);
   useEffect(() => { offsetRef.current = { x: offsetX, y: offsetY }; }, [offsetX, offsetY]);
   useEffect(() => { rotRef.current = { x: rotX, y: rotY, z: rotZ, spin: spin ? 1 : 0 }; }, [rotX, rotY, rotZ, spin]);
   useEffect(() => { intensityRef.current = intensity; },     [intensity]);
-  useEffect(() => { pausedRef.current = paused; },           [paused]);
+  useEffect(() => {
+    pausedRef.current = paused;
+    // If the tab was hidden while paused, the RAF loop stopped. Restart it now.
+    if (!paused) startLoopRef.current?.();
+  }, [paused]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -171,7 +177,7 @@ export default function GeometryGrid({
 
     // Reduce particle count on mobile — visually equivalent, significantly cheaper
     const isMobile = window.innerWidth < 768;
-    const N   = isMobile ? Math.min(particleCount, 600) : particleCount;
+    const N   = isMobile ? Math.min(particleCount, 400) : particleCount;
     const getSize = () => ({ w: window.innerWidth, h: window.innerHeight });
     let { w, h } = getSize();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -222,16 +228,18 @@ export default function GeometryGrid({
     };
 
     let t        = 0;
-    let raf;
+    let raf      = null;
     let frameN   = 0;
     // Preallocate draws buffer — reused every frame, no GC pressure
     const draws  = new Array(N);
 
+    const startLoop = () => { if (!raf) raf = requestAnimationFrame(draw); };
+    const stopLoop  = () => { if (raf) { cancelAnimationFrame(raf); raf = null; } };
+    startLoopRef.current = startLoop;
+
     const draw = () => {
-      if (pausedRef.current) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
+      raf = null;
+      if (pausedRef.current || document.hidden) { startLoop(); return; }
       t += 0.008;
 
       // Update home positions to current shape
@@ -336,13 +344,21 @@ export default function GeometryGrid({
         ctx.fill();
       }
 
-      raf = requestAnimationFrame(draw);
+      startLoop();
     };
 
-    draw();
+    // Pause completely when tab is hidden — saves GPU even when paused prop is false
+    const onVisChange = () => {
+      if (document.hidden) stopLoop();
+      else if (!pausedRef.current) startLoop();
+    };
+    document.addEventListener('visibilitychange', onVisChange);
+
+    startLoop();
 
     return () => {
-      cancelAnimationFrame(raf);
+      stopLoop();
+      document.removeEventListener('visibilitychange', onVisChange);
       window.removeEventListener('resize', resize);
     };
   // Re-run only when particleCount changes (everything else uses refs)
