@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import SpotlightCard from './SpotlightCard';
+import { m } from 'framer-motion';
 
 function PrincipleRow({ p, i }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <motion.div
+    <m.div
       className="relative flex items-start gap-6 py-7 border-t transition-colors duration-200"
       style={{ borderColor: hovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)' }}
       initial={{ opacity: 0, x: -20 }}
@@ -65,7 +65,7 @@ function PrincipleRow({ p, i }) {
           {p.body}
         </p>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -91,7 +91,7 @@ function ModuleCard({ mod, i }) {
   const glyph = MODULE_GLYPHS[mod.label] || '◇';
   return (
     <SpotlightCard>
-    <motion.div
+    <m.div
       className="relative p-5 flex flex-col justify-between transition-all duration-200 cursor-default overflow-hidden"
       style={{
         backgroundColor: hovered ? 'rgba(20,4,8,0.7)' : 'rgba(8,8,8,0.42)',
@@ -144,7 +144,7 @@ function ModuleCard({ mod, i }) {
       >
         {mod.label}
       </div>
-    </motion.div>
+    </m.div>
     </SpotlightCard>
   );
 }
@@ -163,7 +163,7 @@ export default function SystemsLab() {
             title={sl.principlesLabel}
             page="006"
           />
-          <motion.p
+          <m.p
             className="text-base mt-10"
             style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.8, maxWidth: '520px' }}
             initial={{ opacity: 0, y: 20 }}
@@ -172,7 +172,7 @@ export default function SystemsLab() {
             transition={{ duration: 0.5, delay: 0.35 }}
           >
             {sl.description}
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Principles */}
@@ -185,7 +185,7 @@ export default function SystemsLab() {
 
         {/* Modules grid */}
         <div>
-          <motion.div
+          <m.div
             className="flex items-center gap-4 mb-8"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -194,7 +194,7 @@ export default function SystemsLab() {
           >
             <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-rule)' }} />
             <span className="sys-label">{sl.modulesLabel}</span>
-          </motion.div>
+          </m.div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
             {sl.modules.map((mod, i) => (
               <ModuleCard key={mod.label} mod={mod} i={i} />

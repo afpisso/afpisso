@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import ContactOverlay from './ContactOverlay';
 import SweepFill from './SweepFill';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
+import { m } from 'framer-motion';
 
 export default function Nav({ onMenuOpen }) {
   const [scrolled, setScrolled] = useState(false);
@@ -31,7 +31,7 @@ export default function Nav({ onMenuOpen }) {
       Skip to content
     </a>
 
-    <motion.nav
+    <m.nav
       aria-label="Site navigation"
       className={`fixed top-0 left-0 right-0 z-50 ${scrolled ? 'border-b' : ''}`}
       style={{
@@ -215,7 +215,7 @@ export default function Nav({ onMenuOpen }) {
           </button>
         </div>
       </div>
-    </motion.nav>
+    </m.nav>
     <ContactOverlay open={contactOpen} onClose={() => setContactOpen(false)} />
     </>
   );

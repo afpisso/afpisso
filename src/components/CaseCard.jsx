@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import { CardCorners, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
 import SpotlightCard from './SpotlightCard';
+import { m, useReducedMotion } from 'framer-motion';
 
 // Emil Kowalski principles:
 //   - clip-path for layout-free reveal (props-clip-path-performant)
@@ -33,7 +33,7 @@ export default function CaseCard({ caseData, index }) {
   const statusLabel = t.caseStatuses[caseData.visibility] || caseData.status;
 
   return (
-    <motion.article
+    <m.article
       aria-label={`${caseData.id}: ${caseData.title}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -132,7 +132,7 @@ export default function CaseCard({ caseData, index }) {
 
           {/* ── Hover overlay — clip-path sweep from bottom ── */}
           {/* Emil: clip-path is layout-free (no reflow). Enter ease-out, exit ease-in. */}
-          <motion.div
+          <m.div
             className="absolute inset-0 flex flex-col justify-end p-4"
             style={{
               background: 'linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(10,10,10,0.82) 60%, rgba(20,4,8,0.55) 100%)',
@@ -195,7 +195,7 @@ export default function CaseCard({ caseData, index }) {
               {t.caseFiles.openCase}
               <span aria-hidden>→</span>
             </Link>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* ── Card body (always visible) ── */}
@@ -257,6 +257,6 @@ export default function CaseCard({ caseData, index }) {
         </div>
       </div>
       </SpotlightCard>
-    </motion.article>
+    </m.article>
   );
 }

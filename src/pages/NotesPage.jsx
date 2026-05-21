@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -7,6 +6,7 @@ import { noteArticles } from '../data/noteArticles';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { m } from 'framer-motion';
 
 const typeColors = {
   'Deep Dive': { color: '#60a5fa', bg: 'rgba(59,130,246,0.08)' },
@@ -34,7 +34,7 @@ export default function NotesPage({ onMenuOpen }) {
       <main>
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
-            <motion.div
+            <m.div
               className="flex items-center gap-4 mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -42,8 +42,8 @@ export default function NotesPage({ onMenuOpen }) {
             >
               <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
               <span className="sys-label">{t.fieldNotes.label}</span>
-            </motion.div>
-            <motion.h1
+            </m.div>
+            <m.h1
               className="uppercase"
               style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(4rem, 8vw, 7rem)', color: 'var(--color-fg)', lineHeight: 0.9, letterSpacing: '0.02em' }}
               initial={{ opacity: 0, y: 24 }}
@@ -52,8 +52,8 @@ export default function NotesPage({ onMenuOpen }) {
             >
               {t.fieldNotes.headline.split(' ').slice(0, -1).join(' ')}<br />
               <GlitchStrokeText stroke="1.5px rgba(245,245,243,0.5)">{t.fieldNotes.headline.split(' ').slice(-1)}</GlitchStrokeText>
-            </motion.h1>
-            <motion.p
+            </m.h1>
+            <m.p
               className="mt-6"
               style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.85, maxWidth: '520px' }}
               initial={{ opacity: 0 }}
@@ -61,7 +61,7 @@ export default function NotesPage({ onMenuOpen }) {
               transition={{ duration: 0.4, delay: 0.15 }}
             >
               {t.fieldNotes.description}
-            </motion.p>
+            </m.p>
           </div>
         </section>
 
@@ -71,7 +71,7 @@ export default function NotesPage({ onMenuOpen }) {
               {fieldNotes.map((note, i) => {
                 const typeStyle = typeColors[note.type] || typeColors['Reference'];
                 return (
-                  <motion.article
+                  <m.article
                     key={note.id}
                     aria-label={note.title}
                     style={{ backgroundColor: 'transparent' }}
@@ -118,7 +118,7 @@ export default function NotesPage({ onMenuOpen }) {
                         <span aria-hidden="true">→</span>
                       </div>
                     </Link>
-                  </motion.article>
+                  </m.article>
                 );
               })}
             </div>

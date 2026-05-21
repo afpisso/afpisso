@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
+import { m } from 'framer-motion';
 
 const experience = [
   {
@@ -69,7 +69,7 @@ export default function ResumePage({ onMenuOpen }) {
         <section className="pt-40 pb-28">
           <div className="max-w-[900px] mx-auto px-6">
             {/* Header */}
-            <motion.div
+            <m.div
               className="flex items-end justify-between mb-16 pb-8 flex-wrap gap-4"
               style={{ borderBottom: '1px solid var(--color-rule)' }}
               initial={{ opacity: 0, y: 20 }}
@@ -105,10 +105,10 @@ export default function ResumePage({ onMenuOpen }) {
               >
                 {r.download} ↓
               </a>
-            </motion.div>
+            </m.div>
 
             {/* Summary */}
-            <motion.section
+            <m.section
               className="mb-16"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -118,10 +118,10 @@ export default function ResumePage({ onMenuOpen }) {
               <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', color: 'rgba(240,238,234,0.75)', lineHeight: 1.85 }}>
                 {r.summary}
               </p>
-            </motion.section>
+            </m.section>
 
             {/* Experience */}
-            <motion.section
+            <m.section
               className="mb-16"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -149,10 +149,10 @@ export default function ResumePage({ onMenuOpen }) {
                 ))}
                 <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
               </dl>
-            </motion.section>
+            </m.section>
 
             {/* Selected Projects */}
-            <motion.section
+            <m.section
               className="mb-16"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -177,10 +177,10 @@ export default function ResumePage({ onMenuOpen }) {
                 ))}
                 <li className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
               </ul>
-            </motion.section>
+            </m.section>
 
             {/* Skills + Tools grid */}
-            <motion.div
+            <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-16"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -206,10 +206,10 @@ export default function ResumePage({ onMenuOpen }) {
                   ))}
                 </ul>
               </section>
-            </motion.div>
+            </m.div>
 
             {/* Education + Languages */}
-            <motion.div
+            <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-16"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -228,10 +228,10 @@ export default function ResumePage({ onMenuOpen }) {
                   {r.languageList.map(l => <li key={l}>{l}</li>)}
                 </ul>
               </section>
-            </motion.div>
+            </m.div>
 
             {/* Contact */}
-            <motion.section
+            <m.section
               className="pt-8"
               style={{ borderTop: '1px solid var(--color-rule)' }}
               initial={{ opacity: 0, y: 16 }}
@@ -256,7 +256,7 @@ export default function ResumePage({ onMenuOpen }) {
                 </a>
                 <span>{r.locationRemote}</span>
               </div>
-            </motion.section>
+            </m.section>
           </div>
         </section>
       </main>

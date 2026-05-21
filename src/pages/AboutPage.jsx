@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import { usePageMeta } from '../hooks/usePageMeta';
 import PhotoGridOverlay from '../components/PhotoGridOverlay';
+import { m } from 'framer-motion';
 
 function RevealLine({ delay = 0 }) {
   return (
-    <motion.div
+    <m.div
       style={{ height: '1px', backgroundColor: 'var(--color-accent)', transformOrigin: 'left' }}
       initial={{ scaleX: 0 }}
       whileInView={{ scaleX: 1 }}
@@ -47,7 +47,7 @@ export default function AboutPage({ onMenuOpen }) {
         {/* Hero */}
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
-            <motion.div
+            <m.div
               className="flex items-center gap-4 mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -55,8 +55,8 @@ export default function AboutPage({ onMenuOpen }) {
             >
               <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
               <span className="sys-label">{about.label}</span>
-            </motion.div>
-            <motion.h1
+            </m.div>
+            <m.h1
               className="uppercase"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
@@ -71,8 +71,8 @@ export default function AboutPage({ onMenuOpen }) {
             >
               Andres Felipe<br />
               <GlitchStrokeText stroke="1.5px rgba(245,245,243,0.5)">Pisso</GlitchStrokeText>
-            </motion.h1>
-            <motion.p
+            </m.h1>
+            <m.p
               className="mt-6"
               style={{
                 fontFamily: '"JetBrains Mono", monospace',
@@ -85,7 +85,7 @@ export default function AboutPage({ onMenuOpen }) {
               transition={{ duration: 0.4, delay: 0.15 }}
             >
               {t.aboutPage.subheadline}
-            </motion.p>
+            </m.p>
           </div>
         </section>
 
@@ -95,7 +95,7 @@ export default function AboutPage({ onMenuOpen }) {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20">
               {/* Left: photo + bio */}
               <div>
-                <motion.div
+                <m.div
                   ref={photoRef}
                   className="relative overflow-hidden mb-10"
                   style={{ aspectRatio: '1/1', maxWidth: '520px' }}
@@ -110,7 +110,7 @@ export default function AboutPage({ onMenuOpen }) {
                     photoMouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
                   }}
                 >
-                  <motion.div className="absolute inset-[-6%] w-[112%] h-[112%]" style={{ y: photoY }}>
+                  <m.div className="absolute inset-[-6%] w-[112%] h-[112%]" style={{ y: photoY }}>
                     <img
                       src="/photo.webp"
                       alt="Andres Felipe Pisso — Game UX/UI Designer"
@@ -121,10 +121,10 @@ export default function AboutPage({ onMenuOpen }) {
                       decoding="async"
                       style={{ filter: 'grayscale(15%) contrast(1.05)' }}
                     />
-                  </motion.div>
+                  </m.div>
                   <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,8,8,0.55) 0%, transparent 55%)' }} aria-hidden="true" />
                   <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2" style={{ borderColor: 'var(--color-accent)' }} aria-hidden="true" />
-                  <motion.div
+                  <m.div
                     className="absolute inset-0"
                     style={{ backgroundColor: 'var(--color-accent)', transformOrigin: 'left' }}
                     initial={{ scaleX: 1 }}
@@ -135,10 +135,10 @@ export default function AboutPage({ onMenuOpen }) {
                   />
                   {/* Interactive dot-grid hover overlay */}
                   <PhotoGridOverlay active={photoHovered} mousePosRef={photoMouseRef} />
-                </motion.div>
+                </m.div>
 
                 {/* Core question */}
-                <motion.div
+                <m.div
                   className="p-6 relative mb-8"
                   style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
                   initial={{ opacity: 0, y: 20 }}
@@ -153,9 +153,9 @@ export default function AboutPage({ onMenuOpen }) {
                   <p className="font-black uppercase" style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', fontSize: '24px', lineHeight: 1.2 }}>
                     {about.coreQuestion}
                   </p>
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -170,12 +170,12 @@ export default function AboutPage({ onMenuOpen }) {
                   <p className="leading-relaxed" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}>
                     {about.bio3}
                   </p>
-                </motion.div>
+                </m.div>
               </div>
 
               {/* Right: skills + timeline */}
               <div>
-                <motion.div
+                <m.div
                   className="mb-12"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -185,7 +185,7 @@ export default function AboutPage({ onMenuOpen }) {
                   <div className="sys-label mb-5">{about.expertiseLabel}</div>
                   <div className="space-y-6">
                     {about.skillGroups.map((group, gi) => (
-                      <motion.div
+                      <m.div
                         key={group.title}
                         initial={{ opacity: 0, y: 12 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -208,16 +208,16 @@ export default function AboutPage({ onMenuOpen }) {
                             </li>
                           ))}
                         </ul>
-                      </motion.div>
+                      </m.div>
                     ))}
                   </div>
-                </motion.div>
+                </m.div>
 
                 <div>
                   <div className="sys-label mb-5">{about.timelineLabel}</div>
                   <dl className="space-y-0">
                     {about.timeline.map((item, i) => (
-                      <motion.div
+                      <m.div
                         key={i}
                         className="flex gap-6 py-5 border-t"
                         style={{ borderColor: 'var(--color-rule)' }}
@@ -233,7 +233,7 @@ export default function AboutPage({ onMenuOpen }) {
                           <div className="text-[14px] font-bold uppercase mb-1" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg)' }}>{item.role}</div>
                           <div className="text-[12px]" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}>{item.context}</div>
                         </dd>
-                      </motion.div>
+                      </m.div>
                     ))}
                     <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
                   </dl>
@@ -242,7 +242,7 @@ export default function AboutPage({ onMenuOpen }) {
             </div>
 
             {/* Philosophy */}
-            <motion.div
+            <m.div
               className="p-8 md:p-12 relative"
               style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
               initial={{ opacity: 0, y: 20 }}
@@ -255,7 +255,7 @@ export default function AboutPage({ onMenuOpen }) {
               <p className="font-bold uppercase leading-tight" style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', fontSize: '22px', maxWidth: '700px' }}>
                 {about.philosophy}
               </p>
-            </motion.div>
+            </m.div>
           </div>
         </section>
       </main>

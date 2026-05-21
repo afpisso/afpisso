@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import GlitchStrokeText from './GlitchStrokeText';
+import { m } from 'framer-motion';
 
 /**
  * SectionHeading — editorial section title system.
@@ -36,7 +36,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
   return (
     <div>
       {/* ── Top row: chamfered red block + PAGE number ── */}
-      <motion.div
+      <m.div
         className="flex items-center justify-between mb-8"
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -81,12 +81,12 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
         >
           PAGE<br />{page}
         </div>
-      </motion.div>
+      </m.div>
 
       {/* ── Staircase h2 — each word is its own line ── */}
       <h2 aria-label={displayTitle} style={{ lineHeight: 0.88 }}>
         {words.map((word, i) => (
-          <motion.div
+          <m.div
             key={word + i}
             style={{
               paddingLeft: getIndent(i),
@@ -113,7 +113,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
             >
               <GlitchStrokeText silent>{word}</GlitchStrokeText>
             </span>
-          </motion.div>
+          </m.div>
         ))}
       </h2>
     </div>

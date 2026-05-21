@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import { StepNumber } from './CyberIcons';
 import SectionHeading from './SectionHeading';
+import { m } from 'framer-motion';
 
 export default function HowIWork() {
   const { t } = useLang();
@@ -17,7 +17,7 @@ export default function HowIWork() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: supporting copy */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
@@ -46,12 +46,12 @@ export default function HowIWork() {
             >
               {body}
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Right: steps */}
           <ol className="space-y-0">
             {steps.map((step, i) => (
-              <motion.li
+              <m.li
                 key={step.num}
                 className="flex gap-6 py-6 border-t group"
                 style={{ borderColor: 'var(--color-rule)' }}
@@ -85,7 +85,7 @@ export default function HowIWork() {
                     {step.body}
                   </div>
                 </div>
-              </motion.li>
+              </m.li>
             ))}
             <li className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
           </ol>

@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import PhotoGridOverlay from './PhotoGridOverlay';
 import SectionHeading from './SectionHeading';
+import { m } from 'framer-motion';
 
 export default function About() {
   const photoRef = useRef(null);
@@ -33,7 +33,7 @@ export default function About() {
           {/* Left: photo + bio */}
           <div>
             {/* Photo with red sweep reveal */}
-            <motion.div
+            <m.div
               ref={photoRef}
               className="relative overflow-hidden mb-10"
               style={{ aspectRatio: '1/1', maxWidth: '520px' }}
@@ -49,7 +49,7 @@ export default function About() {
               }}
             >
               {/* Parallax photo */}
-              <motion.div
+              <m.div
                 className="absolute inset-[-6%] w-[112%] h-[112%]"
                 style={{ y: photoY }}
               >
@@ -63,7 +63,7 @@ export default function About() {
                   decoding="async"
                   style={{ filter: 'grayscale(15%) contrast(1.05)' }}
                 />
-              </motion.div>
+              </m.div>
 
               {/* Dark gradient overlay */}
               <div
@@ -79,7 +79,7 @@ export default function About() {
               />
 
               {/* Red sweep reveal overlay */}
-              <motion.div
+              <m.div
                 aria-hidden="true"
                 className="absolute inset-0"
                 style={{ backgroundColor: 'var(--color-accent)', transformOrigin: 'left' }}
@@ -91,10 +91,10 @@ export default function About() {
 
               {/* Interactive dot-grid hover overlay */}
               <PhotoGridOverlay active={photoHovered} mousePosRef={photoMouseRef} />
-            </motion.div>
+            </m.div>
 
             {/* Core question */}
-            <motion.div
+            <m.div
               className="mb-10 p-6 relative glass"
               style={{
                 border: '1px solid rgba(255,255,255,0.08)',
@@ -123,9 +123,9 @@ export default function About() {
               >
                 {about.coreQuestion}
               </p>
-            </motion.div>
+            </m.div>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -160,13 +160,13 @@ export default function About() {
                 <span>{t.about.fullProfile}</span>
                 <span aria-hidden="true">→</span>
               </Link>
-            </motion.div>
+            </m.div>
           </div>
 
           {/* Right: skill groups + timeline */}
           <div>
             {/* Skill groups */}
-            <motion.div
+            <m.div
               className="mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -176,7 +176,7 @@ export default function About() {
               <div className="sys-label mb-5" id="expertise-label">{about.expertiseLabel}</div>
               <div className="space-y-6">
                 {about.skillGroups.map((group, gi) => (
-                  <motion.div
+                  <m.div
                     key={group.title}
                     initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -214,17 +214,17 @@ export default function About() {
                         </li>
                       ))}
                     </ul>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Timeline */}
             <div>
               <div className="sys-label mb-5">{about.timelineLabel}</div>
               <dl className="space-y-0">
                 {about.timeline.map((item, i) => (
-                  <motion.div
+                  <m.div
                     key={i}
                     className="flex gap-6 py-5 border-t"
                     style={{ borderColor: 'var(--color-rule)' }}
@@ -250,7 +250,7 @@ export default function About() {
                         {item.context}
                       </div>
                     </dd>
-                  </motion.div>
+                  </m.div>
                 ))}
                 <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
               </dl>
@@ -259,7 +259,7 @@ export default function About() {
         </div>
 
         {/* Philosophy block */}
-        <motion.div
+        <m.div
           className="p-8 md:p-12 relative glass"
           style={{
             border: '1px solid rgba(255,255,255,0.08)',
@@ -283,7 +283,7 @@ export default function About() {
           >
             {about.philosophy}
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

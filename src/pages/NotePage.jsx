@@ -1,11 +1,11 @@
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { fieldNotes } from '../data/fieldNotes';
 import { noteArticles } from '../data/noteArticles';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { m } from 'framer-motion';
 
 // ─── Block renderers ──────────────────────────────────────────────────────
 
@@ -188,7 +188,7 @@ export default function NotePage({ onMenuOpen }) {
           <div className="max-w-[860px] mx-auto px-6">
 
             {/* Breadcrumb */}
-            <motion.div
+            <m.div
               className="flex items-center gap-3 mb-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -206,10 +206,10 @@ export default function NotePage({ onMenuOpen }) {
               <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
                 {meta.id}
               </span>
-            </motion.div>
+            </m.div>
 
             {/* Type + meta row */}
-            <motion.div
+            <m.div
               className="flex flex-wrap items-center gap-3 mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -225,10 +225,10 @@ export default function NotePage({ onMenuOpen }) {
               <span className="sys-label">{meta.readTime}</span>
               <span className="sys-label">·</span>
               <span className="sys-label">{meta.category}</span>
-            </motion.div>
+            </m.div>
 
             {/* Title */}
-            <motion.h1
+            <m.h1
               className="uppercase"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
@@ -241,17 +241,17 @@ export default function NotePage({ onMenuOpen }) {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
             >
               {title}
-            </motion.h1>
+            </m.h1>
 
             {/* Lead summary */}
-            <motion.p
+            <m.p
               style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', lineHeight: 1.85, color: 'var(--color-fg-dim)', maxWidth: '620px' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
             >
               {lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary}
-            </motion.p>
+            </m.p>
           </div>
         </section>
 
@@ -261,16 +261,16 @@ export default function NotePage({ onMenuOpen }) {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-16 items-start">
 
               {/* Main content */}
-              <motion.article
+              <m.article
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
               >
                 {blocks.map((block, i) => renderBlock(block, i))}
-              </motion.article>
+              </m.article>
 
               {/* Sidebar */}
-              <motion.aside
+              <m.aside
                 className="hidden lg:block"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -320,7 +320,7 @@ export default function NotePage({ onMenuOpen }) {
                     </div>
                   )}
                 </div>
-              </motion.aside>
+              </m.aside>
             </div>
           </div>
         </section>
@@ -328,7 +328,7 @@ export default function NotePage({ onMenuOpen }) {
         {/* ── Email capture ────────────────────────────────── */}
         <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-16">
           <div className="max-w-[860px] mx-auto px-6">
-            <motion.div
+            <m.div
               style={{ border: '1px solid var(--color-rule)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -391,7 +391,7 @@ export default function NotePage({ onMenuOpen }) {
                   {np.subscribeCta}
                 </button>
               </form>
-            </motion.div>
+            </m.div>
           </div>
         </section>
 

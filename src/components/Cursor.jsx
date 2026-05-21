@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 export default function Cursor() {
   const shouldReduce = useReducedMotion();
@@ -87,7 +87,7 @@ export default function Cursor() {
     <div aria-hidden="true" style={{ pointerEvents: 'none', position: 'fixed', inset: 0, zIndex: 99999 }}>
 
       {/* ── Center dot — fast snap ── */}
-      <motion.div
+      <m.div
         style={{
           position: 'fixed', top: 0, left: 0,
           x: dotX, y: dotY,
@@ -97,15 +97,15 @@ export default function Cursor() {
         animate={{ opacity: visible ? 1 : 0 }}
         transition={{ opacity: { duration: 0.3 } }}
       >
-        <motion.div
+        <m.div
           animate={{ width: dotSize, height: dotSize }}
           transition={{ duration: 0.15 }}
           style={{ backgroundColor: 'var(--color-accent)', pointerEvents: 'none' }}
         />
-      </motion.div>
+      </m.div>
 
       {/* ── Bracket assembly — lazy follow ── */}
-      <motion.div
+      <m.div
         style={{
           position: 'fixed', top: 0, left: 0,
           x: bkX, y: bkY,
@@ -139,7 +139,7 @@ export default function Cursor() {
           >X:0000 Y:0000
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

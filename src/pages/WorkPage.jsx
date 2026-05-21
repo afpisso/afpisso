@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -9,6 +8,7 @@ import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
+import { m } from 'framer-motion';
 
 const filters = ['All', 'Games', 'UEFN', 'VR', 'NDA-Safe', 'Legacy'];
 
@@ -73,15 +73,15 @@ export default function WorkPage({ onMenuOpen }) {
       <main>
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
-            <motion.div
+            <m.div
               className="mb-8"
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <SectionTag label={t.caseFiles.label} page="003" />
-            </motion.div>
-            <motion.h1
+            </m.div>
+            <m.h1
               className="uppercase mb-6"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
@@ -96,8 +96,8 @@ export default function WorkPage({ onMenuOpen }) {
             >
               {t.caseFiles.label.split(' ').slice(0, -1).join(' ')}<br />
               <GlitchStrokeText stroke="1.5px rgba(245,245,243,0.5)">{t.caseFiles.label.split(' ').slice(-1)}</GlitchStrokeText>
-            </motion.h1>
-            <motion.p
+            </m.h1>
+            <m.p
               style={{
                 fontFamily: '"JetBrains Mono", monospace',
                 fontSize: '13px',
@@ -110,14 +110,14 @@ export default function WorkPage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
               {t.caseFiles.description}
-            </motion.p>
+            </m.p>
           </div>
         </section>
 
         <section className="py-12">
           <div className="max-w-[1400px] mx-auto px-6">
             {/* Filters */}
-            <motion.div
+            <m.div
               className="flex flex-wrap gap-2 mb-12"
               role="group"
               aria-label="Filter projects"
@@ -143,7 +143,7 @@ export default function WorkPage({ onMenuOpen }) {
                 </button>
               ))}
               <span className="sys-label self-center ml-2">{visible.length} {visible.length !== 1 ? t.caseFiles.projects : t.caseFiles.project}</span>
-            </motion.div>
+            </m.div>
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
@@ -151,7 +151,7 @@ export default function WorkPage({ onMenuOpen }) {
                 const vstyle = visibilityStyle[c.visibility] || visibilityStyle['legacy'];
                 const statusLabel = t.caseStatuses[c.visibility] || c.status;
                 return (
-                  <motion.div
+                  <m.div
                     key={c.id}
                     style={{ backgroundColor: 'transparent' }}
                     initial={{ opacity: 0, y: 20 }}
@@ -206,7 +206,7 @@ export default function WorkPage({ onMenuOpen }) {
                         </div>
                       </div>
                     </Link>
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>

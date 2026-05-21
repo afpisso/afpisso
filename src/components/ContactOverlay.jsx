@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import SweepFill from './SweepFill';
 import { analytics } from '../utils/analytics';
+import { m, AnimatePresence } from 'framer-motion';
 
 const MONO  = '"JetBrains Mono", monospace';
 const BEBAS = '"Bebas Neue", sans-serif';
@@ -53,7 +53,7 @@ export default function ContactOverlay({ open, onClose }) {
         <div style={{ position: 'fixed', inset: 0, zIndex: 300 }}>
 
           {/* Backdrop */}
-          <motion.div
+          <m.div
             key="co-backdrop"
             onClick={onClose}
             initial={{ opacity: 0 }}
@@ -68,7 +68,7 @@ export default function ContactOverlay({ open, onClose }) {
           />
 
           {/* Panel */}
-          <motion.aside
+          <m.aside
             key="co-panel"
             role="dialog"
             aria-modal="true"
@@ -185,7 +185,7 @@ export default function ContactOverlay({ open, onClose }) {
                 </span>
               </div>
             </div>
-          </motion.aside>
+          </m.aside>
         </div>
       )}
     </AnimatePresence>

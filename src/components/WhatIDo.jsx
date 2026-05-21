@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
+import { m } from 'framer-motion';
 
 // taste-skill §3 Rule 3: 3-column equal card grid is BANNED at DESIGN_VARIANCE 8.
 // Replaced with asymmetric numbered rows — editorial split layout.
@@ -13,7 +13,7 @@ function ServiceRow({ item, index }) {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <motion.div
+    <m.div
       className="relative grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-6 md:gap-12 py-10 border-t group"
       style={{ borderColor: hovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)' }}
       initial={{ opacity: 0, y: 20 }}
@@ -95,7 +95,7 @@ function ServiceRow({ item, index }) {
           ))}
         </ul>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 

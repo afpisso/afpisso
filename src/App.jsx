@@ -6,17 +6,20 @@ import { usePageMeta } from './hooks/usePageMeta';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import CaseFiles from './components/CaseFiles';
-import WhatIDo from './components/WhatIDo';
-import HowIWork from './components/HowIWork';
-import SystemsLab from './components/SystemsLab';
-import FieldNotes from './components/FieldNotes';
-import About from './components/About';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import MenuOverlay from './components/MenuOverlay';
-import ScrollToTopButton from './components/ScrollToTopButton';
-import Cursor from './components/Cursor';
-import DigitalAura from './components/DigitalAura';
+
+// Below-fold homepage sections — deferred until after hero paint
+const WhatIDo  = lazy(() => import('./components/WhatIDo'));
+const HowIWork = lazy(() => import('./components/HowIWork'));
+const FieldNotes = lazy(() => import('./components/FieldNotes'));
+const About    = lazy(() => import('./components/About'));
+const Contact  = lazy(() => import('./components/Contact'));
+
+// Decorative / desktop-only — lowest priority
+const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
+const Cursor      = lazy(() => import('./components/Cursor'));
+const DigitalAura = lazy(() => import('./components/DigitalAura'));
 
 // Route-level code splitting — pages load only when visited
 const CasePage    = lazy(() => import('./pages/CasePage'));
@@ -31,6 +34,11 @@ function PageFallback() {
   return <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)' }} />;
 }
 
+// Section-level lazy fallback — invisible, no shift
+function SectionFallback() {
+  return null;
+}
+
 function HomePage({ onMenuOpen }) {
   // Default title/description handled by index.html; just ensure OG URL is correct
   usePageMeta({});
@@ -41,11 +49,13 @@ function HomePage({ onMenuOpen }) {
       <main>
         <Hero />
         <CaseFiles />
-        <WhatIDo />
-        <HowIWork />
-        <FieldNotes />
-        <About />
-        <Contact />
+        <Suspense fallback={<SectionFallback />}>
+          <WhatIDo />
+          <HowIWork />
+          <FieldNotes />
+          <About />
+          <Contact />
+        </Suspense>
       </main>
       <Footer />
     </div>
@@ -108,9 +118,11 @@ function AppRoutes() {
         onClose={close}
         activeSection="WORK"
       />
-      <ScrollToTopButton />
-      <Cursor />
-      <DigitalAura />
+      <Suspense fallback={null}>
+        <ScrollToTopButton />
+        <Cursor />
+        <DigitalAura />
+      </Suspense>
     </>
   );
 }

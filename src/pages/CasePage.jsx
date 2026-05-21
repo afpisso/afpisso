@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { cases } from '../data/cases';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
+import { m } from 'framer-motion';
 
 const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
@@ -61,7 +61,7 @@ function DecisionBlock({ item, index }) {
   const { t } = useLang();
   const cp = t.casePage.sections;
   return (
-    <motion.div
+    <m.div
       className="relative p-6 mb-4"
       style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}
       initial={{ opacity: 0, y: 16 }}
@@ -84,7 +84,7 @@ function DecisionBlock({ item, index }) {
           <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{item.why}</p>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -174,7 +174,7 @@ export default function CasePage({ onMenuOpen }) {
           <div className="absolute inset-0 grid-bg" aria-hidden="true" />
           <div className="relative z-10 max-w-[1400px] mx-auto px-6">
             {/* Breadcrumb */}
-            <motion.div
+            <m.div
               className="flex items-center gap-3 mb-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -190,10 +190,10 @@ export default function CasePage({ onMenuOpen }) {
               </Link>
               <span style={{ color: RULE }}>·</span>
               <span className="sys-label">{caseData.id}</span>
-            </motion.div>
+            </m.div>
 
             {/* Eyebrow + Title */}
-            <motion.div
+            <m.div
               className="mb-4"
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
@@ -205,9 +205,9 @@ export default function CasePage({ onMenuOpen }) {
               >
                 {visibilityLabel}
               </span>
-            </motion.div>
+            </m.div>
 
-            <motion.h1
+            <m.h1
               className="uppercase mb-6"
               style={{
                 fontFamily: BEBAS,
@@ -221,9 +221,9 @@ export default function CasePage({ onMenuOpen }) {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
               {caseData.title}
-            </motion.h1>
+            </m.h1>
 
-            <motion.p
+            <m.p
               className="mb-10"
               style={{ fontFamily: MONO, fontSize: 'clamp(13px, 1.4vw, 15px)', color: DIM, maxWidth: '640px', lineHeight: 1.85 }}
               initial={{ opacity: 0, y: 16 }}
@@ -231,10 +231,10 @@ export default function CasePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             >
               {lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}
-            </motion.p>
+            </m.p>
 
             {/* Meta row */}
-            <motion.div
+            <m.div
               className="flex flex-wrap gap-6 items-center"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -260,7 +260,7 @@ export default function CasePage({ onMenuOpen }) {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </m.div>
           </div>
         </section>
 
@@ -290,7 +290,7 @@ export default function CasePage({ onMenuOpen }) {
 
               {/* Executive summary */}
               {content?.summary && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -302,12 +302,12 @@ export default function CasePage({ onMenuOpen }) {
                   <p style={{ fontFamily: MONO, fontSize: '15px', color: 'rgba(240,238,234,0.8)', lineHeight: 1.85 }}>
                     {content.summary}
                   </p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* Context */}
               {content?.context && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -317,12 +317,12 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.context}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.context}</p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* Challenge */}
               {content?.challenge && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -332,12 +332,12 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.challenge}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.challenge}</p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* My role */}
               {content?.role && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -347,12 +347,12 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.myRole}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.role}</p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* Constraints */}
               {content?.constraints?.length > 0 && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -369,12 +369,12 @@ export default function CasePage({ onMenuOpen }) {
                       </li>
                     ))}
                   </ul>
-                </motion.section>
+                </m.section>
               )}
 
               {/* UX Approach */}
               {content?.approach?.length > 0 && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -385,7 +385,7 @@ export default function CasePage({ onMenuOpen }) {
                   <SectionLabel>{t.casePage.sections.uxApproach}</SectionLabel>
                   <div className="space-y-8">
                     {content.approach.map((item, i) => (
-                      <motion.div
+                      <m.div
                         key={i}
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -396,18 +396,18 @@ export default function CasePage({ onMenuOpen }) {
                           {item.heading}
                         </h3>
                         <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85 }}>{item.body}</p>
-                      </motion.div>
+                      </m.div>
                     ))}
                   </div>
                   <div className="mt-10">
                     <ImagePlaceholder label="Process / approach visual" aspect="16/7" src={`/cases/${caseData.slug}/approach.jpg`} />
                   </div>
-                </motion.section>
+                </m.section>
               )}
 
               {/* Key decisions */}
               {content?.keyDecisions?.length > 0 && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -422,12 +422,12 @@ export default function CasePage({ onMenuOpen }) {
                   {content.keyDecisions.map((item, i) => (
                     <DecisionBlock key={i} item={item} index={i} />
                   ))}
-                </motion.section>
+                </m.section>
               )}
 
               {/* Deliverables */}
               {content?.deliverables?.length > 0 && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -444,12 +444,12 @@ export default function CasePage({ onMenuOpen }) {
                       </li>
                     ))}
                   </ul>
-                </motion.section>
+                </m.section>
               )}
 
               {/* Outcome */}
               {content?.outcome && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -459,12 +459,12 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.outcome}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.outcome}</p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* What I'd check next */}
               {content?.nextSteps && (
-                <motion.section
+                <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -474,11 +474,11 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.nextSteps}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.nextSteps}</p>
-                </motion.section>
+                </m.section>
               )}
 
               {/* CTA */}
-              <motion.section
+              <m.section
                 className="py-10"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -508,7 +508,7 @@ export default function CasePage({ onMenuOpen }) {
                     {t.casePage.backToWork}
                   </Link>
                 </div>
-              </motion.section>
+              </m.section>
             </div>
 
             {/* Sidebar — Quick facts */}

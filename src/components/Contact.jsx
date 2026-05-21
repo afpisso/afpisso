@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from './GlitchStrokeText';
 import SweepFill from './SweepFill';
 import { CyberChevron, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
 import SectionTag from './SectionTag';
+import { m } from 'framer-motion';
 
 const MONO = '"JetBrains Mono", monospace';
 const BEBAS = '"Bebas Neue", sans-serif';
@@ -29,7 +29,7 @@ export default function Contact() {
 
           {/* Left */}
           <div>
-            <motion.div
+            <m.div
               className="mb-8"
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -37,9 +37,9 @@ export default function Contact() {
               transition={{ duration: 0.5 }}
             >
               <SectionTag label={ct.label} page="008" />
-            </motion.div>
+            </m.div>
 
-            <motion.h2
+            <m.h2
               className="uppercase mb-10"
               style={{ fontFamily: BEBAS, fontSize: 'clamp(2.5rem, 6vw, 5rem)', color: 'var(--color-fg)', lineHeight: 0.92, letterSpacing: '0.02em' }}
               initial={{ opacity: 0, y: 20 }}
@@ -50,9 +50,9 @@ export default function Contact() {
               <GlitchStrokeText>{ct.ctaLine1}</GlitchStrokeText><br />
               <GlitchStrokeText>{ct.ctaStroke}</GlitchStrokeText><br />
               <GlitchStrokeText>{ct.ctaLine3}</GlitchStrokeText>
-            </motion.h2>
+            </m.h2>
 
-            <motion.p
+            <m.p
               className="mb-10"
               style={{ fontFamily: MONO, fontSize: 'clamp(12px, 1.2vw, 14px)', color: 'var(--color-fg-dim)', lineHeight: 1.9, maxWidth: '400px' }}
               initial={{ opacity: 0, y: 16 }}
@@ -61,10 +61,10 @@ export default function Contact() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             >
               {ct.headline}
-            </motion.p>
+            </m.p>
 
             {/* Secondary CTA — LinkedIn */}
-            <motion.a
+            <m.a
               href={`https://${ct.linkedin}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -81,9 +81,9 @@ export default function Contact() {
             >
               <span>{t.contact.linkedinCta}</span>
               <span aria-hidden="true">↗</span>
-            </motion.a>
+            </m.a>
 
-            <motion.a
+            <m.a
               href={`mailto:${ct.email}`}
               aria-label={ct.cta}
               className="inline-flex items-center text-[11px] tracking-widest uppercase"
@@ -107,11 +107,11 @@ export default function Contact() {
                   <span aria-hidden="true">→</span>
                 </span>
               </SweepFill>
-            </motion.a>
+            </m.a>
           </div>
 
           {/* Right: links */}
-          <motion.div
+          <m.div
             className="glass p-8 relative"
             style={{
               border: '1px solid rgba(255,255,255,0.08)',
@@ -128,7 +128,7 @@ export default function Contact() {
             <div className="sys-label mb-6" id="contact-channels-label">{t.contact.channelsLabel}</div>
             <nav aria-labelledby="contact-channels-label">
               {links.map((link, i) => (
-                <motion.a
+                <m.a
                   key={link.label}
                   href={link.href}
                   aria-label={link.ariaLabel}
@@ -162,11 +162,11 @@ export default function Contact() {
                     </div>
                   </div>
                   <CyberChevron size={9} color="var(--color-accent)" className="opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                </motion.a>
+                </m.a>
               ))}
               <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
             </nav>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

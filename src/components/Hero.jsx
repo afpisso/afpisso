@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion, useScroll, useTransform, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 import { analytics } from '../utils/analytics';
 import ClientLogos from './ClientLogos';
@@ -9,6 +8,7 @@ import { useScramble } from '../hooks/useScramble';
 import AudioBars from './AudioBars';
 import SectionTag from './SectionTag';
 import GlitchStrokeText from './GlitchStrokeText';
+import { m, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
 
 const bootLines = [
@@ -79,7 +79,7 @@ function BootSequence({ onComplete }) {
   }, [onComplete]);
 
   return (
-    <motion.div
+    <m.div
       role="status"
       aria-label="System initializing"
       className="fixed inset-0 z-[200] flex items-center justify-center"
@@ -132,7 +132,7 @@ function BootSequence({ onComplete }) {
         </div>
         {/* Skip button — appears after first line */}
         {lines.length >= 1 && !done && (
-          <motion.button
+          <m.button
             onClick={skip}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -157,10 +157,10 @@ function BootSequence({ onComplete }) {
             aria-label="Skip intro animation"
           >
             Skip →
-          </motion.button>
+          </m.button>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -233,7 +233,7 @@ function MagneticCTA({ href, onClick, children, disabled }) {
   }, [x, y]);
 
   return (
-    <motion.a
+    <m.a
       ref={ref}
       href={href}
       onClick={onClick}
@@ -256,13 +256,13 @@ function MagneticCTA({ href, onClick, children, disabled }) {
       whileTap={{ scale: 0.97 }}
     >
       {children}
-      <motion.span
+      <m.span
         aria-hidden="true"
         style={{ display: 'inline-block' }}
         whileHover={{ x: 3 }}
         transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      >→</motion.span>
-    </motion.a>
+      >→</m.span>
+    </m.a>
   );
 }
 
@@ -329,12 +329,12 @@ export default function Hero() {
         <div aria-hidden="true" className="absolute top-[80px] left-0 w-16 h-16 border-l border-t" style={{ borderColor: 'var(--color-rule)' }} />
         <div aria-hidden="true" className="absolute top-[80px] right-0 w-16 h-16 border-r border-t" style={{ borderColor: 'var(--color-rule)' }} />
 
-        <motion.div
+        <m.div
           className="relative z-10 max-w-[1400px] mx-auto px-6 py-24"
           style={shouldReduce ? {} : { y: contentY, opacity: contentOpacity }}
         >
           {/* System label */}
-          <motion.div
+          <m.div
             className="flex items-center gap-4 mb-12 flex-wrap"
             initial={{ opacity: 0, x: -16 }}
             animate={booted ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
@@ -345,7 +345,7 @@ export default function Hero() {
               <AudioBars active={booted} color="var(--color-accent)" size={10} />
               <span className="sys-label" style={{ color: 'var(--color-accent)' }}>{t.hero.signalActive}</span>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* H1 — Name: staggered line reveal + scramble/chromatic on hover */}
           <div className="mb-6">
@@ -360,7 +360,7 @@ export default function Hero() {
               }}
             >
               {nameLines.map((line, lineIdx) => (
-                <motion.div
+                <m.div
                   key={lineIdx}
                   style={{
                     overflow: 'hidden',
@@ -380,13 +380,13 @@ export default function Hero() {
                   <span style={{ color: line.color, display: 'block' }}>
                     <GlitchStrokeText>{line.text}</GlitchStrokeText>
                   </span>
-                </motion.div>
+                </m.div>
               ))}
             </h1>
           </div>
 
           {/* Subtitle */}
-          <motion.div
+          <m.div
             className="flex items-start gap-5 mb-10"
             initial={{ opacity: 0, y: 10 }}
             animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
@@ -406,17 +406,17 @@ export default function Hero() {
             }}>
               {t.hero.subtitle}
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Handle / separator */}
-          <motion.div
+          <m.div
             className="flex items-center gap-4 mb-10"
             aria-hidden="true"
             initial={{ opacity: 0 }}
             animate={booted ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.3, delay: 0.88 }}
           >
-            <motion.div
+            <m.div
               style={{ backgroundColor: 'var(--color-rule)', height: '1px', transformOrigin: 'left' }}
               className="max-w-[180px] w-full"
               initial={{ scaleX: 0 }}
@@ -424,11 +424,11 @@ export default function Hero() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
             />
             <span className="sys-label whitespace-nowrap" aria-label="@byandresfe">{scrambleHandle}</span>
-          </motion.div>
+          </m.div>
 
           {/* Copy + CTAs + Focus tags */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 24 }}
               animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
@@ -454,7 +454,7 @@ export default function Hero() {
                 >
                   {t.hero.cta1}
                 </MagneticCTA>
-                <motion.a
+                <m.a
                   href="/resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -471,13 +471,13 @@ export default function Hero() {
                   whileTap={{ scale: 0.97 }}
                 >
                   {t.hero.cta2}
-                </motion.a>
+                </m.a>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Focus tags */}
             <div>
-              <motion.div
+              <m.div
                 className="sys-label mb-5"
                 id="focus-label"
                 initial={{ opacity: 0 }}
@@ -485,10 +485,10 @@ export default function Hero() {
                 transition={{ duration: 0.5, delay: 1.1 }}
               >
                 {t.hero.focusAreasLabel}
-              </motion.div>
+              </m.div>
               <ul className="flex flex-wrap gap-2" aria-labelledby="focus-label">
                 {t.hero.tags.map((tag, i) => (
-                  <motion.li
+                  <m.li
                     key={tag}
                     className="px-3 py-1.5 text-[10px] tracking-widest uppercase"
                     style={{
@@ -501,14 +501,14 @@ export default function Hero() {
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 1.1 + i * 0.04 }}
                   >
                     {tag}
-                  </motion.li>
+                  </m.li>
                 ))}
               </ul>
             </div>
           </div>
 
           {/* Stats */}
-          <motion.div
+          <m.div
             className="mt-20 pt-8 border-t grid grid-cols-2 md:grid-cols-4 gap-8"
             style={{ borderColor: 'var(--color-rule)' }}
             initial={{ opacity: 0, y: 20 }}
@@ -516,7 +516,7 @@ export default function Hero() {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.25 }}
           >
             {t.trust.stats.map((stat, i) => (
-              <motion.div
+              <m.div
                 key={stat.label}
                 className="relative pl-4"
                 initial={{ opacity: 0, y: 10 }}
@@ -542,10 +542,10 @@ export default function Hero() {
                   <CountUp target={stat.value} suffix="" />
                 </div>
                 <div className="sys-label">{stat.label}</div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </section>
 
       {/* Client logo marquee — below hero */}

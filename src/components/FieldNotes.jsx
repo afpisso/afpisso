@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { fieldNotes } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
+import { m } from 'framer-motion';
 
 // Normalised to the site's token system — no rainbow
 const TYPE_GLYPHS = {
@@ -33,7 +33,7 @@ export default function FieldNotes() {
             label={t.fieldNotes.label.split('/')[0].trim()}
             page="007"
           />
-          <motion.p
+          <m.p
             className="text-base mt-10 max-w-md"
             style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.7 }}
             initial={{ opacity: 0 }}
@@ -42,7 +42,7 @@ export default function FieldNotes() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             {t.fieldNotes.description}
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Editorial list — each note is a horizontal row */}
@@ -52,7 +52,7 @@ export default function FieldNotes() {
             const glyph = TYPE_GLYPHS[note.type] || '◇';
 
             return (
-              <motion.article
+              <m.article
                 key={note.id}
                 aria-label={note.title}
                 className="group relative"
@@ -178,7 +178,7 @@ export default function FieldNotes() {
                 {i === fieldNotes.length - 1 && (
                   <div className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
                 )}
-              </motion.article>
+              </m.article>
             );
           })}
         </div>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useMotionValue, useSpring, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
+import { m } from 'framer-motion';
 
 // Emil Kowalski: ease-out enter, ease-in exit, transform+opacity only, interruptible
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -45,7 +45,7 @@ function CursorPreview({ items, hovered }) {
   const active = items.find(c => c.slug === hovered);
 
   return (
-    <motion.div
+    <m.div
       aria-hidden="true"
       className="fixed pointer-events-none z-[90]"
       style={{
@@ -58,7 +58,7 @@ function CursorPreview({ items, hovered }) {
     >
       <AnimatePresence mode="wait">
         {hovered && active && (
-          <motion.div
+          <m.div
             key={hovered}
             initial={{ opacity: 0, scale: 0.90, y: 14 }}
             animate={{ opacity: 1, scale: 1,    y: 0 }}
@@ -130,10 +130,10 @@ function CursorPreview({ items, hovered }) {
                 backgroundColor: 'var(--color-accent)', opacity: 0.6,
               }}
             />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -144,7 +144,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
   const statusLabel = t.caseStatuses?.[caseData.visibility] || caseData.status;
 
   return (
-    <motion.article
+    <m.article
       aria-label={`${caseData.id}: ${caseData.title}`}
       className="relative group"
       initial={{ opacity: 0, y: 18 }}
@@ -284,7 +284,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
           </div>
         </div>
       </Link>
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -314,7 +314,7 @@ export default function CaseFiles() {
           <div className="mb-16">
             <SectionHeading label={t.caseFiles.label} page="003" />
             <div className="flex items-start gap-12 mt-10 flex-wrap">
-              <motion.p
+              <m.p
                 className="text-base max-w-sm"
                 style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
                 initial={{ opacity: 0, y: 12 }}
@@ -323,8 +323,8 @@ export default function CaseFiles() {
                 transition={{ duration: 0.4, delay: 0.35 }}
               >
                 {t.caseFiles.descriptionShort}
-              </motion.p>
-              <motion.div
+              </m.p>
+              <m.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -340,7 +340,7 @@ export default function CaseFiles() {
                   <span>{t.caseFiles.viewAll}</span>
                   <span aria-hidden="true">→</span>
                 </Link>
-              </motion.div>
+              </m.div>
             </div>
           </div>
 
@@ -360,7 +360,7 @@ export default function CaseFiles() {
           </div>
 
           {/* Bottom CTA */}
-          <motion.div
+          <m.div
             className="mt-8 flex items-center gap-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -378,7 +378,7 @@ export default function CaseFiles() {
               {t.caseFiles.viewAll} →
             </Link>
             <div className="h-[1px] flex-grow" style={{ backgroundColor: 'var(--color-rule)' }} />
-          </motion.div>
+          </m.div>
 
         </div>
       </section>
