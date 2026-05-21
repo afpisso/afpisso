@@ -192,19 +192,38 @@ function useMousePos() {
 
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0]);
+
   useEffect(() => {
-    const observers = ids.map((id) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { threshold: 0.4 }
-      );
-      obs.observe(el);
-      return obs;
-    });
-    return () => observers.forEach((o) => o?.disconnect());
-  }, [ids.join(',')]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Scroll-based detection: works with lazy-loaded sections that may not
+    // exist in the DOM when this effect first runs (IntersectionObserver
+    // can't observe elements that don't exist yet).
+    // Finds the last section whose top edge has crossed 35% down the viewport.
+    const update = () => {
+      const triggerY = window.innerHeight * 0.35;
+      let bestId = ids[0];
+      let bestTop = -Infinity;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top <= triggerY && top > bestTop) {
+          bestTop = top;
+          bestId = id;
+        }
+      }
+      setActive((prev) => (prev === bestId ? prev : bestId));
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    update(); // Immediate check on mount
+    // Retry after lazy sections have had time to load
+    const t = setTimeout(update, 600);
+    return () => {
+      window.removeEventListener('scroll', update);
+      clearTimeout(t);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return active;
 }
 

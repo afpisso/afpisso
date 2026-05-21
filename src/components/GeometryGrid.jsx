@@ -239,7 +239,9 @@ export default function GeometryGrid({
 
     const draw = () => {
       raf = null;
-      if (pausedRef.current || document.hidden) { startLoop(); return; }
+      // When hidden or paused, let the loop die — onVisChange / paused-effect
+      // will restart it. Calling startLoop() here would busy-wait the GPU.
+      if (pausedRef.current || document.hidden) { return; }
       t += 0.008;
 
       // Update home positions to current shape
