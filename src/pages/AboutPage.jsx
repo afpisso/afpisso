@@ -5,7 +5,7 @@ import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import { usePageMeta } from '../hooks/usePageMeta';
 import PhotoGridOverlay from '../components/PhotoGridOverlay';
-import { m } from 'framer-motion';
+import { m, useTransform, useScroll } from 'framer-motion';
 
 function RevealLine({ delay = 0 }) {
   return (

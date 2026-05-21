@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);

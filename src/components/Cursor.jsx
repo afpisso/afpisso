@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { m } from 'framer-motion';
+import { m, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
 export default function Cursor() {
   const shouldReduce = useReducedMotion();

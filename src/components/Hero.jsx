@@ -8,7 +8,7 @@ import { useScramble } from '../hooks/useScramble';
 import AudioBars from './AudioBars';
 import SectionTag from './SectionTag';
 import GlitchStrokeText from './GlitchStrokeText';
-import { m, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { m, useMotionValue, useSpring, useReducedMotion, useInView, useScroll, useTransform } from 'framer-motion';
 
 
 const bootLines = [

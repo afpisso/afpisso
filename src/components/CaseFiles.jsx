@@ -5,7 +5,7 @@ import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
-import { m } from 'framer-motion';
+import { m, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
 
 // Emil Kowalski: ease-out enter, ease-in exit, transform+opacity only, interruptible
 const EASE_OUT = [0.16, 1, 0.3, 1];

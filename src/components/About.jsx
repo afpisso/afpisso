@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import PhotoGridOverlay from './PhotoGridOverlay';
 import SectionHeading from './SectionHeading';
-import { m } from 'framer-motion';
+import { m, useTransform, useScroll } from 'framer-motion';
 
 export default function About() {
   const photoRef = useRef(null);
