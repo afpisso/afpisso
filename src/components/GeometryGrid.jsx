@@ -147,7 +147,7 @@ export default function GeometryGrid({
   rotZ        = 0,
   spin        = true,
   paused      = false,
-  particleCount = 900,
+  particleCount = 1200,
 }) {
   const canvasRef    = useRef(null);
   // Keep mutable refs for props so the RAF loop always sees the latest value

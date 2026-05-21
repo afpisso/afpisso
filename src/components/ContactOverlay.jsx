@@ -134,31 +134,34 @@ export default function ContactOverlay({ open, onClose }) {
               <div style={{ fontSize: 10, letterSpacing: '0.14em', color: 'rgba(245,245,243,0.4)', textTransform: 'uppercase', marginBottom: 12 }}>
                 {co.primaryChannel}
               </div>
-              <a
+              <m.a
                 href={`mailto:${ct.email}`}
                 aria-label={`Send email to ${ct.email}`}
                 style={{
                   position: 'relative', overflow: 'hidden',
                   display: 'block',
-                  background: '#ff2540', color: '#0a0a0a',
+                  background: 'transparent',
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--color-accent)',
                   textDecoration: 'none',
                   fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em',
-                  clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
+                  clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={() => setEmailHover(true)}
                 onMouseLeave={() => setEmailHover(false)}
                 onClick={() => { analytics.emailClick('contact-overlay'); analytics.generateLead('contact-overlay'); }}
+                whileTap={{ scale: 0.97 }}
               >
-                <SweepFill active={emailHover} fillColor="#cc1f34" activeTextColor="#0a0a0a">
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px' }}>
+                <SweepFill active={emailHover} fillColor="var(--color-accent)" activeTextColor="#0a0a0a">
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', color: emailHover ? '#0a0a0a' : 'var(--color-accent)', transition: 'color 0.18s' }}>
                     <span>{ct.email}</span>
                     <span style={{ fontSize: 10, letterSpacing: '0.16em', opacity: 0.75, textTransform: 'uppercase' }}>
                       {co.writeCta}
                     </span>
                   </span>
                 </SweepFill>
-              </a>
+              </m.a>
             </div>
 
             {/* Other channels */}

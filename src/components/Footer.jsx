@@ -82,8 +82,8 @@ export default function Footer() {
             </h3>
             <nav className="flex flex-col gap-2.5">
               {[
-                { to: '/work', label: t.nav.work || 'Case Files' },
-                { to: '/notes', label: t.nav.notes || 'Field Notes' },
+                { to: '/work',       label: t.nav.work  || 'Case Files'  },
+                { to: '/notes',      label: t.nav.notes || 'Field Notes' },
                 { to: '/resume.pdf', label: t.footer?.resume || 'Resume', external: true },
               ].map(({ to, label, external }) =>
                 external ? (
@@ -92,7 +92,7 @@ export default function Footer() {
                     href={to}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center"
+                    className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center gap-1.5"
                     style={{
                       fontFamily: '"JetBrains Mono", monospace',
                       color: 'var(--color-fg-dim)',
@@ -103,21 +103,23 @@ export default function Footer() {
                     onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-fg-dim)')}
                   >
                     <ScrambleText duration={300}>{label}</ScrambleText>
+                    <span aria-hidden="true">↗</span>
                   </a>
                 ) : (
                   <Link
                     key={to}
                     to={to}
-                    className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center"
+                    className="text-[11px] tracking-wider transition-all duration-150 inline-flex items-center gap-1.5 group"
                     style={{
                       fontFamily: '"JetBrains Mono", monospace',
-                      color: 'var(--color-fg-dim)',
+                      color: 'var(--color-accent)',
                       textDecoration: 'none',
                       minHeight: '44px',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-fg)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-fg-dim)')}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                   >
+                    <span aria-hidden="true" style={{ fontSize: '9px' }}>▸</span>
                     <ScrambleText duration={300}>{label}</ScrambleText>
                   </Link>
                 )

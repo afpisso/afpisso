@@ -4,6 +4,7 @@ import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
+import CyberBtn from './CyberBtn';
 import { analytics } from '../utils/analytics';
 import { m, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
 
@@ -367,23 +368,18 @@ export default function CaseFiles() {
 
           {/* Bottom CTA */}
           <m.div
-            className="mt-8 flex items-center gap-6"
+            className="mt-8 flex justify-center"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.35, ease: EASE_OUT, delay: 0.3 }}
           >
-            <div className="h-[1px] flex-grow" style={{ backgroundColor: 'var(--color-rule)' }} />
-            <Link
+            <CyberBtn
               to="/work"
-              className="sys-label whitespace-nowrap transition-colors duration-200"
-              style={{ color: 'var(--color-fg-mute)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
+              size="sm"
             >
-              {t.caseFiles.viewAll} →
-            </Link>
-            <div className="h-[1px] flex-grow" style={{ backgroundColor: 'var(--color-rule)' }} />
+              {t.caseFiles.viewAll}
+            </CyberBtn>
           </m.div>
 
         </div>

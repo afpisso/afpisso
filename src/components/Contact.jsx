@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from './GlitchStrokeText';
-import SweepFill from './SweepFill';
+import CyberBtn from './CyberBtn';
 import { CyberChevron, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
 import SectionTag from './SectionTag';
@@ -13,7 +13,6 @@ const BEBAS = '"Bebas Neue", sans-serif';
 export default function Contact() {
   const { t } = useLang();
   const ct = t.contact;
-  const [ctaHover, setCtaHover] = useState(false);
 
   const links = [
     { label: 'Email', value: ct.email, href: `mailto:${ct.email}`, tag: 'Direct', ariaLabel: 'Send email' },
@@ -89,31 +88,18 @@ export default function Contact() {
               <span aria-hidden="true">↗</span>
             </m.a>
 
-            <m.a
+            <CyberBtn
               href={`mailto:${ct.email}`}
               aria-label={ct.cta}
-              className="inline-flex items-center text-[11px] tracking-widest uppercase"
-              style={{
-                position: 'relative', overflow: 'hidden',
-                fontFamily: MONO, backgroundColor: 'var(--color-accent)', color: '#0a0a0a',
-                clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
-              }}
-              onMouseEnter={() => setCtaHover(true)}
-              onMouseLeave={() => setCtaHover(false)}
+              size="lg"
               onClick={() => { analytics.contactCtaClick(); analytics.emailClick('contact-section'); analytics.generateLead('contact-section'); }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-              whileTap={{ scale: 0.97 }}
             >
-              <SweepFill active={ctaHover} fillColor="#cc1f34" activeTextColor="#0a0a0a">
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '16px 32px' }}>
-                  {ct.cta}
-                  <span aria-hidden="true">→</span>
-                </span>
-              </SweepFill>
-            </m.a>
+              {ct.cta}
+            </CyberBtn>
           </div>
 
           {/* Right: links */}

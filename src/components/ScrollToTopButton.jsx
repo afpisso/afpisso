@@ -24,7 +24,7 @@ export default function ScrollToTopButton() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          whileTap={{ scale: 0.93 }}
+          whileTap={{ scale: 0.97 }}
           style={{
             position: 'fixed',
             bottom: 28,

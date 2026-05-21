@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import ContactOverlay from './ContactOverlay';
-import SweepFill from './SweepFill';
+import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
@@ -11,7 +11,6 @@ import { m } from 'framer-motion';
 export default function Nav({ onMenuOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
-  const [contactHover, setContactHover] = useState(false);
   const { t, lang, toggleLang } = useLang();
 
   useEffect(() => {
@@ -167,32 +166,19 @@ export default function Nav({ onMenuOpen }) {
           </button>
 
           {/* Contact button — always visible */}
-          <button
+          <CyberBtn
+            variant="accent-ghost"
+            size="sm"
+            showArrow={false}
             onClick={() => setContactOpen(true)}
             aria-label={t.nav.contact}
-            onMouseEnter={() => setContactHover(true)}
-            onMouseLeave={() => setContactHover(false)}
-            onFocus={() => setContactHover(true)}
-            onBlur={() => setContactHover(false)}
-            style={{
-              position: 'relative', overflow: 'hidden',
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11, letterSpacing: '0.14em',
-              border: '1px solid var(--color-accent)',
-              background: 'transparent',
-              padding: '8px 14px', cursor: 'pointer',
-              clipPath: 'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px))',
-              minHeight: 44, display: 'flex', alignItems: 'center',
-              textTransform: 'uppercase',
-            }}
+            style={{ minHeight: 44 }}
           >
-            <SweepFill active={contactHover} fillColor="var(--color-accent)" activeTextColor="#0a0a0a">
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: contactHover ? '#0a0a0a' : 'var(--color-accent)', transition: 'color 0.18s' }}>
-                <ScrambleText className="hidden sm:inline" duration={280}>{t.nav.contact}</ScrambleText>
-                <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>◉</span>
-              </span>
-            </SweepFill>
-          </button>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <ScrambleText className="hidden sm:inline" duration={280}>{t.nav.contact}</ScrambleText>
+              <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>◉</span>
+            </span>
+          </CyberBtn>
 
           {/* MENU + */}
           <button

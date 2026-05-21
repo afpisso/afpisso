@@ -8,7 +8,8 @@ import { useScramble } from '../hooks/useScramble';
 import AudioBars from './AudioBars';
 import SectionTag from './SectionTag';
 import GlitchStrokeText from './GlitchStrokeText';
-import { m, useMotionValue, useSpring, useReducedMotion, useInView, useScroll, useTransform } from 'framer-motion';
+import { m, useReducedMotion, useInView, useScroll, useTransform } from 'framer-motion';
+import CyberBtn from './CyberBtn';
 
 
 const bootLines = [
@@ -171,7 +172,7 @@ function BootSequence({ onComplete }) {
 // offsetX fraction of viewport: ±0.46 puts the cloud center at ~27%/73% of viewport,
 // squarely in the transparent zone created by the 62%→82% gradient in each section.
 const SECTION_CONFIG = {
-  'home':      { shape: 'logo',  offsetX:  0.18 },
+  'home':      { shape: 'logo',  offsetX:  0.46 },
   'cases':     { shape: 'cube',  offsetX:  0.46 },  // content left  → particles right
   'what-i-do': { shape: 'torus', offsetX: -0.46 },  // content right → particles left
   'how-i-work':{ shape: 'helix', offsetX:  0.46 },  // content left  → particles right
@@ -227,68 +228,6 @@ function useActiveSection(ids) {
   return active;
 }
 
-// Magnetic CTA — cursor attraction + whileTap scale feedback (Emil Kowalski)
-// Uses useMotionValue + useSpring for GPU-only animation, zero re-renders
-function MagneticCTA({ href, onClick, children, disabled }) {
-  const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.5 });
-  const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.5 });
-
-  const onMouseMove = useCallback((e) => {
-    if (disabled || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    x.set((e.clientX - cx) * 0.28);
-    y.set((e.clientY - cy) * 0.28);
-  }, [disabled, x, y]);
-
-  const onMouseLeave = useCallback((e) => {
-    x.set(0);
-    y.set(0);
-    // Reset background color — onMouseEnter sets it imperatively so we
-    // must clear it here too (Framer Motion style prop doesn't override
-    // inline styles set by the DOM event handler).
-    if (e?.currentTarget) {
-      e.currentTarget.style.backgroundColor = 'var(--color-accent)';
-    }
-  }, [x, y]);
-
-  return (
-    <m.a
-      ref={ref}
-      href={href}
-      onClick={onClick}
-      className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase"
-      style={{
-        fontFamily: '"JetBrains Mono", monospace',
-        backgroundColor: 'var(--color-accent)',
-        color: '#0a0a0a',
-        clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
-        x: springX,
-        y: springY,
-        willChange: 'transform',
-        display: 'inline-flex',
-        position: 'relative',
-        zIndex: 1,
-      }}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#cc1f34')}
-      whileTap={{ scale: 0.97 }}
-    >
-      {children}
-      <m.span
-        aria-hidden="true"
-        style={{ display: 'inline-block' }}
-        whileHover={{ x: 3 }}
-        transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      >→</m.span>
-    </m.a>
-  );
-}
 
 export default function Hero() {
   const shouldReduce = useReducedMotion();
@@ -350,8 +289,9 @@ export default function Hero() {
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,37,64,0.04) 0%, transparent 70%)' }} />
           {/* Bottom fade — prevents particles overlapping stats */}
           <div className="absolute bottom-0 left-0 right-0 h-48" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
-          {/* Left fade — protects text column, fades cleanly to transparent */}
-          <div className="absolute inset-y-0 left-0 w-[48%] max-w-[760px]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 15%, rgba(8,8,8,0.6) 45%, transparent 100%)' }} />
+          {/* Left fade — protects text column up to ~65%, cloud occupies the right 35%.
+              Deliberately wider than before so the content/cloud split reads intentional. */}
+          <div className="absolute inset-y-0 left-0 w-[68%]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 20%, rgba(8,8,8,0.75) 50%, rgba(8,8,8,0.3) 80%, transparent 100%)' }} />
         </div>
 
         {/* Corner marks */}
@@ -467,7 +407,7 @@ export default function Hero() {
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
                   fontSize: '11px',
-                  color: 'var(--color-fg-mute)',
+                  color: 'var(--color-fg-dim)',
                   letterSpacing: '0.05em',
                   maxWidth: '520px',
                 }}
@@ -476,31 +416,20 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap gap-3">
-                <MagneticCTA
+                <CyberBtn
                   href="#cases"
+                  magnetic={!shouldReduce}
                   onClick={() => analytics.heroCta(t.hero.cta1)}
-                  disabled={shouldReduce}
                 >
                   {t.hero.cta1}
-                </MagneticCTA>
-                <m.a
+                </CyberBtn>
+                <CyberBtn
                   href="/resume.pdf"
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase"
-                  style={{
-                    fontFamily: '"JetBrains Mono", monospace',
-                    border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)',
-                    clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
-                    transition: 'border-color 0.2s, color 0.2s',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.color = 'var(--color-fg-dim)'; }}
                   onClick={() => { analytics.heroCta(t.hero.cta2); analytics.resumeDownload(); }}
-                  whileTap={{ scale: 0.97 }}
                 >
                   {t.hero.cta2}
-                </m.a>
+                </CyberBtn>
               </div>
             </m.div>
 
@@ -536,48 +465,55 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Stats */}
-          <m.div
-            className="mt-20 pt-8 border-t grid grid-cols-2 md:grid-cols-4 gap-8"
-            style={{ borderColor: 'var(--color-rule)' }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.25 }}
-          >
-            {t.trust.stats.map((stat, i) => (
-              <m.div
-                key={stat.label}
-                className="relative pl-4"
-                initial={{ opacity: 0, y: 10 }}
-                animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.3 + i * 0.07 }}
-              >
-                {/* Left accent line */}
-                <div
-                  aria-hidden="true"
-                  className="absolute left-0 top-0 bottom-0 w-[2px]"
-                  style={{ backgroundColor: 'var(--color-accent)', opacity: 0.5 }}
-                />
-                <div
-                  className="tabular mb-1.5"
-                  style={{
-                    fontFamily: '"Bebas Neue", sans-serif',
-                    fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
-                    color: 'var(--color-fg)',
-                    letterSpacing: '0.02em',
-                    lineHeight: 1,
-                  }}
-                >
-                  <CountUp target={stat.value} suffix="" />
-                </div>
-                <div className="sys-label">{stat.label}</div>
-              </m.div>
-            ))}
-          </m.div>
         </m.div>
       </section>
 
-      {/* Client logo marquee — below hero */}
+      {/* Stats strip — outside hero section so it doesn't push CTAs below the fold */}
+      <div className="relative z-10" style={{ borderTop: '1px solid var(--color-rule)', borderBottom: '1px solid var(--color-rule)' }}>
+        <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
+          background: 'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 60%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.55) 70%, rgba(10,10,10,0.15) 78%, transparent 85%)',
+        }} />
+        <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
+        <m.div
+          className="relative z-10 lg:max-w-[62%] px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {t.trust.stats.map((stat, i) => (
+            <m.div
+              key={stat.label}
+              className="relative pl-4"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
+            >
+              <div
+                aria-hidden="true"
+                className="absolute left-0 top-0 bottom-0 w-[2px]"
+                style={{ backgroundColor: 'var(--color-accent)', opacity: 0.5 }}
+              />
+              <div
+                className="tabular mb-1.5"
+                style={{
+                  fontFamily: '"Bebas Neue", sans-serif',
+                  fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
+                  color: 'var(--color-fg)',
+                  letterSpacing: '0.02em',
+                  lineHeight: 1,
+                }}
+              >
+                <CountUp target={stat.value} suffix="" />
+              </div>
+              <div className="sys-label">{stat.label}</div>
+            </m.div>
+          ))}
+        </m.div>
+      </div>
+
+      {/* Client logo marquee — below stats */}
       <ClientLogos />
     </>
   );
