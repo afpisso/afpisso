@@ -134,7 +134,7 @@ export default function NotesPage({ onMenuOpen }) {
                     >
                       <div className="flex items-center justify-between mb-4">
                         <span
-                          className="text-[9px] font-bold tracking-widest uppercase px-2 py-1"
+                          className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                           style={{ fontFamily: '"JetBrains Mono", monospace', color: typeStyle.color, backgroundColor: typeStyle.bg, border: `1px solid ${typeStyle.color}30` }}
                         >
                           {note.type}

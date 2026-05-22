@@ -109,17 +109,16 @@ export default function Footer() {
                   <Link
                     key={to}
                     to={to}
-                    className="text-[11px] tracking-wider transition-all duration-150 inline-flex items-center gap-1.5 group"
+                    className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center gap-1.5"
                     style={{
                       fontFamily: '"JetBrains Mono", monospace',
-                      color: 'var(--color-accent)',
+                      color: 'var(--color-fg-dim)',
                       textDecoration: 'none',
                       minHeight: '44px',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
-                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-fg-dim)')}
                   >
-                    <span aria-hidden="true" style={{ fontSize: '9px' }}>▸</span>
                     <ScrambleText duration={300}>{label}</ScrambleText>
                   </Link>
                 )

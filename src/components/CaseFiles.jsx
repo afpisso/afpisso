@@ -4,7 +4,6 @@ import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
-import CyberBtn from './CyberBtn';
 import { analytics } from '../utils/analytics';
 import { m, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
 
@@ -217,7 +216,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
               </h3>
               {/* Status badge */}
               <span
-                className="flex-shrink-0 flex items-center gap-1.5 text-[9px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
+                className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
                   color: vs.color,
@@ -248,7 +247,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
               {caseData.tags.slice(0, 3).map(tag => (
                 <span
                   key={tag}
-                  className="hidden sm:inline text-[9px] tracking-widest uppercase px-2 py-0.5 transition-opacity duration-200"
+                  className="hidden sm:inline text-[10px] tracking-widest uppercase px-2 py-0.5 transition-opacity duration-200"
                   style={{
                     fontFamily: '"JetBrains Mono", monospace',
                     border: '1px solid var(--color-rule)',
@@ -366,21 +365,6 @@ export default function CaseFiles() {
             <div className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
           </div>
 
-          {/* Bottom CTA */}
-          <m.div
-            className="mt-8 flex justify-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.35, ease: EASE_OUT, delay: 0.3 }}
-          >
-            <CyberBtn
-              to="/work"
-              size="sm"
-            >
-              {t.caseFiles.viewAll}
-            </CyberBtn>
-          </m.div>
 
         </div>
       </section>

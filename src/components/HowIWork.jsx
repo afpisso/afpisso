@@ -59,7 +59,7 @@ export default function HowIWork() {
             {steps.map((step, i) => (
               <m.li
                 key={step.num}
-                className="flex gap-6 py-6 border-t group"
+                className="flex gap-6 py-6 border-t"
                 style={{ borderColor: 'var(--color-rule)' }}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}

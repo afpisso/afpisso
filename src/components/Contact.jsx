@@ -142,7 +142,7 @@ export default function Contact() {
                 >
                   <div className="flex items-center gap-4">
                     <span
-                      className="text-[9px] tracking-widest uppercase px-2 py-1 flex items-center gap-1.5"
+                      className="text-[10px] tracking-widest uppercase px-2 py-1 flex items-center gap-1.5"
                       style={{ fontFamily: MONO, border: '1px solid var(--color-rule)', color: 'var(--color-fg-mute)' }}
                     >
                       <StatusDiamond size={4} color="var(--color-fg-mute)" filled />

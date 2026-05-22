@@ -82,7 +82,7 @@ function ServiceRow({ item, index }) {
           {item.tags.map((tag) => (
             <li
               key={tag}
-              className="text-[9px] font-bold tracking-widest uppercase px-2 py-1 transition-all duration-200"
+              className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-all duration-200"
               style={{
                 fontFamily: '"JetBrains Mono", monospace',
                 border: '1px solid var(--color-rule)',

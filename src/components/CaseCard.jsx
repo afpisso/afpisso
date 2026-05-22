@@ -220,7 +220,7 @@ export default function CaseCard({ caseData, index }) {
               </h3>
             </div>
             <span
-              className="flex-shrink-0 flex items-center gap-1.5 text-[9px] font-bold tracking-widest uppercase px-2 py-1 ml-3 mt-1"
+              className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 ml-3 mt-1"
               style={{ fontFamily: '"JetBrains Mono", monospace', ...vstyle }}
             >
               <StatusDiamond size={5} color={vstyle.color} filled />
@@ -241,7 +241,7 @@ export default function CaseCard({ caseData, index }) {
             {caseData.tags.map((tag) => (
               <li
                 key={tag}
-                className="text-[9px] font-bold tracking-widest uppercase px-2 py-1"
+                className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
                   border: '1px solid var(--color-rule)',

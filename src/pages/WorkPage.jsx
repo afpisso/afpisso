@@ -228,7 +228,7 @@ export default function WorkPage({ onMenuOpen }) {
                             </h2>
                           </div>
                           <span
-                            className="text-[9px] font-bold tracking-widest uppercase px-2 py-1 flex-shrink-0 ml-3 mt-1"
+                            className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 flex-shrink-0 ml-3 mt-1"
                             style={{ fontFamily: '"JetBrains Mono", monospace', ...vstyle }}
                           >
                             {statusLabel}

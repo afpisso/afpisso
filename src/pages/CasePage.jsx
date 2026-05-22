@@ -241,7 +241,7 @@ export default function CasePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
               <span
-                className="text-[9px] font-bold tracking-widest uppercase px-2 py-1"
+                className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                 style={{ fontFamily: MONO, color: ACCENT, border: `1px solid rgba(255,37,64,0.3)` }}
               >
                 {visibilityLabel}
@@ -295,7 +295,7 @@ export default function CasePage({ onMenuOpen }) {
               </div>
               <ul className="flex flex-wrap gap-1.5 ml-auto" aria-label="Tags">
                 {caseData.tags.map(tag => (
-                  <li key={tag} className="text-[9px] font-bold tracking-widest uppercase px-2 py-1"
+                  <li key={tag} className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                     style={{ fontFamily: MONO, border: `1px solid ${RULE}`, color: 'var(--color-fg-mute)' }}>
                     {tag}
                   </li>

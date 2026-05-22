@@ -133,7 +133,7 @@ export default function FieldNotes() {
                         {lang === 'es' && note.titleEs ? note.titleEs : note.title}
                       </h3>
                       <span
-                        className="flex-shrink-0 text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
+                        className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                         style={{
                           fontFamily: '"JetBrains Mono", monospace',
                           border: `1px solid ${isHovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)'}`,

@@ -123,7 +123,7 @@ function ModuleCard({ mod, i }) {
 
       {/* Tag */}
       <div
-        className="text-[9px] font-bold tracking-widest uppercase mb-3 transition-colors duration-200"
+        className="text-[10px] font-bold tracking-widest uppercase mb-3 transition-colors duration-200"
         style={{
           fontFamily: '"JetBrains Mono", monospace',
           color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.5)',

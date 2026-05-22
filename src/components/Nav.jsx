@@ -41,7 +41,7 @@ export default function Nav({ onMenuOpen }) {
       }}
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1], delay: 2 }}
+      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1], delay: 0.4 }}
     >
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 py-4 flex items-center justify-between">
 
