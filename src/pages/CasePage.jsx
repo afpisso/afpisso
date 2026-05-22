@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
+import { fieldNotes } from '../data/fieldNotes';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
@@ -26,7 +27,8 @@ function SectionLabel({ children }) {
   );
 }
 
-function ImagePlaceholder({ label = 'Image', aspect = '16/9', src }) {
+function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
+  const hasRealImage = Boolean(src)
   return (
     <div
       style={{
@@ -37,10 +39,15 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src }) {
         alignItems: 'center', justifyContent: 'center',
         gap: 12, position: 'relative', overflow: 'hidden',
       }}
-      aria-hidden="true"
+      aria-hidden={hasRealImage ? undefined : 'true'}
     >
       {src && (
-        <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover" onError={e => { e.currentTarget.style.display = 'none'; }} />
+        <img
+          src={src}
+          alt={alt || label}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={e => { e.currentTarget.style.display = 'none'; }}
+        />
       )}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -249,7 +256,7 @@ export default function CasePage({ onMenuOpen }) {
             </m.div>
 
             <m.h1
-              className="uppercase mb-6"
+              className="uppercase mb-2"
               style={{
                 fontFamily: BEBAS,
                 fontSize: 'clamp(2.5rem, 7vw, 6.5rem)',
@@ -263,6 +270,16 @@ export default function CasePage({ onMenuOpen }) {
             >
               {caseData.title}
             </m.h1>
+            <m.div
+              className="mb-6"
+              style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.12 }}
+              aria-hidden="true"
+            >
+              Game UX/UI Case Study · {caseData.role} · {caseData.platform?.join(' / ')}
+            </m.div>
 
             <m.p
               className="mb-10"
@@ -307,7 +324,7 @@ export default function CasePage({ onMenuOpen }) {
 
         {/* Hero image */}
         <div className="max-w-[1400px] mx-auto px-6 py-8">
-          <ImagePlaceholder label={`${caseData.title} — hero image`} aspect="16/6" src={`/cases/${caseData.slug}/hero.jpg`} />
+          <ImagePlaceholder label={`${caseData.title} — hero image`} aspect="16/6" src={`/cases/${caseData.slug}/hero.jpg`} alt={`${caseData.title} — Game UX/UI case study hero image`} />
         </div>
 
         {/* NDA notice if applicable */}
@@ -441,7 +458,7 @@ export default function CasePage({ onMenuOpen }) {
                     ))}
                   </div>
                   <div className="mt-10">
-                    <ImagePlaceholder label="Process / approach visual" aspect="16/7" src={`/cases/${caseData.slug}/approach.jpg`} />
+                    <ImagePlaceholder label="Process / approach visual" aspect="16/7" src={`/cases/${caseData.slug}/approach.jpg`} alt={`${caseData.title} — design process and approach documentation`} />
                   </div>
                 </m.section>
               )}
@@ -574,24 +591,28 @@ export default function CasePage({ onMenuOpen }) {
               className="xl:sticky xl:top-24 hidden xl:block"
               aria-label="Case quick facts"
             >
-              <div className="p-5 relative" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
+              <div className="relative" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
                 <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: ACCENT }} aria-hidden="true" />
-                <div className="sys-label mb-4">{t.casePage.quickFacts}</div>
+                <div className="px-5 pt-5 pb-2">
+                  <div className="sys-label" style={{ color: ACCENT }}>{t.casePage.quickFacts}</div>
+                </div>
                 {content?.quickFacts && (
-                  <dl className="space-y-4">
+                  <dl>
                     {Object.entries(content.quickFacts).filter(([k]) => k !== 'confidentiality').map(([key, val]) => (
-                      <div key={key}>
-                        <dt className="sys-label mb-1 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</dt>
-                        <dd style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>
+                      <div key={key} className="flex items-start justify-between gap-3 px-5 py-3 border-t" style={{ borderColor: RULE }}>
+                        <dt className="sys-label flex-shrink-0 capitalize w-20" style={{ paddingTop: '1px' }}>
+                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                        </dt>
+                        <dd className="text-right" style={{ fontFamily: MONO, fontSize: '12px', color: FG, lineHeight: 1.4 }}>
                           {Array.isArray(val) ? val.join(', ') : val}
                         </dd>
                       </div>
                     ))}
                   </dl>
                 )}
-                <div className="mt-6 pt-5" style={{ borderTop: `1px solid ${RULE}` }}>
-                  <div className="sys-label mb-3">{t.casePage.metaPlatform}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(', ')}</div>
+                <div className="px-5 py-3 border-t flex items-start justify-between gap-3" style={{ borderColor: RULE }}>
+                  <div className="sys-label flex-shrink-0 w-20">{t.casePage.metaPlatform}</div>
+                  <div className="text-right" style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
                 </div>
               </div>
 
@@ -618,6 +639,37 @@ export default function CasePage({ onMenuOpen }) {
                   <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{nextCase.title}</div>
                 </Link>
               </div>
+
+              {/* Related Field Notes */}
+              {caseData.relatedNotes?.length > 0 && (() => {
+                const related = caseData.relatedNotes
+                  .map(slug => fieldNotes.find(n => n.slug === slug))
+                  .filter(Boolean);
+                if (!related.length) return null;
+                return (
+                  <div className="mt-4 p-4" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <div className="sys-label mb-3" style={{ color: ACCENT }}>Related Field Notes</div>
+                    <ul className="space-y-3">
+                      {related.map(note => (
+                        <li key={note.slug}>
+                          <Link
+                            to={`/notes/${note.slug}`}
+                            className="block transition-colors duration-200"
+                            style={{ textDecoration: 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.color = FG}
+                            onMouseLeave={e => e.currentTarget.style.color = DIM}
+                          >
+                            <div className="sys-label mb-0.5">{note.category}</div>
+                            <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM, lineHeight: 1.5 }}>
+                              {note.title}
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
             </aside>
           </div>
 

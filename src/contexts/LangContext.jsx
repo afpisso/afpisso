@@ -124,6 +124,10 @@ const translations = {
       coreQuestionLabel: 'Core question',
       philosophy: 'Good game UX is not invisible. It is present and clear enough that the player never has to think about the interface.',
       philosophyLabel: 'Design philosophy',
+      availabilityLabel: 'Availability',
+      availabilityStatus: 'Available for freelance and remote contracts',
+      availabilityContext: 'Game UX/UI design · UX leadership · UI systems — remote, global',
+      availabilityCta: 'Get in touch',
       expertiseLabel: 'Expertise areas',
       timelineLabel: 'Career path',
       timeline: [
@@ -393,6 +397,10 @@ const translations = {
       coreQuestionLabel: 'Pregunta central',
       philosophy: 'El buen UX para juegos no es invisible. Es suficientemente presente y claro para que el jugador nunca tenga que pensar en la interfaz.',
       philosophyLabel: 'Filosofía de diseño',
+      availabilityLabel: 'Disponibilidad',
+      availabilityStatus: 'Disponible para contratos freelance y remotos',
+      availabilityContext: 'Diseño Game UX/UI · Liderazgo UX · Sistemas UI — remoto, global',
+      availabilityCta: 'Escribir',
       expertiseLabel: 'Áreas de expertise',
       timelineLabel: 'Trayectoria',
       timeline: [

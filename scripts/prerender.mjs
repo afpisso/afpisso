@@ -38,7 +38,7 @@ const DEFAULT_DESC  =
   'Portfolio of Andres Felipe Pisso, a UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.'
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
-const staticRoutes = ['/', '/work', '/about', '/notes']
+const staticRoutes = ['/', '/work', '/about', '/notes', '/resume']
 
 const routes = [
   ...staticRoutes,
@@ -185,6 +185,17 @@ function buildPageMeta() {
     schema: buildWorkSchema(),
   }
 
+  meta['/resume'] = {
+    title: `Resume — Andres Felipe Pisso | UX Lead & Game UX/UI Designer`,
+    description:
+      'Resume of Andres Felipe Pisso — UX Lead and Game UX/UI Designer with 11+ years of experience across game UX, UI systems, HUD design, LiveOps UX, UEFN, and VR.',
+    canonical: `${BASE}/resume`,
+    ogType: 'website',
+    schema: [
+      breadcrumb({ name: 'Resume', url: `${BASE}/resume` }),
+    ],
+  }
+
   meta['/about'] = {
     title: `Andres Felipe Pisso — UX Lead & Game UX/UI Designer`,
     description:
@@ -316,6 +327,7 @@ function generateSitemap() {
     { loc: `${BASE}/`,         priority: '1.0', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/work`,     priority: '0.9', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/about`,    priority: '0.8', changefreq: 'monthly', lastmod: now },
+    { loc: `${BASE}/resume`,   priority: '0.7', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/notes`,    priority: '0.8', changefreq: 'weekly',  lastmod: now },
     ...fieldNotes.map(n => ({
       loc: `${BASE}/notes/${n.slug}`,

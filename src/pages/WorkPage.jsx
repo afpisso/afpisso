@@ -193,9 +193,13 @@ export default function WorkPage({ onMenuOpen }) {
               {visible.map((c, i) => {
                 const vstyle = visibilityStyle[c.visibility] || visibilityStyle['legacy'];
                 const statusLabel = t.caseStatuses[c.visibility] || c.status;
+                // Span last card to fill the row when it would be alone (count % 3 === 1)
+                const isLast = i === visible.length - 1;
+                const isOrphan = isLast && visible.length % 3 === 1;
                 return (
                   <m.div
                     key={c.id}
+                    className={isOrphan ? 'xl:col-span-3' : undefined}
                     style={{ backgroundColor: 'transparent' }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

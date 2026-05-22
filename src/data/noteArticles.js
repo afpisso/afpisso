@@ -1751,4 +1751,217 @@ export const noteArticles = {
       },
     ],
   },
+
+  'liveops-ux-for-games': {
+    en: [
+      {
+        type: 'paragraph',
+        text: 'LiveOps UX is one of the most specific disciplines in game design, and one of the least documented. Most UX writing focuses on onboarding: getting a new player into the experience, reducing the learning curve, building early confidence. LiveOps is the opposite problem. Your audience already knows the game. They have their habits, their preferred play style, their learned expectations about how the interface works. The challenge is not teaching them. It is giving them enough new information to act on an opportunity without breaking the session they are already in.',
+      },
+      {
+        type: 'heading',
+        text: 'What LiveOps UX Actually Is',
+      },
+      {
+        type: 'paragraph',
+        text: 'LiveOps covers any time-limited or rotating content that appears inside a live game: seasonal events, limited-time offers, battle passes, login rewards, challenges, limited cosmetics, flash sales. Each of these is a communication problem. The player needs to understand: what is available, how long it lasts, what it costs, and whether they care. And they need to understand all of that fast, because they are not in the store to browse. They are in the game to play.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The interface that handles this communication sits between the player and their session. If it is too easy to dismiss, they miss the offer and the studio misses the revenue. If it is too aggressive, it interrupts the session and creates friction. The entire design problem is that a business need and a player experience are directly in tension, and the UI is the place where that tension resolves.',
+      },
+      {
+        type: 'callout',
+        text: 'LiveOps UX is not about interrupting the player. It is about making offers visible at the moments when seeing them causes the least friction and the most value.',
+      },
+      {
+        type: 'heading',
+        text: 'The Information Hierarchy Problem',
+      },
+      {
+        type: 'paragraph',
+        text: 'The most common LiveOps UX failure is information overload. Studios that run multiple simultaneous events — a seasonal pass, a weekly challenge set, a rotating shop, a limited cosmetic bundle — often stack all of them in the same notification layer. The player sees five badges on five different menu items, and because they cannot process all of it at once, they process none of it.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The solution is hierarchy. Not all LiveOps content has equal urgency. An offer that expires in four hours is more urgent than a battle pass with six weeks remaining. A reward the player has already earned is more actionable than a new cosmetic they have not yet seen. The interface should reflect this, and that means making decisions about what the player sees first, second, and not at all on any given session.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Expiring soon: high urgency, needs immediate visibility, ideally with a timer',
+          'New and unclaimed: medium urgency, should be surfaced without blocking gameplay',
+          'Ongoing: low urgency, accessible but not pushed — the player will find it when they are ready',
+          'Seen and ignored: no re-push required — respecting this avoids fatigue',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Reward Clarity and Perceived Value',
+      },
+      {
+        type: 'paragraph',
+        text: 'One of the most expensive LiveOps UX problems is a reward the player does not understand. This happens when the item is shown as an icon with a number, rather than a preview of what the reward actually is. It happens when currency rewards are not connected to what the currency can buy. It happens when the unlock condition is described in a way that requires math or memory to interpret.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Perceived value is not the same as actual value. A player who does not understand what they are earning will not engage with the system, even if the reward is objectively good. The interface has to do the translation work: show the item, not just the icon. Show what it does or looks like. Show the cost and the value together so the comparison is immediate. Remove ambiguity about whether the player has already earned it or still needs to act.',
+      },
+      {
+        type: 'heading',
+        text: 'Timing: When to Surface LiveOps Content',
+      },
+      {
+        type: 'paragraph',
+        text: 'The best LiveOps UX shows content at the moments when the player is already transitioning — between matches, at the main menu after a session, during a loading screen. These are natural interruption points. The player\'s attention is not committed to gameplay, and they are already in a brief pause state. That is when an event summary, a reward notification, or a new shop item has the best chance of being seen without creating frustration.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Surfaces to avoid: mid-match, during a cutscene, immediately after a loss, or during any moment where the player has a primary task. These are moments where any overlay — no matter how well designed — feels like an interruption rather than an offer.',
+      },
+      {
+        type: 'callout',
+        text: 'The player is not shopping. They are playing, and sometimes they are willing to pause and evaluate an offer. The interface\'s job is to be there at the moments when that willingness exists.',
+      },
+      {
+        type: 'heading',
+        text: 'Store UX and the Decision Cost',
+      },
+      {
+        type: 'paragraph',
+        text: 'In-game stores are one of the highest-stakes UX surfaces in a live game. Every extra step the player has to take to understand an item, find the price, or complete a purchase is a point where they can decide it is not worth the effort. The design goal is not to maximize how much content the player sees. It is to minimize the cost of completing a transaction for a player who has already decided they want something.',
+      },
+      {
+        type: 'paragraph',
+        text: 'This means clean item previews, prices that are immediately legible, currency balances visible without having to navigate away, and a checkout flow that takes as few taps as possible. It also means not hiding the price behind a multi-step preview flow, and not requiring the player to mentally convert virtual currency to real money to understand what they are spending.',
+      },
+      {
+        type: 'heading',
+        text: 'What Makes LiveOps UX Difficult to Get Right',
+      },
+      {
+        type: 'paragraph',
+        text: 'Most of the difficulty in LiveOps UX comes from the intersection of business goals and player experience. The business wants maximum visibility for every offer. The player wants minimum interruption and maximum clarity. These goals are not always opposed, but they require someone in the room whose job is to hold the player experience as a design constraint — not just an afterthought.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The second difficulty is velocity. LiveOps content ships constantly, which means the design patterns have to be robust enough that new content can be slotted in without requiring a full redesign every week. That is a systems problem as much as a visual design problem. The solution is a well-documented LiveOps UI system: defined templates, clear rules for what types of content get what types of treatment, and enough flexibility to handle edge cases without breaking the visual language.',
+      },
+    ],
+    es: [
+      {
+        type: 'paragraph',
+        text: 'El LiveOps UX es una de las disciplinas más específicas en el diseño de juegos, y una de las menos documentadas. La mayoría de la escritura sobre UX se centra en el onboarding: llevar a un nuevo jugador a la experiencia, reducir la curva de aprendizaje, construir confianza temprana. El LiveOps es el problema contrario. Tu audiencia ya conoce el juego. Tiene sus hábitos, su estilo de juego preferido, sus expectativas aprendidas sobre cómo funciona la interfaz. El desafío no es enseñarles. Es darles suficiente información nueva para actuar en una oportunidad sin romper la sesión en la que ya están.',
+      },
+      {
+        type: 'heading',
+        text: 'Qué es realmente el LiveOps UX',
+      },
+      {
+        type: 'paragraph',
+        text: 'El LiveOps cubre cualquier contenido de tiempo limitado o rotativo que aparece dentro de un juego en vivo: eventos de temporada, ofertas de tiempo limitado, pases de batalla, recompensas de inicio de sesión, desafíos, cosméticos limitados, ventas flash. Cada uno de estos es un problema de comunicación. El jugador necesita entender: qué está disponible, cuánto tiempo dura, cuánto cuesta y si le importa. Y necesita entender todo eso rápidamente, porque no está en la tienda para navegar. Está en el juego para jugar.',
+      },
+      {
+        type: 'callout',
+        text: 'El LiveOps UX no se trata de interrumpir al jugador. Se trata de hacer que las ofertas sean visibles en los momentos en que verlas causa la menor fricción y el mayor valor.',
+      },
+    ],
+  },
+
+  'player-decision-making-ux': {
+    en: [
+      {
+        type: 'paragraph',
+        text: 'Player decision-making is one of the central problems in game design, but it is rarely framed as a UX problem. When a player makes a bad call — takes the wrong path, wastes a resource, picks the wrong upgrade — the instinct is to attribute it to skill or experience. Sometimes that is correct. But more often, the interface did not give them what they needed to decide well. The question is not "why did the player make that choice?" The question is "what did the interface show them when they made it?"',
+      },
+      {
+        type: 'heading',
+        text: 'Information Available vs. Information Processed',
+      },
+      {
+        type: 'paragraph',
+        text: 'There is a difference between information that is technically present on the screen and information that the player actually processes. Both are the designer\'s responsibility. A tooltip that describes an item\'s effect is technically available. But if the player only sees it on hover, in a font that requires them to stop and read carefully, during a moment when they are under pressure to decide quickly, the information might as well not be there.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Processing capacity is limited. When players are managing multiple inputs — reading the environment, tracking threats, managing resources — cognitive load is high. The less familiar the system, the higher the load. Interface decisions that look obvious during a calm design review can become invisible to a player mid-session. Good decision UX designs for the worst attentional state the player is likely to be in, not the best.',
+      },
+      {
+        type: 'callout',
+        text: 'Design for the player at their most distracted, not their most focused. The choice moment rarely arrives at a calm point in the session.',
+      },
+      {
+        type: 'heading',
+        text: 'Choice Architecture in Games',
+      },
+      {
+        type: 'paragraph',
+        text: 'Choice architecture is the design of how choices are presented. In games, every upgrade screen, skill tree, inventory panel, and branching dialogue is a choice architecture problem. The order options appear in, the visual weight of each option, the presence or absence of a recommended choice, the default selection — all of these influence what the player picks, often more than the actual content of the options.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Default selection: players disproportionately pick whatever is pre-selected or positioned first',
+          'Visual salience: larger, brighter, or more central options get more attention regardless of value',
+          'Comparison framing: relative values ("twice as fast") are processed more easily than absolute values',
+          'Scarcity signals: "limited" labels shift behavior even when the restriction is arbitrary',
+          'Confirmation friction: adding a confirmation step to irreversible choices reduces regret and support volume',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Feedback and the Decision Loop',
+      },
+      {
+        type: 'paragraph',
+        text: 'Decision quality improves with feedback. Players who understand the consequences of their past choices make better future choices. This sounds obvious, but many games fail to close this loop. A player chooses an upgrade, the upgrade fires silently during a chaotic fight, and they have no way to tell whether it made a difference. If they cannot evaluate the outcome, they cannot refine their decision model.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Good decision UX makes consequences visible and legible. Not intrusive — not a pop-up that interrupts the flow every time an ability activates. But clear enough that an attentive player can trace cause and effect. A damage number that reflects the upgrade. A resource counter that shows the difference before and after. A post-run summary that attributes outcomes to choices. These are not just feedback elements. They are the interface\'s way of completing the learning cycle.',
+      },
+      {
+        type: 'heading',
+        text: 'Where Decision UX Breaks Down',
+      },
+      {
+        type: 'paragraph',
+        text: 'The most common breakdown is overwhelming the player with options before they have the context to evaluate them. A new player presented with a full talent tree before they have played enough to understand the mechanics is not making a decision. They are guessing. The interface has given them the form of choice without the substance of informed choice.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The second breakdown is unclear option differentiation. When two choices look similar and their descriptions are abstract or asymmetric, players either pick arbitrarily or pick based on superficial cues — the one that sounds cooler, the one on the left, the one with the bigger icon. The design implication is that option descriptions need to be concrete, comparable, and specific to the player\'s current situation.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The third breakdown is irreversibility without visibility. When players cannot tell that a choice is permanent, they treat it as exploratory. Then they discover the permanence later and feel punished for the interface\'s lack of clarity. The fix is not to make everything reversible. It is to make the permanence visible and legible before the choice is made, not after.',
+      },
+      {
+        type: 'callout',
+        text: 'The player is not bad at deciding. The interface is bad at informing. The gap between those two interpretations is where most game UX work lives.',
+      },
+      {
+        type: 'heading',
+        text: 'Designing for Better Decisions',
+      },
+      {
+        type: 'paragraph',
+        text: 'Better decision UX does not mean making choices easier by removing depth. It means aligning the information available to the player with what they need to make an informed choice at the moment they are making it. This requires understanding when choices happen in the session — not just what the choices are — and designing the interface for that specific moment.',
+      },
+      {
+        type: 'paragraph',
+        text: 'It also means testing. Watching players make decisions in real sessions, noting where they hesitate, where they pick wrong, and where they express confusion or regret afterward. Those moments are not evidence of player failure. They are evidence of an interface that did not do its job. The fix is almost never "the player needs to read the tooltip." The fix is almost always "the interface needs to surface that information without requiring the player to ask for it."',
+      },
+    ],
+    es: [
+      {
+        type: 'paragraph',
+        text: 'La toma de decisiones del jugador es uno de los problemas centrales en el diseño de juegos, pero rara vez se enmarca como un problema de UX. Cuando un jugador toma una mala decisión — elige el camino equivocado, desperdicia un recurso, selecciona la mejora incorrecta — el instinto es atribuirlo a su habilidad o experiencia. A veces eso es correcto. Pero más a menudo, la interfaz no le dio lo que necesitaba para decidir bien. La pregunta no es "¿por qué el jugador tomó esa decisión?" La pregunta es "¿qué le mostró la interfaz cuando la tomó?"',
+      },
+      {
+        type: 'callout',
+        text: 'El jugador no es malo tomando decisiones. La interfaz es mala informando. La brecha entre esas dos interpretaciones es donde vive la mayor parte del trabajo de UX en juegos.',
+      },
+    ],
+  },
 };

@@ -256,6 +256,42 @@ export default function AboutPage({ onMenuOpen }) {
                 {about.philosophy}
               </p>
             </m.div>
+
+            {/* Availability signal */}
+            <m.div
+              className="mt-12 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+              style={{ border: '1px solid rgba(255,37,64,0.2)', backgroundColor: 'rgba(255,37,64,0.03)' }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: 'var(--color-accent)', opacity: 0.4 }} aria-hidden="true" />
+              <div className="flex items-center gap-3">
+                <span className="relative flex h-2 w-2 flex-shrink-0" aria-hidden="true">
+                  <span className="pulse-dot" />
+                </span>
+                <div>
+                  <div className="text-[10px] tracking-widest uppercase mb-0.5" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)' }}>
+                    {about.availabilityLabel || 'Availability'}
+                  </div>
+                  <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg)' }}>
+                    {about.availabilityStatus || 'Available for freelance and remote contracts'}
+                  </div>
+                  <div className="mt-0.5" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-fg-dim)' }}>
+                    {about.availabilityContext || 'Game UX/UI design, UX leadership, UI systems — remote, global'}
+                  </div>
+                </div>
+              </div>
+              <a
+                href="mailto:andres@byandresfe.com"
+                className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase flex-shrink-0"
+                style={{ fontFamily: '"JetBrains Mono", monospace', color: '#0a0a0a', backgroundColor: 'var(--color-accent)', padding: '8px 16px', textDecoration: 'none', clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
+              >
+                {about.availabilityCta || 'Get in touch'}
+                <span aria-hidden>→</span>
+              </a>
+            </m.div>
           </div>
         </section>
       </main>

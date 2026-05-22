@@ -21,6 +21,7 @@ export const cases = [
     descriptionEs:
       'Trabajé en sistemas UX/UI, flujos y decisiones de interfaz para una adaptación VR de una franquicia de trampas y combate. El enfoque fue ayudar a los jugadores a leer información táctica, entender qué cambió y actuar sin romper la inmersión.',
     tags: ['VR UX', 'HUD', 'UI Systems', 'Spatial Feedback', 'Figma'],
+    relatedNotes: ['vr-ux-interface-clarity', 'clean-hud-vs-clear-hud', 'feedback-reduces-guesswork'],
     cta: 'View VR UX/UI case',
     content: {
       summary:
@@ -119,6 +120,7 @@ export const cases = [
     descriptionEs:
       'El desafío fue equilibrar fantasía, combate, progresión y claridad dentro del ecosistema UEFN. Mi enfoque fue hacer que las elecciones, rutas, recompensas y retroalimentación del jugador fueran más fáciles de entender durante una experiencia de ritmo rápido.',
     tags: ['UEFN', 'Fortnite', 'Progression', 'D&D', 'Player Decisions'],
+    relatedNotes: ['uefn-ux-lessons', 'game-accessibility-checklist', 'feedback-reduces-guesswork'],
     cta: 'View D&D Fortnite case',
     content: {
       summary:
@@ -216,6 +218,7 @@ export const cases = [
     descriptionEs:
       'El enfoque fue ayudar a los jugadores a entender amenazas, recursos, acciones y cooperación sin perder el tono de la experiencia. Los detalles del caso están limitados por NDA a decisiones de diseño y enfoque.',
     tags: ['NDA-Safe', 'HUD Design', 'Survival UX', 'Tension', 'Feedback Systems'],
+    relatedNotes: ['clean-hud-vs-clear-hud', 'feedback-reduces-guesswork', 'what-is-a-game-ui-system'],
     cta: 'View NDA-safe breakdown',
     content: {
       summary:
@@ -305,6 +308,7 @@ export const cases = [
     descriptionEs:
       'Mi prioridad fue hacer que el loop de riesgo, recompensa y progresión fuera legible de partida en partida. La interfaz necesitaba soportar decisiones rápidas, recompensas claras y juego repetido.',
     tags: ['UEFN', 'Roguelike', 'Heist', 'Progression', 'Reward Clarity'],
+    relatedNotes: ['uefn-ux-lessons', 'feedback-reduces-guesswork', 'clean-hud-vs-clear-hud'],
     cta: 'View Raptor Heist case',
     content: {
       summary:
@@ -396,6 +400,7 @@ export const cases = [
     descriptionEs:
       'El trabajo se centró en clarificar recompensas, mejoras, escalado de dificultad y elecciones del jugador en partidas rápidas y repetibles.',
     tags: ['UEFN', 'Co-op', 'Roguelike', 'Reward Systems', 'Progression'],
+    relatedNotes: ['uefn-ux-lessons', 'what-is-a-game-ui-system', 'feedback-reduces-guesswork'],
     cta: 'View Havoc Hotel case',
     content: {
       summary:

@@ -4,6 +4,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { fieldNotes } from '../data/fieldNotes';
 import { noteArticles } from '../data/noteArticles';
+import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { m } from 'framer-motion';
@@ -433,6 +434,48 @@ export default function NotePage({ onMenuOpen }) {
             </m.div>
           </div>
         </section>
+
+        {/* ── Related Case Studies ─────────────────────────── */}
+        {meta?.relatedCases?.length > 0 && (() => {
+          const related = meta.relatedCases
+            .map(s => cases.find(c => c.slug === s))
+            .filter(Boolean);
+          if (!related.length) return null;
+          return (
+            <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-12">
+              <div className="max-w-[1100px] mx-auto px-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="h-[1px] w-6" style={{ backgroundColor: 'var(--color-accent)' }} />
+                  <span className="sys-label" style={{ color: 'var(--color-accent)' }}>Related Case Studies</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
+                  {related.map(c => (
+                    <Link
+                      key={c.slug}
+                      to={`/case/${c.slug}`}
+                      className="p-5 transition-colors duration-200"
+                      style={{ textDecoration: 'none', backgroundColor: 'var(--color-bg)', display: 'block' }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.025)'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-bg)'}
+                    >
+                      <div className="sys-label mb-1" style={{ color: 'var(--color-accent)' }}>{c.id}</div>
+                      <div className="uppercase mb-2" style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '1.2rem', color: 'var(--color-fg)', letterSpacing: '0.02em', lineHeight: 1.1 }}>
+                        {c.title}
+                      </div>
+                      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-fg-dim)', lineHeight: 1.6 }}>
+                        {c.focus}
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-3" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', color: 'var(--color-accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                        <span>Open case</span>
+                        <span aria-hidden>→</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        })()}
 
         {/* ── Footer nav ───────────────────────────────────── */}
         <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-12">

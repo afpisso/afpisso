@@ -51,11 +51,12 @@ import Hero      from './components/Hero.jsx'
 import CaseFiles from './components/CaseFiles.jsx'
 
 // Pages — eager imports so content is in the SSR output
-import WorkPage  from './pages/WorkPage.jsx'
-import AboutPage from './pages/AboutPage.jsx'
-import NotesPage from './pages/NotesPage.jsx'
-import NotePage  from './pages/NotePage.jsx'
-import CasePage  from './pages/CasePage.jsx'
+import WorkPage   from './pages/WorkPage.jsx'
+import AboutPage  from './pages/AboutPage.jsx'
+import ResumePage from './pages/ResumePage.jsx'
+import NotesPage  from './pages/NotesPage.jsx'
+import NotePage   from './pages/NotePage.jsx'
+import CasePage   from './pages/CasePage.jsx'
 
 // No-op prop for event handlers that aren't needed during SSR
 const noop = () => {}
@@ -77,9 +78,10 @@ function AppSSR() {
   return (
     <Routes>
       <Route path="/"              element={<HomePageSSR />} />
-      <Route path="/work"          element={<WorkPage  onMenuOpen={noop} />} />
-      <Route path="/about"         element={<AboutPage onMenuOpen={noop} />} />
-      <Route path="/notes"         element={<NotesPage onMenuOpen={noop} />} />
+      <Route path="/work"          element={<WorkPage   onMenuOpen={noop} />} />
+      <Route path="/about"         element={<AboutPage  onMenuOpen={noop} />} />
+      <Route path="/resume"        element={<ResumePage onMenuOpen={noop} />} />
+      <Route path="/notes"         element={<NotesPage  onMenuOpen={noop} />} />
       <Route path="/notes/:slug"   element={<NotePage  onMenuOpen={noop} />} />
       <Route path="/case/:slug"    element={<CasePage  onMenuOpen={noop} />} />
     </Routes>

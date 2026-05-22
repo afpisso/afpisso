@@ -12,6 +12,7 @@ export const fieldNotes = [
       'Un sistema de UI para juegos no es una guía de estilos. Es un conjunto de reglas, componentes, estados y decisiones documentadas que permiten a un equipo construir piezas de interfaz consistentes más rápido y con menos ambigüedad.',
     readTime: '8 min',
     type: 'Deep Dive',
+    relatedCases: ['the-walking-dead', 'havoc-hotel'],
   },
   {
     id: 'FN-002',
@@ -26,6 +27,7 @@ export const fieldNotes = [
       'Eliminar elementos hace que un HUD se vea más limpio. Eliminar los elementos correctos lo hace más claro. La diferencia está en entender qué información necesita realmente el jugador para actuar, y cuándo.',
     readTime: '6 min',
     type: 'Analysis',
+    relatedCases: ['orcs-must-die-by-the-blade', 'the-walking-dead'],
   },
   {
     id: 'FN-003',
@@ -40,6 +42,7 @@ export const fieldNotes = [
       'Cuando la retroalimentación es débil, los jugadores empiezan a adivinar. Cuando los jugadores adivinan, se frenan, cometen errores evitables o se desenganchan. La buena retroalimentación no es ruido. Es confirmación en el momento correcto.',
     readTime: '7 min',
     type: 'Framework',
+    relatedCases: ['orcs-must-die-by-the-blade', 'raptor-heist'],
   },
   {
     id: 'FN-004',
@@ -54,6 +57,7 @@ export const fieldNotes = [
       'Un lenguaje compartido produce mejores productos. Un glosario funcional de términos de UI para juegos: HUD, UI diegética versus no diegética, UI espacial, estados apilados, capas de retroalimentación, y cómo usar las mismas palabras reduce la fricción en el handoff.',
     readTime: '5 min',
     type: 'Reference',
+    relatedCases: [],
   },
   {
     id: 'FN-005',
@@ -68,6 +72,7 @@ export const fieldNotes = [
       'Las opciones de accesibilidad suelen tratarse como un requisito de cumplimiento. Son en realidad una de las mejores herramientas para entender si tu interfaz funciona bajo restricciones reales, y cómo mejorarla para cada jugador.',
     readTime: '6 min',
     type: 'Checklist',
+    relatedCases: ['dungeons-and-dragons-fortnite'],
   },
   {
     id: 'FN-006',
@@ -82,6 +87,37 @@ export const fieldNotes = [
       'La UI espacial sigue reglas distintas a la UI de pantalla plana. El texto debe ser legible a distancia. La información debe colocarse donde el jugador ya está mirando. Y cada elemento flotante compite con el entorno físico por la atención.',
     readTime: '9 min',
     type: 'Deep Dive',
+    relatedCases: ['orcs-must-die-by-the-blade'],
+  },
+  {
+    id: 'FN-008',
+    slug: 'liveops-ux-for-games',
+    title: 'LiveOps UX: Designing for Players Who Already Know the Game',
+    titleEs: 'LiveOps UX: diseñar para jugadores que ya conocen el juego',
+    category: 'LiveOps',
+    date: '2026-05-29',
+    summary:
+      'LiveOps UX is not onboarding. It targets players who are already engaged and need to understand what is new, what is limited, and whether it is worth their time. The interface has to communicate value fast, without breaking the loop they are already in.',
+    summaryEs:
+      'El LiveOps UX no es onboarding. Se dirige a jugadores que ya están comprometidos y necesitan entender qué es nuevo, qué es limitado y si vale su tiempo. La interfaz tiene que comunicar valor rápido, sin romper el loop en el que ya están.',
+    readTime: '7 min',
+    type: 'Framework',
+    relatedCases: ['havoc-hotel', 'raptor-heist'],
+  },
+  {
+    id: 'FN-009',
+    slug: 'player-decision-making-ux',
+    title: 'How Game UX Shapes Player Decisions',
+    titleEs: 'Cómo el UX del juego moldea las decisiones del jugador',
+    category: 'Decision UX',
+    date: '2026-06-05',
+    summary:
+      'Every interface choice the player makes is also a UX problem. Which path to take, which upgrade to buy, when to use a resource. When players make bad decisions, the game often blames their skill. The real question is whether the interface gave them enough to decide well.',
+    summaryEs:
+      'Cada elección de interfaz que hace el jugador también es un problema de UX. Qué ruta tomar, qué mejora comprar, cuándo usar un recurso. Cuando los jugadores toman malas decisiones, el juego suele culpar a su habilidad. La pregunta real es si la interfaz les dio suficiente para decidir bien.',
+    readTime: '8 min',
+    type: 'Analysis',
+    relatedCases: ['dungeons-and-dragons-fortnite', 'the-walking-dead'],
   },
   {
     id: 'FN-007',
@@ -96,5 +132,6 @@ export const fieldNotes = [
       'UEFN ofrece flexibilidad de UI significativa dentro de Fortnite, pero también impone restricciones duras. Entender qué puedes controlar, qué no, y cómo diseñar alrededor de las limitaciones de la plataforma es la verdadera habilidad UX en UEFN.',
     readTime: '8 min',
     type: 'Analysis',
+    relatedCases: ['dungeons-and-dragons-fortnite', 'raptor-heist', 'havoc-hotel'],
   },
 ];
