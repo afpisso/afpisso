@@ -4,7 +4,7 @@ Allow: /
 # Private routes — no need to crawl directly
 Disallow: /api/
 
-Sitemap: https://afpisso.com/sitemap.xml
+Sitemap: https://byandresfe.com/sitemap.xml
 
 # Content usage preferences (Content Signals v0.1)
 # https://contentsignals.org/

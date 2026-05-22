@@ -3,91 +3,91 @@
 
   <!-- Core pages -->
   <url>
-    <loc>https://afpisso.com/</loc>
+    <loc>https://byandresfe.com/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/work</loc>
+    <loc>https://byandresfe.com/work</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/about</loc>
+    <loc>https://byandresfe.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/resume</loc>
+    <loc>https://byandresfe.com/resume</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes</loc>
+    <loc>https://byandresfe.com/notes</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Field Notes -->
   <url>
-    <loc>https://afpisso.com/notes/what-is-a-game-ui-system</loc>
+    <loc>https://byandresfe.com/notes/what-is-a-game-ui-system</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/clean-hud-vs-clear-hud</loc>
+    <loc>https://byandresfe.com/notes/clean-hud-vs-clear-hud</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/feedback-reduces-guesswork</loc>
+    <loc>https://byandresfe.com/notes/feedback-reduces-guesswork</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/ui-terminology-for-game-teams</loc>
+    <loc>https://byandresfe.com/notes/ui-terminology-for-game-teams</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/game-accessibility-checklist</loc>
+    <loc>https://byandresfe.com/notes/game-accessibility-checklist</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/vr-ux-interface-clarity</loc>
+    <loc>https://byandresfe.com/notes/vr-ux-interface-clarity</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/notes/uefn-ux-lessons</loc>
+    <loc>https://byandresfe.com/notes/uefn-ux-lessons</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Case studies -->
   <url>
-    <loc>https://afpisso.com/case/orcs-must-die-by-the-blade</loc>
+    <loc>https://byandresfe.com/case/orcs-must-die-by-the-blade</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/case/dungeons-and-dragons-fortnite</loc>
+    <loc>https://byandresfe.com/case/dungeons-and-dragons-fortnite</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/case/the-walking-dead</loc>
+    <loc>https://byandresfe.com/case/the-walking-dead</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/case/raptor-heist</loc>
+    <loc>https://byandresfe.com/case/raptor-heist</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://afpisso.com/case/havoc-hotel</loc>
+    <loc>https://byandresfe.com/case/havoc-hotel</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
