@@ -47,7 +47,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <!-- Structured data — Person + WebSite -->
+    <!-- Structured data — consolidated @graph (WebSite + ProfilePage + Person + FAQPage) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,66 +62,80 @@
           "author": { "@id": "https://byandresfe.com/#person" }
         },
         {
+          "@type": "ProfilePage",
+          "@id": "https://byandresfe.com/#profilepage",
+          "url": "https://byandresfe.com/",
+          "name": "ByAndresFe — Game UX/UI Designer & UX Lead",
+          "description": "Portfolio of Andres Felipe Pisso — UX Lead and Game UX/UI Designer. Clarity systems, feedback design, and player decision-making across 11+ years in games and interactive media.",
+          "mainEntity": { "@id": "https://byandresfe.com/#person" },
+          "isPartOf": { "@id": "https://byandresfe.com/#website" }
+        },
+        {
           "@type": "Person",
           "@id": "https://byandresfe.com/#person",
           "name": "Andres Felipe Pisso",
           "alternateName": "byandresfe",
           "url": "https://byandresfe.com/",
-          "image": "https://byandresfe.com/logo-mark.png",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://byandresfe.com/photo.webp",
+            "description": "Andres Felipe Pisso — UX Lead and Game UX/UI Designer"
+          },
           "jobTitle": "UX Lead / Game UX/UI Designer",
           "description": "UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, and player decision-making. 11+ years across games, digital products, VR, and interactive experiences.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Bogotá",
+            "addressCountry": "CO"
+          },
           "knowsAbout": [
             "Game UX/UI", "HUD Design", "UI Systems", "Player Experience",
             "UX Leadership", "VR UX", "UEFN", "Product Design",
             "Interaction Design", "Design Documentation"
           ],
           "sameAs": [
-            "https://linkedin.com/in/byandresfe",
+            "https://linkedin.com/in/afpisso",
             "https://instagram.com/byandresfe",
             "https://x.com/byandresfe"
           ]
-        }
-      ]
-    }
-    </script>
-
-    <!-- FAQ schema — improves AEO / Google AI Overview visibility -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does Andres Felipe Pisso do?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Andres Felipe Pisso is a UX Lead and Game UX/UI Designer based in Bogotá, Colombia. He designs game interfaces, UI systems, and player experiences focused on reducing friction, improving feedback loops, and helping teams make better design decisions. He has 11+ years of experience across games, interactive media, VR, and digital products."
-          }
         },
         {
-          "@type": "Question",
-          "name": "What games has Andres Felipe Pisso worked on?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Andres has worked on titles including Orcs Must Die: By the Blade, Dungeons & Dragons in Fortnite, The Walking Dead (UEFN), Raptor Heist, Havoc Hotel, Zomvilles, and Kodety. His work spans game UI systems, HUD design, LiveOps UX, onboarding flows, and Unreal Engine / UEFN experiences."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is Andres Felipe Pisso's area of expertise?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Andres specializes in Game UX/UI design, UX leadership, UI systems, HUD clarity, player decision-making, LiveOps design, accessibility, UEFN / Unreal Engine workflows, and cross-functional design documentation. He works at the intersection of game UX, product thinking, and visual systems."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Andres Felipe Pisso available for work?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Andres Felipe Pisso is currently open to select opportunities in game UX/UI design and UX leadership. You can reach him through byandresfe.com or connect on LinkedIn at linkedin.com/in/afpisso."
-          }
+          "@type": "FAQPage",
+          "@id": "https://byandresfe.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What does Andres Felipe Pisso do?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Andres Felipe Pisso is a UX Lead and Game UX/UI Designer based in Bogotá, Colombia. He designs game interfaces, UI systems, and player experiences focused on reducing friction, improving feedback loops, and helping teams make better design decisions. He has 11+ years of experience across games, interactive media, VR, and digital products."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What games has Andres Felipe Pisso worked on?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Andres has worked on titles including Orcs Must Die: By the Blade, Dungeons & Dragons in Fortnite, The Walking Dead (UEFN), Raptor Heist, Havoc Hotel, Zomvilles, and Kodety. His work spans game UI systems, HUD design, LiveOps UX, onboarding flows, and Unreal Engine / UEFN experiences."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is Andres Felipe Pisso's area of expertise?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Andres specializes in Game UX/UI design, UX leadership, UI systems, HUD clarity, player decision-making, LiveOps design, accessibility, UEFN / Unreal Engine workflows, and cross-functional design documentation. He works at the intersection of game UX, product thinking, and visual systems."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Andres Felipe Pisso available for work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Andres Felipe Pisso is currently open to select opportunities in game UX/UI design and UX leadership. You can reach him through byandresfe.com or connect on LinkedIn at linkedin.com/in/afpisso."
+              }
+            }
+          ]
         }
       ]
     }

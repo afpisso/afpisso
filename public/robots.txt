@@ -9,3 +9,33 @@ Sitemap: https://byandresfe.com/sitemap.xml
 # Content usage preferences (Content Signals v0.1)
 # https://contentsignals.org/
 Content-Signal: ai-train=no, search=yes, ai-input=yes
+
+# AI citation crawlers — explicitly allowed for answer engine visibility
+# (Google AI Overviews, Bing Copilot, Perplexity, Claude)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Training-only crawlers — blocked (ai-train=no)
+User-agent: CCBot
+Disallow: /
+
+User-agent: omgili
+Disallow: /
+
+User-agent: omgilibot
+Disallow: /
