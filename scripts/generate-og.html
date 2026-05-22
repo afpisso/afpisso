@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OG Image Generator — byandresfe.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    canvas {
+      display: block;
+      max-width: 100%;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    button {
+      padding: 12px 28px;
+      background: #ff2540;
+      color: #0a0a0a;
+      border: none;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+      transition: background 0.2s;
+    }
+    button:hover { background: #cc1f34; }
+    .label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .status {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="label">og-image generator — 1200 × 630</div>
+  <canvas id="og" width="1200" height="630"></canvas>
+  <div class="controls">
+    <button onclick="download()">↓ Download og-image.png</button>
+    <span class="status" id="status">Loading fonts…</span>
+  </div>
+
+  <script>
+    const canvas  = document.getElementById('og');
+    const ctx     = canvas.getContext('2d');
+    const W = 1200, H = 630;
+
+    const ACCENT  = '#ff2540';
+    const BG      = '#080808';
+    const FG      = '#f5f5f3';
+    const MONO    = '"JetBrains Mono", monospace';
+    const DISPLAY = '"Bebas Neue", sans-serif';
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // ── Background ──────────────────────────────────────────
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Grid ────────────────────────────────────────────────
+      ctx.strokeStyle = 'rgba(255,255,255,0.028)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= W; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); ctx.stroke();
+      }
+      for (let y = 0; y <= H; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); ctx.stroke();
+      }
+
+      // ── Scan lines ──────────────────────────────────────────
+      for (let y = 0; y < H; y += 4) {
+        ctx.fillStyle = 'rgba(0,0,0,0.045)';
+        ctx.fillRect(0, y + 2, W, 2);
+      }
+
+      // ── Right radial glow ───────────────────────────────────
+      const radial = ctx.createRadialGradient(1050, 315, 0, 1050, 315, 400);
+      radial.addColorStop(0, 'rgba(255,37,64,0.06)');
+      radial.addColorStop(1, 'transparent');
+      ctx.fillStyle = radial;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Vertical rule ───────────────────────────────────────
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(640.5, 52); ctx.lineTo(640.5, H - 52); ctx.stroke();
+
+      // ── Logo mark (faint A, right panel) ────────────────────
+      ctx.save();
+      ctx.globalAlpha = 0.055;
+      ctx.fillStyle = FG;
+      const mx = 920, my = 315, ms = 260;
+      // Outer triangle (A shape)
+      ctx.beginPath();
+      ctx.moveTo(mx, my - ms * 0.52);
+      ctx.lineTo(mx + ms * 0.5,  my + ms * 0.48);
+      ctx.lineTo(mx + ms * 0.38, my + ms * 0.48);
+      ctx.lineTo(mx + ms * 0.265, my + ms * 0.22);
+      ctx.lineTo(mx - ms * 0.265, my + ms * 0.22);
+      ctx.lineTo(mx - ms * 0.38, my + ms * 0.48);
+      ctx.lineTo(mx - ms * 0.5,  my + ms * 0.48);
+      ctx.closePath();
+      ctx.fill();
+      // Inner hollow
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.moveTo(mx, my - ms * 0.18);
+      ctx.lineTo(mx + ms * 0.2,  my + ms * 0.2);
+      ctx.lineTo(mx - ms * 0.2,  my + ms * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      // Red bar
+      ctx.globalAlpha = 0.07;
+      ctx.fillStyle = ACCENT;
+      ctx.fillRect(mx - ms * 0.265, my + ms * 0.17, ms * 0.53, ms * 0.08);
+      ctx.restore();
+
+      // ── Top red accent bar ──────────────────────────────────
+      ctx.fillStyle = ACCENT;
+      ctx.fillRect(0, 0, W, 3);
+
+      // ── Corner accents ──────────────────────────────────────
+      ctx.strokeStyle = 'rgba(255,37,64,0.45)';
+      ctx.lineWidth = 1;
+      // Top-left
+      ctx.beginPath();
+      ctx.moveTo(24, 48); ctx.lineTo(24, 24); ctx.lineTo(48, 24);
+      ctx.stroke();
+      // Bottom-right
+      ctx.beginPath();
+      ctx.moveTo(W - 24, H - 48); ctx.lineTo(W - 24, H - 24); ctx.lineTo(W - 48, H - 24);
+      ctx.stroke();
+
+      // ── Eyebrow label ───────────────────────────────────────
+      ctx.fillStyle = ACCENT;
+      ctx.font = `500 10px ${MONO}`;
+      ctx.letterSpacing = '0.22em';
+      ctx.fillText('◈  PORTFOLIO  ·  GAME UX/UI', 72, 94);
+
+      // ── Name ────────────────────────────────────────────────
+      ctx.fillStyle = FG;
+      ctx.letterSpacing = '0.02em';
+      ctx.font = `82px ${DISPLAY}`;
+      ctx.fillText('ANDRES FELIPE', 68, 230);
+      ctx.fillText('PISSO', 68, 310);
+
+      // ── Separator line ──────────────────────────────────────
+      ctx.fillStyle = ACCENT;
+      ctx.fillRect(72, 328, 48, 2);
+
+      // ── Title ───────────────────────────────────────────────
+      ctx.fillStyle = 'rgba(245,245,243,0.42)';
+      ctx.font = `400 12px ${MONO}`;
+      ctx.letterSpacing = '0.14em';
+      ctx.fillText('UX LEAD  ·  GAME UX/UI DESIGNER  ·  11+ YEARS', 72, 362);
+
+      // ── Tags ────────────────────────────────────────────────
+      const tags = ['UI Systems', 'HUD Design', 'LiveOps UX', 'UEFN', 'Player Experience'];
+      let tx = 72;
+      const ty = 400;
+      ctx.font = `400 9px ${MONO}`;
+      ctx.letterSpacing = '0.14em';
+      tags.forEach(tag => {
+        const tw = ctx.measureText(tag.toUpperCase()).width + 22;
+        ctx.strokeStyle = 'rgba(245,245,243,0.1)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(tx + 0.5, ty + 0.5, tw, 22);
+        ctx.fillStyle = 'rgba(245,245,243,0.28)';
+        ctx.fillText(tag.toUpperCase(), tx + 11, ty + 15);
+        tx += tw + 8;
+      });
+
+      // ── Domain ──────────────────────────────────────────────
+      ctx.fillStyle = 'rgba(245,245,243,0.2)';
+      ctx.font = `400 11px ${MONO}`;
+      ctx.letterSpacing = '0.18em';
+      ctx.fillText('BYANDRESFE.COM', 72, H - 52);
+
+      // ── Status dot + label ──────────────────────────────────
+      const dotX = W - 226, dotY = H - 57;
+      ctx.save();
+      ctx.fillStyle = ACCENT;
+      ctx.shadowColor = ACCENT;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.fillStyle = ACCENT;
+      ctx.font = `500 10px ${MONO}`;
+      ctx.letterSpacing = '0.16em';
+      ctx.fillText('AVAILABLE FOR WORK', dotX + 14, dotY + 4);
+
+      // ── File ID (subtle, bottom-right area) ─────────────────
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      ctx.font = `400 9px ${MONO}`;
+      ctx.letterSpacing = '0.1em';
+      ctx.fillText('AFPISSO-OG-01', W - 182, H - 52);
+    }
+
+    function download() {
+      const link = document.createElement('a');
+      link.download = 'og-image.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Draw on fonts ready
+    document.fonts.ready.then(() => {
+      draw();
+      document.getElementById('status').textContent = '1200 × 630 · Ready to download';
+    });
+
+    // Initial draw immediately (may use fallback fonts)
+    draw();
+  </script>
+</body>
+</html>
