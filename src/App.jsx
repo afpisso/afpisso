@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import './index.css';
 import { LangProvider } from './contexts/LangContext';
 import { usePageMeta } from './hooks/usePageMeta';
@@ -129,8 +130,14 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <LangProvider>
-      <AppRoutes />
-    </LangProvider>
+    // reducedMotion="user" makes every m.* component respect the OS
+    // prefers-reduced-motion setting automatically — no per-component
+    // boilerplate needed. Manual useReducedMotion() hooks in Hero,
+    // CaseCard, GlitchStrokeText etc. remain for custom JS logic.
+    <MotionConfig reducedMotion="user">
+      <LangProvider>
+        <AppRoutes />
+      </LangProvider>
+    </MotionConfig>
   );
 }

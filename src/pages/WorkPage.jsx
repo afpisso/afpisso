@@ -8,7 +8,7 @@ import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
-import { m } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
 
@@ -190,6 +190,7 @@ export default function WorkPage({ onMenuOpen }) {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
+              <AnimatePresence mode="popLayout">
               {visible.map((c, i) => {
                 const vstyle = visibilityStyle[c.visibility] || visibilityStyle['legacy'];
                 const statusLabel = t.caseStatuses[c.visibility] || c.status;
@@ -203,6 +204,7 @@ export default function WorkPage({ onMenuOpen }) {
                     style={{ backgroundColor: 'transparent' }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
                     transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
                     layout
                   >
@@ -256,6 +258,7 @@ export default function WorkPage({ onMenuOpen }) {
                   </m.div>
                 );
               })}
+              </AnimatePresence>
             </div>
 
             {visible.length === 0 && (

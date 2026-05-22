@@ -35,7 +35,7 @@ function CountUp({ target, suffix = '' }) {
     if (shouldReduce) { setCount(numeric); return; }
     // Small delay so entry animations finish before counter fires
     const delay = setTimeout(() => {
-      const duration = 1800;
+      const duration = 900;
       const startTime = performance.now();
       const tick = (now) => {
         const progress = Math.min((now - startTime) / duration, 1);
