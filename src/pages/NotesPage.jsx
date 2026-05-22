@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -7,6 +8,8 @@ import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { m } from 'framer-motion';
+
+const BASE_URL = 'https://byandresfe.com';
 
 const typeColors = {
   'Deep Dive': { color: '#60a5fa', bg: 'rgba(59,130,246,0.08)' },
@@ -23,9 +26,52 @@ export default function NotesPage({ onMenuOpen }) {
   usePageMeta({
     title: lang === 'es' ? 'Field Notes' : 'Field Notes',
     description: lang === 'es'
-      ? 'Análisis, frameworks y notas sobre Game UX/UI de Andres Felipe Pisso.'
-      : 'Design thinking, frameworks, and notes on game UX/UI by Andres Felipe Pisso.',
+      ? 'Frameworks, análisis y notas de Andres Felipe Pisso sobre UX/UI para juegos, sistemas de interfaz, HUD, accesibilidad, UEFN, VR y diseño de producto digital.'
+      : 'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
   });
+
+  // Inject Blog + BreadcrumbList schema for this route
+  useEffect(() => {
+    const schemaId = 'ld-json-notes';
+    let el = document.getElementById(schemaId);
+    const schema = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL + '/' },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Field Notes', 'item': BASE_URL + '/notes' },
+        ],
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        '@id': BASE_URL + '/notes#blog',
+        'name': 'Field Notes',
+        'description': 'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
+        'url': BASE_URL + '/notes',
+        'author': { '@id': BASE_URL + '/#person' },
+        'isPartOf': { '@id': BASE_URL + '/#website' },
+        'blogPost': fieldNotes.map(n => ({
+          '@type': 'BlogPosting',
+          'url': `${BASE_URL}/notes/${n.slug}`,
+          'headline': n.title,
+          'description': n.summary,
+          'keywords': n.category,
+          'datePublished': n.date,
+          'author': { '@id': BASE_URL + '/#person' },
+        })),
+      },
+    ];
+    if (!el) {
+      el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = schemaId;
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, []);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>

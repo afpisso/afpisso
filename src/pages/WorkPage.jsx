@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -9,6 +9,8 @@ import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import { m } from 'framer-motion';
+
+const BASE_URL = 'https://byandresfe.com';
 
 const filters = ['All', 'Games', 'UEFN', 'VR', 'NDA-Safe', 'Legacy'];
 
@@ -60,9 +62,50 @@ export default function WorkPage({ onMenuOpen }) {
   usePageMeta({
     title: lang === 'es' ? 'Trabajo seleccionado' : 'Selected Work',
     description: lang === 'es'
-      ? 'Casos de estudio de Game UX/UI, diseño de producto y UEFN por Andres Felipe Pisso.'
-      : 'Game UX/UI, product design, and UEFN case studies by Andres Felipe Pisso.',
+      ? 'Casos de estudio de Game UX/UI, UEFN, VR y sistemas de interfaz por Andres Felipe Pisso. Cada caso documenta el problema real de diseño, el rol y las decisiones que dieron forma al trabajo.'
+      : 'Selected UX/UI case studies by Andres Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
   });
+
+  // Inject CollectionPage + BreadcrumbList schema for this route
+  useEffect(() => {
+    const schemaId = 'ld-json-work';
+    let el = document.getElementById(schemaId);
+    const schema = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL + '/' },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Selected Work', 'item': BASE_URL + '/work' },
+        ],
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        '@id': BASE_URL + '/work#page',
+        'name': 'Selected Work',
+        'description': 'Selected UX/UI case studies by Andres Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, and player decision-making.',
+        'url': BASE_URL + '/work',
+        'author': { '@id': BASE_URL + '/#person' },
+        'isPartOf': { '@id': BASE_URL + '/#website' },
+        'hasPart': cases.map(c => ({
+          '@type': 'CreativeWork',
+          'url': `${BASE_URL}/case/${c.slug}`,
+          'name': c.title,
+          'description': c.description,
+          'author': { '@id': BASE_URL + '/#person' },
+        })),
+      },
+    ];
+    if (!el) {
+      el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = schemaId;
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, []);
 
   const visible = cases.filter(c => matchFilter(active, c));
 

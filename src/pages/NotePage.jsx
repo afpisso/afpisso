@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -6,6 +7,8 @@ import { noteArticles } from '../data/noteArticles';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { m } from 'framer-motion';
+
+const BASE_URL = 'https://byandresfe.com';
 
 // ─── Block renderers ──────────────────────────────────────────────────────
 
@@ -147,6 +150,30 @@ export default function NotePage({ onMenuOpen }) {
       : '',
     article: meta ? { datePublished: meta.date, dateModified: meta.date } : undefined,
   });
+
+  // Inject BreadcrumbList schema for note pages
+  useEffect(() => {
+    if (!meta) return;
+    const schemaId = `ld-json-note-${meta.slug}`;
+    let el = document.getElementById(schemaId);
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL + '/' },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Field Notes', 'item': BASE_URL + '/notes' },
+        { '@type': 'ListItem', 'position': 3, 'name': title, 'item': `${BASE_URL}/notes/${meta.slug}` },
+      ],
+    };
+    if (!el) {
+      el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = schemaId;
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [meta, title]);
 
   // Next note in the list (circular)
   const idx      = fieldNotes.findIndex((n) => n.slug === slug);

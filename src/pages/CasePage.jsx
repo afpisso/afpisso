@@ -8,6 +8,8 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import { m } from 'framer-motion';
 
+const BASE_URL = 'https://byandresfe.com';
+
 const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
 const DIM = 'var(--color-fg-dim)';
@@ -120,6 +122,45 @@ export default function CasePage({ onMenuOpen }) {
       ? (lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : caseData.description)
       : undefined,
   });
+
+  // Inject BreadcrumbList + CreativeWork schema for this case
+  useEffect(() => {
+    if (!caseData) return;
+    const schemaId = `ld-json-case-${caseData.slug}`;
+    let el = document.getElementById(schemaId);
+    const schema = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL + '/' },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Selected Work', 'item': BASE_URL + '/work' },
+          { '@type': 'ListItem', 'position': 3, 'name': caseData.title, 'item': `${BASE_URL}/case/${caseData.slug}` },
+        ],
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        '@id': `${BASE_URL}/case/${caseData.slug}#work`,
+        'name': caseData.title,
+        'description': caseData.description,
+        'url': `${BASE_URL}/case/${caseData.slug}`,
+        'keywords': caseData.tags?.join(', '),
+        'author': { '@id': BASE_URL + '/#person' },
+        'creator': { '@id': BASE_URL + '/#person' },
+        'about': { '@type': 'Thing', 'name': caseData.focus || caseData.tags?.[0] },
+        'isPartOf': { '@id': BASE_URL + '/work#page' },
+      },
+    ];
+    if (!el) {
+      el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = schemaId;
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [caseData]);
 
   // Scroll depth tracking at 25 / 50 / 75 / 100
   const depthTracked = useRef(new Set());
@@ -474,6 +515,23 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.nextSteps}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.nextSteps}</p>
+                </m.section>
+              )}
+
+              {/* What this shows */}
+              {caseData.whatThisShows && (
+                <m.section
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{t.casePage.sections.whatThisShows || 'What this project shows'}</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>
+                    {caseData.whatThisShows}
+                  </p>
                 </m.section>
               )}
 

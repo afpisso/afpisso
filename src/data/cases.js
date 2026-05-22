@@ -93,6 +93,8 @@ export const cases = [
       nextSteps:
         'I would want to run structured playtests specifically targeting information drop-off moments: where do players miss a critical signal, and at what point in the session does their spatial reading improve? VR UX benefits significantly from session-length data that shows how players adapt to spatial information over time.',
     },
+    whatThisShows:
+      'This project shows how I approach interface clarity when attention, motion, comfort, and physical space all affect the experience. VR is spatial UX at its most constrained. The same principles that made this work — reduce ambiguity, anchor feedback where players already look, and remove anything that does not earn its place — apply to any complex interface, regardless of platform.',
   },
   {
     id: 'CASE-002',
@@ -187,6 +189,8 @@ export const cases = [
       nextSteps:
         'I would explore session replay data to understand exactly where players look during choice moments and whether the class preview is being read or skipped. For RPG-in-platform contexts, there is always a tension between depth and speed that requires iteration past the first release.',
     },
+    whatThisShows:
+      'This project shows how I design inside platform constraints. UEFN gives creators flexibility but also imposes hard limits: native HUD always visible, limited font control, no built-in onboarding. Making a D&D-style progression system readable within those constraints is the same problem as any product that needs to add depth to a constrained system. The skill is making complexity legible without adding noise.',
   },
   {
     id: 'CASE-003',
@@ -273,6 +277,8 @@ export const cases = [
       nextSteps:
         'Survival UX benefits from playtest data focused on moments of player confusion versus intended tension. I would want to distinguish between "confused and frustrated" and "tense and engaged" in session observations, then use that to calibrate exactly how much information the interface needs to surface.',
     },
+    whatThisShows:
+      'This project shows how I approach interface design under NDA constraints. The design problem is real and transferable: survival UX requires communicating urgency without generating anxiety, and cooperative action requires shared clarity without shared clutter. The same challenge exists in any interface where multiple users navigate a high-stakes shared state.',
   },
   {
     id: 'CASE-004',
@@ -361,6 +367,8 @@ export const cases = [
       nextSteps:
         'I would instrument the exact moment players trigger detection versus the moment they first see the alert signal, and look at whether players who see the proactive signal respond differently than those who miss it. Run-length data would tell us whether earlier alert awareness changes player strategy in a meaningful way.',
     },
+    whatThisShows:
+      'This project shows how I design repeatable systems that stay clear across many sessions. Roguelikes require players to re-evaluate risk and reward in every run. An interface that feels readable on run one needs to stay fast and unambiguous on run twenty. The same challenge appears in any product with loops: onboarding flows, dashboards, notifications, or any feature a user returns to repeatedly.',
   },
   {
     id: 'CASE-005',
@@ -456,5 +464,7 @@ export const cases = [
       nextSteps:
         'Long-term franchise UX work benefits from cross-release player behavior analysis. I would want to understand how players who have played multiple releases navigate the UI versus first-time players, and whether the component library is creating meaningful consistency from the player\'s perspective.',
     },
+    whatThisShows:
+      'This project shows how I design UI systems for shared states in co-op contexts. Each player needs individual clarity plus awareness of team state, without either interfering with the other. Solving that without visual noise is a systems problem more than a visual one. The same thinking applies to any collaborative tool or multi-user product where shared context matters.',
   },
 ];
