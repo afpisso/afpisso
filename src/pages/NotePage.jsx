@@ -225,6 +225,17 @@ export default function NotePage({ onMenuOpen }) {
               <span className="sys-label">{meta.readTime}</span>
               <span className="sys-label">·</span>
               <span className="sys-label">{meta.category}</span>
+              {meta.date && (
+                <>
+                  <span className="sys-label">·</span>
+                  <time
+                    dateTime={meta.date}
+                    className="sys-label"
+                  >
+                    {new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </time>
+                </>
+              )}
             </m.div>
 
             {/* Title */}
@@ -290,6 +301,7 @@ export default function NotePage({ onMenuOpen }) {
                         { label: np.metaType,     value: meta.type },
                         { label: np.metaReadTime, value: meta.readTime },
                         { label: np.metaCategory, value: meta.category },
+                        ...(meta.date ? [{ label: 'Published', value: new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
                       ].map(({ label, value }) => (
                         <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                           <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 const SITE_NAME = 'ByAndresFe';
 const BASE_URL = 'https://byandresfe.com';
 const DEFAULT_DESCRIPTION =
-  'Portfolio of Andres Felipe Pisso, UX Lead and Game UX/UI Designer focused on clarity, feedback, systems, and better player experiences across games, products, VR, and interactive media.';
+  'Portfolio of Andres Felipe Pisso — UX Lead and Game UX/UI Designer. Clarity systems, feedback design, and player decision-making across 11+ years in games and interactive media.';
 
 /**
  * Sets document.title, meta tags, og/twitter, canonical, and optional

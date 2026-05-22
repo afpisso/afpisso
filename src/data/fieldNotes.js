@@ -5,6 +5,7 @@ export const fieldNotes = [
     title: 'What is a Game UI System?',
     titleEs: '¿Qué es un sistema de UI para juegos?',
     category: 'Systems',
+    date: '2024-02-15',
     summary:
       'A game UI system is not a style guide. It is a set of rules, components, states, and documented decisions that let a team build consistent interface pieces faster and with less ambiguity.',
     summaryEs:
@@ -18,6 +19,7 @@ export const fieldNotes = [
     title: 'A Clean HUD is Not Always a Clear HUD',
     titleEs: 'Un HUD limpio no siempre es un HUD claro',
     category: 'HUD Design',
+    date: '2024-03-08',
     summary:
       'Removing elements makes a HUD look cleaner. Removing the right elements makes it clearer. The difference is understanding what information the player actually needs to act, and when.',
     summaryEs:
@@ -31,6 +33,7 @@ export const fieldNotes = [
     title: 'Why Feedback Reduces Guesswork',
     titleEs: 'Por qué la retroalimentación reduce la ambigüedad',
     category: 'Feedback Systems',
+    date: '2024-04-12',
     summary:
       'When feedback is weak, players start guessing. When players guess, they slow down, make avoidable mistakes, or disengage. Strong feedback is not about noise. It is about confirmation at the right moment.',
     summaryEs:
@@ -44,6 +47,7 @@ export const fieldNotes = [
     title: 'UI Terminology for Game Teams',
     titleEs: 'Terminología de UI para equipos de juego',
     category: 'Reference',
+    date: '2024-05-20',
     summary:
       'Shared language makes better products. A working glossary of game UI terms: HUD, diegetic versus non-diegetic UI, spatial UI, stacking states, feedback layers, and how using the same words reduces handoff friction.',
     summaryEs:
@@ -57,6 +61,7 @@ export const fieldNotes = [
     title: 'What Game Teams Can Learn from Accessibility Settings',
     titleEs: 'Qué pueden aprender los equipos de juego de las opciones de accesibilidad',
     category: 'Accessibility',
+    date: '2024-07-03',
     summary:
       'Accessibility settings are often treated as a compliance requirement. They are actually one of the best tools for understanding whether your interface works under real constraints, and how to make it better for every player.',
     summaryEs:
@@ -70,6 +75,7 @@ export const fieldNotes = [
     title: 'VR Interface Clarity: What Changes in Spatial UI',
     titleEs: 'Claridad de interfaz en VR: qué cambia en la UI espacial',
     category: 'VR UX',
+    date: '2024-09-10',
     summary:
       'Spatial UI follows different rules than flat screen UI. Text must be legible at distance. Information must be placed where the player is already looking. And every floating element competes with the physical environment for attention.',
     summaryEs:
@@ -83,6 +89,7 @@ export const fieldNotes = [
     title: 'UEFN UX Lessons: Designing Inside Fortnite',
     titleEs: 'Lecciones de UX en UEFN: diseñar dentro de Fortnite',
     category: 'UEFN',
+    date: '2024-11-18',
     summary:
       'UEFN gives creators significant UI flexibility inside Fortnite, but it also imposes hard constraints. Understanding what you can control, what you cannot, and how to design around the platform\'s limitations is the real UEFN UX skill.',
     summaryEs:
