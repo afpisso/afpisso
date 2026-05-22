@@ -81,7 +81,7 @@ export default function CaseCard({ caseData, index }) {
           {caseData.thumbnail ? (
             <img
               src={caseData.thumbnail}
-              alt=""
+              alt={caseData.thumbnailAlt || caseData.title}
               className="w-full h-full object-cover"
               style={{
                 transform: hovered ? 'scale(1.04)' : 'scale(1)',
