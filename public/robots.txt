@@ -5,3 +5,7 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://afpisso.com/sitemap.xml
+
+# Content usage preferences (Content Signals v0.1)
+# https://contentsignals.org/
+Content-Signal: ai-train=no, search=yes, ai-input=yes

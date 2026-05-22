@@ -1,0 +1,51 @@
+# Andres Felipe Pisso — Game UX/UI Designer & UX Lead
+
+> Portfolio site for Andres Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead
+> based in Bogotá, Colombia. Specialises in game interfaces, UI systems, player experience
+> design, and cross-functional UX leadership.
+
+## Contact
+
+- Email: Available at afpisso.com/#contact
+- LinkedIn: linkedin.com/in/afpisso
+- Instagram: @byandresfe
+- X / Twitter: @byandresfe
+
+## Work (Case Files)
+
+Full case list at: https://afpisso.com/work
+
+- CASE-001: Game UI Systems — UI component systems, HUD clarity, implementation rules (UX Lead)
+- CASE-002: LiveOps UX — Events, rewards, retention loops, store UX (UX Lead)
+- CASE-003: UEFN / Fortnite Creative — Onboarding, lobby UX, player flows (UX Lead / Game UX/UI Designer)
+- CASE-004: Zomvilles — Game systems, progression, UX flows (Lead Game Designer)
+- CASE-005: Kodety — Educational game design, interaction, product design (Game Designer / UX/UI) — Award winner
+
+## Expertise
+
+Game UX/UI, UX Leadership, UI Systems, Player Experience, Game Design, Accessibility,
+UEFN / Unreal Engine, Figma, LiveOps Design, Documentation, Cross-functional Collaboration
+
+## Field Notes
+
+Articles and references at: https://afpisso.com/notes
+
+- Game UI Systems
+- Game UI Terminology
+- UX Heuristics for Games
+- Accessibility Checklist for Games
+- Complexity in Game UX/UI
+- Figma Plugins for Game UI
+
+## Site structure
+
+- / — Home / Command Center
+- /work — Case Files (portfolio)
+- /notes — Field Notes (articles)
+- /about — Operator Profile
+- /resume.pdf — Resume (PDF)
+
+## Usage
+
+This site is a personal portfolio. Content may not be used for AI training.
+Searching and AI-assisted summarisation for informational purposes is permitted.
