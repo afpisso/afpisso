@@ -5,6 +5,7 @@ import { fieldNotes } from '../data/fieldNotes';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import CaseRail from '../components/CaseRail';
+import CaseTOC from '../components/CaseTOC';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
@@ -293,6 +294,22 @@ export default function CasePage({ onMenuOpen }) {
   const content = (lang === 'es' && caseData.contentEs) ? caseData.contentEs : caseData.content;
   const whatThisShows = (lang === 'es' && caseData.whatThisShowsEs) ? caseData.whatThisShowsEs : caseData.whatThisShows;
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
+  const cp = t.casePage.sections;
+
+  // Build TOC dynamically — only sections present in this case's content
+  const tocSections = [
+    content?.summary                   && { id: 'cs-summary',      label: cp.executiveSummary },
+    content?.context                   && { id: 'cs-context',      label: cp.context },
+    content?.challenge                 && { id: 'cs-challenge',    label: cp.challenge },
+    content?.role                      && { id: 'cs-role',         label: cp.myRole },
+    content?.constraints?.length > 0   && { id: 'cs-constraints',  label: cp.constraints },
+    content?.approach?.length > 0      && { id: 'cs-approach',     label: cp.uxApproach },
+    content?.keyDecisions?.length > 0  && { id: 'cs-decisions',    label: cp.keyDecisions },
+    content?.deliverables?.length > 0  && { id: 'cs-deliverables', label: cp.deliverables },
+    content?.outcome                   && { id: 'cs-outcome',      label: cp.outcome },
+    content?.nextSteps                 && { id: 'cs-next',         label: cp.nextSteps },
+    whatThisShows                      && { id: 'cs-shows',        label: cp.whatThisShows || 'What this shows' },
+  ].filter(Boolean);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
@@ -442,6 +459,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Executive summary */}
               {content?.summary && (
                 <m.section
+                  id="cs-summary"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -459,6 +477,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Context */}
               {content?.context && (
                 <m.section
+                  id="cs-context"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -474,6 +493,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Challenge */}
               {content?.challenge && (
                 <m.section
+                  id="cs-challenge"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -489,6 +509,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* My role */}
               {content?.role && (
                 <m.section
+                  id="cs-role"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -504,6 +525,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Constraints */}
               {content?.constraints?.length > 0 && (
                 <m.section
+                  id="cs-constraints"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -526,6 +548,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* UX Approach */}
               {content?.approach?.length > 0 && (
                 <m.section
+                  id="cs-approach"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -559,6 +582,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Key decisions */}
               {content?.keyDecisions?.length > 0 && (
                 <m.section
+                  id="cs-decisions"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -579,6 +603,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Deliverables */}
               {content?.deliverables?.length > 0 && (
                 <m.section
+                  id="cs-deliverables"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -601,6 +626,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* Outcome */}
               {content?.outcome && (
                 <m.section
+                  id="cs-outcome"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -616,6 +642,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* What I'd check next */}
               {content?.nextSteps && (
                 <m.section
+                  id="cs-next"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -631,6 +658,7 @@ export default function CasePage({ onMenuOpen }) {
               {/* What this shows */}
               {whatThisShows && (
                 <m.section
+                  id="cs-shows"
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
@@ -696,6 +724,9 @@ export default function CasePage({ onMenuOpen }) {
                   <div className="text-right" style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
                 </div>
               </div>
+
+              {/* Section table of contents */}
+              <CaseTOC sections={tocSections} />
 
               {/* Navigation between cases */}
               <div className="mt-4 grid grid-cols-2 gap-2">
