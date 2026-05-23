@@ -6,12 +6,20 @@
  *
  * Static import (SSR-safe: Lenis only instantiates inside useEffect).
  * No dynamic import → no race condition between cleanup and resolution.
+ *
+ * Scrollbar fix: when the user drags the native scrollbar, Lenis's RAF loop
+ * would fight the browser's own scroll handling and snap back on release.
+ * We detect mousedown near the right edge (scrollbar zone), pause Lenis,
+ * let the browser own the drag, then resync + resume on mouseup.
  */
 
 import { createContext, useContext, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 
 const LenisCtx = createContext(null);
+
+// Width of native scrollbar hit zone (px from right edge of viewport)
+const SCROLLBAR_ZONE = 20;
 
 export function LenisProvider({ children }) {
   const lenisRef = useRef(null);
@@ -31,17 +39,59 @@ export function LenisProvider({ children }) {
 
     lenisRef.current = lenis;
 
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    // ── RAF loop ────────────────────────────────────────────────────────────
+    let rafId = null;
+
+    function startRaf() {
+      function tick(time) {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
     }
-    rafId = requestAnimationFrame(raf);
+
+    function stopRaf() {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    }
+
+    startRaf();
+
+    // ── Native scrollbar drag fix ────────────────────────────────────────────
+    // When the user clicks inside the scrollbar zone, pause Lenis so the
+    // browser can move the page freely. On mouseup, sync Lenis to wherever
+    // the browser landed and resume.
+    let draggingScrollbar = false;
+
+    function onMouseDown(e) {
+      if (e.clientX >= document.documentElement.clientWidth - SCROLLBAR_ZONE) {
+        draggingScrollbar = true;
+        lenis.stop();
+        stopRaf();
+      }
+    }
+
+    function onMouseUp() {
+      if (!draggingScrollbar) return;
+      draggingScrollbar = false;
+      // Snap Lenis internal target to wherever the browser ended up,
+      // then restart — no lerp drift, no position fight.
+      lenis.scrollTo(window.scrollY, { immediate: true });
+      lenis.start();
+      startRaf();
+    }
+
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup',   onMouseUp);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stopRaf();
       lenis.destroy();
       lenisRef.current = null;
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup',   onMouseUp);
     };
   }, []);
 
