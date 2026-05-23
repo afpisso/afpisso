@@ -93,13 +93,13 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
               overflow: 'hidden',
               display: 'block',
             }}
-            initial={{ opacity: 0, y: '60%' }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ y: '106%' }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: '-30px' }}
             transition={{
-              duration: 0.6,
+              duration: 0.72,
               ease: [0.16, 1, 0.3, 1],
-              delay: delay + 0.1 + i * 0.08,
+              delay: delay + 0.08 + i * 0.09,
             }}
           >
             <span
