@@ -420,8 +420,8 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
       )`;
 
   const t = lang === 'es'
-    ? { connect: 'CONECTA', contact: 'CONTACTO', year: '© 2026 AFPISSO. TODOS LOS DERECHOS RESERVADOS.', closing: 'AFPISSO · BOGOTÁ → MUNDO', live: 'EN DIRECTO' }
-    : { connect: 'CONNECT', contact: 'CONTACT',  year: '© 2026 AFPISSO. ALL RIGHTS RESERVED.',           closing: 'AFPISSO · BOGOTÁ → WORLD', live: 'LIVE'       };
+    ? { connect: 'CONECTA', contact: 'CONTACTO', year: '© 2026 BYANDRESFE. TODOS LOS DERECHOS RESERVADOS.', closing: 'BYANDRESFE · BOGOTÁ → MUNDO', live: 'EN DIRECTO' }
+    : { connect: 'CONNECT', contact: 'CONTACT',  year: '© 2026 BYANDRESFE. ALL RIGHTS RESERVED.',           closing: 'BYANDRESFE · BOGOTÁ → WORLD', live: 'LIVE'       };
 
   return (
     <div
@@ -468,7 +468,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
             {sessionId} · NODE.{hhmm.replace(':', '')}
           </span>
           <span style={{ opacity: 0.5, display: 'flex', alignItems: 'center', gap: 8 }}>
-            AFPISSO
+            BYANDRESFE
             <span style={{ opacity: 0.45 }}>/</span>
             {lang === 'es' ? 'ACTIVA' : 'NOW'}
             <span style={{ color: accent, opacity: 1 }}>· {activeLabel}</span>
@@ -796,9 +796,9 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
           whiteSpace: 'nowrap', overflow: 'hidden', paddingLeft: 20,
           userSelect: 'none',
         }}>
-          <span>AFPISSO·AFPISSO·AFPISSO</span>
-          <span style={{ alignSelf: 'flex-end' }}>·AFPISSO·AFPISSO</span>
-          <span>AFPISSO·AFPISSO·AFPISSO</span>
+          <span>BYANDRESFE·BYANDRESFE</span>
+          <span style={{ alignSelf: 'flex-end' }}>·BYANDRESFE·</span>
+          <span>BYANDRESFE·BYANDRESFE</span>
         </div>
 
         {/* Center loading chip — visible only at stage 3 */}
@@ -829,7 +829,7 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
           fontFamily: '"JetBrains Mono", monospace',
           fontSize: 11, letterSpacing: '0.16em', color: '#0a0a0a', opacity: 0.8,
         }}>
-          ▢ AFPISSO · OS / {hashId}
+          ▢ BYANDRESFE · OS / {hashId}
         </div>
         <div style={{
           position: 'absolute', bottom: 24, right: 28,

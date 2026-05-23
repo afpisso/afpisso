@@ -4,7 +4,7 @@ import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 
 const SOCIAL = [
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/afpisso', external: true },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/byandresfe', external: true },
   { label: 'Instagram', href: 'https://instagram.com/byandresfe', external: true },
   { label: 'X / Twitter', href: 'https://x.com/byandresfe', external: true },
 ];
