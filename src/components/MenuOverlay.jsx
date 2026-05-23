@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import { useLenis } from '../contexts/LenisContext';
 
 // ── Scramble hook ──────────────────────────────────────────────────────────
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_*<>+#';
@@ -373,10 +374,17 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
     onClose?.();
     if (href.startsWith('/#')) {
       navigate('/');
+      // Wait for the route render, then scroll to section via Lenis
+      // (native scrollIntoView conflicts with Lenis's RAF loop)
       setTimeout(() => {
         const id = href.slice(2);
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+        const el = document.getElementById(id);
+        if (el && lenisRef?.current) {
+          lenisRef.current.scrollTo(el, { offset: -80, duration: 1.0 });
+        } else if (el) {
+          el.scrollIntoView({ behavior: 'instant' });
+        }
+      }, 120);
     } else {
       navigate(href);
     }
@@ -691,6 +699,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
 // ── MenuOverlay — 7-stage state machine ────────────────────────────────────
 export default function MenuOverlay({ open, onClose, activeSection }) {
   const { lang } = useLang();
+  const lenisRef = useLenis();
   const accent = '#ff2540';
   const [stage, setStage] = useState(0);
 

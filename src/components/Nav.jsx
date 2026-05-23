@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import { useLenis } from '../contexts/LenisContext';
 import ContactOverlay from './ContactOverlay';
 import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
@@ -72,6 +73,7 @@ export default function Nav({ onMenuOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const { t, lang, toggleLang } = useLang();
+  const lenisRef = useLenis();
 
   useEffect(() => {
     // Trigger pill after 80px — gives the hero enough room before switching
@@ -121,7 +123,7 @@ export default function Nav({ onMenuOpen }) {
                   to="/"
                   className="flex items-center gap-3"
                   aria-label={t.nav.logoLabel}
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => lenisRef?.current ? lenisRef.current.scrollTo(0, { duration: 0.9 }) : window.scrollTo({ top: 0, behavior: 'instant' })}
                 >
                   <LogoMark size={40} />
                   <div>
@@ -261,7 +263,7 @@ export default function Nav({ onMenuOpen }) {
               <Link
                 to="/"
                 aria-label={t.nav.logoLabel}
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={() => lenisRef?.current ? lenisRef.current.scrollTo(0, { duration: 0.9 }) : window.scrollTo({ top: 0, behavior: 'instant' })}
                 style={{ display: 'flex', alignItems: 'center', padding: '2px 4px' }}
               >
                 <LogoMark size={30} />

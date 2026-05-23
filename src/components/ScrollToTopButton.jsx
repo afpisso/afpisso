@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
+import { useLenis } from '../contexts/LenisContext';
 
 export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
+  const lenisRef = useLenis();
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 600);
@@ -11,7 +13,11 @@ export default function ScrollToTopButton() {
   }, []);
 
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (lenisRef?.current) {
+      lenisRef.current.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }
 
   return (

@@ -276,9 +276,8 @@ export default function CasePage({ onMenuOpen }) {
     return () => window.removeEventListener('scroll', checkDepth);
   }, [caseData]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [slug]);
+  // Scroll-to-top on slug change is handled by App.jsx via Lenis
+  // (lenisRef.current.scrollTo(0, { immediate: true }) on location.pathname change)
 
   if (!caseData) {
     return (

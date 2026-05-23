@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import { useLenis } from '../contexts/LenisContext';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 
@@ -12,6 +13,7 @@ const SOCIAL = [
 export default function Footer() {
   const year = new Date().getFullYear();
   const { t } = useLang();
+  const lenisRef = useLenis();
 
   return (
     <footer style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
@@ -28,7 +30,7 @@ export default function Footer() {
             className="inline-flex items-center gap-3 mb-4 group"
             style={{ textDecoration: 'none' }}
             aria-label="ByAndresFe home"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => lenisRef?.current ? lenisRef.current.scrollTo(0, { duration: 1.2 }) : window.scrollTo({ top: 0, behavior: 'instant' })}
           >
             <div
               className="w-7 h-7 flex items-center justify-center overflow-hidden transition-colors duration-200"
