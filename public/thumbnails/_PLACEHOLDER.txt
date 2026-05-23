@@ -1,0 +1,14 @@
+THUMBNAILS — Work grid cards
+Ratio: 16:9 | Tamaño: 1280x720px min (idealmente 1920x1080px) | Formato: JPG | Peso: max 300kb
+
+Archivos requeridos:
+  orcs-must-die-by-the-blade.jpg   — CASE-001 (VR / MetaQuest)
+  zombie-dragon-adventure.jpg      — CASE-002 (D&D in Fortnite / UEFN)
+  courtyard-king.jpg               — CASE-003 (The Walking Dead Universe / UEFN)
+  raptor-heist.jpg                 — CASE-004 (Havoc Hotel Saga / UEFN)
+  havoc-hotel-3.jpg                — CASE-005 (Havoc Hotel Saga / UEFN)
+  zomvilles.jpg                    — CASE-006 (Pixiemeta / Mobile) — legacy
+  kodety.jpg                       — CASE-007 (Diversoft / Web) — legacy
+
+Nota: los archivos con nombres anteriores (dungeons-and-dragons-fortnite.jpg, the-walking-dead.jpg,
+havoc-hotel.jpg) ya no son necesarios. Puedes eliminarlos.

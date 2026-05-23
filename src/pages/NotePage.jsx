@@ -7,6 +7,7 @@ import { noteArticles } from '../data/noteArticles';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
+import SectionTag from '../components/SectionTag';
 import { m } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
@@ -90,9 +91,11 @@ function Callout({ text }) {
     <div style={{
       margin: '2rem 0',
       padding: '20px 24px',
-      borderLeft: '2px solid var(--color-accent)',
-      backgroundColor: 'rgba(255,37,64,0.05)',
+      border: '1px solid rgba(255,37,64,0.25)',
+      backgroundColor: 'rgba(255,37,64,0.04)',
+      position: 'relative',
     }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
       <p style={{
         fontFamily: '"JetBrains Mono", monospace',
         fontSize: '13px',
@@ -118,15 +121,11 @@ function renderBlock(block, i) {
   }
 }
 
-// ─── Type badge colors ────────────────────────────────────────────────────
-
-const typeColors = {
-  'Deep Dive':  { color: '#60a5fa', bg: 'rgba(59,130,246,0.08)' },
-  'Reference':  { color: '#a3a3a3', bg: 'rgba(100,100,100,0.08)' },
-  'Framework':  { color: '#c084fc', bg: 'rgba(192,132,252,0.08)' },
-  'Checklist':  { color: '#4ade80', bg: 'rgba(34,197,94,0.08)' },
-  'Analysis':   { color: '#fb923c', bg: 'rgba(251,146,60,0.08)' },
-  'Tools':      { color: '#facc15', bg: 'rgba(234,179,8,0.08)' },
+// Monochrome signal system — type name communicates the category, not color
+const TYPE_STYLE = {
+  color: 'var(--color-fg-dim)',
+  backgroundColor: 'rgba(255,255,255,0.04)',
+  border: '1px solid var(--color-rule)',
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────
@@ -203,7 +202,7 @@ export default function NotePage({ onMenuOpen }) {
     );
   }
 
-  const typeStyle = typeColors[meta.type] || typeColors['Reference'];
+  const typeStyle = TYPE_STYLE;
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
@@ -244,9 +243,9 @@ export default function NotePage({ onMenuOpen }) {
               transition={{ duration: 0.4, delay: 0.05 }}
             >
               <span style={{
-                fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', fontWeight: 700,
-                letterSpacing: '0.18em', textTransform: 'uppercase', padding: '4px 10px',
-                color: typeStyle.color, backgroundColor: typeStyle.bg, border: `1px solid ${typeStyle.color}30`,
+                fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', fontWeight: 700,
+                letterSpacing: '0.16em', textTransform: 'uppercase', padding: '4px 10px',
+                ...typeStyle,
               }}>
                 {meta.type}
               </span>
@@ -332,7 +331,7 @@ export default function NotePage({ onMenuOpen }) {
                         ...(meta.date ? [{ label: 'Published', value: new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
                       ].map(({ label, value }) => (
                         <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
+                          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
                           <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', color: 'var(--color-fg-dim)', textAlign: 'right' }}>{value}</span>
                         </div>
                       ))}
@@ -349,7 +348,7 @@ export default function NotePage({ onMenuOpen }) {
                           onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.03)'; }}
                           onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
-                          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
+                          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
                             {nextNote.id}
                           </span>
                           <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '17px', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>
@@ -369,14 +368,14 @@ export default function NotePage({ onMenuOpen }) {
         <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-16">
           <div className="max-w-[860px] mx-auto px-6">
             <m.div
-              style={{ border: '1px solid var(--color-rule)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+              style={{ border: '1px solid rgba(255,37,64,0.2)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(255,37,64,0.04)' }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
-              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
+              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
                 {np.fieldNotesLabel}
               </p>
               <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(18px, 3vw, 26px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', marginBottom: '8px', lineHeight: 1.1 }}>
@@ -444,9 +443,8 @@ export default function NotePage({ onMenuOpen }) {
           return (
             <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-12">
               <div className="max-w-[1100px] mx-auto px-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="h-[1px] w-6" style={{ backgroundColor: 'var(--color-accent)' }} />
-                  <span className="sys-label" style={{ color: 'var(--color-accent)' }}>Related Case Studies</span>
+                <div className="mb-6">
+                  <SectionTag label="Related Case Studies" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
                   {related.map(c => (

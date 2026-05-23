@@ -180,9 +180,10 @@ export default function WorkPage({ onMenuOpen }) {
                     color: active === f ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                     backgroundColor: active === f ? 'rgba(255,37,64,0.05)' : 'transparent',
                     cursor: 'pointer',
+                    minHeight: '44px',
                   }}
                 >
-                  {f}
+                  {t.caseFiles.filterLabels?.[f] ?? f}
                 </button>
               ))}
               <span className="sys-label self-center ml-2">{visible.length} {visible.length !== 1 ? t.caseFiles.projects : t.caseFiles.project}</span>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
@@ -7,9 +7,95 @@ import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
-import { m } from 'framer-motion';
+import SectionTag from '../components/SectionTag';
+import CyberBtn from '../components/CyberBtn';
+import { m, useReducedMotion } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
+
+// ── Ambient page ghost ────────────────────────────────────────────────────────
+// Thumbnail blurred to abstraction (120px) at 4% opacity. Too faint to read as
+// an image; just enough to give each case a unique color temperature throughout
+// the page. Absolutely positioned so it blends over the solid bg. GPU layer via
+// CSS filter on the img element — never backdrop-filter on scrolling content.
+function PageGhost({ slug }) {
+  const [failed, setFailed] = useState(false);
+  const shouldReduce = useReducedMotion();
+  if (failed || shouldReduce) return null;
+  return (
+    <img
+      src={`/thumbnails/${slug}.jpg`}
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0,
+        width: '100%',
+        height: '75vh',
+        objectFit: 'cover',
+        objectPosition: 'center top',
+        filter: 'blur(120px)',
+        opacity: 0.045,
+        transform: 'scale(1.4)',
+        transformOrigin: 'top center',
+        zIndex: 0,
+        pointerEvents: 'none',
+        userSelect: 'none',
+      }}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
+// ── Hero section blur ─────────────────────────────────────────────────────────
+// Strong blur (72px) confined to the case header section (overflow:hidden clips
+// the scaled image). Layers: blurred img → dark veil (80% opacity) → grid-bg
+// → content. The veil keeps text legible; the bottom gradient dissolves cleanly
+// into the solid content area below.
+function HeroBlur({ slug }) {
+  const [failed, setFailed] = useState(false);
+  const shouldReduce = useReducedMotion();
+  if (failed || shouldReduce) return null;
+  return (
+    <>
+      <img
+        src={`/thumbnails/${slug}.jpg`}
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center top',
+          filter: 'blur(72px)',
+          transform: 'scale(1.18)',
+          zIndex: 0,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+        onError={() => setFailed(true)}
+      />
+      {/* Dark veil — preserves text contrast, lets project color bleed through */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          backgroundColor: 'rgba(8,8,8,0.80)',
+        }}
+      />
+      {/* Bottom fade — hero dissolves into the solid content sections below */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: '48%', zIndex: 2,
+          background: 'linear-gradient(to bottom, transparent, var(--color-bg))',
+          pointerEvents: 'none',
+        }}
+      />
+    </>
+  );
+}
 
 const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
@@ -20,9 +106,8 @@ const BEBAS = '"Bebas Neue", sans-serif';
 
 function SectionLabel({ children }) {
   return (
-    <div className="flex items-center gap-4 mb-8">
-      <div style={{ width: 32, height: 1, backgroundColor: ACCENT }} />
-      <span className="sys-label">{children}</span>
+    <div className="mb-8">
+      <SectionTag label={children} />
     </div>
   );
 }
@@ -205,11 +290,17 @@ export default function CasePage({ onMenuOpen }) {
     );
   }
 
-  const { content } = caseData;
+  const content = (lang === 'es' && caseData.contentEs) ? caseData.contentEs : caseData.content;
+  const whatThisShows = (lang === 'es' && caseData.whatThisShowsEs) ? caseData.whatThisShowsEs : caseData.whatThisShows;
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
+      {/* Ambient color ghost — sits above solid bg, below all content */}
+      <PageGhost slug={caseData.slug} />
+
+      {/* Content — z-index 1 keeps it above the ghost */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
 
@@ -219,8 +310,10 @@ export default function CasePage({ onMenuOpen }) {
           className="relative pt-36 pb-20 overflow-hidden"
           style={{ borderBottom: `1px solid ${RULE}` }}
         >
-          <div className="absolute inset-0 grid-bg" aria-hidden="true" />
-          <div className="relative z-10 max-w-[1400px] mx-auto px-6">
+          {/* Strong blur layer — img filter on GPU, not backdrop-filter */}
+          <HeroBlur slug={caseData.slug} />
+          <div className="absolute inset-0 grid-bg" aria-hidden="true" style={{ zIndex: 3, opacity: 0.45 }} />
+          <div className="relative z-10 max-w-[1400px] mx-auto px-6" style={{ zIndex: 4 }}>
             {/* Breadcrumb */}
             <m.div
               className="flex items-center gap-3 mb-10"
@@ -536,7 +629,7 @@ export default function CasePage({ onMenuOpen }) {
               )}
 
               {/* What this shows */}
-              {caseData.whatThisShows && (
+              {whatThisShows && (
                 <m.section
                   className="py-10 mb-2"
                   style={{ borderBottom: `1px solid ${RULE}` }}
@@ -547,7 +640,7 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.whatThisShows || 'What this project shows'}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>
-                    {caseData.whatThisShows}
+                    {whatThisShows}
                   </p>
                 </m.section>
               )}
@@ -564,24 +657,12 @@ export default function CasePage({ onMenuOpen }) {
                   {t.casePage_cta.body}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link
-                    to="/contact"
-                    className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"
-                    style={{ fontFamily: MONO, backgroundColor: ACCENT, color: '#0a0a0a', clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))' }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = ACCENT}
-                  >
+                  <CyberBtn variant="solid" to="/contact">
                     {t.contact.contactMe}
-                  </Link>
-                  <Link
-                    to="/work"
-                    className="flex items-center gap-3 px-6 py-3 text-[11px] tracking-widest uppercase transition-all duration-200"
-                    style={{ fontFamily: MONO, border: `1px solid ${RULE}`, color: DIM, clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)'; e.currentTarget.style.color = FG; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = RULE; e.currentTarget.style.color = DIM; }}
-                  >
+                  </CyberBtn>
+                  <CyberBtn variant="ghost" to="/work">
                     {t.casePage.backToWork}
-                  </Link>
+                  </CyberBtn>
                 </div>
               </m.section>
             </div>
@@ -695,6 +776,7 @@ export default function CasePage({ onMenuOpen }) {
         </article>
       </main>
       <Footer />
+      </div>{/* end content z-index wrapper */}
     </div>
   );
 }

@@ -209,8 +209,8 @@ function ChannelRow({ channel }) {
         color: hover ? '#ff2540' : '#f5f5f3',
         textDecoration: 'none',
         fontFamily: '"JetBrains Mono", monospace',
-        transition: 'color 0.18s, border-color 0.18s',
-        borderLeft: `2px solid ${hover ? '#ff2540' : 'transparent'}`,
+        transition: 'color 0.18s, background-color 0.18s',
+        backgroundColor: hover ? 'rgba(255,37,64,0.04)' : 'transparent',
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -221,7 +221,7 @@ function ChannelRow({ channel }) {
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
         <span style={{
-          fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
+          fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
           border: '1px solid rgba(255,255,255,0.12)', padding: '3px 8px',
           color: hover ? '#ff2540' : 'rgba(245,245,243,0.45)',
           transition: 'color 0.18s, border-color 0.18s',

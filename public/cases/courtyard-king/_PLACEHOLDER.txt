@@ -1,0 +1,6 @@
+CASE: The Walking Dead (NDA-Safe)
+
+  hero.jpg     — Ratio 16:6 (1920x720px min) — Composición genérica si no hay assets compartibles
+  approach.jpg — Ratio 16:7 (1920x840px min) — Diagrama de flujo, wireframe sin assets propietarios
+
+  Nota: si el caso es full NDA, omite las imágenes — el código muestra un placeholder funcional.

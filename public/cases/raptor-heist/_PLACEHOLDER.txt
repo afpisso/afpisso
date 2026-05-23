@@ -1,0 +1,4 @@
+CASE: Raptor Heist
+
+  hero.jpg     — Ratio 16:6 (1920x720px min) — Screenshot/mockup principal del proyecto
+  approach.jpg — Ratio 16:7 (1920x840px min) — Wireframes, Figma, proceso o documentación

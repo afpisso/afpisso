@@ -6,18 +6,17 @@ import { fieldNotes } from '../data/fieldNotes';
 import { noteArticles } from '../data/noteArticles';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
+import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { m } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
 
-const typeColors = {
-  'Deep Dive': { color: '#60a5fa', bg: 'rgba(59,130,246,0.08)' },
-  'Reference': { color: '#a3a3a3', bg: 'rgba(100,100,100,0.08)' },
-  'Framework': { color: '#c084fc', bg: 'rgba(192,132,252,0.08)' },
-  'Checklist': { color: '#4ade80', bg: 'rgba(34,197,94,0.08)' },
-  'Analysis': { color: '#fb923c', bg: 'rgba(251,146,60,0.08)' },
-  'Tools': { color: '#facc15', bg: 'rgba(234,179,8,0.08)' },
+// Monochrome signal system — type name communicates the category, not color
+const TYPE_STYLE = {
+  color: 'var(--color-fg-dim)',
+  backgroundColor: 'rgba(255,255,255,0.04)',
+  border: '1px solid var(--color-rule)',
 };
 
 export default function NotesPage({ onMenuOpen }) {
@@ -81,13 +80,12 @@ export default function NotesPage({ onMenuOpen }) {
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
             <m.div
-              className="flex items-center gap-4 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
+              className="mb-8"
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{t.fieldNotes.label}</span>
+              <SectionTag label={t.fieldNotes.label} page="004" />
             </m.div>
             <m.h1
               className="uppercase"
@@ -115,7 +113,6 @@ export default function NotesPage({ onMenuOpen }) {
           <div className="max-w-[1400px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
               {fieldNotes.map((note, i) => {
-                const typeStyle = typeColors[note.type] || typeColors['Reference'];
                 return (
                   <m.article
                     key={note.id}
@@ -135,7 +132,7 @@ export default function NotesPage({ onMenuOpen }) {
                       <div className="flex items-center justify-between mb-4">
                         <span
                           className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
-                          style={{ fontFamily: '"JetBrains Mono", monospace', color: typeStyle.color, backgroundColor: typeStyle.bg, border: `1px solid ${typeStyle.color}30` }}
+                          style={{ fontFamily: '"JetBrains Mono", monospace', ...TYPE_STYLE }}
                         >
                           {note.type}
                         </span>

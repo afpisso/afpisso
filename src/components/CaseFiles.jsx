@@ -19,6 +19,67 @@ const VISIBILITY_STYLE = {
   'legacy':             { color: 'var(--color-fg-mute)',   border: 'var(--color-rule)' },
 };
 
+// ── Thumbnail with fallback placeholder ──────────────────────────────────────
+function ThumbnailOrPlaceholder({ case: c }) {
+  const [failed, setFailed] = useState(false);
+  const src = `/thumbnails/${c.slug}.jpg`;
+
+  if (!failed) {
+    return (
+      <img
+        key={src}
+        src={src}
+        alt=""
+        aria-hidden="true"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        loading="eager"
+        decoding="async"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  // Fallback: dark card with ID watermark + platform tags
+  return (
+    <div
+      style={{
+        width: '100%', height: '100%',
+        backgroundColor: 'rgba(14,3,6,0.95)',
+        border: '1px solid rgba(255,37,64,0.12)',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+        padding: '20px 24px',
+      }}
+    >
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: '"Bebas Neue", sans-serif',
+        fontSize: '5rem',
+        color: 'rgba(255,37,64,0.06)',
+        letterSpacing: '-0.02em',
+        userSelect: 'none',
+      }}>
+        {c.id}
+      </div>
+      <div style={{ position: 'relative', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {c.platform?.map(p => (
+          <span key={p} style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: '8px', letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--color-fg-mute)',
+            border: '1px solid var(--color-rule)',
+            padding: '2px 6px',
+          }}>{p}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Floating cursor preview ───────────────────────────────────────────────────
 // Follows the mouse with spring lag; swaps project image via AnimatePresence.
 function CursorPreview({ items, hovered }) {
@@ -74,54 +135,8 @@ function CursorPreview({ items, hovered }) {
               boxShadow: '0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06)',
             }}
           >
-            {active.thumbnail ? (
-              <img
-                src={active.thumbnail}
-                alt=""
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                loading="eager"
-                decoding="async"
-              />
-            ) : (
-              /* Placeholder when no thumbnail */
-              <div
-                style={{
-                  width: '100%', height: '100%',
-                  backgroundColor: 'rgba(14,3,6,0.95)',
-                  border: '1px solid rgba(255,37,64,0.12)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-end',
-                  padding: '20px 24px',
-                }}
-              >
-                {/* Huge ID as texture */}
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: '5rem',
-                  color: 'rgba(255,37,64,0.06)',
-                  letterSpacing: '-0.02em',
-                  userSelect: 'none',
-                }}>
-                  {active.id}
-                </div>
-                {/* Platform tags */}
-                <div style={{ position: 'relative', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {active.platform?.map(p => (
-                    <span key={p} style={{
-                      fontFamily: '"JetBrains Mono", monospace',
-                      fontSize: '8px', letterSpacing: '0.14em', textTransform: 'uppercase',
-                      color: 'var(--color-fg-mute)',
-                      border: '1px solid var(--color-rule)',
-                      padding: '2px 6px',
-                    }}>{p}</span>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Thumbnail image — derived from slug path */}
+            <ThumbnailOrPlaceholder case={active} />
 
             {/* Red accent line at top */}
             <div

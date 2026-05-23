@@ -43,7 +43,7 @@ const staticRoutes = ['/', '/work', '/about', '/notes', '/resume']
 const routes = [
   ...staticRoutes,
   ...fieldNotes.map(n => `/notes/${n.slug}`),
-  ...cases.filter(c => c.featured).map(c => `/case/${c.slug}`),
+  ...cases.filter(c => c.content).map(c => `/case/${c.slug}`),
 ]
 
 // ── HTML escape helpers ─────────────────────────────────────────────────────
@@ -335,9 +335,9 @@ function generateSitemap() {
       changefreq: 'monthly',
       lastmod: n.date,
     })),
-    ...cases.filter(c => c.featured).map(c => ({
+    ...cases.filter(c => c.content).map(c => ({
       loc: `${BASE}/case/${c.slug}`,
-      priority: '0.8',
+      priority: c.featured ? '0.8' : '0.5',
       changefreq: 'monthly',
       lastmod: now,
     })),

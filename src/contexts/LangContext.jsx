@@ -81,6 +81,7 @@ const translations = {
       project: 'project',
       projects: 'projects',
       noProjects: 'No projects match this filter.',
+      filterLabels: { All: 'All', Games: 'Games', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Legacy' },
     },
     systemsLab: {
       label: 'Systems Lab / Process',
@@ -226,6 +227,7 @@ const translations = {
         deliverables: 'Deliverables',
         outcome: 'Outcome',
         nextSteps: 'What I would check next',
+        whatThisShows: 'What this project shows',
       },
     },
     notFound: {
@@ -354,6 +356,7 @@ const translations = {
       project: 'proyecto',
       projects: 'proyectos',
       noProjects: 'Ningún proyecto coincide con este filtro.',
+      filterLabels: { All: 'Todos', Games: 'Juegos', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Legacy' },
     },
     systemsLab: {
       label: 'Systems Lab / Proceso',
@@ -499,6 +502,7 @@ const translations = {
         deliverables: 'Entregables',
         outcome: 'Resultado',
         nextSteps: 'Lo que revisaría después',
+        whatThisShows: 'Lo que este proyecto muestra',
       },
     },
     notFound: {
@@ -553,10 +557,15 @@ const LangContext = createContext(null);
 
 export function LangProvider({ children }) {
   const [lang, setLang] = useState(() => {
-    const stored = localStorage.getItem('lang');
+    let stored = null;
+    try { stored = localStorage.getItem('lang'); } catch (_) { /* storage unavailable */ }
     if (stored === 'en' || stored === 'es') return stored;
+    // Auto-detect from browser and persist immediately so every subsequent
+    // page load (refresh, new tab, direct URL) uses the same language.
     const browser = navigator.language.slice(0, 2).toLowerCase();
-    return browser === 'es' ? 'es' : 'en';
+    const detected = browser === 'es' ? 'es' : 'en';
+    try { localStorage.setItem('lang', detected); } catch (_) { /* storage unavailable */ }
+    return detected;
   });
 
   // Keep <html lang="…"> in sync with the active language
@@ -567,13 +576,13 @@ export function LangProvider({ children }) {
   function toggleLang() {
     const next = lang === 'en' ? 'es' : 'en';
     setLang(next);
-    localStorage.setItem('lang', next);
+    try { localStorage.setItem('lang', next); } catch (_) { /* storage unavailable */ }
   }
 
   function changeLang(l) {
     if (l !== 'en' && l !== 'es') return;
     setLang(l);
-    localStorage.setItem('lang', l);
+    try { localStorage.setItem('lang', l); } catch (_) { /* storage unavailable */ }
   }
 
   const value = useMemo(

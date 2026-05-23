@@ -3,6 +3,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
+import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import PhotoGridOverlay from '../components/PhotoGridOverlay';
 import { m, useTransform, useScroll } from 'framer-motion';
@@ -48,13 +49,12 @@ export default function AboutPage({ onMenuOpen }) {
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
             <m.div
-              className="flex items-center gap-4 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
+              className="mb-8"
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="h-[1px] w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <span className="sys-label">{about.label}</span>
+              <SectionTag label={about.label} page="005" />
             </m.div>
             <m.h1
               className="uppercase"
