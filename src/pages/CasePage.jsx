@@ -4,6 +4,7 @@ import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import CaseRail from '../components/CaseRail';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
@@ -754,27 +755,12 @@ export default function CasePage({ onMenuOpen }) {
             </aside>
           </div>
 
-          {/* Mobile case nav */}
-          <div className="xl:hidden mt-12 grid grid-cols-2 gap-2">
-            <Link
-              to={`/case/${prevCase.slug}`}
-              className="p-4 transition-all duration-200"
-              style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
-            >
-              <div className="sys-label mb-1">{t.casePage.prev}</div>
-              <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{prevCase.title}</div>
-            </Link>
-            <Link
-              to={`/case/${nextCase.slug}`}
-              className="p-4 text-right transition-all duration-200"
-              style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
-            >
-              <div className="sys-label mb-1">{t.casePage.next}</div>
-              <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{nextCase.title}</div>
-            </Link>
-          </div>
         </article>
       </main>
+
+      {/* Full-width case carousel — lives outside main so it bleeds edge-to-edge */}
+      <CaseRail currentSlug={caseData.slug} />
+
       <Footer />
       </div>{/* end content z-index wrapper */}
     </div>
