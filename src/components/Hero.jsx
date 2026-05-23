@@ -253,17 +253,13 @@ export default function Hero() {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // On mobile: lock particle cloud to bottom-right corner (anchor effect).
-  // offsetX=0.33 → cx ≈ 66% of screen width (near right edge at mobile widths).
-  // offsetY=0.69 → cy ≈ 84% of screen height (near bottom, above the bottom fade gradient).
-  // canvasClip reveals only the bottom-right 260×260px corner of the fixed canvas.
-  const geoOffsetX   = isMobile ? 0.33 : currentOffsetX;
-  const geoOffsetY   = isMobile ? 0.69 : 0;
+  // On mobile: render a separate small 220×220px canvas anchored bottom-right.
+  // No clip-path needed — the canvas IS the corner element.
+  // offsetX/Y=0 → particle cloud centered in the small canvas viewport.
+  const geoOffsetX   = isMobile ? 0 : currentOffsetX;
+  const geoOffsetY   = 0;
   const geoIntensity = isMobile ? 3 : 7;
-  const geoCount     = isMobile ? 260 : 1200;
-  const geoClip      = isMobile
-    ? 'inset(calc(100dvh - 260px) 0 0 calc(100vw - 260px))'
-    : undefined;
+  const geoCount     = isMobile ? 240 : 1200;
 
   // reducedMotion fallback handled in useState initializer above
 
@@ -307,7 +303,8 @@ export default function Hero() {
             spin={true}
             paused={false}
             particleCount={geoCount}
-            canvasClip={geoClip}
+            mobileCanvas={isMobile}
+            mobileSize={220}
           />
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">

@@ -148,7 +148,8 @@ export default function GeometryGrid({
   spin        = true,
   paused      = false,
   particleCount = 1200,
-  canvasClip,   // CSS clip-path string — used on mobile to confine to a corner
+  mobileCanvas = false, // when true, renders a small fixed canvas at bottom-right
+  mobileSize   = 280,   // CSS px — square dimensions of the mobileCanvas
 }) {
   const canvasRef    = useRef(null);
   // Keep mutable refs for props so the RAF loop always sees the latest value
@@ -177,22 +178,36 @@ export default function GeometryGrid({
     const ctx = canvas.getContext('2d');
 
     // Reduce particle count on mobile — visually equivalent, significantly cheaper
-    const isMobile = window.innerWidth < 768;
-    const N   = isMobile ? Math.min(particleCount, 400) : particleCount;
-    const getSize = () => ({ w: window.innerWidth, h: window.innerHeight });
-    let { w, h } = getSize();
+    const isMobileViewport = window.innerWidth < 768;
+    const N   = isMobileViewport ? Math.min(particleCount, 400) : particleCount;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w, h;
+    let cleanupResize = () => {};
 
-    const resize = () => {
-      ({ w, h } = getSize());
+    if (mobileCanvas) {
+      // Fixed small canvas — no resize listener needed
+      w = mobileSize;
+      h = mobileSize;
       canvas.width  = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width  = w + 'px';
       canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
+    } else {
+      const getSize = () => ({ w: window.innerWidth, h: window.innerHeight });
+      ({ w, h } = getSize());
+      const resize = () => {
+        ({ w, h } = getSize());
+        canvas.width  = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width  = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+      cleanupResize = () => window.removeEventListener('resize', resize);
+    }
 
     // Pre-compute all shape targets
     const allTargets = {};
@@ -362,18 +377,22 @@ export default function GeometryGrid({
     return () => {
       stopLoop();
       document.removeEventListener('visibilitychange', onVisChange);
-      window.removeEventListener('resize', resize);
+      cleanupResize();
     };
-  // Re-run only when particleCount changes (everything else uses refs)
-  }, [particleCount]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Re-run when particleCount, mobileCanvas, or mobileSize change
+  }, [particleCount, mobileCanvas, mobileSize]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
       style={{
-        position: 'fixed', top: 0, left: 0, zIndex: 0, pointerEvents: 'none',
-        ...(canvasClip ? { clipPath: canvasClip } : {}),
+        position: 'fixed',
+        ...(mobileCanvas
+          ? { bottom: 0, right: 0, top: 'auto', left: 'auto' }
+          : { top: 0, left: 0 }),
+        zIndex: 0,
+        pointerEvents: 'none',
       }}
     />
   );
