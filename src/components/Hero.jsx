@@ -237,6 +237,13 @@ export default function Hero() {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768
   );
+  // Responsive canvas size — 65% of viewport width, capped at 280px.
+  // Stored as state so GeometryGrid re-runs its effect when it changes.
+  const [mobileGeoSize, setMobileGeoSize] = useState(
+    () => typeof window !== 'undefined'
+      ? Math.min(Math.floor(window.innerWidth * 0.65), 280)
+      : 240
+  );
   const sectionRef = useRef(null);
   const { t } = useLang();
   const mouseRef = useMousePos();
@@ -245,25 +252,38 @@ export default function Hero() {
   const currentShape  = sectionCfg.shape;
   const currentOffsetX = sectionCfg.offsetX;
 
-  // Mobile detection — update on orientation change
+  // Mobile detection + responsive geo size — both update on resize/orientation change
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
-    const update = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
+    const onMq = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', onMq);
+
+    const onResize = () => {
+      const vw = window.innerWidth;
+      if (vw < 768) setMobileGeoSize(Math.min(Math.floor(vw * 0.65), 280));
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+
+    return () => {
+      mq.removeEventListener('change', onMq);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
-  // On mobile: render a 260×260px canvas, position:absolute inside the hero section
-  // so it scrolls away with the content as the user scrolls past.
-  // Placed top-right, slightly past the viewport edge (right:-40px) so it crops
-  // naturally via the section's overflow:hidden — compositionally alongside the name.
-  // offsetX/Y=0 centers the sphere in the small canvas viewport.
+  // On mobile: position:absolute canvas inside the hero so it scrolls with content.
+  //
+  // Vertical alignment math (phones, font clamped at 4.5rem = 72px):
+  //   section.paddingTop(80) + m.div.pt-5(20) + label+mb(~52px) = name starts at y≈152px
+  //   3 lines × 72px × 0.88 lh = 190px tall → name center at y≈247px
+  //   grid top = nameCenter − mobileGeoSize/2 ≈ 247 − 130 = 117px → use 115px
+  //
+  // right:-20px crops 20px off the right for a composed edge effect via overflow:hidden.
   const geoOffsetX   = isMobile ? 0 : currentOffsetX;
   const geoOffsetY   = 0;
   const geoIntensity = isMobile ? 3 : 7;
   const geoCount     = isMobile ? 260 : 1200;
   const geoMobileStyle = isMobile
-    ? { position: 'absolute', top: '60px', right: '-40px', bottom: 'auto', left: 'auto' }
+    ? { position: 'absolute', top: '115px', right: '-20px', bottom: 'auto', left: 'auto' }
     : {};
 
   // reducedMotion fallback handled in useState initializer above
@@ -309,7 +329,7 @@ export default function Hero() {
             paused={false}
             particleCount={geoCount}
             mobileCanvas={isMobile}
-            mobileSize={260}
+            mobileSize={mobileGeoSize}
             mobileStyle={geoMobileStyle}
           />
         )}
