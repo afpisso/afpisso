@@ -52,6 +52,10 @@ html {
   scroll-behavior: auto;
   overflow-x: clip; /* clip avoids creating a scroll container (unlike hidden), which could block wheel events */
   touch-action: manipulation;
+  /* Disable browser scroll anchoring — it adjusts scrollTop when DOM changes
+     happen above the viewport (animations, lazy load). That fights Lenis's lerp
+     and causes the "snaps back" effect during wheel scroll. */
+  overflow-anchor: none;
 }
 
 body {
@@ -63,6 +67,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   /* overflow-x: clip already set on html — no need to repeat on body */
+  overflow-anchor: none;
 }
 
 /* ─── Scrollbar ──────────────────────────────────────── */
