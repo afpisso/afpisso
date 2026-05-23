@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-22T00:00:00Z",
+  "title": "Design System: byandresfe.com",
+  "extensions": {
+    "colorMeta": {
+      "signal-red":       { "role": "primary",  "displayName": "Signal Red",       "canonical": "oklch(57% 0.27 25)",  "tonalRamp": ["oklch(18% 0.14 25)", "oklch(26% 0.19 25)", "oklch(34% 0.23 25)", "oklch(43% 0.26 25)", "oklch(52% 0.27 25)", "oklch(63% 0.26 25)", "oklch(74% 0.21 25)", "oklch(86% 0.14 25)"] },
+      "void-canvas":      { "role": "neutral",  "displayName": "Void Canvas",      "canonical": "oklch(7% 0.003 90)",  "tonalRamp": ["oklch(5%  0.003 90)", "oklch(9%  0.003 90)", "oklch(13% 0.003 90)", "oklch(19% 0.003 90)", "oklch(28% 0.003 90)", "oklch(42% 0.003 90)", "oklch(60% 0.003 90)", "oklch(80% 0.003 90)"] },
+      "surface-raised":   { "role": "neutral",  "displayName": "Surface Raised",   "canonical": "oklch(9% 0.003 90)",  "tonalRamp": ["oklch(6%  0.003 90)", "oklch(10% 0.003 90)", "oklch(15% 0.003 90)", "oklch(22% 0.003 90)", "oklch(33% 0.003 90)", "oklch(48% 0.003 90)", "oklch(65% 0.003 90)", "oklch(84% 0.003 90)"] },
+      "surface-elevated": { "role": "neutral",  "displayName": "Surface Elevated", "canonical": "oklch(11% 0.003 90)", "tonalRamp": ["oklch(7%  0.003 90)", "oklch(11% 0.003 90)", "oklch(16% 0.003 90)", "oklch(24% 0.003 90)", "oklch(36% 0.003 90)", "oklch(52% 0.003 90)", "oklch(69% 0.003 90)", "oklch(87% 0.003 90)"] },
+      "parchment":        { "role": "neutral",  "displayName": "Parchment",        "canonical": "oklch(96% 0.003 90)", "tonalRamp": ["oklch(20% 0.004 90)", "oklch(34% 0.004 90)", "oklch(48% 0.004 90)", "oklch(62% 0.004 90)", "oklch(74% 0.004 90)", "oklch(84% 0.003 90)", "oklch(91% 0.003 90)", "oklch(96% 0.003 90)"] },
+      "warm-white":       { "role": "neutral",  "displayName": "Warm White",       "canonical": "oklch(94% 0.005 90)", "tonalRamp": ["oklch(18% 0.005 90)", "oklch(32% 0.005 90)", "oklch(46% 0.005 90)", "oklch(60% 0.005 90)", "oklch(72% 0.005 90)", "oklch(82% 0.005 90)", "oklch(89% 0.005 90)", "oklch(94% 0.005 90)"] },
+      "muted-ash":        { "role": "neutral",  "displayName": "Muted Ash",        "canonical": "oklch(58% 0.003 90)", "tonalRamp": ["oklch(15% 0.003 90)", "oklch(24% 0.003 90)", "oklch(34% 0.003 90)", "oklch(44% 0.003 90)", "oklch(54% 0.003 90)", "oklch(64% 0.003 90)", "oklch(75% 0.003 90)", "oklch(87% 0.003 90)"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Page H1s and section heroes. Always Bebas Neue, always uppercase, always alone at the top of the visual hierarchy." },
+      "headline": { "displayName": "Headline", "purpose": "Card titles in featured grids, case study titles, major section subheadings." },
+      "title":    { "displayName": "Title",    "purpose": "Card titles in dense grids, secondary headings within sections." },
+      "body":     { "displayName": "Body",     "purpose": "All prose content. Max container ~520px (~65ch). Reads as technical documentation, not marketing." },
+      "label":    { "displayName": "Label",    "purpose": "All metadata, IDs, tags, section page numbers, status chips. Minimum size 10px. The .sys-label utility." }
+    },
+    "shadows": [
+      { "name": "state-hover",    "value": "0 4px 12px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4)",   "purpose": "Cards and containers on hover. Confirms interactivity. Not used at rest." },
+      { "name": "floating",       "value": "0 12px 32px rgba(0,0,0,0.7), 0 4px 8px rgba(0,0,0,0.5)",  "purpose": "Elements that genuinely float: nav overlay, glass containers." },
+      { "name": "cursor-preview", "value": "0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06)", "purpose": "The 400px cursor-following thumbnail panel in CaseFiles." },
+      { "name": "glass-ambient",  "value": "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.4)", "purpose": "The .glass utility. About quote card, Contact right panel." }
+    ],
+    "motion": [
+      { "name": "ease-out",    "value": "cubic-bezier(0.16, 1, 0.3, 1)",   "purpose": "Enter transitions — elements appearing, expanding, revealing. Snappy start, smooth land." },
+      { "name": "ease-in",     "value": "cubic-bezier(0.4, 0, 1, 1)",       "purpose": "Exit transitions — elements leaving, collapsing, hiding. Fast out." },
+      { "name": "ease-sweep",  "value": "cubic-bezier(0.76, 0, 0.2, 1)",   "purpose": "Wipe / sweep transitions: red photo reveal, menu overlay sweep." },
+      { "name": "ease-ios",    "value": "cubic-bezier(0.32, 0.72, 0, 1)",  "purpose": "iOS-style drawer/sheet feel. Nav entrance." },
+      { "name": "duration-fast",  "value": "150ms", "purpose": "Micro feedback: color transitions, opacity changes." },
+      { "name": "duration-base",  "value": "250ms", "purpose": "Standard UI transitions: hover states, border shifts." },
+      { "name": "duration-slow",  "value": "350ms", "purpose": "Entrance animations, whileInView reveals." },
+      { "name": "duration-enter", "value": "260ms", "purpose": "CaseCard clip-path enter. The canonical enter duration for interactive reveals." },
+      { "name": "duration-exit",  "value": "180ms", "purpose": "CaseCard clip-path exit. Always shorter than enter (asymmetric timing rule)." }
+    ],
+    "breakpoints": [
+      { "name": "sm",  "value": "640px",  "note": "Mobile/tablet boundary. Layout switches to single-column." },
+      { "name": "md",  "value": "768px",  "note": "Two-column grids, side-by-side layouts." },
+      { "name": "lg",  "value": "1024px", "note": "Three-column grids, 62%/38% section splits." },
+      { "name": "xl",  "value": "1280px", "note": "Four/five-column module grids (SystemsLab)." },
+      { "name": "2xl", "value": "1400px", "note": "Max content container width." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button — Solid",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Primary CTA. Signal red fill, near-black text, 8px chamfer polygon. SweepFill on hover, arrow nudge 3px, scale 0.97 on press.",
+      "html": "<button class=\"ds-btn-solid\">Send a signal <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-solid { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; background: #ff2540; color: #0a0a0a; border: none; padding: 16px 32px; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); transition: background 0.2s; } .ds-btn-solid:hover { background: #cc1f34; } .ds-btn-solid:focus-visible { outline: 2px solid #ff2540; outline-offset: 3px; } .ds-btn-solid:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Button — Accent Ghost",
+      "kind": "button",
+      "refersTo": "button-accent-ghost",
+      "description": "Default variant. Transparent background, signal-red border and text. Hover sweeps to solid red fill.",
+      "html": "<button class=\"ds-btn-accent-ghost\">View selected work <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-accent-ghost { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; background: transparent; color: #ff2540; border: 1px solid #ff2540; padding: 13px 24px; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); transition: background 0.2s, color 0.2s; } .ds-btn-accent-ghost:hover { background: #ff2540; color: #0a0a0a; } .ds-btn-accent-ghost:focus-visible { outline: 2px solid #ff2540; outline-offset: 3px; } .ds-btn-accent-ghost:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Button — Ghost",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Transparent background, rule-line border. Hover lightens border and tints background.",
+      "html": "<button class=\"ds-btn-ghost\">Download resume <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-ghost { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; cursor: pointer; background: transparent; color: rgba(245,245,243,0.62); border: 1px solid rgba(255,255,255,0.11); padding: 13px 24px; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); transition: background 0.2s, border-color 0.2s, color 0.2s; } .ds-btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.28); color: #f5f5f3; } .ds-btn-ghost:focus-visible { outline: 2px solid #ff2540; outline-offset: 3px; } .ds-btn-ghost:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Section Tag",
+      "kind": "chip",
+      "refersTo": "section-tag",
+      "description": "Red chamfer-clipped section identifier chip. Followed by mono page number. Used at the start of each major section.",
+      "html": "<span class=\"ds-section-tag-wrap\"><span class=\"ds-section-tag\">Selected Work</span><span class=\"ds-section-tag-num\">003</span></span>",
+      "css": ".ds-section-tag-wrap { display: inline-flex; align-items: center; gap: 10px; } .ds-section-tag { background: #ff2540; color: #0a0a0a; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); padding: 3px 10px 2px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.6; white-space: nowrap; } .ds-section-tag-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; color: rgba(245,245,243,0.45); }"
+    },
+    {
+      "name": "Filter Pill",
+      "kind": "chip",
+      "refersTo": "filter-pill",
+      "description": "Rectangular filter toggle. Inactive: rule-line border, muted text. Active: signal-red border + dim fill + signal-red text.",
+      "html": "<div class=\"ds-filter-group\"><button class=\"ds-filter-pill ds-filter-pill--active\" aria-pressed=\"true\">All</button><button class=\"ds-filter-pill\" aria-pressed=\"false\">Games</button><button class=\"ds-filter-pill\" aria-pressed=\"false\">UEFN</button></div>",
+      "css": ".ds-filter-group { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } .ds-filter-pill { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.11); color: rgba(245,245,243,0.45); background: transparent; cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; } .ds-filter-pill:hover { border-color: rgba(255,255,255,0.28); color: rgba(245,245,243,0.75); } .ds-filter-pill--active { border-color: #ff2540; color: #ff2540; background: rgba(255,37,64,0.05); } .ds-filter-pill:focus-visible { outline: 2px solid #ff2540; outline-offset: 2px; }"
+    },
+    {
+      "name": "Editorial Row",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The anti-card. Horizontal project/note row. Hover reveals red left accent bar (scaleY), title brightens, index turns full red. Used in CaseFiles, FieldNotes, WhatIDo.",
+      "html": "<article class=\"ds-editorial-row\"><div class=\"ds-editorial-row__accent\" aria-hidden=\"true\"></div><a href=\"/case/example\" class=\"ds-editorial-row__link\"><div class=\"ds-editorial-row__index\">01</div><div class=\"ds-editorial-row__content\"><h3 class=\"ds-editorial-row__title\">Orcs Must Die: By the Blade</h3><div class=\"ds-editorial-row__meta\"><span>UX/UI Designer</span><span>·</span><span>2024</span></div></div><div class=\"ds-editorial-row__arrow\" aria-hidden=\"true\">→</div></a></article>",
+      "css": ".ds-editorial-row { position: relative; } .ds-editorial-row::before { content: ''; display: block; height: 1px; background: rgba(255,255,255,0.11); transition: background 0.3s; } .ds-editorial-row:hover::before { background: rgba(255,37,64,0.45); } .ds-editorial-row__accent { position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: #ff2540; opacity: 0; transform: scaleY(0); transform-origin: top; transition: opacity 0.25s, transform 0.32s cubic-bezier(0.16,1,0.3,1); } .ds-editorial-row:hover .ds-editorial-row__accent { opacity: 1; transform: scaleY(1); } .ds-editorial-row__link { display: flex; align-items: center; gap: 20px; padding: 24px 16px 24px 24px; text-decoration: none; background: transparent; transition: background 0.2s; } .ds-editorial-row:hover .ds-editorial-row__link { background: rgba(255,37,64,0.018); } .ds-editorial-row__index { flex-shrink: 0; width: 40px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: rgba(255,37,64,0.3); transition: color 0.2s; } .ds-editorial-row:hover .ds-editorial-row__index { color: #ff2540; } .ds-editorial-row__content { flex-grow: 1; min-width: 0; } .ds-editorial-row__title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.7rem, 3.2vw, 3rem); line-height: 1; letter-spacing: 0.01em; text-transform: uppercase; color: rgba(240,238,234,0.75); transition: color 0.2s; } .ds-editorial-row:hover .ds-editorial-row__title { color: #f5f5f3; } .ds-editorial-row__meta { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,245,243,0.45); } .ds-editorial-row__arrow { flex-shrink: 0; font-size: 18px; color: #ff2540; opacity: 0; transform: translateX(-10px); transition: opacity 0.2s, transform 0.28s cubic-bezier(0.16,1,0.3,1); } .ds-editorial-row:hover .ds-editorial-row__arrow { opacity: 1; transform: translateX(0); }"
+    },
+    {
+      "name": "System Label",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The .sys-label utility. All metadata, IDs, read-time, category tags, divider labels. The visual voice of UI chrome.",
+      "html": "<span class=\"ds-sys-label\">UX/UI Designer · 2024 · VR</span>",
+      "css": ".ds-sys-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,245,243,0.62); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Design Instrument",
+    "overview": "A calibrated instrument has no unnecessary controls. Every dial, gauge, and readout exists because someone needs it to make a decision. This system works the same way: surfaces that recede into near-black, type that reads cleanly under any screen, and a single red that fires only when something requires attention. Nothing is decorative by default.\n\nThe system is built for a professional audience running a quick diagnostic. A hiring manager scanning case studies in a lit office, evaluating whether this designer can solve the UX problems their studio has right now. The interface should accelerate that evaluation, not distract it.\n\nThe grid background, scan line, and chamfer polygon cuts are functional references to technical UX documentation and game-engine UI. They signal that the person who built this thinks in systems. The system reads as dark, technical, and deliberate — not hacker, not cyberpunk, not neon.",
+    "keyCharacteristics": [
+      "Void-black surfaces with near-zero reflectance; no atmospheric glow or bloom",
+      "Two typefaces only: Bebas Neue for display, JetBrains Mono for everything else",
+      "Signal Red on ≤10% of any screen surface — status, active state, primary CTA only",
+      "All corners sharp (0px) or chamfer-cut (8px polygon clip); no circular border-radius on interactive elements",
+      "Elevation flat by default; shadows appear only as response to interaction or float state",
+      "Spacing varies by section rhythm: 112px major sections, 64px compact sections"
+    ],
+    "rules": [
+      { "name": "The Rarity Rule",           "body": "Signal Red appears on ≤10% of any given screen. The moment it stops being rare, it stops being a signal. If a new element wants red, an existing one loses it first.",                                             "section": "colors" },
+      { "name": "The Warm Tint Rule",        "body": "No neutral is fully achromatic. Every near-black is slightly warm (#0a0a0a, #080808), every near-white is parchment-tinted (#f5f5f3, #f0eeea). Pure #000000 and #ffffff are forbidden.",                       "section": "colors" },
+      { "name": "The Transparency Rule",     "body": "Semi-transparent tokens (--color-rule, --color-fg-dim, --color-fg-mute) are contextual by design. Never convert them to opaque equivalents.",                                                                 "section": "colors" },
+      { "name": "The Two-Font Rule",         "body": "Bebas Neue and JetBrains Mono only. No system-ui fallback, no decorative third face, no weight variations outside 400/500/700.",                                                                              "section": "typography" },
+      { "name": "The Uppercase-Display Rule","body": "Bebas Neue is always text-transform: uppercase. Mixed case breaks its character. If a display element needs mixed case, change the typographic level — not the case rule.",                                     "section": "typography" },
+      { "name": "The 10px Floor Rule",       "body": "No text element drops below 10px. Enforce with .sys-label and .micro-label utilities.",                                                                                                                        "section": "typography" },
+      { "name": "The Flat-By-Default Rule",  "body": "If an element is at rest and not floating above other content, it has no shadow. Resting shadows spend depth vocabulary without communicating a state change.",                                                  "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Signal Red only on elements that carry status or activation: CTAs, hover state transitions, status badges, focus rings, section identifiers.",
+      "Do use JetBrains Mono for all body copy, labels, metadata, and UI chrome. Bebas Neue for display headlines only.",
+      "Do apply the 8px chamfer polygon to all interactive button-shaped elements.",
+      "Do use editorial row patterns over card grids for ordered lists of work, notes, or services.",
+      "Do keep the grain overlay and scan line on every page.",
+      "Do vary section vertical spacing: 112px major, 64px compact, 24px horizontal baseline.",
+      "Do write interface copy in the PRODUCT.md voice: senior, specific, problems over aesthetics, no em dashes."
+    ],
+    "donts": [
+      "Don't use Signal Red as ambient atmosphere (gradient fill, section tint, decorative glow).",
+      "Don't apply backdrop-filter: blur() to scrolling content containers.",
+      "Don't build identical card grids (icon + heading + text, same size, repeated).",
+      "Don't use gradient text (background-clip: text on a gradient fill).",
+      "Don't add neon glow, bloom effects, or atmospheric light halos.",
+      "Don't write 'passionate about,' 'innovative solutions,' 'seamless experience,' 'game-changing,' or 'revolutionary.'",
+      "Don't apply resting shadows to cards or containers at rest.",
+      "Don't introduce a second accent color.",
+      "Don't build SaaS-style metric hero blocks.",
+      "Don't use modals as first response to any interaction.",
+      "Don't produce designs that read as generic creative-agency portfolio, Dribbble shot dump, SaaS landing template, or game-studio player-facing site."
+    ]
+  }
+}
