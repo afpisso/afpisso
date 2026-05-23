@@ -1,6 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { MotionConfig, m, AnimatePresence } from 'framer-motion';
+import { MotionConfig, m, AnimatePresence, animate } from 'framer-motion';
 import './index.css';
 import { LangProvider } from './contexts/LangContext';
 import { LenisProvider, useLenis } from './contexts/LenisContext';
@@ -132,8 +132,9 @@ function AppRoutes() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const lenisRef = useLenis();
+  const flashRef = useRef(null);
 
-  // On route change: close menu + scroll to top
+  // On route change: close menu + scroll to top + red micro-flash
   useEffect(() => {
     setMenuOpen(false);
     // Use Lenis instant scroll when available, fallback to native
@@ -141,6 +142,15 @@ function AppRoutes() {
       lenisRef.current.scrollTo(0, { immediate: true });
     } else {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+    // Brand micro-flash: peaks at 7% red opacity, fades in 280ms
+    // Fires on the exit beat so the enter feels clean
+    if (flashRef.current) {
+      animate(
+        flashRef.current,
+        { opacity: [0, 0.07, 0] },
+        { duration: 0.28, ease: [0.16, 1, 0.3, 1], times: [0, 0.28, 1] },
+      );
     }
   }, [location.pathname, lenisRef]);
 
@@ -198,6 +208,20 @@ function AppRoutes() {
         <Cursor />
         <Grain />
       </Suspense>
+
+      {/* Brand micro-flash — imperatively animated on route change */}
+      <div
+        ref={flashRef}
+        aria-hidden="true"
+        style={{
+          position:        'fixed',
+          inset:           0,
+          backgroundColor: 'var(--color-accent)',
+          opacity:         0,
+          pointerEvents:   'none',
+          zIndex:          45,
+        }}
+      />
     </>
   );
 }
