@@ -148,6 +148,7 @@ export default function GeometryGrid({
   spin        = true,
   paused      = false,
   particleCount = 1200,
+  canvasClip,   // CSS clip-path string — used on mobile to confine to a corner
 }) {
   const canvasRef    = useRef(null);
   // Keep mutable refs for props so the RAF loop always sees the latest value
@@ -370,7 +371,10 @@ export default function GeometryGrid({
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      style={{ position: 'fixed', top: 0, left: 0, zIndex: 0, pointerEvents: 'none' }}
+      style={{
+        position: 'fixed', top: 0, left: 0, zIndex: 0, pointerEvents: 'none',
+        ...(canvasClip ? { clipPath: canvasClip } : {}),
+      }}
     />
   );
 }

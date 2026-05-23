@@ -234,6 +234,9 @@ export default function Hero() {
   const [booted, setBooted] = useState(
     () => shouldReduce || sessionStorage.getItem('booted') === '1'
   );
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 768
+  );
   const sectionRef = useRef(null);
   const { t } = useLang();
   const mouseRef = useMousePos();
@@ -241,6 +244,26 @@ export default function Hero() {
   const sectionCfg    = SECTION_CONFIG[activeSection] ?? SECTION_CONFIG['home'];
   const currentShape  = sectionCfg.shape;
   const currentOffsetX = sectionCfg.offsetX;
+
+  // Mobile detection — update on orientation change
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // On mobile: lock particle cloud to bottom-right corner (anchor effect).
+  // offsetX=0.33 → cx ≈ 66% of screen width (near right edge at mobile widths).
+  // offsetY=0.69 → cy ≈ 84% of screen height (near bottom, above the bottom fade gradient).
+  // canvasClip reveals only the bottom-right 260×260px corner of the fixed canvas.
+  const geoOffsetX   = isMobile ? 0.33 : currentOffsetX;
+  const geoOffsetY   = isMobile ? 0.69 : 0;
+  const geoIntensity = isMobile ? 3 : 7;
+  const geoCount     = isMobile ? 260 : 1200;
+  const geoClip      = isMobile
+    ? 'inset(calc(100dvh - 260px) 0 0 calc(100vw - 260px))'
+    : undefined;
 
   // reducedMotion fallback handled in useState initializer above
 
@@ -277,21 +300,23 @@ export default function Hero() {
           <GeometryGrid
             mouseRef={mouseRef}
             shape={currentShape}
-            intensity={7}
-            offsetX={currentOffsetX}
-            offsetY={0}
+            intensity={geoIntensity}
+            offsetX={geoOffsetX}
+            offsetY={geoOffsetY}
             rotX={0.20}
             spin={true}
             paused={false}
+            particleCount={geoCount}
+            canvasClip={geoClip}
           />
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,37,64,0.04) 0%, transparent 70%)' }} />
           {/* Bottom fade — prevents particles overlapping stats */}
           <div className="absolute bottom-0 left-0 right-0 h-48" style={{ background: 'linear-gradient(transparent, var(--color-bg))' }} />
-          {/* Left fade — protects text column up to ~65%, cloud occupies the right 35%.
-              Deliberately wider than before so the content/cloud split reads intentional. */}
-          <div className="absolute inset-y-0 left-0 w-[68%]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 20%, rgba(8,8,8,0.75) 50%, rgba(8,8,8,0.3) 80%, transparent 100%)' }} />
+          {/* Left fade — desktop only. On mobile, particles are clipped to the
+              bottom-right corner so text protection via gradient is not needed. */}
+          <div className="hidden md:block absolute inset-y-0 left-0 w-[68%]" style={{ background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 20%, rgba(8,8,8,0.75) 50%, rgba(8,8,8,0.3) 80%, transparent 100%)' }} />
         </div>
 
         {/* Corner marks */}
@@ -299,12 +324,12 @@ export default function Hero() {
         <div aria-hidden="true" className="absolute top-[80px] right-0 w-16 h-16 border-r border-t" style={{ borderColor: 'var(--color-rule)' }} />
 
         <m.div
-          className="relative z-10 max-w-[1400px] mx-auto px-6 py-24"
+          className="relative z-10 max-w-[1400px] mx-auto px-6 py-8 md:py-24"
           style={shouldReduce ? {} : { y: contentY, opacity: contentOpacity }}
         >
           {/* System label */}
           <m.div
-            className="flex items-center gap-4 mb-12 flex-wrap"
+            className="flex items-center gap-4 mb-6 md:mb-12 flex-wrap"
             initial={{ opacity: 0, x: -16 }}
             animate={booted ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
@@ -356,7 +381,7 @@ export default function Hero() {
 
           {/* Subtitle */}
           <m.div
-            className="flex items-start gap-5 mb-10"
+            className="flex items-start gap-5 mb-6 md:mb-10"
             initial={{ opacity: 0, y: 10 }}
             animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.72 }}
@@ -379,7 +404,7 @@ export default function Hero() {
 
           {/* Handle / separator */}
           <m.div
-            className="flex items-center gap-4 mb-10"
+            className="flex items-center gap-4 mb-6 md:mb-10"
             aria-hidden="true"
             initial={{ opacity: 0 }}
             animate={booted ? { opacity: 1 } : { opacity: 0 }}
@@ -396,14 +421,14 @@ export default function Hero() {
           </m.div>
 
           {/* Copy + CTAs + Focus tags */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-end">
             <m.div
               initial={{ opacity: 0, y: 24 }}
               animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
             >
               <p
-                className="mb-10"
+                className="mb-6 md:mb-10"
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
                   fontSize: '11px',
