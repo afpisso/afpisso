@@ -293,7 +293,7 @@ export default function Hero() {
       <section
         ref={sectionRef}
         id="home"
-        className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden"
+        className="relative min-h-[100dvh] flex flex-col justify-start md:justify-center overflow-hidden"
         style={{ paddingTop: '80px' }}
       >
         {/* Background — GeometryGrid is absolute within this section only */}
@@ -327,7 +327,7 @@ export default function Hero() {
         <div aria-hidden="true" className="absolute top-[80px] right-0 w-16 h-16 border-r border-t" style={{ borderColor: 'var(--color-rule)' }} />
 
         <m.div
-          className="relative z-10 max-w-[1400px] mx-auto px-6 py-8 md:py-24"
+          className="relative z-10 max-w-[1400px] mx-auto px-6 pt-5 pb-10 md:py-24"
           style={shouldReduce ? {} : { y: contentY, opacity: contentOpacity }}
         >
           {/* System label */}
