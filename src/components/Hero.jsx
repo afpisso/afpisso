@@ -253,13 +253,18 @@ export default function Hero() {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // On mobile: render a separate small 220×220px canvas anchored bottom-right.
-  // No clip-path needed — the canvas IS the corner element.
-  // offsetX/Y=0 → particle cloud centered in the small canvas viewport.
+  // On mobile: render a 260×260px canvas, position:absolute inside the hero section
+  // so it scrolls away with the content as the user scrolls past.
+  // Placed top-right, slightly past the viewport edge (right:-40px) so it crops
+  // naturally via the section's overflow:hidden — compositionally alongside the name.
+  // offsetX/Y=0 centers the sphere in the small canvas viewport.
   const geoOffsetX   = isMobile ? 0 : currentOffsetX;
   const geoOffsetY   = 0;
   const geoIntensity = isMobile ? 3 : 7;
-  const geoCount     = isMobile ? 240 : 1200;
+  const geoCount     = isMobile ? 260 : 1200;
+  const geoMobileStyle = isMobile
+    ? { position: 'absolute', top: '60px', right: '-40px', bottom: 'auto', left: 'auto' }
+    : {};
 
   // reducedMotion fallback handled in useState initializer above
 
@@ -304,7 +309,8 @@ export default function Hero() {
             paused={false}
             particleCount={geoCount}
             mobileCanvas={isMobile}
-            mobileSize={220}
+            mobileSize={260}
+            mobileStyle={geoMobileStyle}
           />
         )}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">

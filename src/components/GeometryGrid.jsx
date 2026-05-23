@@ -148,8 +148,9 @@ export default function GeometryGrid({
   spin        = true,
   paused      = false,
   particleCount = 1200,
-  mobileCanvas = false, // when true, renders a small fixed canvas at bottom-right
+  mobileCanvas = false, // when true, renders a small canvas sized to mobileSize
   mobileSize   = 280,   // CSS px — square dimensions of the mobileCanvas
+  mobileStyle  = {},    // position overrides applied to canvas style when mobileCanvas=true
 }) {
   const canvasRef    = useRef(null);
   // Keep mutable refs for props so the RAF loop always sees the latest value
@@ -389,7 +390,7 @@ export default function GeometryGrid({
       style={{
         position: 'fixed',
         ...(mobileCanvas
-          ? { bottom: 0, right: 0, top: 'auto', left: 'auto' }
+          ? { bottom: 0, right: 0, top: 'auto', left: 'auto', ...mobileStyle }
           : { top: 0, left: 0 }),
         zIndex: 0,
         pointerEvents: 'none',
