@@ -56,7 +56,7 @@ function ServiceRow({ item, index }) {
             fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
             lineHeight: 1,
             letterSpacing: '0.01em',
-            color: hovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.82)',
+            color: 'var(--color-fg)',
           }}
         >
           {item.title}
@@ -70,7 +70,7 @@ function ServiceRow({ item, index }) {
           style={{
             fontFamily: '"JetBrains Mono", monospace',
             fontSize: '13px',
-            color: hovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
+            color: hovered ? 'var(--color-fg)' : 'var(--color-fg-dim)',
             lineHeight: 1.85,
             maxWidth: '560px',
           }}

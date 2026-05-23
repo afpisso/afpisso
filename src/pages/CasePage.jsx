@@ -9,7 +9,6 @@ import CaseTOC from '../components/CaseTOC';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
-import SectionTag from '../components/SectionTag';
 import CyberBtn from '../components/CyberBtn';
 import { m, useReducedMotion } from 'framer-motion';
 
@@ -109,7 +108,41 @@ const BEBAS = '"Bebas Neue", sans-serif';
 function SectionLabel({ children }) {
   return (
     <div className="mb-8">
-      <SectionTag label={children} />
+      {/* Eyebrow: small mono marker */}
+      <div
+        style={{
+          display:        'flex',
+          alignItems:     'center',
+          gap:            8,
+          marginBottom:   10,
+        }}
+      >
+        <div style={{ width: 18, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+        <span
+          style={{
+            fontFamily:    MONO,
+            fontSize:      '9px',
+            letterSpacing: '0.2em',
+            color:         ACCENT,
+            textTransform: 'uppercase',
+            fontWeight:    700,
+          }}
+        >
+          //
+        </span>
+      </div>
+      {/* Section heading — readable at document scale */}
+      <h2
+        style={{
+          fontFamily:    BEBAS,
+          fontSize:      'clamp(1.7rem, 2.6vw, 2.6rem)',
+          letterSpacing: '0.03em',
+          color:         FG,
+          lineHeight:    1,
+        }}
+      >
+        {children}
+      </h2>
     </div>
   );
 }

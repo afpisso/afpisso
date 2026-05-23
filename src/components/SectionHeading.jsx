@@ -55,9 +55,9 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
           <span
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
+              fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
               color: '#0a0a0a',
-              letterSpacing: '0.04em',
+              letterSpacing: '0.06em',
               lineHeight: 1,
               display: 'block',
               whiteSpace: 'nowrap',
@@ -105,8 +105,8 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
             <span
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: 'clamp(3.5rem, 7.5vw, 8.5rem)',
-                letterSpacing: '-0.01em',
+                fontSize: 'clamp(3.8rem, 7.5vw, 8.5rem)',
+                letterSpacing: '0.01em',
                 color: 'var(--color-fg)',
                 display: 'block',
               }}
