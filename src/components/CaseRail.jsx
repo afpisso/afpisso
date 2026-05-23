@@ -11,7 +11,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link }   from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cases }  from '../data/cases';
 import { useLang } from '../contexts/LangContext';
@@ -79,9 +79,10 @@ function RailThumb({ slug, id, isCenter }) {
 }
 
 // ── Single 3D card ────────────────────────────────────────────────────────────
-function RailCard({ item, offset, onClickOffset, shouldReduce }) {
-  const isCenter = offset === 0;
-  const dist     = Math.abs(offset);
+function RailCard({ item, offset, onClickOffset, shouldReduce, navigate }) {
+  const isCenter  = offset === 0;
+  const dist      = Math.abs(offset);
+  const [hovered, setHovered] = useState(false);
 
   // Spatial transforms — disabled for reduced motion (flat fade instead)
   const xPos    = shouldReduce ? 0         : offset * X_STEP;
@@ -100,10 +101,10 @@ function RailCard({ item, offset, onClickOffset, shouldReduce }) {
         width:  CARD_W,
         height: CARD_H,
         transformStyle: 'preserve-3d',
-        cursor: isCenter ? 'default' : 'pointer',
+        cursor: 'pointer',
         overflow: 'hidden',
-        // Inline rounded corners to match project's borderless aesthetic
         borderRadius: 2,
+        textDecoration: 'none',
       }}
       initial={false}
       animate={{
@@ -122,8 +123,16 @@ function RailCard({ item, offset, onClickOffset, shouldReduce }) {
         opacity: { duration: 0.32, ease: EASE_OUT },
         filter:  { duration: 0.32, ease: EASE_OUT },
       }}
-      onClick={() => { if (!isCenter) onClickOffset(offset); }}
-      whileTap={isCenter ? {} : { scale: scale * 0.97 }}
+      onClick={() => {
+        if (isCenter) {
+          navigate(`/case/${item.slug}`);
+        } else {
+          onClickOffset(offset);
+        }
+      }}
+      onMouseEnter={() => { if (isCenter) setHovered(true);  }}
+      onMouseLeave={() => { if (isCenter) setHovered(false); }}
+      whileTap={{ scale: isCenter ? scale * 0.985 : scale * 0.97 }}
     >
       {/* Thumbnail (keyed on slug so failed state resets on item change) */}
       <RailThumb key={item.slug} slug={item.slug} id={item.id} isCenter={isCenter} />
@@ -175,13 +184,43 @@ function RailCard({ item, offset, onClickOffset, shouldReduce }) {
           {item.title}
         </div>
       </div>
+
+      {/* Center card: hover reveal — "OPEN CASE →" */}
+      {isCenter && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{
+            background: hovered ? 'rgba(8,8,8,0.38)' : 'rgba(8,8,8,0)',
+            transition: 'background 0.22s ease',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    '"JetBrains Mono", monospace',
+              fontSize:      '9px',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color:         '#fff',
+              border:        '1px solid rgba(255,255,255,0.28)',
+              padding:       '6px 14px',
+              opacity:       hovered ? 1 : 0,
+              transform:     hovered ? 'translateY(0)' : 'translateY(4px)',
+              transition:    'opacity 0.2s ease, transform 0.22s ease',
+            }}
+          >
+            OPEN CASE →
+          </span>
+        </div>
+      )}
     </m.div>
   );
 }
 
 // ── Main export ───────────────────────────────────────────────────────────────
 export default function CaseRail({ currentSlug }) {
-  const { t }       = useLang();
+  const { t }        = useLang();
+  const navigate     = useNavigate();
   const shouldReduce = useReducedMotion();
 
   // Items: all cases with content, minus the one currently being viewed
@@ -368,6 +407,7 @@ export default function CaseRail({ currentSlug }) {
                     offset={offset}
                     onClickOffset={(o) => setActive(p => p + o)}
                     shouldReduce={shouldReduce}
+                    navigate={navigate}
                   />
                 );
               })}

@@ -20,7 +20,6 @@ const Contact  = lazy(() => import('./components/Contact'));
 // Decorative / desktop-only — lowest priority
 const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
 const Cursor      = lazy(() => import('./components/Cursor'));
-const DigitalAura = lazy(() => import('./components/DigitalAura'));
 
 // Route-level code splitting — pages load only when visited
 const CasePage    = lazy(() => import('./pages/CasePage'));
@@ -122,7 +121,6 @@ function AppRoutes() {
       <Suspense fallback={null}>
         <ScrollToTopButton />
         <Cursor />
-        <DigitalAura />
       </Suspense>
     </>
   );
