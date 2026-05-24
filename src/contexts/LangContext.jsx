@@ -234,6 +234,9 @@ const translations = {
         outcome: 'Outcome',
         nextSteps: 'What I would check next',
         whatThisShows: 'What this project shows',
+        featuredSystems: 'Featured systems',
+        beforeAfter: 'Before and after',
+        whatILearned: 'What I learned',
       },
     },
     notFound: {
@@ -515,6 +518,9 @@ const translations = {
         outcome: 'Resultado',
         nextSteps: 'Lo que revisaría después',
         whatThisShows: 'Lo que este proyecto muestra',
+        featuredSystems: 'Sistemas destacados',
+        beforeAfter: 'Antes y después',
+        whatILearned: 'Lo que aprendí',
       },
     },
     notFound: {

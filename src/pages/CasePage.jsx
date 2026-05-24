@@ -338,11 +338,14 @@ export default function CasePage({ onMenuOpen }) {
     content?.role                      && { id: 'cs-role',         label: cp.myRole },
     content?.constraints?.length > 0   && { id: 'cs-constraints',  label: cp.constraints },
     content?.approach?.length > 0      && { id: 'cs-approach',     label: cp.uxApproach },
-    content?.keyDecisions?.length > 0  && { id: 'cs-decisions',    label: cp.keyDecisions },
-    content?.deliverables?.length > 0  && { id: 'cs-deliverables', label: cp.deliverables },
-    content?.outcome                   && { id: 'cs-outcome',      label: cp.outcome },
-    content?.nextSteps                 && { id: 'cs-next',         label: cp.nextSteps },
-    whatThisShows                      && { id: 'cs-shows',        label: cp.whatThisShows || 'What this shows' },
+    content?.keyDecisions?.length > 0        && { id: 'cs-decisions',    label: cp.keyDecisions },
+    content?.featuredSystems?.length > 0     && { id: 'cs-systems',      label: cp.featuredSystems || 'Featured systems' },
+    content?.beforeAfter                     && { id: 'cs-before-after', label: cp.beforeAfter || 'Before and after' },
+    content?.deliverables?.length > 0        && { id: 'cs-deliverables', label: cp.deliverables },
+    content?.outcome                         && { id: 'cs-outcome',      label: cp.outcome },
+    content?.whatILearned                    && { id: 'cs-learned',      label: cp.whatILearned || 'What I learned' },
+    content?.nextSteps                       && { id: 'cs-next',         label: cp.nextSteps },
+    whatThisShows                            && { id: 'cs-shows',        label: cp.whatThisShows || 'What this shows' },
   ].filter(Boolean);
 
   return (
@@ -548,6 +551,16 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.challenge}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.challenge}</p>
+                  {content?.challengeRisks?.length > 0 && (
+                    <ul className="mt-6 space-y-2">
+                      {content.challengeRisks.map((r, i) => (
+                        <li key={i} className="flex gap-3 items-start">
+                          <span aria-hidden="true" style={{ color: ACCENT, flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
+                          <span style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{r}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </m.section>
               )}
 
@@ -564,6 +577,16 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.myRole}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.role}</p>
+                  {content?.roleResponsibilities?.length > 0 && (
+                    <ul className="mt-6 space-y-2">
+                      {content.roleResponsibilities.map((r, i) => (
+                        <li key={i} className="flex gap-3 items-start">
+                          <span aria-hidden="true" style={{ color: 'rgba(240,238,234,0.35)', flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
+                          <span style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{r}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </m.section>
               )}
 
@@ -645,6 +668,125 @@ export default function CasePage({ onMenuOpen }) {
                 </m.section>
               )}
 
+              {/* Featured Systems */}
+              {content?.featuredSystems?.length > 0 && (
+                <m.section
+                  id="cs-systems"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{cp.featuredSystems || 'Featured systems'}</SectionLabel>
+                  <div className="space-y-16">
+                    {content.featuredSystems.map((sys, i) => (
+                      <m.div
+                        key={sys.id || i}
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+                      >
+                        <div className="flex items-baseline gap-4 mb-4">
+                          <span style={{ fontFamily: MONO, fontSize: '10px', color: ACCENT, letterSpacing: '0.16em' }}>
+                            {sys.num || String(i + 1).padStart(2, '0')}
+                          </span>
+                          <h3 className="uppercase" style={{ fontFamily: BEBAS, fontSize: 'clamp(1.5rem, 2.8vw, 2.2rem)', color: FG, letterSpacing: '0.02em', lineHeight: 1 }}>
+                            {sys.title}
+                          </h3>
+                        </div>
+                        <p className="mb-8" style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85, maxWidth: '600px' }}>
+                          {sys.body}
+                        </p>
+                        <ImagePlaceholder
+                          label={sys.assetCaption || sys.title}
+                          aspect="16/9"
+                          src={sys.asset}
+                          alt={sys.assetAlt || sys.title}
+                        />
+                        {sys.assetCaption && (
+                          <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                            {sys.assetCaption}
+                          </p>
+                        )}
+                      </m.div>
+                    ))}
+                  </div>
+                </m.section>
+              )}
+
+              {/* Before and After */}
+              {content?.beforeAfter && (
+                <m.section
+                  id="cs-before-after"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{cp.beforeAfter || 'Before and after'}</SectionLabel>
+                  {content.beforeAfter.context && (
+                    <p className="mb-8" style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '560px' }}>
+                      {content.beforeAfter.context}
+                    </p>
+                  )}
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-px mb-10"
+                    style={{ backgroundColor: RULE }}
+                  >
+                    {/* Before column */}
+                    <div style={{ backgroundColor: 'var(--color-bg)', padding: '24px 28px' }}>
+                      <div className="flex items-center gap-2 mb-5">
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'rgba(240,238,234,0.25)' }} aria-hidden="true" />
+                        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.4)' }}>Before</span>
+                      </div>
+                      <ul className="space-y-3">
+                        {(content.beforeAfter.before || []).map((item, i) => (
+                          <li key={i} className="flex gap-3 items-start">
+                            <span aria-hidden="true" style={{ color: 'rgba(240,238,234,0.25)', flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
+                            <span style={{ fontFamily: MONO, fontSize: '12px', color: 'var(--color-fg-mute)', lineHeight: 1.75 }}>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    {/* After column */}
+                    <div style={{ backgroundColor: 'var(--color-bg)', padding: '24px 28px' }}>
+                      <div className="flex items-center gap-2 mb-5">
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: ACCENT }} aria-hidden="true" />
+                        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT }}>After</span>
+                      </div>
+                      <ul className="space-y-3">
+                        {(content.beforeAfter.after || []).map((item, i) => (
+                          <li key={i} className="flex gap-3 items-start">
+                            <span aria-hidden="true" style={{ color: ACCENT, flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
+                            <span style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.75 }}>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                  {content.beforeAfter.asset && (
+                    <>
+                      <ImagePlaceholder
+                        label={content.beforeAfter.assetCaption || 'Before / after diagram'}
+                        aspect="16/7"
+                        src={content.beforeAfter.asset}
+                        alt={content.beforeAfter.assetAlt || 'Before and after comparison'}
+                      />
+                      {content.beforeAfter.assetCaption && (
+                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                          {content.beforeAfter.assetCaption}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </m.section>
+              )}
+
               {/* Deliverables */}
               {content?.deliverables?.length > 0 && (
                 <m.section
@@ -681,6 +823,22 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.outcome}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.outcome}</p>
+                </m.section>
+              )}
+
+              {/* What I learned */}
+              {content?.whatILearned && (
+                <m.section
+                  id="cs-learned"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{cp.whatILearned || 'What I learned'}</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>{content.whatILearned}</p>
                 </m.section>
               )}
 
