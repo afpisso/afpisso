@@ -1,14 +1,16 @@
 import { useLang } from '../contexts/LangContext';
-import { StepNumber } from './CyberIcons';
+import { StepNumber, IconLoop, IconSearch, IconSignal, IconTest, IconDoc } from './CyberIcons';
 import SectionHeading from './SectionHeading';
 import { m } from 'framer-motion';
 
+const STEP_ICONS = [IconLoop, IconSearch, IconSignal, IconTest, IconDoc];
+
 export default function HowIWork() {
   const { t } = useLang();
-  const { label, headline, body, steps } = t.howIWork;
+  const { label, sectionTitle, headline, body, steps } = t.howIWork;
 
   return (
-    <section id="how-i-work" className="py-28 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="how-i-work" className="py-24 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
       {/* Mobile: solid bg */}
       <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
       {/* Desktop: content left, particles right */}
@@ -18,7 +20,7 @@ export default function HowIWork() {
       <div className="relative z-10 lg:max-w-[62%] lg:mr-auto px-6">
         {/* Section heading */}
         <div className="mb-16">
-          <SectionHeading label={label} page="005" />
+          <SectionHeading label={label} title={sectionTitle} page="005" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -56,17 +58,25 @@ export default function HowIWork() {
 
           {/* Right: steps */}
           <ol className="space-y-0">
-            {steps.map((step, i) => (
+            {steps.map((step, i) => {
+              const StepIcon = STEP_ICONS[i];
+              return (
               <m.li
                 key={step.num}
-                className="flex gap-6 py-6 border-t"
+                className="flex gap-5 py-6 border-t"
                 style={{ borderColor: 'var(--color-rule)' }}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
               >
-                <div className="flex-shrink-0 pt-0.5">
+                {/* Step icon + number stacked */}
+                <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-0.5" style={{ minWidth: 28 }}>
+                  {StepIcon && (
+                    <div style={{ color: 'rgba(255,37,64,0.45)' }}>
+                      <StepIcon size={18} />
+                    </div>
+                  )}
                   <StepNumber num={step.num} />
                 </div>
                 <div>
@@ -92,7 +102,8 @@ export default function HowIWork() {
                   </div>
                 </div>
               </m.li>
-            ))}
+              );
+            })}
             <li className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
           </ol>
         </div>

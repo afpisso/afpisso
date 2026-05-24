@@ -1,47 +1,63 @@
 /**
- * CaseTOC — sticky table of contents for case study pages.
+ * CaseTOC — vertical progress rail for case study navigation.
  *
- * Renders only sections that exist in the current case (caller filters).
- * Tracks active section via IntersectionObserver — highlights as you scroll.
- * Navigates via Lenis (smooth, offset-corrected for fixed nav).
+ * Design:
+ *   A 1px vertical rail connects all section markers.
+ *   An accent fill line grows via scaleY (transform only — Emil rule props-transform-opacity).
+ *   Each marker animates between dot and bar via scaleY + borderRadius, no height/width change.
+ *   No outer border box — the rail IS the visual container.
  *
- * Props:
- *   sections  { id: string, label: string }[]  — ordered list of present sections
+ * Emil Kowalski compliance:
+ *   - All animations: transform + opacity only (no height, width, top, left)
+ *   - Duration ≤ 300ms for markers, ≤ 400ms for fill
+ *   - Interruptible: IntersectionObserver updates drive state, Lenis handles scroll
+ *
+ * Accessibility:
+ *   - nav[aria-label] + button elements
+ *   - Touch targets min 44px via minHeight
+ *   - aria-current="true" on active item
  */
 
 import { useState, useEffect } from 'react';
 import { useLenis } from '../contexts/LenisContext';
+import { m } from 'framer-motion';
 
 const MONO   = '"JetBrains Mono", monospace';
 const ACCENT = 'var(--color-accent)';
 const RULE   = 'var(--color-rule)';
-const DIM    = 'var(--color-fg-dim)';
+const FG     = 'var(--color-fg)';
 const MUTE   = 'var(--color-fg-mute)';
+const DIM    = 'var(--color-fg-dim)';
+
+const EASE_OUT = [0.16, 1, 0.3, 1];
+
+// Marker geometry — height fixed at MAX, visual size controlled by scaleY
+const MARKER_H     = 16;  // px — max height (active bar)
+const MARKER_W     = 2;   // px
+const DOT_SCALE    = 3 / MARKER_H; // ≈ 0.1875 — makes it appear 3px tall
 
 export default function CaseTOC({ sections }) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? null);
   const lenisRef = useLenis();
 
+  const activeIndex = Math.max(0, sections.findIndex(s => s.id === activeId));
+  // Progress 0→1 from first to last section
+  const railProgress = sections.length > 1 ? activeIndex / (sections.length - 1) : 0;
+
+  // ── IntersectionObserver — picks topmost intersecting section ───────────────
   useEffect(() => {
     if (!sections.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Among all currently intersecting entries, pick the one
-        // closest to the top of the viewport (the "reading" section).
-        const intersecting = entries.filter(e => e.isIntersecting);
-        if (!intersecting.length) return;
-
-        const topmost = intersecting.reduce((a, b) =>
+        const visible = entries.filter(e => e.isIntersecting);
+        if (!visible.length) return;
+        const topmost = visible.reduce((a, b) =>
           Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b
         );
         setActiveId(topmost.target.id);
       },
-      {
-        // Fire when the top of a section enters the top ~45% of the viewport
-        rootMargin: '0px 0px -55% 0px',
-        threshold: 0,
-      },
+      { rootMargin: '0px 0px -55% 0px', threshold: 0 },
     );
 
     sections.forEach(({ id }) => {
@@ -52,6 +68,7 @@ export default function CaseTOC({ sections }) {
     return () => observer.disconnect();
   }, [sections]);
 
+  // ── Scroll to section via Lenis ─────────────────────────────────────────────
   function scrollTo(id) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -65,78 +82,159 @@ export default function CaseTOC({ sections }) {
   if (!sections.length) return null;
 
   return (
-    <div
-      style={{
-        border:          `1px solid ${RULE}`,
-        backgroundColor: 'rgba(255,255,255,0.01)',
-        marginTop:       16,
-      }}
-    >
-      {/* Header — red top accent matches Quick Facts style */}
-      <div className="relative">
-        <div
-          className="absolute top-0 left-0 right-0 h-[1px]"
-          style={{ backgroundColor: ACCENT }}
-          aria-hidden="true"
-        />
-        <div className="px-5 pt-5 pb-2">
-          <div
-            className="sys-label"
-            style={{ color: ACCENT }}
-            id="case-toc-label"
-          >
-            SECTIONS
-          </div>
-        </div>
+    <nav aria-label="Case study sections" style={{ marginTop: 20 }}>
+
+      {/* Tiny eyebrow — same // language as site markers */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          marginBottom: 14,
+          paddingLeft: 20,
+        }}
+      >
+        <div style={{ width: 10, height: 1, backgroundColor: ACCENT, opacity: 0.5 }} />
+        <span
+          style={{
+            fontFamily: MONO,
+            fontSize: '9px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,37,64,0.45)',
+            fontWeight: 700,
+          }}
+        >
+          // nav
+        </span>
       </div>
 
-      {/* Section list */}
-      <nav aria-labelledby="case-toc-label">
-        {sections.map(({ id, label }) => {
+      {/* Rail + items */}
+      <div style={{ position: 'relative', paddingLeft: 20 }}>
+
+        {/* Background rail — 1px vertical line */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: 20,
+            top: 0,
+            bottom: 0,
+            width: 1,
+            backgroundColor: RULE,
+          }}
+        />
+
+        {/*
+          Progress fill — scaleY from top, Emil-compliant (transform only).
+          Grows to cover the fraction of sections completed.
+        */}
+        <m.div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: 20,
+            top: 0,
+            bottom: 0,
+            width: 1,
+            backgroundColor: ACCENT,
+            transformOrigin: 'top',
+            opacity: 0.65,
+          }}
+          animate={{ scaleY: railProgress }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
+        />
+
+        {/* Section buttons */}
+        {sections.map(({ id, label }, i) => {
           const isActive = activeId === id;
+          const rowNum = String(i + 1).padStart(2, '0');
+
           return (
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="w-full text-left border-t"
+              aria-current={isActive ? 'true' : undefined}
               style={{
-                borderColor:    RULE,
-                padding:        '10px 20px',
-                display:        'flex',
-                alignItems:     'center',
-                gap:            10,
-                fontFamily:     MONO,
-                fontSize:       '10px',
-                letterSpacing:  '0.1em',
-                textTransform:  'uppercase',
-                color:          isActive ? ACCENT : MUTE,
-                background:     'none',
-                cursor:         'pointer',
-                transition:     'color 0.18s',
-                lineHeight:     1.4,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '0',
+                minHeight: 44,          // UI/UX Pro Max: touch target
+                textAlign: 'left',
+                paddingLeft: 0,
               }}
-              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = DIM; }}
-              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = MUTE; }}
             >
-              {/* Active pip */}
-              <span
+              {/*
+                Marker on the rail.
+                Fixed DOM height (MARKER_H px). Visual size controlled by scaleY.
+                Inactive: scaleY ≈ 0.19 → appears 3px tall (dot)
+                Active: scaleY 1 → appears 16px tall (bar)
+                transformOrigin: center keeps it vertically centered on the rail point.
+                Emil: only transform + backgroundColor animate — zero layout reflow.
+              */}
+              <m.span
                 aria-hidden="true"
                 style={{
-                  width:           3,
-                  height:          isActive ? 14 : 3,
-                  borderRadius:    isActive ? 2 : '50%',
-                  backgroundColor: isActive
-                    ? ACCENT
-                    : 'rgba(255,255,255,0.18)',
-                  flexShrink:      0,
-                  transition:      'height 0.2s, background-color 0.18s',
+                  width: MARKER_W,
+                  height: MARKER_H,
+                  flexShrink: 0,
+                  transformOrigin: 'center',
+                  display: 'block',
                 }}
+                animate={{
+                  scaleY:          isActive ? 1 : DOT_SCALE,
+                  scaleX:          isActive ? 1 : 1.5,  // slightly wider dot when inactive
+                  backgroundColor: isActive ? ACCENT : 'rgba(255,255,255,0.22)',
+                  borderRadius:    isActive ? 1 : 99,
+                }}
+                transition={{ duration: 0.22, ease: EASE_OUT }}
               />
-              {label}
+
+              {/* Row number + label */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, minWidth: 0 }}>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: '8px',
+                    letterSpacing: '0.12em',
+                    color: isActive ? 'rgba(255,37,64,0.6)' : 'rgba(255,255,255,0.14)',
+                    flexShrink: 0,
+                    fontWeight: 700,
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  {rowNum}
+                </span>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: '10px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.4,
+                    color: isActive ? FG : MUTE,
+                    fontWeight: isActive ? 700 : 400,
+                    transition: 'color 0.2s, font-weight 0.1s',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = DIM; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = MUTE; }}
+                >
+                  {label}
+                </span>
+              </div>
             </button>
           );
         })}
-      </nav>
-    </div>
+
+      </div>
+    </nav>
   );
 }

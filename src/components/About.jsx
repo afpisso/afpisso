@@ -19,7 +19,7 @@ export default function About() {
   const photoY = useTransform(photoScroll, [0, 1], ['-6%', '6%']);
 
   return (
-    <section id="about" className="py-28 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="about" className="py-40 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
       {/* Mobile: solid bg */}
       <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
       {/* Desktop: content left, particles right */}
@@ -31,9 +31,69 @@ export default function About() {
         <div className="mb-16">
           <SectionHeading
             label={about.label.split('/')[0].trim()}
+            title={about.sectionTitle}
             page="004"
           />
         </div>
+
+        {/* ── Core question — typographic statement ── */}
+        {/* This is the single question that drives every design decision on this portfolio. */}
+        {/* Full-bleed Bebas at ~15vw: the jury screenshot moment. */}
+        <m.div
+          className="mb-20 overflow-hidden"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              marginBottom: 16,
+            }}
+          >
+            <div style={{ width: 18, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
+            <span
+              style={{
+                fontFamily: '"JetBrains Mono", monospace',
+                fontSize: '9px',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,37,64,0.45)',
+                fontWeight: 700,
+              }}
+            >
+              // core question
+            </span>
+          </div>
+          <p
+            style={{
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: 'clamp(2.8rem, 10vw, 9rem)',
+              lineHeight: 0.92,
+              letterSpacing: '0.01em',
+              color: 'var(--color-fg)',
+            }}
+          >
+            Where is the<br />
+            <span style={{ color: 'var(--color-accent)' }}>player</span> guessing?
+          </p>
+          <p
+            style={{
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '12px',
+              color: 'var(--color-fg-mute)',
+              letterSpacing: '0.06em',
+              marginTop: 20,
+              maxWidth: 420,
+              lineHeight: 1.75,
+            }}
+          >
+            {about.philosophy}
+          </p>
+        </m.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20">
           {/* Left: photo + bio */}

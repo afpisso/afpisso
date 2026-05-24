@@ -22,7 +22,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-28 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
+    <section id="contact" className="py-20 relative" style={{ borderTop: '1px solid var(--color-rule)' }}>
       {/* Mobile: solid bg */}
       <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
       {/* Desktop: content right, particles left */}

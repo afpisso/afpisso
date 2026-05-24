@@ -131,11 +131,12 @@ export default function CaseCard({ caseData, index }) {
           )}
 
           {/* ── Hover overlay — clip-path sweep from bottom ── */}
+          {/* Reveals headline (editorial hook) — NOT visible in card body below. */}
           {/* Emil: clip-path is layout-free (no reflow). Enter ease-out, exit ease-in. */}
           <m.div
             className="absolute inset-0 flex flex-col justify-end p-4"
             style={{
-              background: 'linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(10,10,10,0.82) 60%, rgba(20,4,8,0.55) 100%)',
+              background: 'linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(10,10,10,0.88) 55%, rgba(20,4,8,0.45) 100%)',
               pointerEvents: shouldReduce ? 'none' : 'auto',
             }}
             initial={false}
@@ -148,32 +149,26 @@ export default function CaseCard({ caseData, index }) {
               : { duration: 0.18, ease: EASE_IN }
             }
           >
-            {/* Case ID */}
-            <div
-              className="text-[10px] tracking-widest mb-1"
-              style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)' }}
-            >
-              {caseData.id}
-            </div>
-
-            {/* Title large */}
-            <div
-              className="uppercase mb-3 leading-none"
-              style={{
-                fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
-                color: 'var(--color-fg)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {caseData.title}
-            </div>
-
-            {/* Meta row */}
-            <div className="flex items-center gap-2 mb-4">
-              <span className="sys-label">{caseData.role}</span>
-              <span className="sys-label" aria-hidden>·</span>
-              <span className="sys-label">{caseData.year}</span>
+            {/* Editorial hook — what this case is actually about */}
+            <div className="mb-4">
+              <div
+                className="flex items-center gap-1.5 mb-2"
+                style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(255,37,64,0.6)', textTransform: 'uppercase' }}
+              >
+                <span>// case hook</span>
+              </div>
+              <p
+                style={{
+                  fontFamily: '"JetBrains Mono", monospace',
+                  fontSize: '12px',
+                  color: 'rgba(240,238,234,0.88)',
+                  lineHeight: 1.7,
+                  fontStyle: 'italic',
+                  letterSpacing: '0.01em',
+                }}
+              >
+                {caseData.headline || caseData.focus}
+              </p>
             </div>
 
             {/* CTA */}
@@ -230,7 +225,7 @@ export default function CaseCard({ caseData, index }) {
 
           {/* Description */}
           <p
-            className="text-[12px] leading-relaxed flex-grow mb-4"
+            className="text-[13px] leading-relaxed flex-grow mb-4"
             style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}
           >
             {lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : caseData.description}

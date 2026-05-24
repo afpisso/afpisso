@@ -5,6 +5,7 @@ import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
+import CyberBtn from './CyberBtn';
 import { m, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
 
 // Emil Kowalski: ease-out enter, ease-in exit, transform+opacity only, interruptible
@@ -320,7 +321,7 @@ export default function CaseFiles() {
 
       <section
         id="cases"
-        className="py-28 relative"
+        className="py-36 relative"
         style={{ borderTop: '1px solid var(--color-rule)' }}
       >
         {/* Mobile: solid bg — on desktop the gradient does the work */}
@@ -333,7 +334,7 @@ export default function CaseFiles() {
 
           {/* Section header */}
           <div className="mb-16">
-            <SectionHeading label={t.caseFiles.label} page="003" />
+            <SectionHeading label={t.caseFiles.label} title={t.caseFiles.sectionTitle} page="003" />
             <div className="flex items-start gap-12 mt-10 flex-wrap">
               <m.p
                 className="text-base max-w-sm"
@@ -351,16 +352,9 @@ export default function CaseFiles() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: 0.45 }}
               >
-                <Link
-                  to="/work"
-                  className="flex items-center gap-2 text-[10px] tracking-widest uppercase transition-colors duration-200 w-fit"
-                  style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-mute)' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
-                >
-                  <span>{t.caseFiles.viewAll}</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
+                <CyberBtn to="/work" variant="ghost" size="sm">
+                  {t.caseFiles.viewAll}
+                </CyberBtn>
               </m.div>
             </div>
           </div>

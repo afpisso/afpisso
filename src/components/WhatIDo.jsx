@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
+import { IconGamepad, IconLayers, IconGrid } from './CyberIcons';
 import { m } from 'framer-motion';
+
+// Icon map keyed by item index
+const SERVICE_ICONS = [IconGamepad, IconLayers, IconGrid];
 
 // taste-skill §3 Rule 3: 3-column equal card grid is BANNED at DESIGN_VARIANCE 8.
 // Replaced with asymmetric numbered rows — editorial split layout.
@@ -36,18 +40,29 @@ function ServiceRow({ item, index }) {
         }}
       />
 
-      {/* Left col — number + title */}
+      {/* Left col — number + icon + title */}
       <div className="pl-6 md:pl-8">
-        <div
-          className="mb-3 transition-colors duration-200"
-          style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: '11px',
-            letterSpacing: '0.12em',
-            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.35)',
-          }}
-        >
-          {String(index + 1).padStart(2, '0')}
+        <div className="flex items-center gap-3 mb-3">
+          <div
+            className="transition-colors duration-200"
+            style={{
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '11px',
+              letterSpacing: '0.12em',
+              color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.35)',
+            }}
+          >
+            {String(index + 1).padStart(2, '0')}
+          </div>
+          {/* Section icon — transitions from muted to accent on hover */}
+          {(() => {
+            const Icon = SERVICE_ICONS[index];
+            return Icon ? (
+              <div style={{ color: hovered ? 'var(--color-accent)' : 'rgba(255,255,255,0.2)', transition: 'color 0.2s' }}>
+                <Icon size={18} />
+              </div>
+            ) : null;
+          })()}
         </div>
         <h3
           className="uppercase transition-colors duration-200"
@@ -101,12 +116,12 @@ function ServiceRow({ item, index }) {
 
 export default function WhatIDo() {
   const { t } = useLang();
-  const { label, headline, items } = t.whatIDo;
+  const { label, sectionTitle, headline, items } = t.whatIDo;
 
   return (
     <section
       id="what-i-do"
-      className="py-28 relative"
+      className="py-20 relative"
       style={{ borderTop: '1px solid var(--color-rule)' }}
     >
       {/* Mobile: solid bg */}
@@ -119,7 +134,7 @@ export default function WhatIDo() {
 
         {/* Header */}
         <div className="mb-16">
-          <SectionHeading label={label} page="002" />
+          <SectionHeading label={label} title={sectionTitle} page="002" />
         </div>
 
         {/* Service rows */}

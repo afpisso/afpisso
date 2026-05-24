@@ -75,6 +75,268 @@ const GENS = {
     }
   },
 
+  // ── Semantic shapes — each maps to a content section ─────────────────────
+
+  // ── Upgraded semantic shapes ─────────────────────────────────────────────
+
+  // (5,3) Torus knot — complex interlocked system (Cases section)
+  // p=5 longitudinal wraps · q=3 meridional wraps → intricate overlapping paths
+  tknot53: (i, n) => {
+    const t     = (i / n) * Math.PI * 2;
+    const p = 5, q = 3, R = 0.56, r = 0.30;
+    const phi   = t * p, theta = t * q;
+    const Rr    = R + r * Math.cos(theta);
+    return [Rr * Math.cos(phi), r * Math.sin(theta), Rr * Math.sin(phi)];
+  },
+
+  // (3,2) Trefoil knot — three-lobed identity shape (About section)
+  tknot32: (i, n) => {
+    const t     = (i / n) * Math.PI * 2;
+    const p = 3, q = 2, R = 0.60, r = 0.30;
+    const phi   = t * p, theta = t * q;
+    const Rr    = R + r * Math.cos(theta);
+    return [Rr * Math.cos(phi), r * Math.sin(theta), Rr * Math.sin(phi)];
+  },
+
+  // Lorenz attractor — chaos butterfly, emergent thinking (Notes section)
+  // Pre-computes 4 000 attractor points at module load (< 1ms)
+  lorenz: (() => {
+    let x = 0.1, y = 0, z = 0;
+    const sigma = 10, rho = 28, beta = 8 / 3, dt = 0.004;
+    // Burn warmup transient
+    for (let k = 0; k < 1000; k++) {
+      const dx = sigma * (y - x), dy = x * (rho - z) - y, dz = x * y - beta * z;
+      x += dx * dt; y += dy * dt; z += dz * dt;
+    }
+    // Collect trajectory
+    const raw = [];
+    for (let k = 0; k < 4000; k++) {
+      const dx = sigma * (y - x), dy = x * (rho - z) - y, dz = x * y - beta * z;
+      x += dx * dt; y += dy * dt; z += dz * dt;
+      // Remap: lorenz_x→particle_x  lorenz_z→particle_y  lorenz_y→depth
+      raw.push([x, z, y]);
+    }
+    // Normalize each axis to [-0.86, 0.86]
+    let mnX = 1e9, mxX = -1e9, mnY = 1e9, mxY = -1e9, mnZ = 1e9, mxZ = -1e9;
+    for (const [px, py, pz] of raw) {
+      if (px < mnX) mnX = px; if (px > mxX) mxX = px;
+      if (py < mnY) mnY = py; if (py > mxY) mxY = py;
+      if (pz < mnZ) mnZ = pz; if (pz > mxZ) mxZ = pz;
+    }
+    const cX = (mnX + mxX) / 2, sX = (mxX - mnX) / 2 || 1;
+    const cY = (mnY + mxY) / 2, sY = (mxY - mnY) / 2 || 1;
+    const cZ = (mnZ + mxZ) / 2, sZ = (mxZ - mnZ) / 2 || 1;
+    const sc = 0.86;
+    const pts = raw.map(([px, py, pz]) => [
+      (px - cX) / sX * sc,
+      -((py - cY) / sY) * sc,   // invert: high lorenz_z → visual top (white)
+      (pz - cZ) / sZ * sc * 0.42,
+    ]);
+    return (i, n) => pts[Math.round((i / Math.max(n - 1, 1)) * (pts.length - 1))];
+  })(),
+
+  // Double helix — two intertwined strands + rungs (Contact section)
+  dhelix: (i, n) => {
+    const turns     = 4.5;
+    const nRungSegs = Math.round(turns * 2);   // 9 rungs
+    const nRungPts  = 7;                        // particles per rung
+    const nRungs    = nRungSegs * nRungPts;
+    const nStrands  = n - nRungs;
+    const half      = Math.floor(nStrands / 2);
+
+    if (i < nStrands) {
+      // Strands
+      const strand = i < half ? 0 : 1;
+      const ti     = (i % half) / Math.max(half - 1, 1);
+      const angle  = ti * Math.PI * 2 * turns + strand * Math.PI;
+      return [Math.cos(angle) * 0.46, (ti * 2 - 1) * 0.92, Math.sin(angle) * 0.46];
+    }
+    // Rungs — straight bars connecting strand A to strand B
+    const ri   = i - nStrands;
+    const rl   = Math.floor(ri / nRungPts);
+    const u    = (ri % nRungPts) / Math.max(nRungPts - 1, 1); // 0→1 across rung
+    const rt   = rl / nRungSegs;
+    const ang  = rt * Math.PI * 2 * turns;
+    const yPos = (rt * 2 - 1) * 0.92;
+    const s    = 1 - 2 * u;                    // strand A (+1) → strand B (−1)
+    return [Math.cos(ang) * 0.46 * s, yPos, Math.sin(ang) * 0.46 * s];
+  },
+
+  // Möbius strip — continuous one-sided loop, design iteration (What I Do section)
+  // STRIP particles span the cross-section width; the rest step along the loop
+  mobius: (i, n) => {
+    const STRIP = 6;
+    const nMain = Math.ceil(n / STRIP);
+    const ti    = Math.floor(i / STRIP) / nMain;       // 0..1 along the loop
+    const si    = (i % STRIP) / (STRIP - 1) * 2 - 1;  // -1..1 across the width
+    const t     = ti * Math.PI * 2;
+    const R = 0.66, w = 0.22;
+    return [
+      (R + w * si * Math.cos(t / 2)) * Math.cos(t),
+      w * si * Math.sin(t / 2),
+      (R + w * si * Math.cos(t / 2)) * Math.sin(t),
+    ];
+  },
+
+  // Vortex funnel — wide input converges to a tight point (How I Work section)
+  // Top (white) = broad inputs · Bottom (red) = focused outcome
+  vortex: (i, n) => {
+    const t     = i / n;
+    const turns = 7;
+    const angle = t * Math.PI * 2 * turns;
+    const y     = (t * 2 - 1) * 0.88;          // −0.88 (top/white) → +0.88 (bottom/red)
+    const r     = (1 - t) * 0.72 + 0.04;       // tapers: wide top → tight bottom
+    return [Math.cos(angle) * r, y, Math.sin(angle) * r];
+  },
+
+  // Scanline — CRT power-off: all particles collapse to a horizontal line
+  // Used as fallback when user scrolls past all sections (footer area)
+  scanline: (i, n) => {
+    const u = (i / Math.max(n - 1, 1)) * 2 - 1;  // −1..1 along the line
+    return [u * 0.80, 0, 0];
+  },
+
+  // Ripple — radial dampened water-drop surface (kept for morph compat)
+  ripple: (i, n) => {
+    const side = Math.ceil(Math.sqrt(n));
+    const xi   = i % side, zi = Math.floor(i / side);
+    const u    = (xi / Math.max(side - 1, 1)) * 2 - 1;
+    const v    = (zi / Math.max(side - 1, 1)) * 2 - 1;
+    const rad  = Math.sqrt(u * u + v * v);
+    const y    = 0.30 * Math.cos(rad * Math.PI * 2.4) * Math.exp(-rad * 1.1);
+    return [u * 1.1, y, v * 1.1];
+  },
+
+  // ── Legacy shapes kept for morph compatibility ──────────────────────────
+
+  // Game controller — volumetric 3D point cloud (ellipsoidal surface sampling)
+  // Parts: [cx, cy, cz,  rx,   ry,   rz,  weight]
+  // Y axis: +1 = visual bottom (red), -1 = visual top (white)
+  controller: (() => {
+    const PARTS = [
+      [  0.00, -0.04,  0.00,  0.64, 0.26, 0.18, 30], // main body
+      [ -0.39,  0.46,  0.03,  0.20, 0.38, 0.20, 17], // left handle
+      [  0.39,  0.46,  0.03,  0.20, 0.38, 0.20, 17], // right handle
+      [ -0.53, -0.36, -0.06,  0.20, 0.09, 0.13,  8], // left shoulder bump
+      [  0.53, -0.36, -0.06,  0.20, 0.09, 0.13,  8], // right shoulder bump
+      [ -0.28,  0.09,  0.20,  0.13, 0.13, 0.06,  6], // left thumbstick
+      [  0.16,  0.10,  0.20,  0.13, 0.13, 0.06,  6], // right thumbstick
+      [ -0.42, -0.06,  0.22,  0.11, 0.11, 0.03,  4], // d-pad area
+      [  0.36, -0.08,  0.22,  0.12, 0.12, 0.03,  4], // face buttons
+    ];
+    const TW = PARTS.reduce((s, p) => s + p[6], 0);
+    const CW = []; let sum = 0;
+    for (const p of PARTS) { sum += p[6]; CW.push(sum); }
+
+    return (i, n) => {
+      // Two independent deterministic hashes per particle
+      let h1 = Math.imul(i ^ 0xdeadbeef, 0x9e3779b9);
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 0x85ebca6b);
+      h1 = Math.imul(h1 ^ (h1 >>> 13), 0xc2b2ae35);
+      const u = ((h1 ^ (h1 >>> 16)) >>> 0) / 0x100000000;
+
+      let h2 = Math.imul((i + 7919) ^ 0xbabe1337, 0x6c62272e);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 0xa3b195d5);
+      h2 = Math.imul(h2 ^ (h2 >>> 13), 0xf42b5a7f);
+      const v = ((h2 ^ (h2 >>> 16)) >>> 0) / 0x100000000;
+
+      // Assign particle to part by sequential proportion
+      const tgt = (i / n) * TW;
+      let pi = 0;
+      while (pi < CW.length - 1 && CW[pi] <= tgt) pi++;
+      const [cx, cy, cz, rx, ry, rz] = PARTS[pi];
+
+      // Uniform surface sampling: uniform in cos(phi) → uniform area on sphere
+      const phi   = Math.acos(1 - 2 * u);
+      const theta = Math.PI * 2 * v;
+      const sp    = Math.sin(phi);
+      return [
+        cx + rx * sp * Math.cos(theta),
+        cy + ry * sp * Math.sin(theta),
+        cz + rz * Math.cos(phi),
+      ];
+    };
+  })(),
+
+  // Brain — volumetric 3D point cloud (lateral hemisphere view)
+  // Parts: [cx, cy, cz,  rx,   ry,   rz,  weight]
+  brain: (() => {
+    const PARTS = [
+      [  0.00, -0.05,  0.00,  0.58, 0.44, 0.34, 44], // main hemisphere mass
+      [ -0.30, -0.10,  0.10,  0.26, 0.28, 0.22, 20], // frontal lobe
+      [ -0.06,  0.40,  0.06,  0.24, 0.18, 0.18, 13], // temporal lobe
+      [  0.38, -0.04,  0.02,  0.22, 0.28, 0.20, 11], // occipital lobe
+      [ -0.46, -0.22,  0.06,  0.14, 0.20, 0.14,  5], // prefrontal
+      [  0.10,  0.64,  0.00,  0.10, 0.20, 0.10,  7], // brainstem
+    ];
+    const TW = PARTS.reduce((s, p) => s + p[6], 0);
+    const CW = []; let sum = 0;
+    for (const p of PARTS) { sum += p[6]; CW.push(sum); }
+
+    return (i, n) => {
+      let h1 = Math.imul(i ^ 0xc0ffee42, 0x9e3779b9);
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 0x85ebca6b);
+      h1 = Math.imul(h1 ^ (h1 >>> 13), 0xc2b2ae35);
+      const u = ((h1 ^ (h1 >>> 16)) >>> 0) / 0x100000000;
+
+      let h2 = Math.imul((i + 3571) ^ 0xf00dcafe, 0x6c62272e);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 0xa3b195d5);
+      h2 = Math.imul(h2 ^ (h2 >>> 13), 0xf42b5a7f);
+      const v = ((h2 ^ (h2 >>> 16)) >>> 0) / 0x100000000;
+
+      const tgt = (i / n) * TW;
+      let pi = 0;
+      while (pi < CW.length - 1 && CW[pi] <= tgt) pi++;
+      const [cx, cy, cz, rx, ry, rz] = PARTS[pi];
+
+      const phi   = Math.acos(1 - 2 * u);
+      const theta = Math.PI * 2 * v;
+      const sp    = Math.sin(phi);
+      return [
+        cx + rx * sp * Math.cos(theta),
+        cy + ry * sp * Math.sin(theta),
+        cz + rz * Math.cos(phi),
+      ];
+    };
+  })(),
+
+  // Circuit board — orthogonal PCB traces on a flat plane (for How I Work section)
+  circuit: (() => {
+    const GRID = 7;
+    function node(gx, gy) {
+      return [(gx / (GRID - 1)) * 1.7 - 0.85, 0, (gy / (GRID - 1)) * 1.7 - 0.85];
+    }
+    const segs = [];
+    // Horizontal traces
+    for (let gy = 0; gy < GRID; gy++) {
+      for (let gx = 0; gx < GRID - 1; gx++) {
+        const a = node(gx, gy), b = node(gx + 1, gy);
+        const dx = b[0] - a[0]; segs.push({ a, b, len: Math.abs(dx) });
+      }
+    }
+    // Vertical traces
+    for (let gx = 0; gx < GRID; gx++) {
+      for (let gy = 0; gy < GRID - 1; gy++) {
+        const a = node(gx, gy), b = node(gx, gy + 1);
+        const dz = b[2] - a[2]; segs.push({ a, b, len: Math.abs(dz) });
+      }
+    }
+    const total = segs.reduce((s, sg) => s + sg.len, 0);
+    const cum = []; let acc = 0;
+    for (const sg of segs) { acc += sg.len; cum.push(acc); }
+    return (i, n) => {
+      const t = (i / n) * total;
+      let si = cum.findIndex(c => c >= t); if (si < 0) si = segs.length - 1;
+      const sg = segs[si], prev = si > 0 ? cum[si - 1] : 0;
+      const u = sg.len > 0 ? (t - prev) / sg.len : 0;
+      const x = sg.a[0] + (sg.b[0] - sg.a[0]) * u;
+      const z = sg.a[2] + (sg.b[2] - sg.a[2]) * u;
+      // Nodes (segment endpoints) pop slightly up; traces stay flat
+      const atNode = Math.min(u, 1 - u) < 0.06;
+      return [x, atNode ? 0.10 : 0.0, z];
+    };
+  })(),
+
   // AFP logo — two paths from logo-mark.svg (viewBox 500×556, center 250,278)
   // positive y = down in canvas space, so no y-flip needed
   logo: (() => {

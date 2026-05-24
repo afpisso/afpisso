@@ -3,6 +3,7 @@ import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
+import { m } from 'framer-motion';
 
 const SOCIAL = [
   { label: 'LinkedIn', href: 'https://linkedin.com/in/byandresfe', external: true },
@@ -16,7 +17,57 @@ export default function Footer() {
   const lenisRef = useLenis();
 
   return (
-    <footer style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
+    <footer id="footer-tx" style={{ borderTop: '1px solid var(--color-rule)', backgroundColor: 'var(--color-bg)' }}>
+
+      {/* END TRANSMISSION — typographic close statement */}
+      <div
+        className="max-w-[1400px] mx-auto px-6 py-16 md:py-24"
+        style={{ borderBottom: '1px solid var(--color-rule)', overflow: 'hidden' }}
+      >
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              marginBottom: 12,
+            }}
+          >
+            <div style={{ width: 18, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
+            <span
+              style={{
+                fontFamily: '"JetBrains Mono", monospace',
+                fontSize: '9px',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,37,64,0.45)',
+                fontWeight: 700,
+              }}
+            >
+              // transmission complete
+            </span>
+          </div>
+          <p
+            aria-hidden="true"
+            style={{
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: 'clamp(3rem, 8.5vw, 8rem)',
+              lineHeight: 0.9,
+              letterSpacing: '0.01em',
+              color: 'rgba(240,238,234,0.08)',
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            END TRANSMISSION
+          </p>
+        </m.div>
+      </div>
 
       {/* Upper section — tagline + nav */}
       <div

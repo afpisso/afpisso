@@ -13,10 +13,12 @@ import CyberBtn from './CyberBtn';
 
 
 const bootLines = [
-  'BYANDRESFE SYSTEM v2.6',
-  'Loading case files...',
-  'Initializing UX console...',
-  'Signal active.',
+  'AFPISSO.SYS v2.6 — ONLINE',
+  'MOUNTING: 7 case studies...',
+  'SCANNING: hud clarity protocols',
+  'LOADING: player decision trees',
+  'SIGNAL: 11yrs · 0 guesses left',
+  'SYSTEM READY.',
 ];
 
 function CountUp({ target, suffix = '' }) {
@@ -131,6 +133,32 @@ function BootSequence({ onComplete }) {
             </div>
           ))}
         </div>
+        {/* Progress bar — width synced to lines loaded / total */}
+        {lines.length > 0 && (
+          <div
+            aria-hidden="true"
+            style={{
+              marginTop: 20,
+              height: 1,
+              backgroundColor: 'rgba(255,37,64,0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                height: '100%',
+                backgroundColor: 'var(--color-accent)',
+                width: `${(lines.length / bootLines.length) * 100}%`,
+                transition: 'width 0.28s cubic-bezier(0.16,1,0.3,1)',
+                opacity: done ? 0 : 1,
+              }}
+            />
+          </div>
+        )}
         {/* Skip button — appears after first line */}
         {lines.length >= 1 && !done && (
           <m.button
@@ -171,14 +199,19 @@ function BootSequence({ onComplete }) {
 // Shape + particle cloud offset per section.
 // offsetX fraction of viewport: ±0.46 puts the cloud center at ~27%/73% of viewport,
 // squarely in the transparent zone created by the 62%→82% gradient in each section.
+// Semantic shape-per-section: the particle entity adapts to reflect the content it frames.
+// tknot53 = interlocked systems · lorenz  = emergent thinking · circuit = process
+// mobius  = design iteration    · vortex  = converging process · tknot32 = identity
+// dhelix  = transmission signal · scanline = CRT power-off (footer fallback)
 const SECTION_CONFIG = {
-  'home':      { shape: 'logo',  offsetX:  0.46 },
-  'cases':     { shape: 'cube',  offsetX:  0.46 },  // content left  → particles right
-  'what-i-do': { shape: 'torus', offsetX: -0.46 },  // content right → particles left
-  'how-i-work':{ shape: 'helix', offsetX:  0.46 },  // content left  → particles right
-  'notes':     { shape: 'wave',  offsetX: -0.46 },  // content right → particles left
-  'about':     { shape: 'logo',  offsetX:  0.46 },  // content left  → particles right
-  'contact':   { shape: 'logo',  offsetX: -0.46 },  // content right → particles left
+  'home':      { shape: 'logo',     offsetX:  0.46, spin: true  },  // AFP logo mark
+  'cases':     { shape: 'tknot53',  offsetX:  0.46, spin: true  },  // (5,3) knot — layered game systems
+  'what-i-do': { shape: 'mobius',   offsetX: -0.46, spin: true  },  // möbius loop — design iteration
+  'how-i-work':{ shape: 'vortex',   offsetX:  0.46, spin: true  },  // funnel — wide input → focused output
+  'notes':     { shape: 'lorenz',   offsetX: -0.46, spin: true  },  // chaos butterfly — emergent thinking
+  'about':     { shape: 'tknot32',  offsetX:  0.46, spin: true  },  // trefoil — three-lobed identity
+  'contact':   { shape: 'sphere',   offsetX: -0.46, spin: true  },  // sphere — open signal / contact point
+  'footer-tx': { shape: 'scanline', offsetX:  0.00, spin: false },  // CRT power-off — end transmission
 };
 
 function useMousePos() {
@@ -247,10 +280,11 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const { t } = useLang();
   const mouseRef = useMousePos();
-  const activeSection = useActiveSection(Object.keys(SECTION_CONFIG));
-  const sectionCfg    = SECTION_CONFIG[activeSection] ?? SECTION_CONFIG['home'];
-  const currentShape  = sectionCfg.shape;
+  const activeSection  = useActiveSection(Object.keys(SECTION_CONFIG));
+  const sectionCfg     = SECTION_CONFIG[activeSection] ?? SECTION_CONFIG['home'];
+  const currentShape   = sectionCfg.shape;
   const currentOffsetX = sectionCfg.offsetX;
+  const currentSpin    = sectionCfg.spin !== false;
 
   // Mobile detection + responsive geo size — both update on resize/orientation change
   useEffect(() => {
@@ -325,7 +359,7 @@ export default function Hero() {
             offsetX={geoOffsetX}
             offsetY={geoOffsetY}
             rotX={0.20}
-            spin={true}
+            spin={currentSpin}
             paused={false}
             particleCount={geoCount}
             mobileCanvas={isMobile}
@@ -404,15 +438,33 @@ export default function Hero() {
 
           {/* Subtitle */}
           <m.div
-            className="flex items-start gap-5 mb-6 md:mb-10"
+            className="mb-6 md:mb-10"
             initial={{ opacity: 0, y: 10 }}
             animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.72 }}
           >
             <div
-              aria-hidden="true"
-              style={{ width: '2px', minHeight: '100%', alignSelf: 'stretch', backgroundColor: 'var(--color-accent)', flexShrink: 0, marginTop: '4px' }}
-            />
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                marginBottom: 8,
+              }}
+            >
+              <div style={{ width: 14, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
+              <span
+                style={{
+                  fontFamily: '"JetBrains Mono", monospace',
+                  fontSize: '9px',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,37,64,0.45)',
+                  fontWeight: 700,
+                }}
+              >
+                // game ux/ui · ux lead
+              </span>
+            </div>
             <p style={{
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: 'clamp(13px, 1.5vw, 16px)',
@@ -470,13 +522,6 @@ export default function Hero() {
                   onClick={() => analytics.heroCta(t.hero.cta1)}
                 >
                   {t.hero.cta1}
-                </CyberBtn>
-                <CyberBtn
-                  href="/resume.pdf"
-                  target="_blank"
-                  onClick={() => { analytics.heroCta(t.hero.cta2); analytics.resumeDownload(); }}
-                >
-                  {t.hero.cta2}
                 </CyberBtn>
               </div>
             </m.div>

@@ -6,6 +6,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import CaseRail from '../components/CaseRail';
 import CaseTOC from '../components/CaseTOC';
+import CaseNavRail from '../components/CaseNavRail';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
@@ -353,6 +354,8 @@ export default function CasePage({ onMenuOpen }) {
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
+      {/* Ghost Rail (tablet) + Section Stamp (mobile) — hidden on xl+ where CaseTOC takes over */}
+      <CaseNavRail sections={tocSections} />
 
       <main>
         {/* Case header */}
@@ -362,6 +365,15 @@ export default function CasePage({ onMenuOpen }) {
         >
           {/* Strong blur layer — img filter on GPU, not backdrop-filter */}
           <HeroBlur slug={caseData.slug} />
+          {/* Committed red: diagonal wash at 30% opacity — each case page has color mass */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute', inset: 0, zIndex: 2,
+              background: 'linear-gradient(135deg, rgba(255,37,64,0.18) 0%, rgba(255,37,64,0.06) 40%, transparent 65%)',
+              pointerEvents: 'none',
+            }}
+          />
           <div className="absolute inset-0 grid-bg" aria-hidden="true" style={{ zIndex: 3, opacity: 0.45 }} />
           <div className="relative z-10 max-w-[1400px] mx-auto px-6" style={{ zIndex: 4 }}>
             {/* Breadcrumb */}
@@ -762,27 +774,78 @@ export default function CasePage({ onMenuOpen }) {
               <CaseTOC sections={tocSections} />
 
               {/* Navigation between cases */}
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <Link
-                  to={`/case/${prevCase.slug}`}
-                  className="p-3 transition-all duration-200"
-                  style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = RULE}
-                >
-                  <div className="sys-label mb-1">{t.casePage.prev}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{prevCase.title}</div>
-                </Link>
-                <Link
-                  to={`/case/${nextCase.slug}`}
-                  className="p-3 text-right transition-all duration-200"
-                  style={{ border: `1px solid ${RULE}`, textDecoration: 'none' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = RULE}
-                >
-                  <div className="sys-label mb-1">{t.casePage.next}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '11px', color: DIM }}>{nextCase.title}</div>
-                </Link>
+              <div className="mt-6 flex flex-col gap-px" style={{ borderTop: `1px solid ${RULE}` }}>
+                {[
+                  { c: prevCase, dir: 'prev', label: t.casePage.prev, arrow: '←', align: 'left' },
+                  { c: nextCase, dir: 'next', label: t.casePage.next, arrow: '→', align: 'right' },
+                ].map(({ c, dir, label, arrow, align }) => (
+                  <Link
+                    key={dir}
+                    to={`/case/${c.slug}`}
+                    className="group relative py-4 px-4 flex flex-col gap-1 transition-colors duration-200"
+                    style={{
+                      textDecoration: 'none',
+                      borderBottom: `1px solid ${RULE}`,
+                      alignItems: align === 'right' ? 'flex-end' : 'flex-start',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.025)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    {/* Direction label */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 5,
+                        flexDirection: align === 'right' ? 'row-reverse' : 'row',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: MONO,
+                          fontSize: '9px',
+                          letterSpacing: '0.16em',
+                          textTransform: 'uppercase',
+                          color: 'rgba(255,37,64,0.45)',
+                          fontWeight: 700,
+                        }}
+                      >
+                        {arrow}
+                      </span>
+                      <span className="sys-label" style={{ color: 'var(--color-fg-mute)' }}>{label}</span>
+                    </div>
+                    {/* Case ID */}
+                    <div
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: '9px',
+                        letterSpacing: '0.14em',
+                        color: 'rgba(255,37,64,0.4)',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {c.id}
+                    </div>
+                    {/* Case title */}
+                    <div
+                      style={{
+                        fontFamily: BEBAS,
+                        fontSize: 'clamp(1rem, 1.4vw, 1.2rem)',
+                        letterSpacing: '0.02em',
+                        lineHeight: 1.1,
+                        color: 'rgba(240,238,234,0.75)',
+                        textTransform: 'uppercase',
+                        textAlign: align,
+                        transition: 'color 0.2s',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.color = FG; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(240,238,234,0.75)'; }}
+                    >
+                      {c.title}
+                    </div>
+                  </Link>
+                ))}
               </div>
 
               {/* Related Field Notes */}

@@ -2,7 +2,21 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
 import SpotlightCard from './SpotlightCard';
+import { IconHUD, IconNetwork, IconLayers, IconEye, IconOnboard, IconLiveOps, IconFigma, IconUnreal, IconDoc } from './CyberIcons';
 import { m } from 'framer-motion';
+
+// SVG icon per module — thin-line cyberpunk aesthetic
+const MODULE_ICONS = {
+  'HUD Reviews':          IconHUD,
+  'UX Systems':           IconNetwork,
+  'UI Components & States': IconLayers,
+  'Accessibility Reviews': IconEye,
+  'Player Onboarding':    IconOnboard,
+  'LiveOps UX':           IconLiveOps,
+  'Figma Workflows':      IconFigma,
+  'UEFN Workflows':       IconUnreal,
+  'Documentation':        IconDoc,
+};
 
 function PrincipleRow({ p, i }) {
   const [hovered, setHovered] = useState(false);
@@ -88,17 +102,18 @@ const MODULE_GLYPHS = {
 
 function ModuleCard({ mod, i }) {
   const [hovered, setHovered] = useState(false);
-  const glyph = MODULE_GLYPHS[mod.label] || '◇';
+  const Icon = MODULE_ICONS[mod.label] || null;
   return (
     <SpotlightCard>
     <m.div
-      className="relative p-5 flex flex-col justify-between transition-all duration-200 cursor-default overflow-hidden"
+      className="relative p-5 flex flex-col gap-3 cursor-default overflow-hidden"
       style={{
         backgroundColor: hovered ? 'rgba(20,4,8,0.7)' : 'rgba(8,8,8,0.42)',
         minHeight: '90px',
         boxShadow: hovered
           ? 'inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 16px rgba(0,0,0,0.4)'
           : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+        transition: 'background-color 0.2s, box-shadow 0.2s',
       }}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -108,37 +123,37 @@ function ModuleCard({ mod, i }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Background glyph — decorative, large, faint */}
-      <div
-        aria-hidden="true"
-        className="absolute right-3 bottom-1 text-[38px] leading-none transition-all duration-300 pointer-events-none select-none"
-        style={{
-          color: hovered ? 'rgba(255,37,64,0.08)' : 'rgba(255,255,255,0.04)',
-          fontFamily: 'monospace',
-          transform: hovered ? 'scale(1.1)' : 'scale(1)',
-        }}
-      >
-        {glyph}
-      </div>
+      {/* Icon + Tag row */}
+      <div className="flex items-center justify-between">
+        {/* Icon */}
+        <div
+          style={{
+            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+            transition: 'color 0.2s',
+          }}
+        >
+          {Icon && <Icon size={18} />}
+        </div>
 
-      {/* Tag */}
-      <div
-        className="text-[10px] font-bold tracking-widest uppercase mb-3 transition-colors duration-200"
-        style={{
-          fontFamily: '"JetBrains Mono", monospace',
-          color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.5)',
-        }}
-      >
-        {mod.tag}
+        {/* Tag */}
+        <div
+          className="text-[9px] font-bold tracking-widest uppercase transition-colors duration-200"
+          style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+          }}
+        >
+          {mod.tag}
+        </div>
       </div>
 
       {/* Label */}
       <div
-        className="text-[12px] transition-colors duration-200"
+        className="text-[11px] transition-colors duration-200"
         style={{
           fontFamily: '"JetBrains Mono", monospace',
           color: hovered ? 'var(--color-fg)' : 'var(--color-fg-dim)',
-          lineHeight: 1.35,
+          lineHeight: 1.4,
           letterSpacing: '0.01em',
         }}
       >
@@ -160,7 +175,7 @@ export default function SystemsLab() {
         <div className="mb-16">
           <SectionHeading
             label={sl.label.split('/')[0].trim()}
-            title={sl.principlesLabel}
+            title={sl.sectionTitle}
             page="006"
           />
           <m.p

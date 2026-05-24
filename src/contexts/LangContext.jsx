@@ -37,6 +37,7 @@ const translations = {
     },
     whatIDo: {
       label: 'What I do',
+      sectionTitle: 'Three domains.\nOne constraint.',
       headline: 'Design across three domains.',
       items: [
         {
@@ -58,6 +59,7 @@ const translations = {
     },
     howIWork: {
       label: 'How I work',
+      sectionTitle: 'From hesitation\nto signal.',
       headline: 'From hesitation to signal.',
       body: 'Every project starts with a loop, a gap, and a signal. The process is systematic, not decorative.',
       steps: [
@@ -70,6 +72,7 @@ const translations = {
     },
     caseFiles: {
       label: 'Selected Work',
+      sectionTitle: 'Real problems.\nReal constraints.',
       headline: 'Case files.',
       descriptionShort: 'Each project below represents a real design problem. Some are NDA-safe, some are public case studies. The role and focus area describe where the actual design work happened.',
       description: 'Each project below represents a real design problem. Some are NDA-safe breakdowns, some are public case studies. The role and focus area describe where the actual design work happened.',
@@ -85,6 +88,7 @@ const translations = {
     },
     systemsLab: {
       label: 'Systems Lab / Process',
+      sectionTitle: 'Constraints,\nnot values.',
       principlesLabel: 'Design principles',
       modulesLabel: 'Active work modules',
       description: 'These are not aspirational values. They are practical constraints applied to every design decision. They exist because game UX fails in predictable ways, and these principles address the most common failure modes.',
@@ -109,6 +113,7 @@ const translations = {
     },
     fieldNotes: {
       label: 'Field Notes / Thinking',
+      sectionTitle: 'Applied.\nNot theoretical.',
       headline: 'Notes and frameworks.',
       description: 'Breakdowns, frameworks, and reference material built from working on real game UX problems. Not theory. Things that have been used or tested.',
       readNote: 'Read note',
@@ -116,6 +121,7 @@ const translations = {
     },
     about: {
       label: 'Operator Profile / About',
+      sectionTitle: 'Where clarity\nbreaks.',
       fullProfile: 'Full profile',
       headline: 'Where does clarity break?',
       bio1: 'I am Andres Felipe Pisso, a UX Lead and Game UX/UI Designer working across games, digital products, and interactive experiences.',
@@ -312,6 +318,7 @@ const translations = {
     },
     whatIDo: {
       label: 'Qué hago',
+      sectionTitle: 'Tres dominios.\nUna restricción.',
       headline: 'Diseño en tres dominios.',
       items: [
         {
@@ -333,6 +340,7 @@ const translations = {
     },
     howIWork: {
       label: 'Cómo trabajo',
+      sectionTitle: 'De la duda\na la señal.',
       headline: 'De la duda a la señal.',
       body: 'Cada proyecto empieza con un loop, una brecha y una señal. El proceso es sistemático, no decorativo.',
       steps: [
@@ -345,6 +353,7 @@ const translations = {
     },
     caseFiles: {
       label: 'Trabajo seleccionado',
+      sectionTitle: 'Problemas reales.\nRestricciones reales.',
       headline: 'Casos de estudio.',
       descriptionShort: 'Cada proyecto aquí representa un problema de diseño real. Algunos son análisis NDA-safe, otros son casos de estudio públicos. El rol y el área de enfoque describen dónde ocurrió el trabajo de diseño.',
       description: 'Cada proyecto aquí representa un problema de diseño real. Algunos son análisis NDA-safe, otros son casos de estudio públicos. El rol y el área de enfoque describen dónde ocurrió el trabajo de diseño.',
@@ -360,6 +369,7 @@ const translations = {
     },
     systemsLab: {
       label: 'Systems Lab / Proceso',
+      sectionTitle: 'Restricciones,\nno valores.',
       principlesLabel: 'Principios de diseño',
       modulesLabel: 'Módulos de trabajo activo',
       description: 'Estos no son valores aspiracionales. Son restricciones prácticas aplicadas a cada decisión de diseño. Existen porque el UX en juegos falla de maneras predecibles, y estos principios abordan los modos de falla más comunes.',
@@ -384,6 +394,7 @@ const translations = {
     },
     fieldNotes: {
       label: 'Field Notes / Pensamiento',
+      sectionTitle: 'Aplicado.\nNo teórico.',
       headline: 'Notas y frameworks.',
       description: 'Análisis, frameworks y material de referencia construido a partir de problemas reales de UX en juegos. No teoría. Cosas que han sido usadas o probadas.',
       readNote: 'Leer nota',
@@ -391,6 +402,7 @@ const translations = {
     },
     about: {
       label: 'Perfil del operador / Sobre mí',
+      sectionTitle: 'Donde falla\nla claridad.',
       fullProfile: 'Perfil completo',
       headline: '¿Dónde se rompe la claridad?',
       bio1: 'Soy Andres Felipe Pisso, UX Lead y Diseñador Game UX/UI. Trabajo en juegos, productos digitales y experiencias interactivas.',

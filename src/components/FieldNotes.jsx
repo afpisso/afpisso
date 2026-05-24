@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fieldNotes } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
 import SectionHeading from './SectionHeading';
+import CyberBtn from './CyberBtn';
 import { m } from 'framer-motion';
 
 // Normalised to the site's token system — no rainbow
@@ -22,7 +23,7 @@ export default function FieldNotes() {
   return (
     <section
       id="notes"
-      className="py-28 relative"
+      className="py-24 relative"
       style={{ borderTop: '1px solid var(--color-rule)' }}
     >
       {/* Mobile: solid bg */}
@@ -37,18 +38,31 @@ export default function FieldNotes() {
         <div className="mb-16">
           <SectionHeading
             label={t.fieldNotes.label.split('/')[0].trim()}
+            title={t.fieldNotes.sectionTitle}
             page="007"
           />
-          <m.p
-            className="text-base mt-10 max-w-md"
-            style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.7 }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            {t.fieldNotes.description}
-          </m.p>
+          <div className="flex items-start gap-12 mt-10 flex-wrap">
+            <m.p
+              className="text-base max-w-sm"
+              style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+            >
+              {t.fieldNotes.description}
+            </m.p>
+            <m.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.45 }}
+            >
+              <CyberBtn to="/notes" variant="ghost" size="sm">
+                {t.fieldNotes.viewAll}
+              </CyberBtn>
+            </m.div>
+          </div>
         </div>
 
         {/* Editorial list — each note is a horizontal row */}
