@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
@@ -144,6 +144,111 @@ function SectionLabel({ children }) {
       >
         {children}
       </h2>
+    </div>
+  );
+}
+
+// ── Game trailer player ───────────────────────────────────────────────────────
+// Shows the case thumbnail as a poster with a play button. On click, swaps to
+// a native <video controls> playing the full trailer inline. No autoplay —
+// the user controls when they watch and with audio.
+function TrailerPlayer({ src, poster, title, label }) {
+  const [playing, setPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const shouldReduce = useReducedMotion();
+
+  // Once playing state flips to true, the video node mounts — play it
+  const videoMounted = useCallback(node => {
+    if (node) {
+      videoRef.current = node;
+      node.play().catch(() => {});
+    }
+  }, []);
+
+  return (
+    <div>
+      {/* Eyebrow label */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+        <div style={{ width: 18, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+        <span style={{
+          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em',
+          color: ACCENT, textTransform: 'uppercase', fontWeight: 700,
+        }}>
+          {label || 'Game Trailer'}
+        </span>
+      </div>
+
+      {/* Player frame */}
+      <div
+        style={{
+          aspectRatio: '16/9', position: 'relative',
+          backgroundColor: '#000', border: `1px solid ${RULE}`,
+          overflow: 'hidden',
+        }}
+      >
+        {!playing ? (
+          <>
+            {/* Poster image */}
+            <img
+              src={poster}
+              alt=""
+              aria-hidden="true"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+
+            {/* Scrim — bottom-heavy for button legibility */}
+            <div aria-hidden="true" style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to top, rgba(8,8,8,0.72) 0%, rgba(8,8,8,0.28) 50%, transparent 100%)',
+              pointerEvents: 'none',
+            }} />
+
+            {/* Play button */}
+            <button
+              onClick={() => setPlaying(true)}
+              aria-label={`Play ${title} trailer`}
+              style={{
+                position: 'absolute', inset: 0,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 14, background: 'none', border: 'none', cursor: 'pointer',
+              }}
+            >
+              <m.div
+                whileHover={shouldReduce ? {} : { scale: 1.1 }}
+                whileTap={shouldReduce ? {} : { scale: 0.97 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  width: 72, height: 72, borderRadius: '50%',
+                  border: `1px solid rgba(255,37,64,0.55)`,
+                  backgroundColor: 'rgba(8,8,8,0.72)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                {/* Play triangle — offset right slightly so it looks optically centered */}
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" style={{ marginLeft: 3 }}>
+                  <polygon points="5,3 19,11 5,19" fill={ACCENT} />
+                </svg>
+              </m.div>
+              <span style={{
+                fontFamily: MONO, fontSize: '9px', letterSpacing: '0.22em',
+                textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)',
+              }}>
+                Watch trailer
+              </span>
+            </button>
+          </>
+        ) : (
+          <video
+            ref={videoMounted}
+            controls
+            poster={poster}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000' }}
+          >
+            <source src={src} type="video/mp4" />
+            Your browser doesn't support HTML5 video.
+          </video>
+        )}
+      </div>
     </div>
   );
 }
@@ -611,6 +716,22 @@ export default function CasePage({ onMenuOpen }) {
             </div>
           </div>
         </m.div>
+
+        {/* Game trailer — only when trailerSrc is defined */}
+        {caseData.trailerSrc && (
+          <m.div
+            className="max-w-[1400px] mx-auto px-6 py-8"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.38 }}
+          >
+            <TrailerPlayer
+              src={caseData.trailerSrc}
+              poster={`/thumbnails/${caseData.slug}.jpg`}
+              title={caseData.title}
+            />
+          </m.div>
+        )}
 
         {/* NDA notice if applicable */}
         {(caseData.visibility === 'nda-safe') && content?.quickFacts?.confidentiality && (

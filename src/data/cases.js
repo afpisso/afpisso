@@ -14,6 +14,7 @@ export const cases = [
     year: '2025 – 2026',
     featured: true,
     category: 'games',
+    trailerSrc: '/cases/orcs-must-die-by-the-blade/orcs-must-die-by-the-blade-Trailer.mp4',
     headline: 'Designing UX/UI Systems for a Complex VR Game',
     headlineEs: 'Diseño de sistemas UX/UI para un juego VR complejo',
     description:
@@ -367,6 +368,7 @@ export const cases = [
     relatedNotes: ['uefn-ux-lessons', 'game-accessibility-checklist', 'feedback-reduces-guesswork'],
     cta: 'View D&D: Zombie Dragon Adventure case',
     heroVideoSrc: '/cases/zombie-dragon-adventure/01-hero-gameplay.mp4',
+    trailerSrc: '/cases/zombie-dragon-adventure/zombie-dragon-adventure-Trailer.mp4',
     content: {
       summary:
         'D&D Zombie Dragon Adventure is an active UEFN experience built for the Fortnite ecosystem. I worked on the project as UX Lead during a 4-month production window, leading the UX/UI process with a team of three designers including myself. The challenge was not only creating screens for a UEFN game. It was helping players understand a complex adventure loop through clearer onboarding, reusable UI assets, structured flows and production-ready documentation. The experience combined a roguelike loop, class selection, lobby progression, stores, upgrades, D20 events, missions, inventory, stats, map systems and a final Dracolich boss encounter. The UX/UI work needed to bring clarity to that complexity while respecting the technical limitations of UEFN and the visual expectations of a recognizable IP.',
