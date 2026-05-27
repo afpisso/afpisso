@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
+import SignalTrigger from './SignalTrigger';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { m } from 'framer-motion';
@@ -41,16 +42,18 @@ export default function Footer() {
             <div style={{ width: 18, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
             <span
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: '9px',
+                fontFamily:    '"JetBrains Mono", monospace',
+                fontSize:      '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,37,64,0.45)',
-                fontWeight: 700,
+                color:         'rgba(255,37,64,0.45)',
+                fontWeight:    700,
               }}
             >
               // transmission complete
             </span>
+            {/* SIG-FOOTER — Terminal Echo hunt trigger */}
+            <SignalTrigger id="sig-footer" prominence="low" />
           </div>
           <p
             aria-hidden="true"

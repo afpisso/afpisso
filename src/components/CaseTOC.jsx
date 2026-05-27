@@ -44,28 +44,33 @@ export default function CaseTOC({ sections }) {
   // Progress 0→1 from first to last section
   const railProgress = sections.length > 1 ? activeIndex / (sections.length - 1) : 0;
 
-  // ── IntersectionObserver — picks topmost intersecting section ───────────────
+  // ── Scroll-based active section — reliable across fast scroll and Lenis ──────
+  // Strategy: on every scroll tick, iterate sections in DOM order and mark the
+  // LAST one whose top edge has crossed 40% of the viewport height. That section
+  // is definitionally "in view" and is what the reader is looking at.
+  //
+  // Why not IntersectionObserver: the previous Math.abs reduction incorrectly
+  // favoured sections that had just scrolled *above* the viewport (top ≈ −5px)
+  // over ones clearly in view (top ≈ +80px) because |−5| < |80|.
   useEffect(() => {
     if (!sections.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter(e => e.isIntersecting);
-        if (!visible.length) return;
-        const topmost = visible.reduce((a, b) =>
-          Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b
-        );
-        setActiveId(topmost.target.id);
-      },
-      { rootMargin: '0px 0px -55% 0px', threshold: 0 },
-    );
+    function update() {
+      const threshold = window.innerHeight * 0.4;
+      let currentId = sections[0].id;
+      for (const { id } of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= threshold) {
+          currentId = id;
+        }
+      }
+      setActiveId(currentId);
+    }
 
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    window.addEventListener('scroll', update, { passive: true });
+    update(); // initial paint
+    return () => window.removeEventListener('scroll', update);
   }, [sections]);
 
   // ── Scroll to section via Lenis ─────────────────────────────────────────────

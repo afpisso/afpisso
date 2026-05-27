@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fieldNotes } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
+import { useHunt } from '../contexts/HuntContext';
+import SignalTrigger from './SignalTrigger';
 import SectionHeading from './SectionHeading';
 import CyberBtn from './CyberBtn';
 import { m } from 'framer-motion';
@@ -19,6 +21,7 @@ const TYPE_GLYPHS = {
 export default function FieldNotes() {
   const [hovered, setHovered] = useState(null);
   const { t, lang } = useLang();
+  useHunt(); // keeps context subscription alive
 
   return (
     <section
@@ -198,9 +201,14 @@ export default function FieldNotes() {
                 {i === fieldNotes.length - 1 && (
                   <div className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
                 )}
+
               </m.article>
             );
           })}
+          {/* SIG-NOTES — medium prominence [!] after the full notes list */}
+          <div style={{ paddingTop: 4 }}>
+            <SignalTrigger id="sig-notes" prominence="medium" style={{ padding: '6px 0' }} />
+          </div>
         </div>
 
       </div>

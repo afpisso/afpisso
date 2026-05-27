@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
@@ -330,23 +330,28 @@ export default function CasePage({ onMenuOpen }) {
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const cp = t.casePage.sections;
 
-  // Build TOC dynamically — only sections present in this case's content
-  const tocSections = [
-    content?.summary                   && { id: 'cs-summary',      label: cp.executiveSummary },
-    content?.context                   && { id: 'cs-context',      label: cp.context },
-    content?.challenge                 && { id: 'cs-challenge',    label: cp.challenge },
-    content?.role                      && { id: 'cs-role',         label: cp.myRole },
-    content?.constraints?.length > 0   && { id: 'cs-constraints',  label: cp.constraints },
-    content?.approach?.length > 0      && { id: 'cs-approach',     label: cp.uxApproach },
+  // Build TOC dynamically — only sections present in this case's content.
+  // Memoized so the array reference is stable across renders; prevents the
+  // IntersectionObserver in CaseTOC / CaseNavRail from disconnecting and
+  // reconnecting on every render (which caused active-section tracking to fail).
+  const tocSections = useMemo(() => [
+    content?.summary                         && { id: 'cs-summary',      label: cp.executiveSummary },
+    content?.context                         && { id: 'cs-context',      label: cp.context },
+    content?.challenge                       && { id: 'cs-challenge',    label: cp.challenge },
+    content?.role                            && { id: 'cs-role',         label: cp.myRole },
+    content?.constraints?.length > 0         && { id: 'cs-constraints',  label: cp.constraints },
+    content?.playerLoop                      && { id: 'cs-player-loop',  label: cp.playerExperienceLoop || 'Player Experience Loop' },
+    content?.approach?.length > 0            && { id: 'cs-approach',     label: cp.uxApproach },
     content?.keyDecisions?.length > 0        && { id: 'cs-decisions',    label: cp.keyDecisions },
     content?.featuredSystems?.length > 0     && { id: 'cs-systems',      label: cp.featuredSystems || 'Featured systems' },
     content?.beforeAfter                     && { id: 'cs-before-after', label: cp.beforeAfter || 'Before and after' },
     content?.deliverables?.length > 0        && { id: 'cs-deliverables', label: cp.deliverables },
     content?.outcome                         && { id: 'cs-outcome',      label: cp.outcome },
+    content?.playtests                       && { id: 'cs-playtests',    label: cp.playtests || 'Research & Playtests' },
     content?.whatILearned                    && { id: 'cs-learned',      label: cp.whatILearned || 'What I learned' },
     content?.nextSteps                       && { id: 'cs-next',         label: cp.nextSteps },
     whatThisShows                            && { id: 'cs-shows',        label: cp.whatThisShows || 'What this shows' },
-  ].filter(Boolean);
+  ].filter(Boolean), [content, whatThisShows, cp]);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
@@ -480,9 +485,24 @@ export default function CasePage({ onMenuOpen }) {
           </div>
         </section>
 
-        {/* Hero image */}
+        {/* Hero image or video */}
         <div className="max-w-[1400px] mx-auto px-6 py-8">
-          <ImagePlaceholder label={`${caseData.title} — hero image`} aspect="16/6" src={`/cases/${caseData.slug}/hero.jpg`} alt={`${caseData.title} — Game UX/UI case study hero image`} />
+          {caseData?.heroVideoSrc ? (
+            <div style={{ aspectRatio: '16/6', overflow: 'hidden', position: 'relative', border: `1px solid ${RULE}`, backgroundColor: '#000' }}>
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                aria-label={`${caseData.title} — gameplay footage`}
+              >
+                <source src={caseData.heroVideoSrc} type="video/mp4" />
+              </video>
+            </div>
+          ) : (
+            <ImagePlaceholder label={`${caseData.title} — hero image`} aspect="16/6" src={`/cases/${caseData.slug}/hero.jpg`} alt={`${caseData.title} — Game UX/UI case study hero image`} />
+          )}
         </div>
 
         {/* NDA notice if applicable */}
@@ -610,6 +630,66 @@ export default function CasePage({ onMenuOpen }) {
                       </li>
                     ))}
                   </ul>
+                </m.section>
+              )}
+
+              {/* Player Experience Loop */}
+              {content?.playerLoop && (
+                <m.section
+                  id="cs-player-loop"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{cp.playerExperienceLoop || 'Player Experience Loop'}</SectionLabel>
+                  {content.playerLoop.intro && (
+                    <p className="mb-8" style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '600px' }}>
+                      {content.playerLoop.intro}
+                    </p>
+                  )}
+                  {content.playerLoop.steps?.length > 0 && (
+                    <div className="mb-10">
+                      {content.playerLoop.steps.map((step, i) => (
+                        <m.div
+                          key={i}
+                          className="flex gap-5 items-start py-4 border-t"
+                          style={{ borderColor: RULE }}
+                          initial={{ opacity: 0, x: -12 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: '-60px' }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                        >
+                          <span style={{ fontFamily: MONO, fontSize: '10px', color: ACCENT, letterSpacing: '0.16em', flexShrink: 0, paddingTop: '3px', minWidth: 28, fontWeight: 700 }}>
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <div>
+                            <h3 className="uppercase mb-1" style={{ fontFamily: BEBAS, fontSize: '1.25rem', color: FG, letterSpacing: '0.03em', lineHeight: 1 }}>
+                              {step.label}
+                            </h3>
+                            <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{step.desc}</p>
+                          </div>
+                        </m.div>
+                      ))}
+                    </div>
+                  )}
+                  {content.playerLoop.asset && (
+                    <>
+                      <ImagePlaceholder
+                        label={content.playerLoop.assetCaption || 'Player loop diagram'}
+                        aspect="16/7"
+                        src={content.playerLoop.asset}
+                        alt={content.playerLoop.assetAlt}
+                      />
+                      {content.playerLoop.assetCaption && (
+                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                          {content.playerLoop.assetCaption}
+                        </p>
+                      )}
+                    </>
+                  )}
                 </m.section>
               )}
 
@@ -823,6 +903,22 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabel>{t.casePage.sections.outcome}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.outcome}</p>
+                </m.section>
+              )}
+
+              {/* Research, Playtests and Feedback */}
+              {content?.playtests && (
+                <m.section
+                  id="cs-playtests"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>{cp.playtests || 'Research, Playtests and Feedback'}</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>{content.playtests}</p>
                 </m.section>
               )}
 

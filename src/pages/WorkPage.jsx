@@ -9,6 +9,7 @@ import SectionTag from '../components/SectionTag';
 import { StatusDiamond } from '../components/CyberIcons';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
+import SignalTrigger from '../components/SignalTrigger';
 import { m, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
@@ -513,6 +514,11 @@ export default function WorkPage({ onMenuOpen }) {
               {visible.length > 0 && (
                 <m.div layout className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
               )}
+
+              {/* SIG-WORK — also discoverable from the full /work index */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                <SignalTrigger id="sig-work" prominence="medium" style={{ padding: '6px 0' }} />
+              </div>
             </div>
 
             {visible.length === 0 && (

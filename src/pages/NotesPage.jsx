@@ -7,6 +7,7 @@ import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
+import SignalTrigger from '../components/SignalTrigger';
 import { m } from 'framer-motion';
 
 const TYPE_GLYPHS = {
@@ -248,6 +249,11 @@ export default function NotesPage({ onMenuOpen }) {
                   </m.article>
                 );
               })}
+
+              {/* SIG-NOTES — also discoverable from the full /notes index */}
+              <div style={{ paddingTop: 4 }}>
+                <SignalTrigger id="sig-notes" prominence="medium" style={{ padding: '6px 0' }} />
+              </div>
             </div>
           </div>
         </section>

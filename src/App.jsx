@@ -4,6 +4,8 @@ import { MotionConfig, m, AnimatePresence, animate } from 'framer-motion';
 import './index.css';
 import { LangProvider } from './contexts/LangContext';
 import { LenisProvider, useLenis } from './contexts/LenisContext';
+import { HuntProvider } from './contexts/HuntContext';
+import HuntHUD from './components/HuntHUD';
 import { usePageMeta } from './hooks/usePageMeta';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -25,12 +27,13 @@ const Cursor            = lazy(() => import('./components/Cursor'));
 const Grain             = lazy(() => import('./components/Grain'));
 
 // Route-level code splitting — pages load only when visited
-const CasePage  = lazy(() => import('./pages/CasePage'));
-const WorkPage  = lazy(() => import('./pages/WorkPage'));
-const AboutPage = lazy(() => import('./pages/AboutPage'));
-const ResumePage = lazy(() => import('./pages/ResumePage'));
-const NotesPage = lazy(() => import('./pages/NotesPage'));
-const NotePage  = lazy(() => import('./pages/NotePage'));
+const CasePage        = lazy(() => import('./pages/CasePage'));
+const WorkPage        = lazy(() => import('./pages/WorkPage'));
+const AboutPage       = lazy(() => import('./pages/AboutPage'));
+const ResumePage      = lazy(() => import('./pages/ResumePage'));
+const NotesPage       = lazy(() => import('./pages/NotesPage'));
+const NotePage        = lazy(() => import('./pages/NotePage'));
+const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 
 // Easing
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -190,7 +193,8 @@ function AppRoutes() {
               <Route path="/resume"        element={<ResumePage   onMenuOpen={open} />} />
               <Route path="/notes"         element={<NotesPage    onMenuOpen={open} />} />
               <Route path="/notes/:slug"   element={<NotePage     onMenuOpen={open} />} />
-              <Route path="/case/:slug"    element={<CasePage     onMenuOpen={open} />} />
+              <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
+              <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
               {/* Legacy routes */}
               <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
               <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />
@@ -208,6 +212,9 @@ function AppRoutes() {
         <Cursor />
         <Grain />
       </Suspense>
+
+      {/* Signal Hunt HUD — invisible until first signal found */}
+      <HuntHUD />
 
       {/* Brand micro-flash — imperatively animated on route change */}
       <div
@@ -228,6 +235,15 @@ function AppRoutes() {
 
 // ── Root ───────────────────────────────────────────────────────────────────────
 export default function App() {
+  // Console hint — visible in browser devtools, thematic breadcrumb
+  useEffect(() => {
+    console.log(
+      '%c// AFPISSO.SYS — 6 SIGNALS ACTIVE\n// explore the system. some layers are not obvious.',
+      'color:rgba(255,37,64,0.55);font-family:monospace;font-size:11px;letter-spacing:2px;line-height:1.8',
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     // reducedMotion="user" makes every m.* component respect the OS
     // prefers-reduced-motion setting automatically — no per-component
@@ -236,7 +252,9 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <LangProvider>
         <LenisProvider>
-          <AppRoutes />
+          <HuntProvider>
+            <AppRoutes />
+          </HuntProvider>
         </LenisProvider>
       </LangProvider>
     </MotionConfig>

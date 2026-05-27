@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
+import { useHunt } from '../contexts/HuntContext';
+import SignalTrigger from '../components/SignalTrigger';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -33,6 +35,20 @@ export default function AboutPage({ onMenuOpen }) {
   const photoRef = useRef(null);
   const photoMouseRef = useRef({ x: -1, y: -1 });
   const [photoHovered, setPhotoHovered] = useState(false);
+  const { acquireSignal } = useHunt();
+
+  // SIG-ABOUT: triple-click on the core question fires the signal (mirrors About.jsx)
+  const cqClickCount = useRef(0);
+  const cqClickTimer = useRef(null);
+  function handleCoreQuestionClick() {
+    cqClickCount.current++;
+    clearTimeout(cqClickTimer.current);
+    cqClickTimer.current = setTimeout(() => { cqClickCount.current = 0; }, 700);
+    if (cqClickCount.current >= 3) {
+      acquireSignal('sig-about');
+      cqClickCount.current = 0;
+    }
+  }
 
   const { scrollYProgress: photoScroll } = useScroll({
     target: photoRef,
@@ -140,19 +156,24 @@ export default function AboutPage({ onMenuOpen }) {
                 {/* Core question */}
                 <m.div
                   className="p-6 relative mb-8"
-                  style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+                  style={{ border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', cursor: 'default', userSelect: 'none' }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={handleCoreQuestionClick}
                 >
                   <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
                   <p className="mb-3" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                     {about.coreQuestionLabel}
                   </p>
-                  <p className="font-black uppercase" style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', fontSize: '24px', lineHeight: 1.2 }}>
-                    {about.coreQuestion}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <p className="font-black uppercase" style={{ fontFamily: '"Bebas Neue", sans-serif', color: 'var(--color-fg)', fontSize: '24px', lineHeight: 1.2 }}>
+                      {about.coreQuestion}
+                    </p>
+                    {/* SIG-ABOUT — also discoverable from /about page */}
+                    <SignalTrigger id="sig-about" prominence="low" />
+                  </div>
                 </m.div>
 
                 <m.div

@@ -41,6 +41,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
 import { LangProvider } from './contexts/LangContext.jsx'
+import { HuntProvider } from './contexts/HuntContext.jsx'
 
 // Nav + Footer — always visible, include for internal link discovery
 import Nav     from './components/Nav.jsx'
@@ -92,7 +93,9 @@ export function render(url) {
   return renderToStaticMarkup(
     <StaticRouter location={url}>
       <LangProvider>
-        <AppSSR />
+        <HuntProvider>
+          <AppSSR />
+        </HuntProvider>
       </LangProvider>
     </StaticRouter>
   )

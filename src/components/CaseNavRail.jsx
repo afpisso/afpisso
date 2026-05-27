@@ -51,31 +51,32 @@ function chamferClip(n) {
   return `polygon(0 0, calc(100% - ${n}px) 0, 100% ${n}px, 100% 100%, ${n}px 100%, 0 calc(100% - ${n}px))`;
 }
 
-// ── Shared IntersectionObserver hook ─────────────────────────────────────────
+// ── Shared scroll-based active-section hook ───────────────────────────────────
+// Same logic as CaseTOC: iterate sections in DOM order on every scroll tick,
+// keep updating currentId as long as a section's top edge is above 40% of the
+// viewport. The last match is the section the reader is actually viewing.
 function useActiveSectionId(sections) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? null);
 
   useEffect(() => {
     if (!sections.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter(e => e.isIntersecting);
-        if (!visible.length) return;
-        const topmost = visible.reduce((a, b) =>
-          Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b
-        );
-        setActiveId(topmost.target.id);
-      },
-      { rootMargin: '0px 0px -55% 0px', threshold: 0 },
-    );
+    function update() {
+      const threshold = window.innerHeight * 0.4;
+      let currentId = sections[0].id;
+      for (const { id } of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= threshold) {
+          currentId = id;
+        }
+      }
+      setActiveId(currentId);
+    }
 
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    window.addEventListener('scroll', update, { passive: true });
+    update(); // initial paint
+    return () => window.removeEventListener('scroll', update);
   }, [sections]);
 
   return [activeId, setActiveId];

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import SignalTrigger from './SignalTrigger';
 import { analytics } from '../utils/analytics';
 import ClientLogos from './ClientLogos';
 import GeometryGrid from './GeometryGrid';
@@ -559,6 +560,17 @@ export default function Hero() {
           </div>
 
         </m.div>
+
+        {/* SIG-HERO — Grid Anomaly hunt trigger.
+            Opacity 0.04 at rest, 0.28 on hover. Cursor becomes crosshair.
+            Positioned at bottom-right, overlaps the corner mark area.
+            aria-hidden + tabIndex=-1 so it never appears in the a11y tree or tab order. */}
+        {/* SIG-HERO — high prominence (tutorial signal, intentionally obvious).
+            Pulsing [!] near the corner mark. Teaches players the mechanic. */}
+        <div style={{ position: 'absolute', bottom: 88, right: 14, zIndex: 5 }}>
+          <SignalTrigger id="sig-hero" prominence="high" />
+        </div>
+
       </section>
 
       {/* Stats strip — outside hero section so it doesn't push CTAs below the fold */}

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
+import { useHunt } from '../contexts/HuntContext';
+import SignalTrigger from './SignalTrigger';
 import SectionHeading from './SectionHeading';
 import { StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
@@ -307,6 +309,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
 // ── Main section ──────────────────────────────────────────────────────────────
 export default function CaseFiles() {
   const { t } = useLang();
+  useHunt(); // needed to keep context subscription alive in this subtree
   const [hovered, setHovered] = useState(null);
 
   const VISIBILITY_ORDER = { public: 0, 'nda-safe': 1, 'password-protected': 2, 'coming-soon': 3, legacy: 4 };
@@ -372,6 +375,11 @@ export default function CaseFiles() {
             ))}
             {/* Bottom border */}
             <div className="h-[1px]" style={{ backgroundColor: 'var(--color-rule)' }} />
+
+            {/* SIG-WORK — medium prominence [!] after the public record ends */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+              <SignalTrigger id="sig-work" prominence="medium" style={{ padding: '6px 0' }} />
+            </div>
           </div>
 
 

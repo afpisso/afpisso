@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
+import { useHunt } from '../contexts/HuntContext';
 import PhotoGridOverlay from './PhotoGridOverlay';
 import SectionHeading from './SectionHeading';
 import { m, useTransform, useScroll } from 'framer-motion';
@@ -11,6 +12,21 @@ export default function About() {
   const [photoHovered, setPhotoHovered] = useState(false);
   const { t } = useLang();
   const about = t.about;
+  const { acquireSignal } = useHunt();
+
+  // SIG-ABOUT: triple-click on the core question fires the signal.
+  // No visual hint — either you try it or you don't.
+  const cqClickCount = useRef(0);
+  const cqClickTimer = useRef(null);
+  function handleCoreQuestionClick() {
+    cqClickCount.current++;
+    clearTimeout(cqClickTimer.current);
+    cqClickTimer.current = setTimeout(() => { cqClickCount.current = 0; }, 700);
+    if (cqClickCount.current >= 3) {
+      acquireSignal('sig-about');
+      cqClickCount.current = 0;
+    }
+  }
 
   const { scrollYProgress: photoScroll } = useScroll({
     target: photoRef,
@@ -69,12 +85,15 @@ export default function About() {
             </span>
           </div>
           <p
+            onClick={handleCoreQuestionClick}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
               fontSize: 'clamp(2.8rem, 10vw, 9rem)',
               lineHeight: 0.92,
               letterSpacing: '0.01em',
               color: 'var(--color-fg)',
+              cursor: 'default',
+              userSelect: 'none',
             }}
           >
             Where is the<br />
