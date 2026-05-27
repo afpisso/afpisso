@@ -274,31 +274,68 @@ export default function Nav({ onMenuOpen }) {
             </m.nav>
 
           ) : (
-            // ── Floating glass pill ─────────────────────────────────────────
-            // Glass: filter on nav element itself (fixed/sticky = safe for backdrop-filter).
-            // Pill is pointer-events-auto; the outer shell remains pointer-events-none.
-            <m.nav
+            // ── Floating glass pill — outer glow ring architecture ──────────
+            // Wrapper: holds ambient base glow + two directional outer rings +
+            // the glass pill itself. Rings have *static* box-shadows; only their
+            // opacity is spring-animated (compositor-only, no per-frame paint).
+            // Inner radial overlays stay for the subtle fill tint inside.
+            <m.div
               key="pill"
-              aria-label="Site navigation"
-              className="pointer-events-auto flex items-center gap-0.5"
-              style={{
-                marginTop: 10,
-                borderRadius: 9999,
-                padding: '6px 8px',
-                background: 'rgba(8,8,8,0.52)',
-                backdropFilter: 'blur(22px) saturate(160%)',
-                WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
-                // Required so absolutely-positioned overlays clip to the pill shape
-                position: 'relative',
-                overflow: 'hidden',
-              }}
+              className="pointer-events-none"
+              style={{ position: 'relative', marginTop: 10 }}
               initial={{ y: -20, opacity: 0, scale: 0.90 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: -12, opacity: 0, scale: 0.94, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
               transition={{ duration: 0.32, ease: EASE_OUT }}
             >
+              {/* Ambient base — always-on soft halo at rest */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', inset: -5, borderRadius: 9999,
+                  boxShadow: '0 0 22px 6px rgba(255,37,64,0.09)',
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Top rim — scroll down: light blooms from above the pill */}
+              <m.div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', inset: -6, borderRadius: 9999,
+                  boxShadow: '0 -8px 28px 6px rgba(255,37,64,0.38)',
+                  opacity: topGlow,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Bottom rim — scroll up: light blooms from below the pill */}
+              <m.div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', inset: -6, borderRadius: 9999,
+                  boxShadow: '0 8px 28px 6px rgba(255,37,64,0.38)',
+                  opacity: bottomGlow,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Glass pill — z-index:1 keeps it above the glow rings */}
+              <nav
+                aria-label="Site navigation"
+                className="pointer-events-auto flex items-center gap-0.5"
+                style={{
+                  position: 'relative', zIndex: 1,
+                  borderRadius: 9999,
+                  padding: '6px 8px',
+                  background: 'rgba(8,8,8,0.52)',
+                  backdropFilter: 'blur(22px) saturate(160%)',
+                  WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
+                  overflow: 'hidden', // clips inner gradient overlays to pill shape
+                }}
+              >
               {/* Logo mark */}
               <Link
                 to="/"
@@ -398,15 +435,12 @@ export default function Nav({ onMenuOpen }) {
                 {t.nav.menu}
               </button>
 
-              {/* ── Directional glow overlays ───────────────────────────────
-                   Static radial gradients; only their opacity animates.
-                   top-glow   → scroll down (pill pushed from above)
-                   bottom-glow → scroll up  (pill pushed from below)     */}
+              {/* ── Inner fill overlays — reinforce direction inside the pill */}
               <m.div
                 aria-hidden="true"
                 style={{
                   position: 'absolute', inset: 0,
-                  background: 'radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255,37,64,0.32) 0%, transparent 100%)',
+                  background: 'radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255,37,64,0.22) 0%, transparent 100%)',
                   opacity: topGlow,
                   pointerEvents: 'none',
                   borderRadius: 9999,
@@ -416,13 +450,14 @@ export default function Nav({ onMenuOpen }) {
                 aria-hidden="true"
                 style={{
                   position: 'absolute', inset: 0,
-                  background: 'radial-gradient(ellipse 90% 55% at 50% 108%, rgba(255,37,64,0.32) 0%, transparent 100%)',
+                  background: 'radial-gradient(ellipse 90% 55% at 50% 108%, rgba(255,37,64,0.22) 0%, transparent 100%)',
                   opacity: bottomGlow,
                   pointerEvents: 'none',
                   borderRadius: 9999,
                 }}
               />
-            </m.nav>
+              </nav>
+            </m.div>
           )}
         </AnimatePresence>
       </div>
