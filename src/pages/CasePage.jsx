@@ -541,6 +541,7 @@ export default function CasePage({ onMenuOpen }) {
             {caseData?.heroVideoSrc ? (
               <video
                 autoPlay muted loop playsInline
+                poster={`/thumbnails/${caseData.slug}.jpg`}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 aria-label={`${caseData.title} — gameplay footage`}
               >
