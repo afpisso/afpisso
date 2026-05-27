@@ -256,12 +256,14 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
                 {caseData.role}
               </span>
               <span className="sys-label opacity-40" aria-hidden>·</span>
-              <span
-                className="sys-label transition-colors duration-200"
-                style={{ color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)' }}
-              >
-                {caseData.year}
-              </span>
+              {caseData.year && (
+                <span
+                  className="sys-label transition-colors duration-200"
+                  style={{ color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)' }}
+                >
+                  {caseData.year}
+                </span>
+              )}
               {caseData.tags.slice(0, 3).map(tag => (
                 <span
                   key={tag}

@@ -1386,7 +1386,7 @@ export const cases = [
     status: 'LEGACY — AWARD',
     visibility: 'legacy',
     statusColor: 'default',
-    year: '2015',
+    year: null,
     featured: false,
     category: 'games',
     headline: 'Designing an educational web game for Diversoft that earned industry recognition.',

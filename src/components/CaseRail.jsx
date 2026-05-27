@@ -441,7 +441,7 @@ export default function CaseRail({ currentSlug }) {
                     color:         'var(--color-accent)',
                   }}
                 >
-                  {activeItem.role} · {activeItem.year}
+                  {activeItem.role}{activeItem.year ? ` · ${activeItem.year}` : ''}
                 </div>
 
                 {/* Title */}

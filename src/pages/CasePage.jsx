@@ -469,10 +469,12 @@ export default function CasePage({ onMenuOpen }) {
                 <div className="sys-label mb-1">{t.casePage.metaPlatform}</div>
                 <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
               </div>
-              <div>
-                <div className="sys-label mb-1">{t.casePage.metaYear}</div>
-                <div style={{ fontFamily: MONO, fontSize: '12px', color: FG, fontVariantNumeric: 'tabular-nums' }}>{caseData.year}</div>
-              </div>
+              {caseData.year && (
+                <div>
+                  <div className="sys-label mb-1">{t.casePage.metaYear}</div>
+                  <div style={{ fontFamily: MONO, fontSize: '12px', color: FG, fontVariantNumeric: 'tabular-nums' }}>{caseData.year}</div>
+                </div>
+              )}
               <ul className="flex flex-wrap gap-1.5 ml-auto" aria-label="Tags">
                 {caseData.tags.map(tag => (
                   <li key={tag} className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
