@@ -898,6 +898,7 @@ export const cases = [
     year: '2025',
     featured: true,
     category: 'games',
+    trailerSrc: '/cases/raptor-heist/raptor-heist-Trailer.mp4',
     headline: 'Designing the UX/UI layer for a heist roguelike inside the Havoc Hotel universe.',
     headlineEs: 'Diseño de la capa UX/UI para un roguelike de atraco en el universo de Havoc Hotel.',
     description:
