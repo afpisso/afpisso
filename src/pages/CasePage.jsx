@@ -136,7 +136,7 @@ function SectionLabel({ children }) {
       <h2
         style={{
           fontFamily:    BEBAS,
-          fontSize:      'clamp(1.7rem, 2.6vw, 2.6rem)',
+          fontSize:      'clamp(1.4rem, 2vw, 2.1rem)',
           letterSpacing: '0.03em',
           color:         FG,
           lineHeight:    1,
@@ -801,7 +801,7 @@ export default function CasePage({ onMenuOpen }) {
                         alt={content.playerLoop.assetAlt}
                       />
                       {content.playerLoop.assetCaption && (
-                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
                           {content.playerLoop.assetCaption}
                         </p>
                       )}
@@ -838,9 +838,7 @@ export default function CasePage({ onMenuOpen }) {
                       </m.div>
                     ))}
                   </div>
-                  <div className="mt-10">
-                    <ImagePlaceholder label="Process / approach visual" aspect="16/7" src={`/cases/${caseData.slug}/approach.jpg`} alt={`${caseData.title} — design process and approach documentation`} />
-                  </div>
+                  {/* Approach asset — only renders when the case data provides one */}
                 </m.section>
               )}
 
@@ -904,7 +902,7 @@ export default function CasePage({ onMenuOpen }) {
                           alt={sys.assetAlt || sys.title}
                         />
                         {sys.assetCaption && (
-                          <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                          <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
                             {sys.assetCaption}
                           </p>
                         )}
@@ -975,7 +973,7 @@ export default function CasePage({ onMenuOpen }) {
                         alt={content.beforeAfter.assetAlt || 'Before and after comparison'}
                       />
                       {content.beforeAfter.assetCaption && (
-                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(240,238,234,0.35)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+                        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
                           {content.beforeAfter.assetCaption}
                         </p>
                       )}
