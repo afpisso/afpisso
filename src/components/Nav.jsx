@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
@@ -7,7 +7,7 @@ import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
-import { m, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
@@ -75,12 +75,49 @@ export default function Nav({ onMenuOpen }) {
   const { t, lang, toggleLang } = useLang();
   const lenisRef = useLenis();
 
+  // ── Directional glow on the pill ──────────────────────────────────────────
+  // Raw motion values set on each scroll event; springs smooth the visual.
+  // Technique: static gradient overlays inside the pill — only `opacity` moves
+  // (compositor-only, no paint). Emil: transform + opacity only.
+  const topGlowMV    = useMotionValue(0);
+  const bottomGlowMV = useMotionValue(0);
+  const topGlow    = useSpring(topGlowMV,    { stiffness: 48, damping: 20 });
+  const bottomGlow = useSpring(bottomGlowMV, { stiffness: 48, damping: 20 });
+  const decayTimer = useRef(null);
+
   useEffect(() => {
-    // Trigger pill after 80px — gives the hero enough room before switching
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    let prevScrollY = window.scrollY;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const delta    = currentY - prevScrollY;
+      prevScrollY    = currentY;
+
+      // Pill visibility threshold
+      setScrolled(currentY > 80);
+
+      // Directional glow — ignore micro-jitter below 2px
+      clearTimeout(decayTimer.current);
+      if (delta > 2) {
+        topGlowMV.set(1);
+        bottomGlowMV.set(0);
+      } else if (delta < -2) {
+        topGlowMV.set(0);
+        bottomGlowMV.set(1);
+      }
+      // Decay both to 0 shortly after scroll stops
+      decayTimer.current = setTimeout(() => {
+        topGlowMV.set(0);
+        bottomGlowMV.set(0);
+      }, 120);
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(decayTimer.current);
+    };
+  }, [topGlowMV, bottomGlowMV]);
 
   return (
     <>
@@ -253,6 +290,9 @@ export default function Nav({ onMenuOpen }) {
                 WebkitBackdropFilter: 'blur(22px) saturate(160%)',
                 border: '1px solid rgba(255,255,255,0.07)',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
+                // Required so absolutely-positioned overlays clip to the pill shape
+                position: 'relative',
+                overflow: 'hidden',
               }}
               initial={{ y: -20, opacity: 0, scale: 0.90 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -357,6 +397,31 @@ export default function Nav({ onMenuOpen }) {
               >
                 {t.nav.menu}
               </button>
+
+              {/* ── Directional glow overlays ───────────────────────────────
+                   Static radial gradients; only their opacity animates.
+                   top-glow   → scroll down (pill pushed from above)
+                   bottom-glow → scroll up  (pill pushed from below)     */}
+              <m.div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255,37,64,0.32) 0%, transparent 100%)',
+                  opacity: topGlow,
+                  pointerEvents: 'none',
+                  borderRadius: 9999,
+                }}
+              />
+              <m.div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'radial-gradient(ellipse 90% 55% at 50% 108%, rgba(255,37,64,0.32) 0%, transparent 100%)',
+                  opacity: bottomGlow,
+                  pointerEvents: 'none',
+                  borderRadius: 9999,
+                }}
+              />
             </m.nav>
           )}
         </AnimatePresence>
