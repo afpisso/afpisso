@@ -148,6 +148,34 @@ function SectionLabel({ children }) {
   );
 }
 
+// ── Level-1 section heading (recruiter-scan tier) ────────────────────────────
+// Used only for Summary, Challenge, and Outcome — the three sections that carry
+// strategic weight. Larger scale, longer eyebrow line, marginally more air.
+function SectionLabelPrimary({ children }) {
+  return (
+    <div className="mb-10">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <div style={{ width: 28, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+        <span style={{
+          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em',
+          color: ACCENT, textTransform: 'uppercase', fontWeight: 700,
+        }}>
+          //
+        </span>
+      </div>
+      <h2 style={{
+        fontFamily: BEBAS,
+        fontSize: 'clamp(2rem, 3.2vw, 3.4rem)',
+        letterSpacing: '0.03em',
+        color: FG,
+        lineHeight: 1,
+      }}>
+        {children}
+      </h2>
+    </div>
+  );
+}
+
 function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
   const hasRealImage = Boolean(src)
   return (
@@ -487,25 +515,101 @@ export default function CasePage({ onMenuOpen }) {
           </div>
         </section>
 
-        {/* Hero image or video */}
-        <div className="max-w-[1400px] mx-auto px-6 py-8">
-          {caseData?.heroVideoSrc ? (
-            <div style={{ aspectRatio: '16/6', overflow: 'hidden', position: 'relative', border: `1px solid ${RULE}`, backgroundColor: '#000' }}>
+        {/* ── Hero asset — cinematic full-bleed ────────────────────────────────
+             Full viewport width, no lateral padding. Scale-settle entrance:
+             starts at 1.035 (slightly zoomed) → 1.0 (settled) over 750ms with
+             expo-out curve. Vignette + bottom dissolve prevent harsh edges.    */}
+        <m.div
+          className="relative overflow-hidden"
+          style={{ borderBottom: `1px solid ${RULE}` }}
+          initial={{ opacity: 0, scale: 1.035 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
+        >
+          {/* Red accent line — solid → transparent gradient */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+              background: `linear-gradient(to right, ${ACCENT} 0%, rgba(255,37,64,0.35) 55%, transparent 100%)`,
+              zIndex: 10, pointerEvents: 'none',
+            }}
+          />
+
+          {/* Media — 21:9 CinemaScope */}
+          <div style={{ aspectRatio: '21/9', position: 'relative', backgroundColor: '#000' }}>
+            {caseData?.heroVideoSrc ? (
               <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                autoPlay muted loop playsInline
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 aria-label={`${caseData.title} — gameplay footage`}
               >
                 <source src={caseData.heroVideoSrc} type="video/mp4" />
               </video>
+            ) : (
+              <img
+                src={`/cases/${caseData.slug}/hero.jpg`}
+                alt={`${caseData.title} hero`}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                onError={e => { e.currentTarget.style.display = 'none'; }}
+              />
+            )}
+
+            {/* Radial vignette — darkens edges, keeps center open */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'radial-gradient(ellipse at 50% 50%, transparent 42%, rgba(8,8,8,0.58) 100%)',
+              }}
+            />
+
+            {/* Bottom dissolve — asset fades into content below */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '38%',
+                zIndex: 3, pointerEvents: 'none',
+                background: 'linear-gradient(to bottom, transparent, rgba(8,8,8,0.75))',
+              }}
+            />
+
+            {/* Corner frame brackets */}
+            {[['4px', '4px', 'top', 'left'], ['4px', 'auto', 'top', 'right'], ['auto', '4px', 'bottom', 'left'], ['auto', 'auto', 'bottom', 'right']].map(([t2, r2, v, h]) => (
+              <div
+                key={`${v}-${h}`}
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  top: v === 'top' ? 16 : 'auto',
+                  bottom: v === 'bottom' ? 16 : 'auto',
+                  left: h === 'left' ? 20 : 'auto',
+                  right: h === 'right' ? 20 : 'auto',
+                  width: 28, height: 28,
+                  borderTop: v === 'top' ? `2px solid rgba(255,37,64,0.5)` : 'none',
+                  borderBottom: v === 'bottom' ? `2px solid rgba(255,37,64,0.5)` : 'none',
+                  borderLeft: h === 'left' ? `2px solid rgba(255,37,64,0.5)` : 'none',
+                  borderRight: h === 'right' ? `2px solid rgba(255,37,64,0.5)` : 'none',
+                  zIndex: 4,
+                  pointerEvents: 'none',
+                }}
+              />
+            ))}
+
+            {/* Case ID watermark */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', bottom: 18, right: 24, zIndex: 4,
+                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.18)',
+                pointerEvents: 'none', userSelect: 'none',
+              }}
+            >
+              {caseData.id}
             </div>
-          ) : (
-            <ImagePlaceholder label={`${caseData.title} — hero image`} aspect="16/6" src={`/cases/${caseData.slug}/hero.jpg`} alt={`${caseData.title} — Game UX/UI case study hero image`} />
-          )}
-        </div>
+          </div>
+        </m.div>
 
         {/* NDA notice if applicable */}
         {(caseData.visibility === 'nda-safe') && content?.quickFacts?.confidentiality && (
@@ -526,19 +630,25 @@ export default function CasePage({ onMenuOpen }) {
             {/* Main content */}
             <div>
 
-              {/* Executive summary */}
+              {/* Executive summary — Level 1 (recruiter scan) */}
               {content?.summary && (
                 <m.section
                   id="cs-summary"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  className="py-14 mb-2"
+                  style={{
+                    borderBottom: `1px solid ${RULE}`,
+                    backgroundColor: 'rgba(255,37,64,0.022)',
+                    // Bleed tint to the left edge of the article container
+                    marginLeft: '-1.5rem',
+                    paddingLeft: '1.5rem',
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>{t.casePage.sections.executiveSummary}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '15px', color: 'rgba(240,238,234,0.8)', lineHeight: 1.85 }}>
+                  <SectionLabelPrimary>{t.casePage.sections.executiveSummary}</SectionLabelPrimary>
+                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>
                     {content.summary}
                   </p>
                 </m.section>
@@ -560,19 +670,24 @@ export default function CasePage({ onMenuOpen }) {
                 </m.section>
               )}
 
-              {/* Challenge */}
+              {/* Challenge — Level 1 (recruiter scan) */}
               {content?.challenge && (
                 <m.section
                   id="cs-challenge"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  className="py-14 mb-2"
+                  style={{
+                    borderBottom: `1px solid ${RULE}`,
+                    backgroundColor: 'rgba(255,37,64,0.022)',
+                    marginLeft: '-1.5rem',
+                    paddingLeft: '1.5rem',
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>{t.casePage.sections.challenge}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.challenge}</p>
+                  <SectionLabelPrimary>{t.casePage.sections.challenge}</SectionLabelPrimary>
+                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.challenge}</p>
                   {content?.challengeRisks?.length > 0 && (
                     <ul className="mt-6 space-y-2">
                       {content.challengeRisks.map((r, i) => (
@@ -892,19 +1007,24 @@ export default function CasePage({ onMenuOpen }) {
                 </m.section>
               )}
 
-              {/* Outcome */}
+              {/* Outcome — Level 1 (recruiter scan) */}
               {content?.outcome && (
                 <m.section
                   id="cs-outcome"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  className="py-14 mb-2"
+                  style={{
+                    borderBottom: `1px solid ${RULE}`,
+                    backgroundColor: 'rgba(255,37,64,0.022)',
+                    marginLeft: '-1.5rem',
+                    paddingLeft: '1.5rem',
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>{t.casePage.sections.outcome}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.outcome}</p>
+                  <SectionLabelPrimary>{t.casePage.sections.outcome}</SectionLabelPrimary>
+                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.outcome}</p>
                 </m.section>
               )}
 
