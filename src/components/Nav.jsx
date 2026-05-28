@@ -7,7 +7,7 @@ import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
-import { m, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
+import { m, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useReducedMotion } from 'framer-motion';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
@@ -74,6 +74,7 @@ export default function Nav({ onMenuOpen }) {
   const [contactOpen, setContactOpen] = useState(false);
   const { t, lang, toggleLang } = useLang();
   const lenisRef = useLenis();
+  const shouldReduceMotion = useReducedMotion();
 
   // ── Rubber pill animation ─────────────────────────────────────────────────
   // Three states: idle (center-bottom glow + thin accent border),
@@ -87,13 +88,15 @@ export default function Nav({ onMenuOpen }) {
   const glowMV = useMotionValue(0);
   const decayTimer = useRef(null);
 
-  // High stiffness + low damping = springy overshoot = rubber feel
-  const bendSpring = useSpring(bendMV, { stiffness: 340, damping: 13, mass: 0.45 });
-  const glowSpring = useSpring(glowMV, { stiffness: 100, damping: 18 });
+  // Controlled single-overshoot rubber — damping ratio ≈ 0.90
+  // One clean snap with a brief tail; no multi-bounce toy feel.
+  // (ratio = 22 / (2 × √(300 × 0.5)) ≈ 0.90 → barely underdamped)
+  const bendSpring = useSpring(bendMV, { stiffness: 300, damping: 22, mass: 0.5 });
+  const glowSpring = useSpring(glowMV, { stiffness: 120, damping: 22 });
 
   // Derived transforms: nudge + SVG path bezier bowing + glow opacity
-  const pillY       = useTransform(bendSpring, v => v * 3);
-  const glowOpacity = useTransform(glowSpring, [0, 1], [0.20, 0.58]);
+  const pillY       = useTransform(bendSpring, v => v * 4);
+  const glowOpacity = useTransform(glowSpring, [0, 1], [0.14, 0.52]);
   const ringOpacity = useTransform(glowSpring, [0, 1], [0, 1]);
 
   // SVG rubber border: directional pressing.
@@ -122,16 +125,17 @@ export default function Nav({ onMenuOpen }) {
 
       clearTimeout(decayTimer.current);
       if (delta > 2) {
-        bendMV.set(-1);   // scroll down: pill bends upward
+        if (!shouldReduceMotion) bendMV.set(-1);  // scroll down: top edge bows inward
         glowMV.set(1);
       } else if (delta < -2) {
-        bendMV.set(1);    // scroll up: pill bends downward
+        if (!shouldReduceMotion) bendMV.set(1);   // scroll up: bottom edge bows inward
         glowMV.set(1);
       }
+      // 200ms window — rubber needs time to overshoot and settle before returning to idle
       decayTimer.current = setTimeout(() => {
         bendMV.set(0);
         glowMV.set(0);
-      }, 140);
+      }, 200);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -139,7 +143,7 @@ export default function Nav({ onMenuOpen }) {
       window.removeEventListener('scroll', onScroll);
       clearTimeout(decayTimer.current);
     };
-  }, [bendMV, glowMV]);
+  }, [bendMV, glowMV, shouldReduceMotion]);
 
   return (
     <>
@@ -170,10 +174,14 @@ export default function Nav({ onMenuOpen }) {
               key="full-bar"
               aria-label="Site navigation"
               className="absolute top-0 left-0 right-0 pointer-events-auto"
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -16, opacity: 0, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
-              transition={{ duration: 0.3, ease: EASE_OUT, delay: 0.4 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { y: -20, opacity: 0 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
+              exit={shouldReduceMotion
+                ? { opacity: 0, transition: { duration: 0.1 } }
+                : { y: -16, opacity: 0, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
+              transition={shouldReduceMotion
+                ? { duration: 0.15 }
+                : { duration: 0.3, ease: EASE_OUT, delay: 0.4 }}
             >
               <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 py-4 flex items-center justify-between">
 
@@ -305,10 +313,14 @@ export default function Nav({ onMenuOpen }) {
               key="pill"
               className="pointer-events-none"
               style={{ position: 'relative', marginTop: 10 }}
-              initial={{ opacity: 0, scale: 0.90 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94, y: -12, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
-              transition={{ duration: 0.32, ease: EASE_OUT }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92, filter: 'blur(5px)' }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              exit={shouldReduceMotion
+                ? { opacity: 0, transition: { duration: 0.1 } }
+                : { opacity: 0, scale: 0.95, y: -8, filter: 'blur(4px)', transition: { duration: 0.13, ease: [0.4, 0, 1, 1] } }}
+              transition={shouldReduceMotion
+                ? { duration: 0.15 }
+                : { duration: 0.26, ease: EASE_OUT }}
             >
               {/* Inner rubber wrapper — y nudge only; shape deformation is on the SVG border */}
               <m.div style={{ position: 'relative', y: pillY }}>
@@ -412,7 +424,7 @@ export default function Nav({ onMenuOpen }) {
                           fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase',
                           color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           textDecoration: 'none', padding: '8px 10px',
-                          transition: 'color 0.2s',
+                          transition: 'color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
                         })}
                         onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
                         onMouseLeave={e => {
@@ -437,7 +449,7 @@ export default function Nav({ onMenuOpen }) {
                       background: 'transparent', border: 'none',
                       color: 'var(--color-fg-mute)', padding: '8px 10px',
                       cursor: 'pointer', minHeight: 44,
-                      transition: 'color 0.2s',
+                      transition: 'color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
@@ -456,7 +468,7 @@ export default function Nav({ onMenuOpen }) {
                       color: 'var(--color-fg-mute)', padding: '8px 10px',
                       minHeight: 44, display: 'flex', alignItems: 'center',
                       fontSize: 13, lineHeight: 1,
-                      transition: 'color 0.2s',
+                      transition: 'color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
@@ -477,7 +489,7 @@ export default function Nav({ onMenuOpen }) {
                       color: 'var(--color-fg)', padding: '8px 12px',
                       cursor: 'pointer', minHeight: 44,
                       display: 'flex', alignItems: 'center',
-                      transition: 'color 0.2s',
+                      transition: 'color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
