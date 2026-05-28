@@ -7,7 +7,7 @@ import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
-import { m, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { m, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
@@ -75,15 +75,28 @@ export default function Nav({ onMenuOpen }) {
   const { t, lang, toggleLang } = useLang();
   const lenisRef = useLenis();
 
-  // ── Directional glow on the pill ──────────────────────────────────────────
-  // Raw motion values set on each scroll event; springs smooth the visual.
-  // Technique: static gradient overlays inside the pill — only `opacity` moves
-  // (compositor-only, no paint). Emil: transform + opacity only.
-  const topGlowMV    = useMotionValue(0);
-  const bottomGlowMV = useMotionValue(0);
-  const topGlow    = useSpring(topGlowMV,    { stiffness: 48, damping: 20 });
-  const bottomGlow = useSpring(bottomGlowMV, { stiffness: 48, damping: 20 });
+  // ── Rubber pill animation ─────────────────────────────────────────────────
+  // Three states: idle (center-bottom glow + thin accent border),
+  // scroll-down (pill springs up, squashes, glow pulses),
+  // scroll-up (pill springs down, squashes, glow pulses).
+  //
+  // Technique: transform + opacity only (compositor-safe, Emil principles).
+  // bendMV: -1 = scroll down (pill bends up), 0 = idle, +1 = scroll up.
+  // glowMV: 0 = rest intensity, 1 = scroll intensity.
+  const bendMV = useMotionValue(0);
+  const glowMV = useMotionValue(0);
   const decayTimer = useRef(null);
+
+  // High stiffness + low damping = springy overshoot = rubber feel
+  const bendSpring = useSpring(bendMV, { stiffness: 340, damping: 13, mass: 0.45 });
+  const glowSpring = useSpring(glowMV, { stiffness: 100, damping: 18 });
+
+  // Derived transforms: nudge, squash-and-stretch, glow/ring opacity
+  const pillY        = useTransform(bendSpring, v => v * 3);
+  const squashScaleX = useTransform(bendSpring, [-1, 0, 1], [1.016, 1, 1.016]);
+  const squashScaleY = useTransform(bendSpring, [-1, 0, 1], [0.972, 1, 0.972]);
+  const glowOpacity  = useTransform(glowSpring, [0, 1], [0.20, 0.60]);
+  const ringOpacity  = useTransform(glowSpring, [0, 1], [0, 1]);
 
   useEffect(() => {
     let prevScrollY = window.scrollY;
@@ -93,23 +106,20 @@ export default function Nav({ onMenuOpen }) {
       const delta    = currentY - prevScrollY;
       prevScrollY    = currentY;
 
-      // Pill visibility threshold
       setScrolled(currentY > 80);
 
-      // Directional glow — ignore micro-jitter below 2px
       clearTimeout(decayTimer.current);
       if (delta > 2) {
-        topGlowMV.set(1);
-        bottomGlowMV.set(0);
+        bendMV.set(-1);   // scroll down: pill bends upward
+        glowMV.set(1);
       } else if (delta < -2) {
-        topGlowMV.set(0);
-        bottomGlowMV.set(1);
+        bendMV.set(1);    // scroll up: pill bends downward
+        glowMV.set(1);
       }
-      // Decay both to 0 shortly after scroll stops
       decayTimer.current = setTimeout(() => {
-        topGlowMV.set(0);
-        bottomGlowMV.set(0);
-      }, 120);
+        bendMV.set(0);
+        glowMV.set(0);
+      }, 140);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -117,7 +127,7 @@ export default function Nav({ onMenuOpen }) {
       window.removeEventListener('scroll', onScroll);
       clearTimeout(decayTimer.current);
     };
-  }, [topGlowMV, bottomGlowMV]);
+  }, [bendMV, glowMV]);
 
   return (
     <>
@@ -274,189 +284,178 @@ export default function Nav({ onMenuOpen }) {
             </m.nav>
 
           ) : (
-            // ── Floating glass pill — outer glow ring architecture ──────────
-            // Wrapper: holds ambient base glow + two directional outer rings +
-            // the glass pill itself. Rings have *static* box-shadows; only their
-            // opacity is spring-animated (compositor-only, no per-frame paint).
-            // Inner radial overlays stay for the subtle fill tint inside.
+            // ── Floating glass pill — rubber animation architecture ──────────
+            // Outer m.div: handles enter/exit opacity+scale only.
+            // Inner m.div: continuous rubber physics (y nudge + squash-stretch).
+            // Idle: thin accent border + soft center-bottom halo.
+            // Scroll: spring overshoots in direction → rubber feel; glow pulses.
             <m.div
               key="pill"
               className="pointer-events-none"
               style={{ position: 'relative', marginTop: 10 }}
-              initial={{ y: -20, opacity: 0, scale: 0.90 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: -12, opacity: 0, scale: 0.94, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
+              initial={{ opacity: 0, scale: 0.90 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.94, y: -12, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
               transition={{ duration: 0.32, ease: EASE_OUT }}
             >
-              {/* Ambient base — always-on soft halo at rest */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', inset: -5, borderRadius: 9999,
-                  boxShadow: '0 0 22px 6px rgba(255,37,64,0.09)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Top rim — scroll down: light blooms from above the pill */}
+              {/* Inner rubber wrapper — y nudge + squash-and-stretch */}
               <m.div
-                aria-hidden="true"
                 style={{
-                  position: 'absolute', inset: -6, borderRadius: 9999,
-                  boxShadow: '0 -8px 28px 6px rgba(255,37,64,0.38)',
-                  opacity: topGlow,
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Bottom rim — scroll up: light blooms from below the pill */}
-              <m.div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', inset: -6, borderRadius: 9999,
-                  boxShadow: '0 8px 28px 6px rgba(255,37,64,0.38)',
-                  opacity: bottomGlow,
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Glass pill — z-index:1 keeps it above the glow rings */}
-              <nav
-                aria-label="Site navigation"
-                className="pointer-events-auto flex items-center gap-0.5"
-                style={{
-                  position: 'relative', zIndex: 1,
-                  borderRadius: 9999,
-                  padding: '6px 8px',
-                  background: 'rgba(8,8,8,0.52)',
-                  backdropFilter: 'blur(22px) saturate(160%)',
-                  WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
-                  overflow: 'hidden', // clips inner gradient overlays to pill shape
+                  position: 'relative',
+                  y: pillY,
+                  scaleX: squashScaleX,
+                  scaleY: squashScaleY,
                 }}
               >
-              {/* Logo mark */}
-              <Link
-                to="/"
-                aria-label={t.nav.logoLabel}
-                onClick={() => lenisRef?.current ? lenisRef.current.scrollTo(0, { duration: 0.9 }) : window.scrollTo({ top: 0, behavior: 'instant' })}
-                style={{ display: 'flex', alignItems: 'center', padding: '2px 4px' }}
-              >
-                <LogoMark size={30} />
-              </Link>
+                {/* Idle center-bottom halo — always present at low intensity */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute', inset: -4, borderRadius: 9999,
+                    boxShadow: '0 6px 22px 4px rgba(255,37,64,0.11), 0 0 0 1px rgba(255,37,64,0.14)',
+                    pointerEvents: 'none',
+                  }}
+                />
 
-              <PillDivider />
+                {/* Scroll glow ring — center-bottom, intensifies on scroll */}
+                <m.div
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute', inset: -7, borderRadius: 9999,
+                    boxShadow: '0 10px 40px 8px rgba(255,37,64,0.32), 0 0 0 1px rgba(255,37,64,0.28)',
+                    opacity: ringOpacity,
+                    pointerEvents: 'none',
+                  }}
+                />
 
-              {/* Nav links — sm and up */}
-              <div className="hidden sm:flex items-center">
-                {[
-                  { to: '/work', label: t.nav.work },
-                  { to: '/notes', label: t.nav.notes },
-                ].map(({ to, label }) => (
-                  <NavLink
-                    key={to}
-                    to={to}
-                    style={({ isActive }) => ({
-                      fontFamily: '"JetBrains Mono", monospace',
-                      fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase',
-                      color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
-                      textDecoration: 'none', padding: '8px 10px',
-                      transition: 'color 0.2s',
-                    })}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
-                    onMouseLeave={e => {
-                      const active = e.currentTarget.getAttribute('aria-current') === 'page';
-                      e.currentTarget.style.color = active ? 'var(--color-accent)' : 'var(--color-fg-mute)';
-                    }}
+                {/* Glass pill */}
+                <nav
+                  aria-label="Site navigation"
+                  className="pointer-events-auto flex items-center gap-0.5"
+                  style={{
+                    position: 'relative', zIndex: 1,
+                    borderRadius: 9999,
+                    padding: '6px 8px',
+                    background: 'rgba(8,8,8,0.54)',
+                    backdropFilter: 'blur(22px) saturate(160%)',
+                    WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+                    border: '1px solid rgba(255,37,64,0.18)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {/* Logo mark */}
+                  <Link
+                    to="/"
+                    aria-label={t.nav.logoLabel}
+                    onClick={() => lenisRef?.current ? lenisRef.current.scrollTo(0, { duration: 0.9 }) : window.scrollTo({ top: 0, behavior: 'instant' })}
+                    style={{ display: 'flex', alignItems: 'center', padding: '2px 4px' }}
                   >
-                    {label}
-                  </NavLink>
-                ))}
-              </div>
+                    <LogoMark size={30} />
+                  </Link>
 
-              <div className="hidden sm:block"><PillDivider /></div>
+                  <PillDivider />
 
-              {/* Language toggle */}
-              <button
-                onClick={() => { analytics.languageSwitch(lang === 'en' ? 'es' : 'en'); toggleLang(); }}
-                aria-label={`Switch language to ${t.nav.lang}`}
-                style={{
-                  fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
-                  letterSpacing: '0.14em', textTransform: 'uppercase',
-                  background: 'transparent', border: 'none',
-                  color: 'var(--color-fg-mute)', padding: '8px 10px',
-                  cursor: 'pointer', minHeight: 44,
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
-              >
-                {t.nav.lang}
-              </button>
+                  {/* Nav links */}
+                  <div className="hidden sm:flex items-center">
+                    {[
+                      { to: '/work', label: t.nav.work },
+                      { to: '/notes', label: t.nav.notes },
+                    ].map(({ to, label }) => (
+                      <NavLink
+                        key={to}
+                        to={to}
+                        style={({ isActive }) => ({
+                          fontFamily: '"JetBrains Mono", monospace',
+                          fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase',
+                          color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
+                          textDecoration: 'none', padding: '8px 10px',
+                          transition: 'color 0.2s',
+                        })}
+                        onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
+                        onMouseLeave={e => {
+                          const active = e.currentTarget.getAttribute('aria-current') === 'page';
+                          e.currentTarget.style.color = active ? 'var(--color-accent)' : 'var(--color-fg-mute)';
+                        }}
+                      >
+                        {label}
+                      </NavLink>
+                    ))}
+                  </div>
 
-              <PillDivider />
+                  <div className="hidden sm:block"><PillDivider /></div>
 
-              {/* Contact — ◉ icon only */}
-              <button
-                onClick={() => setContactOpen(true)}
-                aria-label={t.nav.contact}
-                style={{
-                  background: 'transparent', border: 'none', cursor: 'pointer',
-                  color: 'var(--color-fg-mute)', padding: '8px 10px',
-                  minHeight: 44, display: 'flex', alignItems: 'center',
-                  fontSize: 13, lineHeight: 1,
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
-              >
-                ◉
-              </button>
+                  {/* Language toggle */}
+                  <button
+                    onClick={() => { analytics.languageSwitch(lang === 'en' ? 'es' : 'en'); toggleLang(); }}
+                    aria-label={`Switch language to ${t.nav.lang}`}
+                    style={{
+                      fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
+                      letterSpacing: '0.14em', textTransform: 'uppercase',
+                      background: 'transparent', border: 'none',
+                      color: 'var(--color-fg-mute)', padding: '8px 10px',
+                      cursor: 'pointer', minHeight: 44,
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
+                  >
+                    {t.nav.lang}
+                  </button>
 
-              <PillDivider />
+                  <PillDivider />
 
-              {/* MENU — no clip-path in pill context */}
-              <button
-                onClick={onMenuOpen}
-                aria-label="Open navigation menu"
-                style={{
-                  fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
-                  letterSpacing: '0.14em', textTransform: 'uppercase',
-                  background: 'transparent', border: 'none',
-                  color: 'var(--color-fg)', padding: '8px 12px',
-                  cursor: 'pointer', minHeight: 44,
-                  display: 'flex', alignItems: 'center',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
-              >
-                {t.nav.menu}
-              </button>
+                  {/* Contact */}
+                  <button
+                    onClick={() => setContactOpen(true)}
+                    aria-label={t.nav.contact}
+                    style={{
+                      background: 'transparent', border: 'none', cursor: 'pointer',
+                      color: 'var(--color-fg-mute)', padding: '8px 10px',
+                      minHeight: 44, display: 'flex', alignItems: 'center',
+                      fontSize: 13, lineHeight: 1,
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
+                  >
+                    ◉
+                  </button>
 
-              {/* ── Inner fill overlays — reinforce direction inside the pill */}
-              <m.div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', inset: 0,
-                  background: 'radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255,37,64,0.22) 0%, transparent 100%)',
-                  opacity: topGlow,
-                  pointerEvents: 'none',
-                  borderRadius: 9999,
-                }}
-              />
-              <m.div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', inset: 0,
-                  background: 'radial-gradient(ellipse 90% 55% at 50% 108%, rgba(255,37,64,0.22) 0%, transparent 100%)',
-                  opacity: bottomGlow,
-                  pointerEvents: 'none',
-                  borderRadius: 9999,
-                }}
-              />
-              </nav>
+                  <PillDivider />
+
+                  {/* MENU */}
+                  <button
+                    onClick={onMenuOpen}
+                    aria-label="Open navigation menu"
+                    style={{
+                      fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
+                      letterSpacing: '0.14em', textTransform: 'uppercase',
+                      background: 'transparent', border: 'none',
+                      color: 'var(--color-fg)', padding: '8px 12px',
+                      cursor: 'pointer', minHeight: 44,
+                      display: 'flex', alignItems: 'center',
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
+                  >
+                    {t.nav.menu}
+                  </button>
+
+                  {/* Center-bottom glow fill — inside pill, always visible, pulses on scroll */}
+                  <m.div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute', inset: 0,
+                      background: 'radial-gradient(ellipse 60% 100% at 50% 130%, rgba(255,37,64,0.50) 0%, transparent 70%)',
+                      opacity: glowOpacity,
+                      pointerEvents: 'none',
+                      borderRadius: 9999,
+                    }}
+                  />
+                </nav>
+              </m.div>
             </m.div>
           )}
         </AnimatePresence>
