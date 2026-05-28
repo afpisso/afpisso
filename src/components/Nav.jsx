@@ -95,23 +95,21 @@ export default function Nav({ onMenuOpen }) {
   const glowSpring = useSpring(glowMV, { stiffness: 120, damping: 22 });
 
   // Derived transforms: nudge + SVG path bezier bowing + glow opacity
-  const pillY       = useTransform(bendSpring, v => v * 4);
-  const glowOpacity = useTransform(glowSpring, [0, 1], [0.14, 0.52]);
+  const pillY       = useTransform(bendSpring, v => v * 2);
+  const glowOpacity = useTransform(glowSpring, [0, 1], [0.10, 0.42]);
   const ringOpacity = useTransform(glowSpring, [0, 1], [0, 1]);
 
-  // SVG rubber border: directional pressing.
-  // Scroll DOWN → top edge bows INWARD (compressed from above); bottom barely moves.
-  // Scroll UP   → bottom edge bows INWARD (compressed from below); top barely moves.
+  // SVG rubber border: directional pressing — 50% deformation depth.
+  // Scroll DOWN → top edge bows INWARD; bottom barely moves.
+  // Scroll UP   → bottom edge bows INWARD; top barely moves.
   //
-  // SVG y=0 is the top edge, y=44 is the bottom.
-  // Q control point INSIDE pill range = inward bow (concave from outside = pressed in).
-  // Q control point OUTSIDE pill range = outward bulge.
-  //
-  //   scroll down (bend=-1): topBow=+10 (bows into pill), bottomBow=46 (slight outward)
-  //   scroll up   (bend=+1): topBow=-3  (barely out),     bottomBow=36 (bows into pill)
-  const topBow    = useTransform(bendSpring, [-1, 0, 1], [10, 0, -3]);
-  const bottomBow = useTransform(bendSpring, [-1, 0, 1], [46, 44, 36]);
-  const pillPath  = useMotionTemplate`M 22 0 Q 150 ${topBow} 278 0 A 22 22 0 0 1 300 22 A 22 22 0 0 1 278 44 Q 150 ${bottomBow} 22 44 A 22 22 0 0 1 0 22 A 22 22 0 0 1 22 0 Z`;
+  //   scroll down (bend=-1): topBow=+5 (inward), bottomBow=45 (barely outward)
+  //   scroll up   (bend=+1): topBow=-2 (barely outward), bottomBow=40 (inward)
+  const topBow    = useTransform(bendSpring, [-1, 0, 1], [5, 0, -2]);
+  const bottomBow = useTransform(bendSpring, [-1, 0, 1], [45, 44, 40]);
+  // Chamfered octagon — 10px diagonal cuts at all 4 corners.
+  // Straight top/bottom edges carry rubber deformation via Q bezier.
+  const pillPath  = useMotionTemplate`M 10 0 Q 150 ${topBow} 290 0 L 300 10 L 300 34 L 290 44 Q 150 ${bottomBow} 10 44 L 0 34 L 0 10 Z`;
 
   useEffect(() => {
     let prevScrollY = window.scrollY;
@@ -325,22 +323,26 @@ export default function Nav({ onMenuOpen }) {
               {/* Inner rubber wrapper — y nudge only; shape deformation is on the SVG border */}
               <m.div style={{ position: 'relative', y: pillY }}>
 
-                {/* Idle center-bottom halo — bottom-offset so the glow pools underneath */}
+                {/* Idle bottom-center glow — soft point anchored to base of pill */}
                 <div
                   aria-hidden="true"
                   style={{
-                    position: 'absolute', inset: -4, borderRadius: 9999,
-                    boxShadow: '0 8px 24px 4px rgba(255,37,64,0.10)',
+                    position: 'absolute', bottom: -8, left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '44%', height: 1,
+                    boxShadow: '0 0 14px 5px rgba(255,37,64,0.16)',
                     pointerEvents: 'none',
                   }}
                 />
 
-                {/* Scroll glow — center-bottom bloom, intensifies on scroll */}
+                {/* Scroll glow — same anchor, intensity scales with motion */}
                 <m.div
                   aria-hidden="true"
                   style={{
-                    position: 'absolute', inset: -8, borderRadius: 9999,
-                    boxShadow: '0 12px 44px 10px rgba(255,37,64,0.30)',
+                    position: 'absolute', bottom: -10, left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '54%', height: 1,
+                    boxShadow: '0 0 22px 8px rgba(255,37,64,0.28)',
                     opacity: ringOpacity,
                     pointerEvents: 'none',
                   }}
@@ -388,7 +390,8 @@ export default function Nav({ onMenuOpen }) {
                   className="pointer-events-auto flex items-center gap-0.5"
                   style={{
                     position: 'relative', zIndex: 1,
-                    borderRadius: 9999,
+                    borderRadius: 0,
+                    clipPath: 'polygon(10px 0px, calc(100% - 10px) 0px, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0px calc(100% - 10px), 0px 10px)',
                     padding: '6px 8px',
                     background: 'rgba(8,8,8,0.54)',
                     backdropFilter: 'blur(22px) saturate(160%)',
@@ -497,15 +500,14 @@ export default function Nav({ onMenuOpen }) {
                     {t.nav.menu}
                   </button>
 
-                  {/* Center-bottom glow fill — inside pill, always visible, pulses on scroll */}
+                  {/* Bottom-center fill — tight ellipse at base, clipped to pill shape */}
                   <m.div
                     aria-hidden="true"
                     style={{
                       position: 'absolute', inset: 0,
-                      background: 'radial-gradient(ellipse 60% 100% at 50% 130%, rgba(255,37,64,0.50) 0%, transparent 70%)',
+                      background: 'radial-gradient(ellipse 50% 60% at 50% 120%, rgba(255,37,64,0.45) 0%, transparent 65%)',
                       opacity: glowOpacity,
                       pointerEvents: 'none',
-                      borderRadius: 9999,
                     }}
                   />
                 </nav>
