@@ -1538,6 +1538,7 @@ export const cases = [
     year: null,
     featured: false,
     category: 'games',
+    trailerSrc: '/cases/kodety/Kodety-trailer.mp4',
     headline: 'Designing an educational web game for Diversoft that earned industry recognition.',
     headlineEs: 'Diseño de un juego web educativo para Diversoft que obtuvo reconocimiento de la industria.',
     description:
