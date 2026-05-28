@@ -746,9 +746,64 @@ export default function CasePage({ onMenuOpen }) {
           </div>
         )}
 
+        {/* ── Quick facts strip — horizontal metadata band ─────────────────────
+             Moves production metadata out of the sidebar so the TOC is always
+             visible. Pattern: Linear / Ueno / Basic Agency case studies.
+             Each cell: label above, value below, right border divider.
+             flex-wrap handles mobile naturally — last row's border-bottom
+             becomes the section's visual bottom edge.                         */}
+        {content?.quickFacts && (() => {
+          const entries = Object.entries(content.quickFacts)
+            .filter(([k]) => k !== 'confidentiality');
+          if (!entries.length) return null;
+          return (
+            <section
+              aria-label="Case metadata"
+              style={{ borderTop: `1px solid ${RULE}` }}
+            >
+              <dl
+                className="max-w-[1400px] mx-auto"
+                style={{ display: 'flex', flexWrap: 'wrap' }}
+              >
+                {entries.map(([key, val]) => (
+                  <div
+                    key={key}
+                    style={{
+                      display: 'flex', flexDirection: 'column', gap: 6,
+                      padding: '18px 24px', flex: '1 1 130px', minWidth: 0,
+                      borderRight: `1px solid ${RULE}`,
+                      borderBottom: `1px solid ${RULE}`,
+                      transition: 'background 0.12s cubic-bezier(0.16,1,0.3,1)',
+                      cursor: 'default',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,37,64,0.025)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <dt
+                      className="sys-label"
+                      style={{ flexShrink: 0 }}
+                    >
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </dt>
+                    <dd
+                      style={{
+                        fontFamily: MONO, fontSize: '12px',
+                        color: FG, lineHeight: 1.55,
+                        wordBreak: 'break-word',
+                      }}
+                    >
+                      {Array.isArray(val) ? val.join(', ') : val}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          );
+        })()}
+
         {/* Body */}
         <article className="max-w-[1400px] mx-auto px-6 pb-28">
-          <div className="grid grid-cols-1 xl:grid-cols-[1fr_280px] gap-12 items-start">
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_220px] gap-10 items-start">
             {/* Main content */}
             <div>
 
@@ -1236,36 +1291,11 @@ export default function CasePage({ onMenuOpen }) {
               </m.section>
             </div>
 
-            {/* Sidebar — Quick facts */}
+            {/* Sidebar — TOC + navigation only */}
             <aside
               className="xl:sticky xl:top-24 hidden xl:block"
-              aria-label="Case quick facts"
+              aria-label="Case navigation"
             >
-              <div className="relative" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
-                <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: ACCENT }} aria-hidden="true" />
-                <div className="px-5 pt-5 pb-2">
-                  <div className="sys-label" style={{ color: ACCENT }}>{t.casePage.quickFacts}</div>
-                </div>
-                {content?.quickFacts && (
-                  <dl>
-                    {Object.entries(content.quickFacts).filter(([k]) => k !== 'confidentiality').map(([key, val]) => (
-                      <div key={key} className="flex items-start justify-between gap-3 px-5 py-3 border-t" style={{ borderColor: RULE }}>
-                        <dt className="sys-label flex-shrink-0 capitalize w-20" style={{ paddingTop: '1px' }}>
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </dt>
-                        <dd className="text-right" style={{ fontFamily: MONO, fontSize: '12px', color: FG, lineHeight: 1.4 }}>
-                          {Array.isArray(val) ? val.join(', ') : val}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                )}
-                <div className="px-5 py-3 border-t flex items-start justify-between gap-3" style={{ borderColor: RULE }}>
-                  <div className="sys-label flex-shrink-0 w-20">{t.casePage.metaPlatform}</div>
-                  <div className="text-right" style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
-                </div>
-              </div>
-
               {/* Section table of contents */}
               <CaseTOC sections={tocSections} />
 
