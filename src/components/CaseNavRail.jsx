@@ -217,9 +217,9 @@ function GhostRail({ sections, activeId, scrollTo }) {
         {panelOpen && (
           <m.div
             key="ghost-panel"
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 12 }}
+            initial={{ opacity: 0, x: 16, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: 10, filter: 'blur(3px)', transition: { duration: 0.15, ease: EASE_IN } }}
             transition={{ duration: 0.22, ease: EASE_OUT }}
             style={{
               ...GLASS,
@@ -282,7 +282,7 @@ function GhostRail({ sections, activeId, scrollTo }) {
                       padding: '8px 16px',
                       minHeight: 44,
                       textAlign: 'left',
-                      transition: 'background 0.15s',
+                      transition: 'background 0.12s cubic-bezier(0.16,1,0.3,1)',
                     }}
                     onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
                     onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'none'; }}
@@ -379,9 +379,9 @@ function SectionStamp({ sections, activeId, scrollTo }) {
           <m.nav
             key="stamp-grid"
             aria-label="Case sections — expanded grid"
-            initial={{ opacity: 0, y: 12, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.97 }}
+            initial={{ opacity: 0, y: 12, scale: 0.96, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: 6, scale: 0.97, filter: 'blur(3px)', transition: { duration: 0.15, ease: EASE_IN } }}
             transition={{ duration: 0.22, ease: EASE_OUT }}
             style={{
               ...GLASS,
