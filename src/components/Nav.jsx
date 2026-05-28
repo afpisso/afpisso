@@ -7,7 +7,7 @@ import CyberBtn from './CyberBtn';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
-import { m, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { m, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
@@ -91,12 +91,20 @@ export default function Nav({ onMenuOpen }) {
   const bendSpring = useSpring(bendMV, { stiffness: 340, damping: 13, mass: 0.45 });
   const glowSpring = useSpring(glowMV, { stiffness: 100, damping: 18 });
 
-  // Derived transforms: nudge, squash-and-stretch, glow/ring opacity
-  const pillY        = useTransform(bendSpring, v => v * 3);
-  const squashScaleX = useTransform(bendSpring, [-1, 0, 1], [1.016, 1, 1.016]);
-  const squashScaleY = useTransform(bendSpring, [-1, 0, 1], [0.972, 1, 0.972]);
-  const glowOpacity  = useTransform(glowSpring, [0, 1], [0.20, 0.60]);
-  const ringOpacity  = useTransform(glowSpring, [0, 1], [0, 1]);
+  // Derived transforms: nudge + SVG path bezier bowing + glow opacity
+  const pillY       = useTransform(bendSpring, v => v * 3);
+  const glowOpacity = useTransform(glowSpring, [0, 1], [0.20, 0.58]);
+  const ringOpacity = useTransform(glowSpring, [0, 1], [0, 1]);
+
+  // SVG rubber border: top edge bows in direction of travel,
+  // bottom edge trails in the opposite direction (S-curve deformation).
+  // ViewBox is 0 0 300 44 (approximate pill dims, scaled to fill via preserveAspectRatio="none").
+  // Q control points sit at x=150 (center), y varies:
+  //   topBow  = -8 when scrolling down (top curves UP, leading edge)
+  //   bottomBow = 52 when scrolling down (bottom trails DOWN, 8px below pill)
+  const topBow    = useTransform(bendSpring, [-1, 0, 1], [-8, 0, 8]);
+  const bottomBow = useTransform(bendSpring, [-1, 0, 1], [52, 44, 36]);
+  const pillPath  = useMotionTemplate`M 22 0 Q 150 ${topBow} 278 0 A 22 22 0 0 1 300 22 A 22 22 0 0 1 278 44 Q 150 ${bottomBow} 22 44 A 22 22 0 0 1 0 22 A 22 22 0 0 1 22 0 Z`;
 
   useEffect(() => {
     let prevScrollY = window.scrollY;
@@ -298,37 +306,67 @@ export default function Nav({ onMenuOpen }) {
               exit={{ opacity: 0, scale: 0.94, y: -12, transition: { duration: 0.15, ease: [0.4, 0, 1, 1] } }}
               transition={{ duration: 0.32, ease: EASE_OUT }}
             >
-              {/* Inner rubber wrapper — y nudge + squash-and-stretch */}
-              <m.div
-                style={{
-                  position: 'relative',
-                  y: pillY,
-                  scaleX: squashScaleX,
-                  scaleY: squashScaleY,
-                }}
-              >
-                {/* Idle center-bottom halo — always present at low intensity */}
+              {/* Inner rubber wrapper — y nudge only; shape deformation is on the SVG border */}
+              <m.div style={{ position: 'relative', y: pillY }}>
+
+                {/* Idle center-bottom halo — bottom-offset so the glow pools underneath */}
                 <div
                   aria-hidden="true"
                   style={{
                     position: 'absolute', inset: -4, borderRadius: 9999,
-                    boxShadow: '0 6px 22px 4px rgba(255,37,64,0.11), 0 0 0 1px rgba(255,37,64,0.14)',
+                    boxShadow: '0 8px 24px 4px rgba(255,37,64,0.10)',
                     pointerEvents: 'none',
                   }}
                 />
 
-                {/* Scroll glow ring — center-bottom, intensifies on scroll */}
+                {/* Scroll glow — center-bottom bloom, intensifies on scroll */}
                 <m.div
                   aria-hidden="true"
                   style={{
-                    position: 'absolute', inset: -7, borderRadius: 9999,
-                    boxShadow: '0 10px 40px 8px rgba(255,37,64,0.32), 0 0 0 1px rgba(255,37,64,0.28)',
+                    position: 'absolute', inset: -8, borderRadius: 9999,
+                    boxShadow: '0 12px 44px 10px rgba(255,37,64,0.30)',
                     opacity: ringOpacity,
                     pointerEvents: 'none',
                   }}
                 />
 
-                {/* Glass pill */}
+                {/*
+                  SVG rubber border — the actual deforming pill outline.
+                  Two overlaid paths: idle (faint) + active (bright, scales with ringOpacity).
+                  ViewBox 300×44 scaled to fill via preserveAspectRatio="none".
+                  Top edge Q control point bows in direction of travel;
+                  bottom edge Q trails the opposite way → visible S-curve rubber feel.
+                */}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 300 44"
+                  preserveAspectRatio="none"
+                  style={{
+                    position: 'absolute', inset: 0,
+                    width: '100%', height: '100%',
+                    overflow: 'visible',
+                    pointerEvents: 'none',
+                    zIndex: 2,
+                  }}
+                >
+                  {/* Idle border */}
+                  <m.path
+                    d={pillPath}
+                    fill="none"
+                    stroke="rgba(255,37,64,0.24)"
+                    strokeWidth="1"
+                  />
+                  {/* Active border — brighter on scroll */}
+                  <m.path
+                    d={pillPath}
+                    fill="none"
+                    stroke="rgba(255,37,64,0.58)"
+                    strokeWidth="1.5"
+                    style={{ opacity: ringOpacity }}
+                  />
+                </svg>
+
+                {/* Glass pill — no CSS border; SVG provides the outline */}
                 <nav
                   aria-label="Site navigation"
                   className="pointer-events-auto flex items-center gap-0.5"
@@ -339,7 +377,7 @@ export default function Nav({ onMenuOpen }) {
                     background: 'rgba(8,8,8,0.54)',
                     backdropFilter: 'blur(22px) saturate(160%)',
                     WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-                    border: '1px solid rgba(255,37,64,0.18)',
+                    border: 'none',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
                     overflow: 'hidden',
                   }}
