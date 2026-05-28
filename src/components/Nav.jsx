@@ -96,14 +96,18 @@ export default function Nav({ onMenuOpen }) {
   const glowOpacity = useTransform(glowSpring, [0, 1], [0.20, 0.58]);
   const ringOpacity = useTransform(glowSpring, [0, 1], [0, 1]);
 
-  // SVG rubber border: top edge bows in direction of travel,
-  // bottom edge trails in the opposite direction (S-curve deformation).
-  // ViewBox is 0 0 300 44 (approximate pill dims, scaled to fill via preserveAspectRatio="none").
-  // Q control points sit at x=150 (center), y varies:
-  //   topBow  = -8 when scrolling down (top curves UP, leading edge)
-  //   bottomBow = 52 when scrolling down (bottom trails DOWN, 8px below pill)
-  const topBow    = useTransform(bendSpring, [-1, 0, 1], [-8, 0, 8]);
-  const bottomBow = useTransform(bendSpring, [-1, 0, 1], [52, 44, 36]);
+  // SVG rubber border: directional pressing.
+  // Scroll DOWN → top edge bows INWARD (compressed from above); bottom barely moves.
+  // Scroll UP   → bottom edge bows INWARD (compressed from below); top barely moves.
+  //
+  // SVG y=0 is the top edge, y=44 is the bottom.
+  // Q control point INSIDE pill range = inward bow (concave from outside = pressed in).
+  // Q control point OUTSIDE pill range = outward bulge.
+  //
+  //   scroll down (bend=-1): topBow=+10 (bows into pill), bottomBow=46 (slight outward)
+  //   scroll up   (bend=+1): topBow=-3  (barely out),     bottomBow=36 (bows into pill)
+  const topBow    = useTransform(bendSpring, [-1, 0, 1], [10, 0, -3]);
+  const bottomBow = useTransform(bendSpring, [-1, 0, 1], [46, 44, 36]);
   const pillPath  = useMotionTemplate`M 22 0 Q 150 ${topBow} 278 0 A 22 22 0 0 1 300 22 A 22 22 0 0 1 278 44 Q 150 ${bottomBow} 22 44 A 22 22 0 0 1 0 22 A 22 22 0 0 1 22 0 Z`;
 
   useEffect(() => {
