@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { CardCorners, StatusDiamond } from './CyberIcons';
@@ -28,6 +28,7 @@ export default function CaseCard({ caseData, index }) {
   const [hovered, setHovered] = useState(false);
   const { t, lang } = useLang();
   const shouldReduce = useReducedMotion();
+  const videoRef = useRef(null);
 
   const vstyle = visibilityStyle[caseData.visibility] || visibilityStyle['legacy'];
   const statusLabel = t.caseStatuses[caseData.visibility] || caseData.status;
@@ -40,8 +41,14 @@ export default function CaseCard({ caseData, index }) {
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: index * 0.05, ease: EASE_OUT }}
       className="relative group h-full"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        setHovered(true);
+        if (!shouldReduce && videoRef.current) videoRef.current.play().catch(() => {});
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+        if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
+      }}
     >
       <SpotlightCard className="h-full">
       <div
@@ -84,7 +91,7 @@ export default function CaseCard({ caseData, index }) {
               alt={caseData.thumbnailAlt || caseData.title}
               className="w-full h-full object-cover"
               style={{
-                transform: hovered ? 'scale(1.04)' : 'scale(1)',
+                transform: hovered && !caseData.trailerSrc ? 'scale(1.04)' : 'scale(1)',
                 transition: shouldReduce ? 'none' : 'transform 600ms cubic-bezier(0.16,1,0.3,1)',
               }}
               loading="lazy"
@@ -128,6 +135,25 @@ export default function CaseCard({ caseData, index }) {
                 ))}
               </div>
             </div>
+          )}
+
+          {/* ── Trailer preview — fades over thumbnail on hover ── */}
+          {caseData.trailerSrc && (
+            <video
+              ref={videoRef}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                opacity: hovered ? 1 : 0,
+                transition: shouldReduce ? 'none' : 'opacity 400ms cubic-bezier(0.16,1,0.3,1)',
+              }}
+              muted
+              loop
+              playsInline
+              preload="none"
+              aria-hidden="true"
+            >
+              <source src={caseData.trailerSrc} type="video/mp4" />
+            </video>
           )}
 
           {/* ── Hover overlay — clip-path sweep from bottom ── */}

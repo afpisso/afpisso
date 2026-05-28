@@ -739,6 +739,7 @@ export const cases = [
     year: '2025',
     featured: true,
     category: 'games',
+    trailerSrc: '/cases/courtyard-king/courtyard-king-trailer.mp4',
     headline: 'Designing UX/UI for tension, survival, and readable decisions in a Walking Dead Universe UEFN experience.',
     headlineEs: 'Diseño de UX/UI para tensión, supervivencia y decisiones legibles en una experiencia UEFN del universo The Walking Dead.',
     description:
@@ -1058,6 +1059,7 @@ export const cases = [
     year: '2025',
     featured: true,
     category: 'games',
+    trailerSrc: '/cases/havoc-hotel-3/havoc-hoterl-3-Trailer.mp4',
     headline: 'Designing UX/UI systems for a co-op roguelike franchise in Fortnite focused on progression, readability, and replayability.',
     headlineEs: 'Diseño de sistemas UX/UI para una franquicia roguelike cooperativo en Fortnite centrada en progresión, legibilidad y rejugabilidad.',
     description:
