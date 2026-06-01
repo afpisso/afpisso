@@ -4,6 +4,7 @@ import { useLenis } from '../contexts/LenisContext';
 import SignalTrigger from './SignalTrigger';
 import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
+import GlitchStrokeText from './GlitchStrokeText';
 import { m } from 'framer-motion';
 
 const SOCIAL = [
@@ -62,12 +63,11 @@ export default function Footer() {
               fontSize: 'clamp(3rem, 8.5vw, 8rem)',
               lineHeight: 0.9,
               letterSpacing: '0.01em',
-              color: 'rgba(240,238,234,0.08)',
+              color: 'rgba(240,238,234,0.15)',
               userSelect: 'none',
-              pointerEvents: 'none',
             }}
           >
-            END TRANSMISSION
+            <GlitchStrokeText stroke="1px rgba(255,37,64,0.18)">END TRANSMISSION</GlitchStrokeText>
           </p>
         </m.div>
       </div>
@@ -120,14 +120,34 @@ export default function Footer() {
             className="max-w-sm"
             style={{
               fontFamily: '"JetBrains Mono", monospace',
-              fontSize: '11px',
-              color: 'var(--color-fg-mute)',
+              fontSize: '12px',
+              color: 'var(--color-fg-dim)',
               lineHeight: 1.75,
               letterSpacing: '0.02em',
+              marginBottom: '16px',
             }}
           >
             {t.footer?.tagline || 'Game UX/UI, clarity systems and player decision-making.'}
           </p>
+          <Link
+            to="/#contact"
+            style={{
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '11px',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--color-accent)',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              transition: 'opacity 0.15s cubic-bezier(0.16,1,0.3,1)',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.65')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            {t.footer?.cta || 'Start a conversation'} →
+          </Link>
         </div>
 
         {/* Right — nav columns */}
@@ -138,9 +158,8 @@ export default function Footer() {
             </h3>
             <nav className="flex flex-col gap-2.5">
               {[
-                { to: '/work',       label: t.nav.work  || 'Case Files'  },
-                { to: '/notes',      label: t.nav.notes || 'Field Notes' },
-                { to: '/resume.pdf', label: t.footer?.resume || 'Resume', external: true },
+                { to: '/work',  label: t.nav.work  || 'Case Files'  },
+                { to: '/notes', label: t.nav.notes || 'Field Notes' },
               ].map(({ to, label, external }) =>
                 external ? (
                   <a

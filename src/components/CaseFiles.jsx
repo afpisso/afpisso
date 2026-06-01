@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { cases } from '../data/cases';
+import { cases, CASE_ORDER } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import { useHunt } from '../contexts/HuntContext';
 import SignalTrigger from './SignalTrigger';
@@ -198,14 +198,22 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
         style={{ textDecoration: 'none', display: 'block' }}
         onClick={() => analytics.caseCardClick?.(caseData.slug, caseData.title)}
       >
+        {/* Mobile thumbnail — desktop uses cursor-follow preview instead */}
         <div
-          className="flex items-center gap-5 py-6 pl-6 pr-4 sm:pr-6 transition-colors duration-200"
+          className="block sm:hidden"
+          style={{ aspectRatio: '16/9', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+        >
+          <ThumbnailOrPlaceholder case={caseData} />
+        </div>
+
+        <div
+          className="flex items-center gap-3 sm:gap-5 py-4 sm:py-6 pl-3 sm:pl-6 pr-3 sm:pr-6 transition-colors duration-200"
           style={{ backgroundColor: isHovered ? 'rgba(255,37,64,0.018)' : 'transparent' }}
         >
 
           {/* Index number */}
           <div
-            className="flex-shrink-0 w-10 tabular-nums transition-colors duration-200"
+            className="flex-shrink-0 w-7 sm:w-10 tabular-nums transition-colors duration-200"
             style={{
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: '11px',
@@ -224,7 +232,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
                 className="uppercase transition-colors duration-200"
                 style={{
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: 'clamp(1.7rem, 3.2vw, 3rem)',
+                  fontSize: 'clamp(1.1rem, 4vw, 3rem)',
                   lineHeight: 1,
                   letterSpacing: '0.01em',
                   color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.75)',
@@ -282,7 +290,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
           </div>
 
           {/* Right: case ID + animated arrow */}
-          <div className="flex-shrink-0 flex flex-col items-end gap-2 pl-4 min-w-[60px]">
+          <div className="hidden sm:flex flex-shrink-0 flex-col items-end gap-2 pl-4 min-w-[60px]">
             <div
               className="sys-label transition-colors duration-200"
               style={{ color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)' }}
@@ -314,10 +322,11 @@ export default function CaseFiles() {
   useHunt(); // needed to keep context subscription alive in this subtree
   const [hovered, setHovered] = useState(null);
 
-  const VISIBILITY_ORDER = { public: 0, 'nda-safe': 1, 'password-protected': 2, 'coming-soon': 3, legacy: 4 };
-  const featured = [...cases.filter(c => c.featured)].sort(
-    (a, b) => (VISIBILITY_ORDER[a.visibility] ?? 9) - (VISIBILITY_ORDER[b.visibility] ?? 9)
-  );
+  const featured = [...cases].filter(c => c.featured).sort((a, b) => {
+    const ai = CASE_ORDER.indexOf(a.slug);
+    const bi = CASE_ORDER.indexOf(b.slug);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
 
   return (
     <>

@@ -1,3 +1,18 @@
+/**
+ * CASE_ORDER — explicit display order for project lists (CaseFiles, WorkPage).
+ * Edit this array to reorder cases without touching the data below.
+ */
+export const CASE_ORDER = [
+  'star-wars-roguelike-one',
+  'orcs-must-die-by-the-blade',
+  'zombie-dragon-adventure',
+  'raptor-heist',
+  'courtyard-king',
+  'havoc-hotel-3',
+  'zomvilles',
+  'kodety',
+];
+
 export const cases = [
   {
     id: 'CASE-001',
@@ -1681,6 +1696,171 @@ export const cases = [
         'Kodety se lanzó en web y recibió un premio de la industria por su enfoque de diseño. El proyecto demostró que el diseño de juegos educativos tiene éxito cuando los objetivos de aprendizaje y juego están alineados a nivel de mecánicas en lugar de superpuestos uno encima del otro.',
       nextSteps:
         'El diseño de juegos educativos se beneficia significativamente de la medición de resultados de aprendizaje junto con los datos de engagement. Querría ejecutar evaluaciones comparando qué saben los jugadores antes y después de las sesiones, correlacionadas con dónde se comprometieron más tiempo en el juego. Esos datos informarían qué mecánicas están haciendo el trabajo educativo de manera más efectiva.',
+    },
+  },
+  {
+    id: 'CASE-008',
+    slug: 'star-wars-roguelike-one',
+    title: 'Star Wars Roguelike One',
+    thumbnailAlt: 'Star Wars Roguelike One — UEFN roguelike UX/UI design case study',
+    role: 'Game UX/UI Designer',
+    platform: ['UEFN', 'Fortnite'],
+    focus: 'IP-faithful UX, roguelike loop clarity, run readability, Star Wars feedback systems',
+    focusEs: 'UX fiel al IP, claridad del loop roguelike, legibilidad por partida, sistemas de retroalimentación Star Wars',
+    status: 'SELECTED WORK',
+    visibility: 'public',
+    statusColor: 'accent',
+    year: '2026',
+    featured: true,
+    category: 'games',
+    thumbnail: '/cases/star-wars-roguelike-one/hero.jpg',
+    trailerSrc: '/cases/star-wars-roguelike-one/roguelike-one-trailer.mp4',
+    headline: 'Designing UX/UI for a Star Wars roguelike built inside Fortnite Creative.',
+    headlineEs: 'Diseño de UX/UI para un roguelike de Star Wars construido dentro de Fortnite Creative.',
+    description:
+      'Star Wars Roguelike One brings the look, feel, and tension of the Star Wars universe into UEFN as a roguelike experience. My focus was on making the run loop readable, keeping the IP tone intact, and helping players understand risk and progression without breaking Star Wars immersion.',
+    descriptionEs:
+      'Star Wars Roguelike One lleva el aspecto, sensación y tensión del universo Star Wars a UEFN como una experiencia roguelike. Mi enfoque fue hacer el loop de partidas legible, mantener el tono del IP intacto y ayudar a los jugadores a entender riesgo y progresión sin romper la inmersión de Star Wars.',
+    tags: ['UEFN', 'Roguelike', 'Star Wars', 'IP Design', 'Run Clarity'],
+    relatedNotes: ['uefn-ux-lessons', 'feedback-reduces-guesswork', 'clean-hud-vs-clear-hud'],
+    cta: 'View Star Wars Roguelike One case',
+    content: {
+      summary:
+        'Star Wars Roguelike One is a Star Wars experience built in UEFN inside Fortnite. My work focused on UX/UI systems for run structure, IP-faithful feedback, and player orientation across repeatable loops. The challenge was keeping roguelike clarity intact while respecting the visual and emotional language of the Star Wars universe.',
+      quickFacts: {
+        role: 'Game UX/UI Designer',
+        IP: 'Star Wars / Lucasfilm',
+        platform: 'UEFN / Fortnite',
+        engine: 'UEFN',
+        type: 'Roguelike experience',
+        year: '2026',
+        status: 'Shipped',
+      },
+      context:
+        'Building inside an IP like Star Wars creates a UX constraint that most UEFN projects do not face: every interface element has to earn its place against one of the most visually recognizable universes in entertainment. Players do not just play the game — they bring decades of expectations about how Star Wars looks, sounds, and feels. The interface cannot be generic. At the same time, UEFN imposes real technical limits on what custom UI can do inside Fortnite.',
+      challenge:
+        'Roguelikes require players to internalize the run loop quickly: understand their current state, evaluate risk, act, and repeat. That structure depends on clear feedback and predictable information hierarchy. The IP requirement adds a second constraint: that clarity must be delivered through a Star Wars lens. Generic HUD language breaks the fantasy. Too much custom UI breaks UEFN constraints. The problem was building a legible run loop that felt native to the Star Wars universe.',
+      role:
+        'I designed UX/UI systems for run orientation, combat feedback, progression communication, and the post-run flow. I worked within UEFN constraints and collaborated with the design and art teams to align implementation with IP fidelity requirements.',
+      constraints: [
+        'Star Wars IP requirements: interface had to be visually consistent with established franchise language',
+        'UEFN limitations on custom UI placement and rendering',
+        'Fortnite native HUD occupies core screen zones and cannot be removed',
+        'Roguelike run structure requires persistent state communication without cognitive overload',
+        'Player base is Fortnite-native: expects fast reads, not deep onboarding',
+      ],
+      approach: [
+        {
+          heading: 'IP-faithful feedback language',
+          body: 'Established a visual vocabulary grounded in Star Wars iconography rather than generic game UI. Feedback signals drew from established franchise cues — color temperature, typography weight, and motion patterns consistent with how the universe has communicated information in other media. Players could read state without needing to learn a new system from scratch.',
+        },
+        {
+          heading: 'Run state at a glance',
+          body: 'Designed a persistent run status layer that communicated the three most critical variables without dominating the screen: objective progress, available resources, and current threat level. Information outside those three was accessible on demand. This reduced cognitive load while keeping players oriented across fast combat sequences.',
+        },
+        {
+          heading: 'Combat feedback within UEFN constraints',
+          body: 'Worked within UEFN device system constraints to design feedback that felt responsive and IP-appropriate. Focused on timing, position, and visual intensity rather than complex animations that would exceed platform limits. The result was feedback that reads clearly without requiring custom solutions that UEFN cannot support reliably.',
+        },
+        {
+          heading: 'Post-run momentum design',
+          body: 'Designed the end-of-run screen to make progression tangible and re-entry easy. The flow revealed results, unlocks, and next objective in sequence rather than all at once — giving players a moment with each beat before moving to the next. Roguelike retention depends on the player feeling forward momentum between runs.',
+        },
+      ],
+      keyDecisions: [
+        {
+          problem: 'Early prototypes used generic UEFN UI components that communicated game state clearly but read as completely disconnected from the Star Wars universe, weakening IP immersion on every interaction.',
+          decision: 'Replaced generic UI treatments with solutions grounded in Star Wars visual language — color assignments, typographic hierarchy, and motion timing calibrated to franchise precedent rather than game UI defaults.',
+          why: 'IP experiences live or die by tone consistency. A player inside Star Wars who sees a generic health bar is reminded they are playing a Fortnite mini-game. A player who sees interface language that feels native to the universe stays in the experience. The UX job is to make the seams invisible.',
+        },
+        {
+          problem: 'Run-end was causing drop-off: players were seeing the results screen and leaving before re-entering, which broke the roguelike retention loop.',
+          decision: 'Redesigned the post-run flow to lead with progress made rather than run result, and to surface the next unlock or objective immediately after. Changed the primary action from "return to lobby" to "run again" with the reward state visible.',
+          why: 'Roguelike retention is an emotional loop, not a data presentation. Players re-enter when they feel forward momentum, not when they understand their score. The screen needed to answer "what changes if I play again" before it answered anything else.',
+        },
+      ],
+      deliverables: [
+        'Run state UI system and component states documentation',
+        'IP feedback language guide and application examples',
+        'Combat feedback timing specifications',
+        'Post-run flow and information architecture',
+        'UEFN implementation notes and screen zone maps',
+      ],
+      outcome:
+        'Star Wars Roguelike One shipped inside Fortnite in 2026. The project is currently live. Specific engagement metrics are not yet available for public sharing.',
+      nextSteps:
+        'I would track the drop-off rate at the post-run screen and compare it to run-again rate across first-session and returning players. That delta tells you whether the re-entry hook is working or whether players are extracting a single session of value and leaving. I would also look at moments where players die without appearing to understand why — those are the places where the combat feedback system still has work to do.',
+    },
+    whatThisShows:
+      'This project shows how I work at the intersection of IP fidelity and game UX clarity. The constraint is real: the interface has to communicate game state clearly while speaking the visual language of one of the most recognizable franchises in entertainment. That balance — useful and on-brand simultaneously — is the same challenge that exists in any licensed product or tightly governed design system. The solution is not compromise. It is finding the overlap between what the IP demands and what the player needs.',
+    whatThisShowsEs:
+      'Este proyecto muestra cómo trabajo en la intersección de la fidelidad al IP y la claridad de game UX. La restricción es real: la interfaz tiene que comunicar el estado del juego claramente mientras habla el lenguaje visual de una de las franquicias más reconocibles del entretenimiento. Ese equilibrio — útil y fiel a la marca simultáneamente — es el mismo desafío que existe en cualquier producto licenciado o sistema de diseño con gobernanza estricta. La solución no es el compromiso. Es encontrar la superposición entre lo que el IP exige y lo que el jugador necesita.',
+    contentEs: {
+      summary:
+        'Star Wars Roguelike One es una experiencia de Star Wars construida en UEFN dentro de Fortnite. Mi trabajo se centró en sistemas UX/UI para la estructura de partidas, retroalimentación fiel al IP y orientación del jugador a través de loops repetibles. El desafío fue mantener la claridad roguelike intacta mientras se respetaba el lenguaje visual y emocional del universo Star Wars.',
+      quickFacts: {
+        role: 'Game UX/UI Designer',
+        IP: 'Star Wars / Lucasfilm',
+        platform: 'UEFN / Fortnite',
+        engine: 'UEFN',
+        type: 'Experiencia roguelike',
+        year: '2026',
+        status: 'Lanzado',
+      },
+      context:
+        'Construir dentro de un IP como Star Wars crea una restricción de UX que la mayoría de los proyectos UEFN no enfrentan: cada elemento de interfaz tiene que ganarse su lugar frente a uno de los universos más reconocibles visualmente en el entretenimiento. Los jugadores no solo juegan el juego — traen décadas de expectativas sobre cómo se ve, suena y se siente Star Wars. La interfaz no puede ser genérica. Al mismo tiempo, UEFN impone límites técnicos reales sobre lo que la UI personalizada puede hacer dentro de Fortnite.',
+      challenge:
+        'Los roguelikes requieren que los jugadores interioricen el loop de partidas rápidamente: entender su estado actual, evaluar el riesgo, actuar y repetir. Esa estructura depende de retroalimentación clara y jerarquía de información predecible. El requisito del IP añade una segunda restricción: esa claridad debe entregarse a través de un lente Star Wars. El lenguaje genérico de HUD rompe la fantasía. Demasiada UI personalizada rompe las restricciones de UEFN. El problema fue construir un loop legible que se sintiera nativo al universo Star Wars.',
+      role:
+        'Diseñé sistemas UX/UI para orientación de partidas, retroalimentación de combate, comunicación de progresión y el flujo post-partida. Trabajé dentro de las restricciones de UEFN y colaboré con los equipos de diseño y arte para alinear la implementación con los requisitos de fidelidad al IP.',
+      constraints: [
+        'Requisitos del IP de Star Wars: la interfaz tenía que ser visualmente consistente con el lenguaje establecido de la franquicia',
+        'Limitaciones de UEFN en posicionamiento y renderizado de UI personalizada',
+        'El HUD nativo de Fortnite ocupa zonas centrales de pantalla y no puede eliminarse',
+        'La estructura de partidas roguelike requiere comunicación de estado persistente sin sobrecarga cognitiva',
+        'La base de jugadores es nativa de Fortnite: espera lecturas rápidas, no onboarding profundo',
+      ],
+      approach: [
+        {
+          heading: 'Lenguaje de retroalimentación fiel al IP',
+          body: 'Establecí un vocabulario visual fundamentado en la iconografía de Star Wars en lugar de UI de juego genérica. Las señales de retroalimentación se derivaron de pistas establecidas de la franquicia — temperatura de color, peso tipográfico y patrones de movimiento consistentes con cómo el universo ha comunicado información en otros medios. Los jugadores podían leer el estado sin necesidad de aprender un sistema nuevo desde cero.',
+        },
+        {
+          heading: 'Estado de partida de un vistazo',
+          body: 'Diseñé una capa de estado de partida persistente que comunicaba las tres variables más críticas sin dominar la pantalla: progreso del objetivo, recursos disponibles y nivel de amenaza actual. La información fuera de esas tres era accesible bajo demanda. Esto redujo la carga cognitiva mientras mantenía a los jugadores orientados durante secuencias de combate rápidas.',
+        },
+        {
+          heading: 'Retroalimentación de combate dentro de las restricciones de UEFN',
+          body: 'Trabajé dentro de las restricciones del sistema de dispositivos UEFN para diseñar retroalimentación que se sintiera receptiva y apropiada para el IP. Me centré en temporización, posición e intensidad visual en lugar de animaciones complejas que excederían los límites de la plataforma. El resultado fue retroalimentación que se lee claramente sin requerir soluciones personalizadas que UEFN no puede soportar de manera confiable.',
+        },
+        {
+          heading: 'Diseño de impulso post-partida',
+          body: 'Diseñé la pantalla de fin de partida para hacer la progresión tangible y la re-entrada fácil. El flujo revelaba resultados, desbloqueos y próximo objetivo en secuencia en lugar de todo a la vez — dando a los jugadores un momento con cada beat antes de pasar al siguiente. La retención en roguelikes depende de que el jugador sienta impulso hacia adelante entre partidas.',
+        },
+      ],
+      keyDecisions: [
+        {
+          problem: 'Los prototipos iniciales usaban componentes UI genéricos de UEFN que comunicaban el estado del juego claramente pero se leían como completamente desconectados del universo Star Wars, debilitando la inmersión del IP en cada interacción.',
+          decision: 'Reemplacé los tratamientos UI genéricos con soluciones fundamentadas en el lenguaje visual de Star Wars — asignaciones de color, jerarquía tipográfica y temporización de movimiento calibrados a los precedentes de la franquicia en lugar de los valores predeterminados de UI de juego.',
+          why: 'Las experiencias de IP viven o mueren por la consistencia de tono. Un jugador dentro de Star Wars que ve una barra de salud genérica recuerda que está jugando un mini-juego de Fortnite. Un jugador que ve un lenguaje de interfaz que se siente nativo al universo se mantiene en la experiencia. El trabajo de UX es hacer las costuras invisibles.',
+        },
+        {
+          problem: 'El fin de partida estaba causando abandono: los jugadores veían la pantalla de resultados y se iban antes de volver a entrar, lo que rompía el loop de retención roguelike.',
+          decision: 'Rediseñé el flujo post-partida para liderar con el progreso logrado en lugar del resultado de la partida, y para mostrar el próximo desbloqueo u objetivo inmediatamente después. Cambié la acción primaria de "volver al lobby" a "jugar de nuevo" con el estado de recompensa visible.',
+          why: 'La retención en roguelikes es un loop emocional, no una presentación de datos. Los jugadores vuelven a entrar cuando sienten impulso hacia adelante, no cuando entienden su puntuación. La pantalla necesitaba responder "qué cambia si juego de nuevo" antes de responder cualquier otra cosa.',
+        },
+      ],
+      deliverables: [
+        'Sistema UI de estado de partida y documentación de estados de componentes',
+        'Guía de lenguaje de retroalimentación del IP y ejemplos de aplicación',
+        'Especificaciones de temporización de retroalimentación de combate',
+        'Flujo post-partida y arquitectura de información',
+        'Notas de implementación UEFN y mapas de zonas de pantalla',
+      ],
+      outcome:
+        'Star Wars Roguelike One se lanzó dentro de Fortnite en 2026. El proyecto está actualmente disponible. Las métricas específicas de engagement aún no están disponibles para compartir públicamente.',
+      nextSteps:
+        'Haría seguimiento de la tasa de abandono en la pantalla post-partida y la compararía con la tasa de volver a jugar entre jugadores de primera sesión y jugadores que regresan. Ese delta indica si el gancho de re-entrada está funcionando o si los jugadores están extrayendo una sola sesión de valor y saliendo. También observaría los momentos en que los jugadores mueren sin aparentemente entender por qué — esos son los lugares donde el sistema de retroalimentación de combate todavía tiene trabajo por hacer.',
     },
   },
 ];

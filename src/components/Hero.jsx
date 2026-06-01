@@ -339,7 +339,6 @@ export default function Hero() {
 
   // Scramble effects — trigger once booted
   const scrambleLabel  = useScramble(t.hero.label.toUpperCase(),  { duration: 900,  trigger: booted ? 1 : 0, delay: 400,  enabled: !shouldReduce });
-  const scrambleHandle = useScramble('@byandresfe',                { duration: 700,  trigger: booted ? 1 : 0, delay: 1000, enabled: !shouldReduce });
 
   return (
     <>
@@ -456,10 +455,10 @@ export default function Hero() {
               <span
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: '9px',
-                  letterSpacing: '0.2em',
+                  fontSize: '11px',
+                  letterSpacing: '0.16em',
                   textTransform: 'uppercase',
-                  color: 'rgba(255,37,64,0.45)',
+                  color: 'rgba(255,37,64,0.55)',
                   fontWeight: 700,
                 }}
               >
@@ -468,9 +467,9 @@ export default function Hero() {
             </div>
             <p style={{
               fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 'clamp(13px, 1.5vw, 16px)',
+              fontSize: 'clamp(15px, 1.8vw, 20px)',
               color: 'var(--color-fg-dim)',
-              lineHeight: 1.65,
+              lineHeight: 1.6,
               maxWidth: '600px',
               letterSpacing: '0.01em',
             }}>
@@ -478,26 +477,8 @@ export default function Hero() {
             </p>
           </m.div>
 
-          {/* Handle / separator */}
-          <m.div
-            className="flex items-center gap-4 mb-6 md:mb-10"
-            aria-hidden="true"
-            initial={{ opacity: 0 }}
-            animate={booted ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.3, delay: 0.88 }}
-          >
-            <m.div
-              style={{ backgroundColor: 'var(--color-rule)', height: '1px', transformOrigin: 'left' }}
-              className="max-w-[180px] w-full"
-              initial={{ scaleX: 0 }}
-              animate={booted ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
-            />
-            <span className="sys-label whitespace-nowrap" aria-label="@byandresfe">{scrambleHandle}</span>
-          </m.div>
-
           {/* Copy + CTAs + Focus tags */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-start">
             <m.div
               initial={{ opacity: 0, y: 24 }}
               animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
@@ -523,6 +504,13 @@ export default function Hero() {
                   onClick={() => analytics.heroCta(t.hero.cta1)}
                 >
                   {t.hero.cta1}
+                </CyberBtn>
+                <CyberBtn
+                  href="#how-i-work"
+                  variant="ghost"
+                  size="sm"
+                >
+                  {'View Approach'}
                 </CyberBtn>
               </div>
             </m.div>

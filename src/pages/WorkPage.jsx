@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { cases } from '../data/cases';
+import { cases, CASE_ORDER } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
@@ -190,13 +190,21 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
         style={{ textDecoration: 'none', display: 'block' }}
         onClick={() => analytics.caseCardClick?.(caseData.slug, caseData.title)}
       >
+        {/* Mobile thumbnail — desktop uses cursor-follow preview instead */}
         <div
-          className="flex items-center gap-5 py-7 pl-6 pr-4 sm:pr-8 transition-colors duration-200"
+          className="block sm:hidden"
+          style={{ aspectRatio: '16/9', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+        >
+          <ThumbnailOrPlaceholder c={caseData} />
+        </div>
+
+        <div
+          className="flex items-center gap-3 sm:gap-5 py-4 sm:py-7 pl-3 sm:pl-6 pr-3 sm:pr-8 transition-colors duration-200"
           style={{ backgroundColor: isHovered ? 'rgba(255,37,64,0.02)' : 'transparent' }}
         >
           {/* Index number */}
           <div
-            className="flex-shrink-0 w-10 tabular-nums transition-colors duration-200"
+            className="flex-shrink-0 w-7 sm:w-10 tabular-nums transition-colors duration-200"
             style={{
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: '11px',
@@ -215,7 +223,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
                 className="uppercase transition-colors duration-200"
                 style={{
                   fontFamily: '"Bebas Neue", sans-serif',
-                  fontSize: 'clamp(1.7rem, 3.2vw, 3rem)',
+                  fontSize: 'clamp(1.1rem, 4vw, 3rem)',
                   lineHeight: 1,
                   letterSpacing: '0.01em',
                   color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.78)',
@@ -270,7 +278,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
           </div>
 
           {/* Right: case ID + arrow */}
-          <div className="flex-shrink-0 flex flex-col items-end gap-2 pl-4 min-w-[60px]">
+          <div className="hidden sm:flex flex-shrink-0 flex-col items-end gap-2 pl-4 min-w-[60px]">
             <div
               className="sys-label transition-colors duration-200"
               style={{ color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)' }}
@@ -350,7 +358,11 @@ export default function WorkPage({ onMenuOpen }) {
     return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
   }, []);
 
-  const visible = cases.filter(c => matchFilter(active, c));
+  const visible = cases.filter(c => matchFilter(active, c)).sort((a, b) => {
+    const ai = CASE_ORDER.indexOf(a.slug);
+    const bi = CASE_ORDER.indexOf(b.slug);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
@@ -434,7 +446,8 @@ export default function WorkPage({ onMenuOpen }) {
 
             {/* Filter bar — animated active underline via layoutId */}
             <m.div
-              className="flex flex-wrap items-baseline gap-x-6 gap-y-2 mb-10"
+              className="flex sm:flex-wrap items-baseline gap-x-4 sm:gap-x-6 gap-y-2 mb-10 overflow-x-auto sm:overflow-visible"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               role="group"
               aria-label="Filter projects"
               initial={{ opacity: 0, y: 12 }}
