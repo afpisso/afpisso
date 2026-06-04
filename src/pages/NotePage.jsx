@@ -9,6 +9,7 @@ import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import SectionTag from '../components/SectionTag';
 import { m } from 'framer-motion';
+import { ZoomableImage } from '../components/ZoomModal';
 
 const BASE_URL = 'https://byandresfe.com';
 
@@ -117,6 +118,17 @@ function renderBlock(block, i) {
     case 'subheading': return <Subheading key={i} text={block.text} />;
     case 'list':       return <List       key={i} items={block.items} />;
     case 'callout':    return <Callout    key={i} text={block.text} />;
+    case 'image':      return (
+      <div key={i} style={{ margin: '2rem 0' }}>
+        <ZoomableImage
+          src={block.src}
+          alt={block.alt || ''}
+          aspect={block.aspect || '16/9'}
+          objectFit={block.objectFit || 'cover'}
+          caption={block.caption}
+        />
+      </div>
+    );
     default:           return null;
   }
 }

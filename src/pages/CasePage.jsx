@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
@@ -14,6 +13,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import CyberBtn from '../components/CyberBtn';
 import { m, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ZoomModal, ScanSweep } from '../components/ZoomModal';
 
 const BASE_URL = 'https://byandresfe.com';
 
@@ -496,41 +496,84 @@ function PullQuote({ children }) {
 }
 
 function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
-  const hasRealImage = Boolean(src)
+  const hasRealImage = Boolean(src);
+  const [open,    setOpen]    = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [scanKey, setScanKey] = useState(0);
+
   return (
-    <div
-      style={{
-        aspectRatio: aspect,
-        border: `1px solid ${RULE}`,
-        backgroundColor: 'rgba(255,255,255,0.02)',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        gap: 12, position: 'relative', overflow: 'hidden',
-      }}
-      aria-hidden={hasRealImage ? undefined : 'true'}
-    >
-      {src && (
-        <img
-          src={src}
-          alt={alt || label}
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={e => { e.currentTarget.style.display = 'none'; }}
-        />
-      )}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="3" width="18" height="18" rx="1" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-          <circle cx="8.5" cy="8.5" r="2" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-          <path d="M3 16l5-5 4 4 3-3 6 6" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-        </svg>
-        <span style={{ fontFamily: MONO, fontSize: '10px', color: 'rgba(245,245,243,0.25)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-          {label}
-        </span>
-      </div>
-      {[['top-2 left-2', 'border-t border-l'], ['top-2 right-2', 'border-t border-r'], ['bottom-2 left-2', 'border-b border-l'], ['bottom-2 right-2', 'border-b border-r']].map(([pos, cls]) => (
-        <div key={pos} aria-hidden="true" className={`absolute ${pos} w-4 h-4 ${cls}`} style={{ borderColor: RULE }} />
-      ))}
-    </div>
+    <>
+      <m.div
+        style={{
+          aspectRatio: aspect,
+          border: `1px solid ${hovered && hasRealImage ? 'rgba(255,37,64,0.35)' : RULE}`,
+          backgroundColor: 'rgba(255,255,255,0.02)',
+          position: 'relative', overflow: 'hidden',
+          cursor: hasRealImage ? 'zoom-in' : 'default',
+          transition: 'border-color 0.2s ease',
+        }}
+        aria-hidden={hasRealImage ? undefined : 'true'}
+        onMouseEnter={() => { if (hasRealImage) { setHovered(true); setScanKey(k => k + 1); } }}
+        onMouseLeave={() => setHovered(false)}
+        onClick={() => hasRealImage && setOpen(true)}
+      >
+        {src && (
+          <img
+            src={src}
+            alt={alt || label}
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={e => { e.currentTarget.style.display = 'none'; }}
+          />
+        )}
+
+        {/* Placeholder icon — shown only when no image */}
+        {!hasRealImage && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="1" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
+              <circle cx="8.5" cy="8.5" r="2" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
+              <path d="M3 16l5-5 4 4 3-3 6 6" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
+            </svg>
+            <span style={{ fontFamily: MONO, fontSize: '10px', color: 'rgba(245,245,243,0.25)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              {label}
+            </span>
+          </div>
+        )}
+
+        {/* Corner marks on hover */}
+        {hasRealImage && (
+          <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+            {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
+          </m.div>
+        )}
+
+        {/* Zoom hint */}
+        {hasRealImage && (
+          <m.div aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', pointerEvents: 'none' }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+            [ zoom ]
+          </m.div>
+        )}
+
+        {/* Fallback corner marks (static, no-image state) */}
+        {!hasRealImage && [['top-2 left-2', 'border-t border-l'], ['top-2 right-2', 'border-t border-r'], ['bottom-2 left-2', 'border-b border-l'], ['bottom-2 right-2', 'border-b border-r']].map(([pos, cls]) => (
+          <div key={pos} aria-hidden="true" className={`absolute ${pos} w-4 h-4 ${cls}`} style={{ borderColor: RULE }} />
+        ))}
+
+        {hasRealImage && <ScanSweep active={hovered} scanKey={scanKey} />}
+      </m.div>
+
+      <AnimatePresence>
+        {open && (
+          <ZoomModal
+            items={[src]}
+            activeIndex={0}
+            onClose={() => setOpen(false)}
+            onNav={() => {}}
+            title={alt || label}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -549,182 +592,7 @@ const GALLERY_CORNERS = [
   { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
 ];
 
-// Light-glare sweep — only translateX, fires once per hover entry
-function ScanSweep({ active, scanKey }) {
-  return (
-    <m.div
-      key={scanKey}
-      aria-hidden="true"
-      style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 3 }}
-    >
-      <m.div
-        style={{
-          position: 'absolute', top: 0, bottom: 0, left: 0,
-          width: '50%',
-          background: 'linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.055) 50%, transparent 100%)',
-        }}
-        initial={{ x: '-100%' }}
-        animate={active ? { x: '320%' } : { x: '-100%' }}
-        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-      />
-    </m.div>
-  );
-}
-
-// ── Fullscreen image modal ────────────────────────────────────────────────────
-// Opens on click of any gallery image. Keyboard: Escape closes, ← → navigate.
-function GalleryModal({ items, activeIndex, onClose, onNav, title }) {
-  const reduced = useReducedMotion();
-  const [scanKey, setScanKey] = useState(0);
-  const total = items.filter(Boolean).length;
-  const src   = items[activeIndex];
-  const num   = String(activeIndex + 1).padStart(2, '0');
-
-  // Escape + arrow keys
-  useEffect(() => {
-    function onKey(e) {
-      if (e.key === 'Escape')      onClose();
-      if (e.key === 'ArrowRight')  onNav(1);
-      if (e.key === 'ArrowLeft')   onNav(-1);
-    }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose, onNav]);
-
-  // Fire scan sweep once on open
-  useEffect(() => { setScanKey(k => k + 1); }, [activeIndex]);
-
-  // Lock body scroll while open
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
-  }, []);
-
-  const MODAL_CORNERS = [
-    { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
-    { top: 0,    right: 0,   borderTop:    `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
-    { bottom: 0, left: 0,    borderBottom: `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
-    { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
-  ];
-
-  return createPortal(
-    <m.div
-      key="modal-backdrop"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: reduced ? 0.15 : 0.22, ease: 'easeOut' }}
-      onClick={onClose}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        backgroundColor: 'rgba(8,8,8,0.96)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 'clamp(16px, 4vw, 64px)',
-      }}
-    >
-      {/* Image container — stops click propagation */}
-      <m.div
-        key={activeIndex}
-        initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
-        animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-        exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-        transition={{ duration: reduced ? 0.2 : 0.38, ease: [0.16, 1, 0.3, 1] }}
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: '1200px',
-          aspectRatio: '16/9',
-          backgroundColor: '#060606',
-          flexShrink: 0,
-        }}
-      >
-        {src && (
-          <img
-            src={src}
-            alt={`${title} — screen ${activeIndex + 1}`}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-          />
-        )}
-
-        {/* Corner marks */}
-        {MODAL_CORNERS.map((s, i) => (
-          <div key={i} aria-hidden="true" style={{ position: 'absolute', width: 28, height: 28, ...s }} />
-        ))}
-
-        {/* Scan sweep on image change */}
-        <ScanSweep active={true} scanKey={scanKey} />
-
-        {/* Counter — top left */}
-        <div style={{
-          position: 'absolute', top: 10, left: 14, zIndex: 10,
-          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em',
-          color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', pointerEvents: 'none',
-        }}>
-          {num} / {String(total).padStart(2, '0')}
-        </div>
-
-        {/* Nav arrows — inside image */}
-        {total > 1 && (
-          <>
-            <button
-              onClick={e => { e.stopPropagation(); onNav(-1); }}
-              aria-label="Previous image"
-              style={{
-                position: 'absolute', left: 0, top: 0, bottom: 0, width: '15%',
-                background: 'linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 100%)',
-                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
-                justifyContent: 'flex-start', paddingLeft: 14, zIndex: 10,
-                color: 'rgba(255,255,255,0.6)', fontFamily: MONO, fontSize: '11px',
-                letterSpacing: '0.12em',
-              }}
-            >
-              {'←'}
-            </button>
-            <button
-              onClick={e => { e.stopPropagation(); onNav(1); }}
-              aria-label="Next image"
-              style={{
-                position: 'absolute', right: 0, top: 0, bottom: 0, width: '15%',
-                background: 'linear-gradient(to left, rgba(8,8,8,0.55) 0%, transparent 100%)',
-                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
-                justifyContent: 'flex-end', paddingRight: 14, zIndex: 10,
-                color: 'rgba(255,255,255,0.6)', fontFamily: MONO, fontSize: '11px',
-                letterSpacing: '0.12em',
-              }}
-            >
-              {'→'}
-            </button>
-          </>
-        )}
-      </m.div>
-
-      {/* Close — top right, outside image */}
-      <button
-        onClick={onClose}
-        style={{
-          position: 'fixed', top: 20, right: 24, zIndex: 10000,
-          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.45)', background: 'none', border: 'none',
-          cursor: 'pointer', padding: '8px 4px',
-        }}
-      >
-        [ CLOSE ]
-      </button>
-
-      {/* Bottom line: title */}
-      <div style={{
-        position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)',
-        fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.22)', whiteSpace: 'nowrap', pointerEvents: 'none',
-      }}>
-        {title}
-      </div>
-    </m.div>,
-    document.body
-  );
-}
+// ScanSweep and ZoomModal imported from ../components/ZoomModal
 
 function GalleryPlaceholder({ index, caseId }) {
   const num = String(index + 1).padStart(2, '0');
@@ -872,7 +740,7 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, clipFrom = 'bot
 }
 
 // ── Flow diagram block ────────────────────────────────────────────────────────
-// Shows a wide diagram image. Click opens it fullscreen in GalleryModal.
+// Shows a wide diagram image. Click opens it fullscreen in ZoomModal.
 // The image is shown letterboxed at 21/9 to hint at its width, then full
 // resolution is accessible via the zoom-in modal.
 function FlowDiagramBlock({ src, alt, caption }) {
@@ -948,7 +816,7 @@ function FlowDiagramBlock({ src, alt, caption }) {
       {/* Fullscreen modal */}
       <AnimatePresence>
         {open && (
-          <GalleryModal
+          <ZoomModal
             items={[src]}
             activeIndex={0}
             onClose={() => setOpen(false)}
@@ -981,7 +849,7 @@ function CaseGallery({ gallery = [], caseId, title }) {
     <>
     <AnimatePresence>
       {modalIndex !== null && (
-        <GalleryModal
+        <ZoomModal
           items={items}
           activeIndex={modalIndex}
           onClose={closeModal}
