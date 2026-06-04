@@ -1069,7 +1069,7 @@ export const cases = [
     focus: 'Co-op UX, progression, reward clarity, replayability, combat readability',
     focusEs: 'UX cooperativo, progresión, claridad de recompensas, rejugabilidad, legibilidad de combate',
     status: 'SELECTED WORK',
-    visibility: 'public',
+    visibility: 'legacy',
     statusColor: 'accent',
     year: '2025',
     featured: true,
