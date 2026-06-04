@@ -8,8 +8,9 @@ export const CASE_ORDER = [
   'zombie-dragon-adventure',
   'raptor-heist',
   'courtyard-king',
-  'havoc-hotel-3',
   'zomvilles',
+  // legacy — lower priority, shown last
+  'havoc-hotel-3',
   'kodety',
 ];
 
