@@ -73,11 +73,11 @@ function useTypewriter(target, active, { speed = 28 } = {}) {
 // ── Menu data ──────────────────────────────────────────────────────────────
 const MENU_ITEMS = [
   { en: 'HOME',    es: 'INICIO',   page: '000', href: '/',        sub_en: 'Back to home base',               sub_es: 'Volver al inicio'               },
-  { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019—2026',   sub_es: 'Proyectos selectos, 2019—2026'  },
+  { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019–2026',   sub_es: 'Proyectos selectos, 2019–2026'  },
   { en: 'ABOUT',   es: 'SOBRE MÍ', page: '002', href: '/about',   sub_en: 'Biography & process',             sub_es: 'Biografía y proceso'            },
   { en: 'JOURNAL', es: 'DIARIO',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
   { en: 'CONTACT',  es: 'CONTACTO',  page: '004', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
-  { en: 'SPEAKING', es: 'SPEAKING', page: '006', href: '/speaking',  sub_en: 'Colombia 5.0 — Game UX/UI talk',    sub_es: 'Colombia 5.0 — Charla Game UX/UI' },
+  { en: 'SPEAKING', es: 'SPEAKING', page: '006', href: '/speaking',  sub_en: 'Colombia 5.0 · Game UI Systems workshop',    sub_es: 'Colombia 5.0 · Taller Game UI Systems' },
 ];
 
 const SOCIAL = [
