@@ -385,6 +385,14 @@ export const cases = [
     cta: 'View D&D: Zombie Dragon Adventure case',
     heroVideoSrc: '/cases/zombie-dragon-adventure/01-hero-gameplay.mp4',
     trailerSrc: '/cases/zombie-dragon-adventure/zombie-dragon-adventure-Trailer.mp4',
+    gallery: [
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-01.webp',
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-02.webp',
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-03.webp',
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-04.webp',
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-05.webp',
+      '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-06.webp',
+    ],
     content: {
       summary:
         'D&D Zombie Dragon Adventure is an active UEFN experience built for the Fortnite ecosystem. I worked on the project as UX Lead during a 4-month production window, leading the UX/UI process with a team of three designers including myself. The challenge was not only creating screens for a UEFN game. It was helping players understand a complex adventure loop through clearer onboarding, reusable UI assets, structured flows and production-ready documentation. The experience combined a roguelike loop, class selection, lobby progression, stores, upgrades, D20 events, missions, inventory, stats, map systems and a final Dracolich boss encounter. The UX/UI work needed to bring clarity to that complexity while respecting the technical limitations of UEFN and the visual expectations of a recognizable IP.',
@@ -502,6 +510,9 @@ export const cases = [
           asset: '/cases/zombie-dragon-adventure/02-ftux-flow.jpg',
           assetAlt: 'D&D Zombie Dragon Adventure FTUX flow and adventurer guidance onboarding screens',
           assetCaption: 'FTUX flow: staged onboarding for new players entering the adventure.',
+          flowDiagram: '/cases/zombie-dragon-adventure/dnd-player-flow.webp',
+          flowDiagramAlt: 'D&D Zombie Dragon Adventure complete player flow diagram',
+          flowDiagramCaption: 'Player flow: full decision map from first session to end-game loop.',
         },
         {
           id: 'adventure-menu',
@@ -681,6 +692,9 @@ export const cases = [
           asset: '/cases/zombie-dragon-adventure/02-ftux-flow.jpg',
           assetAlt: 'Flujo FTUX y sistema de guía del aventurero en D&D Zombie Dragon Adventure',
           assetCaption: 'Flujo FTUX: onboarding por etapas para nuevos jugadores entrando a la aventura.',
+          flowDiagram: '/cases/zombie-dragon-adventure/dnd-player-flow.webp',
+          flowDiagramAlt: 'Diagrama completo del flujo del jugador en D&D Zombie Dragon Adventure',
+          flowDiagramCaption: 'Flujo del jugador: mapa de decisiones desde la primera sesión hasta el loop final.',
         },
         {
           id: 'adventure-menu',

@@ -38,7 +38,7 @@ const DEFAULT_DESC  =
   'Portfolio of Andres Felipe Pisso, a UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.'
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
-const staticRoutes = ['/', '/work', '/about', '/notes', '/resume']
+const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking']
 
 const routes = [
   ...staticRoutes,

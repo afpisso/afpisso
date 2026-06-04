@@ -76,7 +76,8 @@ const MENU_ITEMS = [
   { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019—2026',   sub_es: 'Proyectos selectos, 2019—2026'  },
   { en: 'ABOUT',   es: 'SOBRE MÍ', page: '002', href: '/about',   sub_en: 'Biography & process',             sub_es: 'Biografía y proceso'            },
   { en: 'JOURNAL', es: 'DIARIO',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
-  { en: 'CONTACT', es: 'CONTACTO', page: '004', href: '/#contact', sub_en: 'Inquiries & availability',       sub_es: 'Consultas y disponibilidad'     },
+  { en: 'CONTACT',  es: 'CONTACTO',  page: '004', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
+  { en: 'SPEAKING', es: 'SPEAKING', page: '006', href: '/speaking',  sub_en: 'Colombia 5.0 — Game UX/UI talk',    sub_es: 'Colombia 5.0 — Charla Game UX/UI' },
 ];
 
 const SOCIAL = [

@@ -34,6 +34,7 @@ const ResumePage      = lazy(() => import('./pages/ResumePage'));
 const NotesPage       = lazy(() => import('./pages/NotesPage'));
 const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
+const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
 
 // Easing
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -197,6 +198,7 @@ function AppRoutes() {
               <Route path="/notes/:slug"   element={<NotePage     onMenuOpen={open} />} />
               <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
               <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
+              <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
               {/* Legacy routes */}
               <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
               <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />

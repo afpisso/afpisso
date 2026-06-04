@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
@@ -12,7 +13,7 @@ import { useLenis } from '../contexts/LenisContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import CyberBtn from '../components/CyberBtn';
-import { m, useReducedMotion } from 'framer-motion';
+import { m, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
 
@@ -533,127 +534,520 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
   );
 }
 
-// ── Gallery strip ─────────────────────────────────────────────────────────────
-// Horizontal scrollable strip of work screenshots. Shows placeholders when
-// gallery array is empty — replace image paths in cases.js when assets exist.
-function GallerySlot({ src, index, caseId, title }) {
-  const [failed, setFailed] = useState(!src);
+// ── Gallery — editorial evidence grid ─────────────────────────────────────────
+// Interactions per tier:
+//   Hero   — clip-path wipe from bottom (750ms, marketing timing), scroll parallax, scan sweep
+//   Pair   — clip-path wipe from outer edges meeting center, brightness+scale hover
+//   Detail — clip-path wipe from bottom, staggered 50ms, brightness+scale hover
+// Reduced-motion: all clips fall back to opacity reveal
+// Scan sweep — translateX glare using only transform (Emil: props-transform-opacity)
 
+const GALLERY_CORNERS = [
+  { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+  { top: 0,    right: 0,   borderTop:    `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+  { bottom: 0, left: 0,    borderBottom: `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+  { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+];
+
+// Light-glare sweep — only translateX, fires once per hover entry
+function ScanSweep({ active, scanKey }) {
   return (
     <m.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: index * 0.06 }}
-      style={{
-        flexShrink: 0,
-        width: 'clamp(280px, 40vw, 500px)',
-        aspectRatio: '16/9',
-        position: 'relative',
-        overflow: 'hidden',
-        border: failed ? `1px dashed ${RULE}` : 'none',
-        backgroundColor: failed ? 'var(--bg-2)' : '#000',
-      }}
+      key={scanKey}
+      aria-hidden="true"
+      style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 3 }}
     >
-      {!failed ? (
-        <img
-          src={src}
-          alt={`${title} — screen ${index + 1}`}
-          loading="lazy"
-          decoding="async"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        <>
-          {/* Large index watermark */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: BEBAS, fontSize: 'clamp(4rem, 8vw, 7rem)',
-            color: 'var(--color-accent-08)', letterSpacing: '0.02em',
-            userSelect: 'none', pointerEvents: 'none',
-          }}>
-            {String(index + 1).padStart(2, '0')}
-          </div>
-          {/* Labels */}
-          <div style={{
-            position: 'absolute', bottom: 16, left: 0, right: 0,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-          }}>
-            <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-fg-mute)', textTransform: 'uppercase' }}>
-              {caseId} / SCREEN {String(index + 1).padStart(2, '0')}
-            </span>
-            <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-accent-35)', textTransform: 'uppercase' }}>
-              — Awaiting asset —
-            </span>
-          </div>
-          {/* Corner brackets */}
-          {[['top-2 left-2', 'border-t border-l'], ['top-2 right-2', 'border-t border-r'], ['bottom-2 left-2', 'border-b border-l'], ['bottom-2 right-2', 'border-b border-r']].map(([pos, cls]) => (
-            <div key={pos} aria-hidden="true" className={`absolute ${pos} w-5 h-5 ${cls}`} style={{ borderColor: 'var(--color-accent-20)' }} />
-          ))}
-        </>
-      )}
-      {/* Screen counter badge */}
-      <div style={{
-        position: 'absolute', top: 10, left: 12,
-        fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em',
-        color: failed ? 'var(--color-fg-mute)' : 'rgba(255,255,255,0.45)',
-        textTransform: 'uppercase', pointerEvents: 'none',
-      }}>
-        {String(index + 1).padStart(2, '0')}
-      </div>
+      <m.div
+        style={{
+          position: 'absolute', top: 0, bottom: 0, left: 0,
+          width: '50%',
+          background: 'linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.055) 50%, transparent 100%)',
+        }}
+        initial={{ x: '-100%' }}
+        animate={active ? { x: '320%' } : { x: '-100%' }}
+        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      />
     </m.div>
   );
 }
 
-// Horizontal scrollable gallery wrapper — always renders (placeholders shown
-// when gallery is empty so the section shape is always visible)
-function CaseGallery({ gallery = [], caseId, title }) {
-  const SLOTS = 4;
-  const items = gallery.length > 0
-    ? gallery
-    : Array(SLOTS).fill(null);
+// ── Fullscreen image modal ────────────────────────────────────────────────────
+// Opens on click of any gallery image. Keyboard: Escape closes, ← → navigate.
+function GalleryModal({ items, activeIndex, onClose, onNav, title }) {
+  const reduced = useReducedMotion();
+  const [scanKey, setScanKey] = useState(0);
+  const total = items.filter(Boolean).length;
+  const src   = items[activeIndex];
+  const num   = String(activeIndex + 1).padStart(2, '0');
+
+  // Escape + arrow keys
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape')      onClose();
+      if (e.key === 'ArrowRight')  onNav(1);
+      if (e.key === 'ArrowLeft')   onNav(-1);
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, onNav]);
+
+  // Fire scan sweep once on open
+  useEffect(() => { setScanKey(k => k + 1); }, [activeIndex]);
+
+  // Lock body scroll while open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  const MODAL_CORNERS = [
+    { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+    { top: 0,    right: 0,   borderTop:    `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+    { bottom: 0, left: 0,    borderBottom: `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+    { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+  ];
+
+  return createPortal(
+    <m.div
+      key="modal-backdrop"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduced ? 0.15 : 0.22, ease: 'easeOut' }}
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        backgroundColor: 'rgba(8,8,8,0.96)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 'clamp(16px, 4vw, 64px)',
+      }}
+    >
+      {/* Image container — stops click propagation */}
+      <m.div
+        key={activeIndex}
+        initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
+        animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+        exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+        transition={{ duration: reduced ? 0.2 : 0.38, ease: [0.16, 1, 0.3, 1] }}
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '1200px',
+          aspectRatio: '16/9',
+          backgroundColor: '#060606',
+          flexShrink: 0,
+        }}
+      >
+        {src && (
+          <img
+            src={src}
+            alt={`${title} — screen ${activeIndex + 1}`}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+          />
+        )}
+
+        {/* Corner marks */}
+        {MODAL_CORNERS.map((s, i) => (
+          <div key={i} aria-hidden="true" style={{ position: 'absolute', width: 28, height: 28, ...s }} />
+        ))}
+
+        {/* Scan sweep on image change */}
+        <ScanSweep active={true} scanKey={scanKey} />
+
+        {/* Counter — top left */}
+        <div style={{
+          position: 'absolute', top: 10, left: 14, zIndex: 10,
+          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em',
+          color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', pointerEvents: 'none',
+        }}>
+          {num} / {String(total).padStart(2, '0')}
+        </div>
+
+        {/* Nav arrows — inside image */}
+        {total > 1 && (
+          <>
+            <button
+              onClick={e => { e.stopPropagation(); onNav(-1); }}
+              aria-label="Previous image"
+              style={{
+                position: 'absolute', left: 0, top: 0, bottom: 0, width: '15%',
+                background: 'linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 100%)',
+                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                justifyContent: 'flex-start', paddingLeft: 14, zIndex: 10,
+                color: 'rgba(255,255,255,0.6)', fontFamily: MONO, fontSize: '11px',
+                letterSpacing: '0.12em',
+              }}
+            >
+              {'←'}
+            </button>
+            <button
+              onClick={e => { e.stopPropagation(); onNav(1); }}
+              aria-label="Next image"
+              style={{
+                position: 'absolute', right: 0, top: 0, bottom: 0, width: '15%',
+                background: 'linear-gradient(to left, rgba(8,8,8,0.55) 0%, transparent 100%)',
+                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                justifyContent: 'flex-end', paddingRight: 14, zIndex: 10,
+                color: 'rgba(255,255,255,0.6)', fontFamily: MONO, fontSize: '11px',
+                letterSpacing: '0.12em',
+              }}
+            >
+              {'→'}
+            </button>
+          </>
+        )}
+      </m.div>
+
+      {/* Close — top right, outside image */}
+      <button
+        onClick={onClose}
+        style={{
+          position: 'fixed', top: 20, right: 24, zIndex: 10000,
+          fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.45)', background: 'none', border: 'none',
+          cursor: 'pointer', padding: '8px 4px',
+        }}
+      >
+        [ CLOSE ]
+      </button>
+
+      {/* Bottom line: title */}
+      <div style={{
+        position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)',
+        fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.22)', whiteSpace: 'nowrap', pointerEvents: 'none',
+      }}>
+        {title}
+      </div>
+    </m.div>,
+    document.body
+  );
+}
+
+function GalleryPlaceholder({ index, caseId }) {
+  const num = String(index + 1).padStart(2, '0');
+  return (
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+      <div aria-hidden="true" style={{ fontFamily: BEBAS, fontSize: 'clamp(3rem, 6vw, 6rem)', color: 'var(--color-accent-08)', letterSpacing: '0.02em', userSelect: 'none' }}>
+        {num}
+      </div>
+      <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-accent-35)', textTransform: 'uppercase' }}>
+        {caseId} / SCREEN {num}
+      </span>
+    </div>
+  );
+}
+
+// Hero — parallax + clip-path wipe from bottom (marketing duration: 750ms)
+function GalleryHero({ src, caseId, title, onOpen }) {
+  const ref    = useRef(null);
+  const [hovered,  setHovered]  = useState(false);
+  const [failed,   setFailed]   = useState(!src);
+  const [scanKey,  setScanKey]  = useState(0);
+  const reduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
+
+  // Clip-path: curtain lifts from bottom; opacity fallback for reduced-motion
+  const revealInitial    = reduced ? { opacity: 0 }            : { clipPath: 'inset(100% 0% 0% 0%)' };
+  const revealAnimate    = reduced ? { opacity: 1 }            : { clipPath: 'inset(0% 0% 0% 0%)' };
+  const revealTransition = reduced
+    ? { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+    : { duration: 0.75, ease: [0.16, 1, 0.3, 1] };
 
   return (
-    <section
-      aria-label="Work screenshots"
-      style={{ borderBottom: `1px solid ${RULE}` }}
+    <m.div
+      ref={ref}
+      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#060606', width: '100%', height: '100%', cursor: src && !failed ? 'zoom-in' : 'default' }}
+      initial={revealInitial}
+      whileInView={revealAnimate}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={revealTransition}
+      onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => src && !failed && onOpen?.()}
     >
-      {/* Header row */}
-      <div
-        className="max-w-[1400px] mx-auto px-6 pt-8 pb-4"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-      >
+      {!failed ? (
+        // Oversized container enables parallax without blank edges
+        <m.div
+          style={{ position: 'absolute', top: '-6%', left: '-6%', width: '112%', height: '112%', y: reduced ? 0 : imgY }}
+        >
+          <m.img
+            src={src}
+            alt={`${title} — main screen`}
+            loading="lazy"
+            decoding="async"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', willChange: 'transform' }}
+            animate={{
+              scale:  hovered ? 1.03 : 1,
+              filter: hovered ? 'brightness(1.09) saturate(1.07)' : 'brightness(1) saturate(1)',
+            }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            onError={() => setFailed(true)}
+          />
+        </m.div>
+      ) : (
+        <GalleryPlaceholder index={0} caseId={caseId} />
+      )}
+
+      {/* Counter badge */}
+      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+        01
+      </div>
+
+      {/* Corner marks on hover */}
+      <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+        {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 24, height: 24, ...s }} />)}
+      </m.div>
+
+      <ScanSweep active={hovered} scanKey={scanKey} />
+    </m.div>
+  );
+}
+
+// Standard tile: clip-path wipe from a given edge + brightness+scale hover + scan sweep
+function GalleryTile({ src, index, caseId, title, tierDelay = 0, clipFrom = 'bottom', onOpen }) {
+  const [hovered, setHovered] = useState(false);
+  const [failed,  setFailed]  = useState(!src);
+  const [scanKey, setScanKey] = useState(0);
+  const reduced = useReducedMotion();
+
+  const CLIP_START = {
+    bottom: 'inset(0% 0% 100% 0%)',
+    left:   'inset(0% 0% 0% 100%)',
+    right:  'inset(0% 100% 0% 0%)',
+  };
+
+  const revealInitial    = reduced ? { opacity: 0 }                            : { clipPath: CLIP_START[clipFrom] ?? CLIP_START.bottom };
+  const revealAnimate    = reduced ? { opacity: 1 }                            : { clipPath: 'inset(0% 0% 0% 0%)' };
+  const revealTransition = reduced
+    ? { duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: tierDelay }
+    : { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: tierDelay };
+
+  const num = String(index + 1).padStart(2, '0');
+
+  return (
+    <m.div
+      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#060606', width: '100%', height: '100%', cursor: src && !failed ? 'zoom-in' : 'default' }}
+      initial={revealInitial}
+      whileInView={revealAnimate}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={revealTransition}
+      onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => src && !failed && onOpen?.()}
+    >
+      {!failed ? (
+        <m.img
+          src={src}
+          alt={`${title} — screen ${index + 1}`}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', willChange: 'transform' }}
+          animate={{
+            scale:  hovered ? 1.04 : 1,
+            filter: hovered ? 'brightness(1.1) saturate(1.08)' : 'brightness(1) saturate(1)',
+          }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <GalleryPlaceholder index={index} caseId={caseId} />
+      )}
+
+      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+        {num}
+      </div>
+
+      <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+        {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
+      </m.div>
+
+      <ScanSweep active={hovered} scanKey={scanKey} />
+    </m.div>
+  );
+}
+
+// ── Flow diagram block ────────────────────────────────────────────────────────
+// Shows a wide diagram image. Click opens it fullscreen in GalleryModal.
+// The image is shown letterboxed at 21/9 to hint at its width, then full
+// resolution is accessible via the zoom-in modal.
+function FlowDiagramBlock({ src, alt, caption }) {
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [scanKey, setScanKey] = useState(0);
+  const reduced = useReducedMotion();
+
+  return (
+    <m.div
+      className="mt-10"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Label row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 18, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+          <div style={{ width: 16, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+          <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>
+            // Player flow
+          </span>
+        </div>
+        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase' }}>
+          click to expand
+        </span>
+      </div>
+
+      {/* Image frame */}
+      <m.div
+        style={{
+          position: 'relative', overflow: 'hidden',
+          aspectRatio: '21/9', backgroundColor: '#060606',
+          cursor: 'zoom-in',
+          border: `1px solid ${hovered ? 'rgba(255,37,64,0.4)' : RULE}`,
+          transition: 'border-color 0.2s ease',
+        }}
+        onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
+        onMouseLeave={() => setHovered(false)}
+        onClick={() => setOpen(true)}
+      >
+        <img
+          src={src}
+          alt={alt}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left center', display: 'block' }}
+        />
+
+        {/* Corner marks */}
+        <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+          {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
+        </m.div>
+
+        {/* Zoom icon hint */}
+        <m.div
+          aria-hidden="true"
+          style={{ position: 'absolute', bottom: 12, right: 14, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', zIndex: 5, pointerEvents: 'none' }}
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.18 }}
+        >
+          [ zoom ]
+        </m.div>
+
+        <ScanSweep active={hovered} scanKey={scanKey} />
+      </m.div>
+
+      {caption && (
+        <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+          {caption}
+        </p>
+      )}
+
+      {/* Fullscreen modal */}
+      <AnimatePresence>
+        {open && (
+          <GalleryModal
+            items={[src]}
+            activeIndex={0}
+            onClose={() => setOpen(false)}
+            onNav={() => {}}
+            title={alt}
+          />
+        )}
+      </AnimatePresence>
+    </m.div>
+  );
+}
+
+function CaseGallery({ gallery = [], caseId, title }) {
+  const SLOTS = 4;
+  const items = gallery.length > 0 ? gallery : Array(SLOTS).fill(null);
+  const count = items.length;
+  const [modalIndex, setModalIndex] = useState(null);
+
+  const openModal  = useCallback((i) => setModalIndex(i), []);
+  const closeModal = useCallback(() => setModalIndex(null), []);
+  const navModal   = useCallback((dir) => {
+    setModalIndex(prev => {
+      const validItems = items.filter(Boolean);
+      if (prev === null) return null;
+      return (prev + dir + validItems.length) % validItems.length;
+    });
+  }, [items]);
+
+  return (
+    <>
+    <AnimatePresence>
+      {modalIndex !== null && (
+        <GalleryModal
+          items={items}
+          activeIndex={modalIndex}
+          onClose={closeModal}
+          onNav={navModal}
+          title={title}
+        />
+      )}
+    </AnimatePresence>
+    <section aria-label="Work screenshots" style={{ borderBottom: `1px solid ${RULE}` }}>
+
+      {/* Header */}
+      <div className="max-w-[1400px] mx-auto px-6 pt-10 pb-5" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 20, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
           <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>
             // Work screens
           </span>
         </div>
         <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', textTransform: 'uppercase' }}>
-          {items.length} screens
+          {count} screens
         </span>
       </div>
 
-      {/* Scrollable image strip */}
-      <div style={{
-        display: 'flex',
-        gap: 3,
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        paddingLeft: 24,
-        paddingRight: 24,
-        paddingBottom: 24,
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-        WebkitOverflowScrolling: 'touch',
-      }}>
-        {items.map((src, i) => (
-          <GallerySlot key={i} src={src} index={i} caseId={caseId} title={title} />
-        ))}
-      </div>
+      {/* Fallback: ≤2 images */}
+      {count <= 2 ? (
+        <div style={{ display: 'flex', gap: 2, overflowX: 'auto', paddingLeft: 24, paddingRight: 24, paddingBottom: 24, scrollbarWidth: 'none' }}>
+          {items.map((src, i) => (
+            <div key={i} style={{ flexShrink: 0, width: 'clamp(280px, 40vw, 520px)', aspectRatio: '16/9' }}>
+              <GalleryTile src={src} index={i} caseId={caseId} title={title} tierDelay={i * 0.07} onOpen={() => openModal(i)} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: 2 }}>
+
+          {/* Tier 1 — hero, full-width with parallax */}
+          <div style={{ width: '100%', aspectRatio: '16/7' }}>
+            <GalleryHero src={items[0]} caseId={caseId} title={title} onOpen={() => openModal(0)} />
+          </div>
+
+          {/* Tier 2 — pair: left wipes from left, right wipes from right (meet center) */}
+          {count >= 3 && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+              <div style={{ aspectRatio: '16/9' }}>
+                <GalleryTile src={items[1]} index={1} caseId={caseId} title={title} tierDelay={0}    clipFrom="left"  onOpen={() => openModal(1)} />
+              </div>
+              <div style={{ aspectRatio: '16/9' }}>
+                <GalleryTile src={items[2]} index={2} caseId={caseId} title={title} tierDelay={0.07} clipFrom="right" onOpen={() => openModal(2)} />
+              </div>
+            </div>
+          )}
+
+          {/* Tier 3 — detail row, staggered 50ms per tile */}
+          {count >= 4 && (
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(count - 3, 4)}, 1fr)`, gap: 2 }}>
+              {items.slice(3).map((src, i) => (
+                <div key={i + 3} style={{ aspectRatio: '16/9' }}>
+                  <GalleryTile src={src} index={i + 3} caseId={caseId} title={title} tierDelay={i * 0.05} clipFrom="bottom" onOpen={() => openModal(i + 3)} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </section>
+    </>
   );
 }
 
@@ -1296,6 +1690,15 @@ export default function CasePage({ onMenuOpen }) {
                           <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
                             {sys.assetCaption}
                           </p>
+                        )}
+
+                        {/* Player flow diagram — click to open fullscreen */}
+                        {sys.flowDiagram && (
+                          <FlowDiagramBlock
+                            src={sys.flowDiagram}
+                            alt={sys.flowDiagramAlt || 'Player flow diagram'}
+                            caption={sys.flowDiagramCaption}
+                          />
                         )}
                       </m.div>
                     ))}

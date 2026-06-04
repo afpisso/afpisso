@@ -277,6 +277,21 @@ const translations = {
     casePage_cta: {
       body: 'If my work fits your team or project, reaching out should take less than a minute.',
     },
+    speaking: {
+      sectionLabel: 'Speaking & Workshops',
+      heroSubtitle: 'Game UI Systems: from pretty screens to interfaces that work.',
+      contextLabel: 'The workshop',
+      bodyP1: 'At Colombia 5.0, I ran a workshop on Game UI Systems — specifically on how to build a reusable, functional UI system for video games using Figma. The premise: most game interfaces look polished but break under real production conditions because they were designed as isolated screens, not as systems.',
+      bodyP2: 'The session covered how to structure components, states and rules so that the UI serves both the player and the team — reducing guesswork on both sides.',
+      whyBelongsLabel: 'Why this belongs in my work',
+      whyBelongs: 'Systems thinking is the part of my work that is hardest to show in a case study. This workshop made it concrete: how to move from decorative screens to structured, reusable UI that holds up across production, updates and team handoffs.',
+      topicsLabel: 'Topics covered',
+      visualsLabel: 'From the event',
+      closingLabel: 'Design is also communication',
+      closingHeadline: 'A strong design perspective should be useful beyond the file.',
+      closingBody: 'It should help teams, students and professionals see where friction starts, why a system matters more than a screen and how better structure leads to better decisions — in the interface and in production.',
+      closingCta: 'Get in touch',
+    },
     caseStatuses: {
       'public': 'Public Case Study',
       'nda-safe': 'NDA-Safe Breakdown',
@@ -560,6 +575,21 @@ const translations = {
     },
     casePage_cta: {
       body: 'Si mi trabajo encaja con tu equipo o proyecto, contactarme debería tomar menos de un minuto.',
+    },
+    speaking: {
+      sectionLabel: 'Speaking & Workshops',
+      heroSubtitle: 'Game UI Systems: de pantallas bonitas a interfaces que funcionan.',
+      contextLabel: 'El taller',
+      bodyP1: 'En Colombia 5.0 impartí un taller sobre Game UI Systems — específicamente sobre cómo construir un sistema de UI reutilizable y funcional para videojuegos usando Figma. La premisa: la mayoría de interfaces de juegos se ven pulidas pero se rompen en condiciones reales de producción porque fueron diseñadas como pantallas aisladas, no como sistemas.',
+      bodyP2: 'La sesión cubrió cómo estructurar componentes, estados y reglas para que la UI le sirva tanto al jugador como al equipo — reduciendo la ambigüedad en ambos lados.',
+      whyBelongsLabel: 'Por qué esto es parte de mi trabajo',
+      whyBelongs: 'El pensamiento sistémico es la parte de mi trabajo más difícil de mostrar en un caso de estudio. Este taller lo hizo concreto: cómo pasar de pantallas decorativas a UI estructurada y reutilizable que aguanta producción, actualizaciones y handoffs de equipo.',
+      topicsLabel: 'Temas tratados',
+      visualsLabel: 'Del evento',
+      closingLabel: 'El diseño también es comunicación',
+      closingHeadline: 'Una perspectiva de diseño sólida debe ser útil más allá del archivo.',
+      closingBody: 'Debe ayudar a equipos, estudiantes y profesionales a ver dónde empieza la fricción, por qué un sistema importa más que una pantalla y cómo mejor estructura lleva a mejores decisiones — en la interfaz y en producción.',
+      closingCta: 'Escribir',
     },
     caseStatuses: {
       'public': 'Caso de estudio público',
