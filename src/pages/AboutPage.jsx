@@ -60,7 +60,7 @@ export default function AboutPage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
-      <main>
+      <main id="main-content">
         {/* Hero */}
         <section className="pt-40 pb-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           <div className="max-w-[1400px] mx-auto px-6">
@@ -222,7 +222,7 @@ export default function AboutPage({ onMenuOpen }) {
                               key={item}
                               className="text-[11px] tracking-wider px-2 py-1 transition-all duration-200"
                               style={{ fontFamily: '"JetBrains Mono", monospace', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}
-                              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'; e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.05)'; }}
+                              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent-30)'; e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.05)'; }}
                               onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.color = 'var(--color-fg-dim)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                             >
                               {item}
@@ -281,7 +281,7 @@ export default function AboutPage({ onMenuOpen }) {
             {/* Availability signal */}
             <m.div
               className="mt-12 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-              style={{ border: '1px solid rgba(255,37,64,0.2)', backgroundColor: 'rgba(255,37,64,0.03)' }}
+              style={{ border: '1px solid var(--color-accent-20)', backgroundColor: 'rgba(255,37,64,0.03)' }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

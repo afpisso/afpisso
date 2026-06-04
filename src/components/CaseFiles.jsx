@@ -15,8 +15,8 @@ const EASE_OUT = [0.16, 1, 0.3, 1];
 const EASE_IN  = [0.4, 0, 1, 1];
 
 const VISIBILITY_STYLE = {
-  'public':             { color: 'var(--color-accent)',    border: 'rgba(255,37,64,0.3)' },
-  'nda-safe':           { color: 'var(--color-accent)',    border: 'rgba(255,37,64,0.3)' },
+  'public':             { color: 'var(--color-accent)',    border: 'var(--color-accent-30)' },
+  'nda-safe':           { color: 'var(--color-accent)',    border: 'var(--color-accent-30)' },
   'password-protected': { color: '#facc15',                border: 'rgba(234,179,8,0.3)' },
   'coming-soon':        { color: '#facc15',                border: 'rgba(234,179,8,0.3)' },
   'legacy':             { color: 'var(--color-fg-mute)',   border: 'var(--color-rule)' },
@@ -25,7 +25,7 @@ const VISIBILITY_STYLE = {
 // ── Thumbnail with fallback placeholder ──────────────────────────────────────
 function ThumbnailOrPlaceholder({ case: c }) {
   const [failed, setFailed] = useState(false);
-  const src = `/thumbnails/${c.slug}.jpg`;
+  const src = `/thumbnails/${c.slug}.webp`;
 
   if (!failed) {
     return (
@@ -48,7 +48,7 @@ function ThumbnailOrPlaceholder({ case: c }) {
       style={{
         width: '100%', height: '100%',
         backgroundColor: 'rgba(14,3,6,0.95)',
-        border: '1px solid rgba(255,37,64,0.12)',
+        border: '1px solid var(--red-dim)',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
@@ -176,7 +176,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
       <div
         aria-hidden="true"
         className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300"
-        style={{ backgroundColor: isHovered ? 'rgba(255,37,64,0.45)' : 'var(--color-rule)' }}
+        style={{ backgroundColor: isHovered ? 'var(--color-accent-45)' : 'var(--color-rule)' }}
       />
 
       {/* Left accent — scaleY reveal */}
@@ -194,7 +194,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
 
       <Link
         to={`/case/${caseData.slug}`}
-        aria-label={`Open case: ${caseData.title}`}
+        aria-label={`${caseData.title}`}
         style={{ textDecoration: 'none', display: 'block' }}
         onClick={() => analytics.caseCardClick?.(caseData.slug, caseData.title)}
       >
@@ -218,7 +218,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: '11px',
               letterSpacing: '0.1em',
-              color: isHovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.3)',
+              color: isHovered ? 'var(--color-accent)' : 'var(--color-accent-30)',
             }}
           >
             {String(index + 1).padStart(2, '0')}

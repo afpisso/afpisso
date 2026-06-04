@@ -219,14 +219,14 @@ export default function Nav({ onMenuOpen }) {
                           fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
                           color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           textDecoration: 'none', padding: '6px 12px',
-                          border: `1px solid ${isActive ? 'rgba(255,37,64,0.35)' : 'transparent'}`,
+                          border: `1px solid ${isActive ? 'var(--color-accent-35)' : 'transparent'}`,
                           transition: 'color 0.2s, border-color 0.2s',
                         })}
                         onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
                         onMouseLeave={e => {
                           const active = e.currentTarget.getAttribute('aria-current') === 'page';
                           e.currentTarget.style.color = active ? 'var(--color-accent)' : 'var(--color-fg-mute)';
-                          e.currentTarget.style.borderColor = active ? 'rgba(255,37,64,0.35)' : 'transparent';
+                          e.currentTarget.style.borderColor = active ? 'var(--color-accent-35)' : 'transparent';
                         }}
                       >
                         <ScrambleText duration={300}>{label}</ScrambleText>
@@ -393,11 +393,11 @@ export default function Nav({ onMenuOpen }) {
                     borderRadius: 0,
                     clipPath: 'polygon(10px 0px, calc(100% - 10px) 0px, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0px calc(100% - 10px), 0px 10px)',
                     padding: '6px 8px',
-                    background: 'rgba(8,8,8,0.54)',
-                    backdropFilter: 'blur(22px) saturate(160%)',
-                    WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+                    background: 'rgba(6,6,6,0.78)',
+                    backdropFilter: 'blur(80px) saturate(120%) brightness(0.65)',
+                    WebkitBackdropFilter: 'blur(80px) saturate(120%) brightness(0.65)',
                     border: 'none',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.2)',
                     overflow: 'hidden',
                   }}
                 >
@@ -505,7 +505,7 @@ export default function Nav({ onMenuOpen }) {
                     aria-hidden="true"
                     style={{
                       position: 'absolute', inset: 0,
-                      background: 'radial-gradient(ellipse 50% 60% at 50% 120%, rgba(255,37,64,0.45) 0%, transparent 65%)',
+                      background: 'radial-gradient(ellipse 50% 60% at 50% 120%, var(--color-accent-45) 0%, transparent 65%)',
                       opacity: glowOpacity,
                       pointerEvents: 'none',
                     }}

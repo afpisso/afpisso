@@ -134,7 +134,7 @@ export default function NotesPage({ onMenuOpen }) {
                     {/* Top rule */}
                     <div
                       className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300"
-                      style={{ backgroundColor: isHov ? 'rgba(255,37,64,0.4)' : 'var(--color-rule)' }}
+                      style={{ backgroundColor: isHov ? 'var(--color-accent-40)' : 'var(--color-rule)' }}
                     />
 
                     {/* Left accent pulse */}
@@ -156,7 +156,7 @@ export default function NotesPage({ onMenuOpen }) {
                         textDecoration: 'none',
                         backgroundColor: isHov ? 'rgba(255,37,64,0.025)' : 'transparent',
                       }}
-                      aria-label={`Read note: ${note.title}`}
+                      aria-label={`${note.title}`}
                       onFocus={() => setHovered(note.id)}
                       onBlur={() => setHovered(null)}
                     >
@@ -199,7 +199,7 @@ export default function NotesPage({ onMenuOpen }) {
                             className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                             style={{
                               fontFamily: '"JetBrains Mono", monospace',
-                              border: `1px solid ${isHov ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)'}`,
+                              border: `1px solid ${isHov ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                               color: isHov ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                             }}
                           >
@@ -221,7 +221,7 @@ export default function NotesPage({ onMenuOpen }) {
                       {/* Meta + CTA right */}
                       <div
                         className="flex-shrink-0 flex flex-col items-end gap-2 pl-4 border-l ml-4 transition-colors duration-200"
-                        style={{ borderColor: isHov ? 'rgba(255,37,64,0.2)' : 'var(--color-rule)', minWidth: '120px' }}
+                        style={{ borderColor: isHov ? 'var(--color-accent-20)' : 'var(--color-rule)', minWidth: '120px' }}
                       >
                         <div className="text-right">
                           <div className="sys-label">{note.readTime}</div>

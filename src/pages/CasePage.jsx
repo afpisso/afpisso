@@ -8,12 +8,247 @@ import CaseRail from '../components/CaseRail';
 import CaseTOC from '../components/CaseTOC';
 import CaseNavRail from '../components/CaseNavRail';
 import { useLang } from '../contexts/LangContext';
+import { useLenis } from '../contexts/LenisContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import CyberBtn from '../components/CyberBtn';
 import { m, useReducedMotion } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
+
+// ── Hero scroll-driven grid reveal (Yuta Abe style) ─────────────────────────
+// Section is 220vh tall; the inner div is sticky at top:0 / height:100vh.
+// As the section scrolls, image tiles assemble diagonally over the title.
+// Scroll progress 0→1 drives every tile's reveal window independently.
+// Styles are applied directly to DOM refs — no React re-renders per frame.
+
+function _sr_mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const _sr_clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const _sr_ease  = (x) => 1 - Math.pow(1 - x, 3);
+
+function _splitTitle(title) {
+  const i = title.indexOf(':');
+  if (i > -1) return [title.slice(0, i).trim(), title.slice(i + 1).trim()];
+  const words = title.split(' ');
+  if (words.length <= 1) return [title, ''];
+  const half = Math.ceil(words.length / 2);
+  return [words.slice(0, half).join(' '), words.slice(half).join(' ')];
+}
+
+const SR_COLS = 5, SR_ROWS = 3, SR_STAGGER = 0.5, SR_SCROLL_VH = 220;
+
+function HeroScrollReveal({ caseData, t, lang }) {
+  const heroRef    = useRef(null);
+  const tileEls    = useRef([]);
+  const bracketRef = useRef(null);
+  const hintRef    = useRef(null);
+  const tintRef    = useRef(null);
+  const shouldReduce    = useReducedMotion();
+  const lenisRef        = useLenis();
+  const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
+  const imgSrc          = `/thumbnails/${caseData.slug}.webp`;
+
+  const tiles = useMemo(() => {
+    const out = [];
+    for (let r = 0; r < SR_ROWS; r++) {
+      for (let c = 0; c < SR_COLS; c++) {
+        out.push({
+          c, r,
+          metric: (c + r) / ((SR_COLS - 1) + (SR_ROWS - 1)),
+          bx: SR_COLS > 1 ? (c / (SR_COLS - 1)) * 100 : 50,
+          by: SR_ROWS > 1 ? (r / (SR_ROWS - 1)) * 100 : 50,
+        });
+      }
+    }
+    const mn = Math.min(...out.map(t => t.metric));
+    const mx = Math.max(...out.map(t => t.metric));
+    const span = (mx - mn) || 1;
+    out.forEach(t => { t.t0 = (t.metric - mn) / span; });
+    return out;
+  }, []);
+
+  tileEls.current = [];
+
+  const winLen = 0.6 - 0.42 * SR_STAGGER;
+  const imgSizeRef  = useRef({ w: 1920, h: 1080 }); // default 16:9 until image loads
+  const updateFnRef = useRef(null);
+
+  // Preload image to get intrinsic dimensions for cover calculation
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      imgSizeRef.current = { w: img.naturalWidth, h: img.naturalHeight };
+      updateFnRef.current?.(window.scrollY);
+    };
+    img.src = imgSrc;
+  }, [imgSrc]);
+
+  useEffect(() => {
+    // object-fit:cover math — scales image to fill W×H while preserving aspect ratio
+    const applyTile = (el, tile, local) => {
+      if (!el) return;
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const { w: iW, h: iH } = imgSizeRef.current;
+      const scale = Math.max(W / iW, H / iH);
+      const rW = iW * scale, rH = iH * scale;
+      const ox = (W - rW) / 2, oy = (H - rH) / 2;
+      const tw = W / SR_COLS,  th = H / SR_ROWS;
+      el.style.backgroundSize      = `${rW}px ${rH}px`;
+      el.style.backgroundPositionX = `${ox - tile.c * tw}px`;
+      el.style.backgroundPositionY = `${oy - tile.r * th}px`;
+      el.style.opacity   = '1';
+      el.style.transform = 'none';
+      el.style.clipPath  = `inset(${(1 - local) * 100}% 0 0 0)`;
+    };
+
+    if (shouldReduce) {
+      tileEls.current.forEach((el, i) => applyTile(el, tiles[i], 1));
+      if (bracketRef.current) bracketRef.current.style.opacity = '1';
+      if (hintRef.current)    hintRef.current.style.opacity    = '0';
+      if (tintRef.current)    tintRef.current.style.opacity    = '0.28';
+      return;
+    }
+
+    const update = (scrollY) => {
+      const hero = heroRef.current;
+      if (!hero) return;
+      const total = hero.offsetHeight - window.innerHeight;
+      const p = total > 0 ? _sr_clamp((scrollY - hero.offsetTop) / total) : 0;
+      for (let i = 0; i < tiles.length; i++) {
+        const tile  = tiles[i];
+        const start = tile.t0 * (1 - winLen);
+        applyTile(tileEls.current[i], tile, _sr_ease(_sr_clamp((p - start) / winLen)));
+      }
+      if (bracketRef.current) bracketRef.current.style.opacity = String(_sr_clamp((p - 0.55) / 0.3));
+      if (tintRef.current)    tintRef.current.style.opacity    = String(0.35 * _sr_clamp((p - 0.2) / 0.6));
+      if (hintRef.current)    hintRef.current.style.opacity    = String(_sr_clamp(1 - p * 4));
+    };
+
+    updateFnRef.current = update;
+
+    const handleResize = () => update(window.scrollY);
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    const lenis = lenisRef?.current;
+    if (lenis) {
+      const handler = ({ scroll }) => update(scroll);
+      lenis.on('scroll', handler);
+      update(window.scrollY);
+      return () => { lenis.off('scroll', handler); window.removeEventListener('resize', handleResize); };
+    } else {
+      let ticking = false;
+      const handler = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(window.scrollY); ticking = false; }); } };
+      window.addEventListener('scroll', handler, { passive: true });
+      update(window.scrollY);
+      return () => { window.removeEventListener('scroll', handler); window.removeEventListener('resize', handleResize); };
+    }
+  }, [tiles, winLen, shouldReduce, lenisRef]);
+
+  const [line1, line2] = _splitTitle(caseData.title.toUpperCase());
+
+  const brackets = [
+    { top: 14, left: 14,  borderTop: `2px solid ${ACCENT}`, borderLeft:  `2px solid ${ACCENT}` },
+    { top: 14, right: 14, borderTop: `2px solid ${ACCENT}`, borderRight: `2px solid ${ACCENT}` },
+    { bottom: 14, left: 14,  borderBottom: `2px solid ${ACCENT}`, borderLeft:  `2px solid ${ACCENT}` },
+    { bottom: 14, right: 14, borderBottom: `2px solid ${ACCENT}`, borderRight: `2px solid ${ACCENT}` },
+  ];
+
+  return (
+    <section
+      ref={heroRef}
+      style={{ position: 'relative', height: shouldReduce ? '100svh' : `${SR_SCROLL_VH}vh`, borderBottom: `1px solid ${RULE}` }}
+    >
+      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'grid', placeItems: 'center', backgroundColor: '#000' }}>
+
+        {/* accent top line */}
+        <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(to right, ${ACCENT} 0%, var(--color-accent-35) 55%, transparent 100%)`, zIndex: 5 }} />
+
+        {/* breadcrumb */}
+        <m.div className="flex items-center justify-center gap-3" style={{ position: 'absolute', top: 100, left: 0, right: 0, zIndex: 5, flexWrap: 'wrap', padding: '0 16px' }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}
+        >
+          <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: DIM, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}
+            onMouseEnter={e => e.currentTarget.style.color = ACCENT} onMouseLeave={e => e.currentTarget.style.color = DIM}
+          >← {t.caseFiles.label}</Link>
+          <span style={{ color: RULE }}>·</span>
+          <span className="sys-label">{caseData.id}</span>
+          <span style={{ color: RULE }}>·</span>
+          <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5" style={{ fontFamily: MONO, color: ACCENT, border: `1px solid var(--color-accent-30)` }}>{visibilityLabel}</span>
+        </m.div>
+
+        {/* title layer — sits behind tiles at z-index 1 */}
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 clamp(20px, 5vw, 48px)' }}>
+          <div style={{ marginBottom: 20 }}>
+            <span style={{
+              display: 'inline-block', backgroundColor: ACCENT, color: '#0a0a0a',
+              fontFamily: BEBAS, fontSize: 'clamp(22px, 2.8vw, 36px)', lineHeight: 0.9,
+              letterSpacing: '0.01em', padding: '5px 16px 2px',
+              clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
+            }}>{caseData.id}</span>
+          </div>
+          <h1 style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 13vw, 168px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase' }}>
+            {line1}
+            {line2 && <><br /><span style={{ color: DIM }}>{line2}</span></>}
+          </h1>
+          {caseData.tags?.length > 0 && (
+            <div style={{ marginTop: 24, display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.32)', textTransform: 'uppercase' }}>
+              {caseData.tags.slice(0, 3).map((tag, i) => <span key={i}>{tag}</span>)}
+            </div>
+          )}
+        </div>
+
+        {/* grid tile layer — assembles over title at z-index 2 */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
+          {tiles.map((tile, i) => (
+            <div
+              key={i}
+              ref={n => { tileEls.current[i] = n; }}
+              style={{
+                position: 'absolute',
+                left:   `${(tile.c / SR_COLS) * 100}%`,
+                top:    `${(tile.r / SR_ROWS) * 100}%`,
+                width:  `${100 / SR_COLS}%`,
+                height: `${100 / SR_ROWS}%`,
+                backgroundImage: `url(${imgSrc})`,
+                backgroundRepeat: 'no-repeat',
+                opacity: 0,
+                willChange: 'transform, opacity, clip-path',
+              }}
+            />
+          ))}
+          {/* dark tint — prevents title bleed-through in bright image areas */}
+          <div ref={tintRef} style={{ position: 'absolute', inset: 0, backgroundColor: '#0a0a0a', opacity: 0 }} />
+          {/* corner brackets — fade in once image is ~assembled */}
+          <div ref={bracketRef} style={{ position: 'absolute', inset: 0, opacity: 0 }}>
+            {brackets.map((style, i) => (
+              <span key={i} aria-hidden="true" style={{ position: 'absolute', width: 26, height: 26, ...style }} />
+            ))}
+          </div>
+        </div>
+
+        {/* scroll hint */}
+        <div ref={hintRef} style={{
+          position: 'absolute', bottom: 28, left: 0, right: 0, zIndex: 3,
+          display: 'flex', justifyContent: 'space-between', padding: '0 32px',
+          fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em',
+          color: DIM, textTransform: 'uppercase', pointerEvents: 'none',
+        }}>
+          <span>Scroll to assemble ↓</span>
+          <span style={{ color: 'rgba(245,245,243,0.32)' }}>{caseData.year || caseData.id}</span>
+        </div>
+
+      </div>
+    </section>
+  );
+}
 
 // ── Ambient page ghost ────────────────────────────────────────────────────────
 // Thumbnail blurred to abstraction (120px) at 4% opacity. Too faint to read as
@@ -26,7 +261,7 @@ function PageGhost({ slug }) {
   if (failed || shouldReduce) return null;
   return (
     <img
-      src={`/thumbnails/${slug}.jpg`}
+      src={`/thumbnails/${slug}.webp`}
       aria-hidden="true"
       style={{
         position: 'absolute',
@@ -48,56 +283,6 @@ function PageGhost({ slug }) {
   );
 }
 
-// ── Hero section blur ─────────────────────────────────────────────────────────
-// Strong blur (72px) confined to the case header section (overflow:hidden clips
-// the scaled image). Layers: blurred img → dark veil (80% opacity) → grid-bg
-// → content. The veil keeps text legible; the bottom gradient dissolves cleanly
-// into the solid content area below.
-function HeroBlur({ slug }) {
-  const [failed, setFailed] = useState(false);
-  const shouldReduce = useReducedMotion();
-  if (failed || shouldReduce) return null;
-  return (
-    <>
-      <img
-        src={`/thumbnails/${slug}.jpg`}
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center top',
-          filter: 'blur(72px)',
-          transform: 'scale(1.18)',
-          zIndex: 0,
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}
-        onError={() => setFailed(true)}
-      />
-      {/* Dark veil — preserves text contrast, lets project color bleed through */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute', inset: 0, zIndex: 1,
-          backgroundColor: 'rgba(8,8,8,0.80)',
-        }}
-      />
-      {/* Bottom fade — hero dissolves into the solid content sections below */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          height: '48%', zIndex: 2,
-          background: 'linear-gradient(to bottom, transparent, var(--color-bg))',
-          pointerEvents: 'none',
-        }}
-      />
-    </>
-  );
-}
 
 const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
@@ -219,7 +404,7 @@ function TrailerPlayer({ src, poster, title, label }) {
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   width: 72, height: 72, borderRadius: '50%',
-                  border: `1px solid rgba(255,37,64,0.55)`,
+                  border: `1px solid var(--color-accent-55)`,
                   backgroundColor: 'rgba(8,8,8,0.72)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
@@ -281,6 +466,34 @@ function SectionLabelPrimary({ children }) {
   );
 }
 
+function PullQuote({ children }) {
+  const shouldReduce = useReducedMotion();
+  return (
+    <m.blockquote
+      style={{
+        borderLeft: `2px solid ${ACCENT}`,
+        backgroundColor: 'var(--color-accent-08)',
+        padding: 'clamp(16px, 2vw, 24px) clamp(20px, 3vw, 32px)',
+        margin: '28px 0 32px',
+      }}
+      initial={shouldReduce ? { opacity: 1 } : { opacity: 0, x: -14 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <p style={{
+        fontFamily: BEBAS,
+        fontSize: 'clamp(1.25rem, 2.8vw, 1.9rem)',
+        color: FG,
+        lineHeight: 1.25,
+        letterSpacing: '0.02em',
+      }}>
+        {children}
+      </p>
+    </m.blockquote>
+  );
+}
+
 function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
   const hasRealImage = Boolean(src)
   return (
@@ -317,6 +530,184 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
         <div key={pos} aria-hidden="true" className={`absolute ${pos} w-4 h-4 ${cls}`} style={{ borderColor: RULE }} />
       ))}
     </div>
+  );
+}
+
+// ── Gallery strip ─────────────────────────────────────────────────────────────
+// Horizontal scrollable strip of work screenshots. Shows placeholders when
+// gallery array is empty — replace image paths in cases.js when assets exist.
+function GallerySlot({ src, index, caseId, title }) {
+  const [failed, setFailed] = useState(!src);
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: index * 0.06 }}
+      style={{
+        flexShrink: 0,
+        width: 'clamp(280px, 40vw, 500px)',
+        aspectRatio: '16/9',
+        position: 'relative',
+        overflow: 'hidden',
+        border: failed ? `1px dashed ${RULE}` : 'none',
+        backgroundColor: failed ? 'var(--bg-2)' : '#000',
+      }}
+    >
+      {!failed ? (
+        <img
+          src={src}
+          alt={`${title} — screen ${index + 1}`}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <>
+          {/* Large index watermark */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: BEBAS, fontSize: 'clamp(4rem, 8vw, 7rem)',
+            color: 'var(--color-accent-08)', letterSpacing: '0.02em',
+            userSelect: 'none', pointerEvents: 'none',
+          }}>
+            {String(index + 1).padStart(2, '0')}
+          </div>
+          {/* Labels */}
+          <div style={{
+            position: 'absolute', bottom: 16, left: 0, right: 0,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+          }}>
+            <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-fg-mute)', textTransform: 'uppercase' }}>
+              {caseId} / SCREEN {String(index + 1).padStart(2, '0')}
+            </span>
+            <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'var(--color-accent-35)', textTransform: 'uppercase' }}>
+              — Awaiting asset —
+            </span>
+          </div>
+          {/* Corner brackets */}
+          {[['top-2 left-2', 'border-t border-l'], ['top-2 right-2', 'border-t border-r'], ['bottom-2 left-2', 'border-b border-l'], ['bottom-2 right-2', 'border-b border-r']].map(([pos, cls]) => (
+            <div key={pos} aria-hidden="true" className={`absolute ${pos} w-5 h-5 ${cls}`} style={{ borderColor: 'var(--color-accent-20)' }} />
+          ))}
+        </>
+      )}
+      {/* Screen counter badge */}
+      <div style={{
+        position: 'absolute', top: 10, left: 12,
+        fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em',
+        color: failed ? 'var(--color-fg-mute)' : 'rgba(255,255,255,0.45)',
+        textTransform: 'uppercase', pointerEvents: 'none',
+      }}>
+        {String(index + 1).padStart(2, '0')}
+      </div>
+    </m.div>
+  );
+}
+
+// Horizontal scrollable gallery wrapper — always renders (placeholders shown
+// when gallery is empty so the section shape is always visible)
+function CaseGallery({ gallery = [], caseId, title }) {
+  const SLOTS = 4;
+  const items = gallery.length > 0
+    ? gallery
+    : Array(SLOTS).fill(null);
+
+  return (
+    <section
+      aria-label="Work screenshots"
+      style={{ borderBottom: `1px solid ${RULE}` }}
+    >
+      {/* Header row */}
+      <div
+        className="max-w-[1400px] mx-auto px-6 pt-8 pb-4"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 18, height: 1, backgroundColor: ACCENT, flexShrink: 0 }} />
+          <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>
+            // Work screens
+          </span>
+        </div>
+        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', textTransform: 'uppercase' }}>
+          {items.length} screens
+        </span>
+      </div>
+
+      {/* Scrollable image strip */}
+      <div style={{
+        display: 'flex',
+        gap: 3,
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        paddingLeft: 24,
+        paddingRight: 24,
+        paddingBottom: 24,
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        WebkitOverflowScrolling: 'touch',
+      }}>
+        {items.map((src, i) => (
+          <GallerySlot key={i} src={src} index={i} caseId={caseId} title={title} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Outcome callout ────────────────────────────────────────────────────────────
+// Prominent metrics band — add outcomeStats: [{value, label}] to cases.js
+// to populate. Shows nothing when field is missing.
+function OutcomeCallout({ stats }) {
+  if (!stats?.length) return null;
+  return (
+    <m.section
+      aria-label="Outcome"
+      className="relative"
+      style={{ borderTop: `1px solid ${RULE}`, borderBottom: `1px solid ${RULE}` }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Accent line */}
+      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(to right, ${ACCENT}, transparent)` }} />
+
+      <div className="max-w-[1400px] mx-auto px-6 py-12">
+        <div className="sys-label mb-8" style={{ color: ACCENT }}>{'//'} Outcome</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px' }}>
+          {stats.map((s, i) => (
+            <m.div
+              key={i}
+              style={{
+                flex: '1 1 160px',
+                padding: '20px 24px',
+                borderRight: `1px solid ${RULE}`,
+                borderBottom: `1px solid ${RULE}`,
+              }}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
+            >
+              <div style={{
+                fontFamily: BEBAS,
+                fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
+                color: ACCENT,
+                lineHeight: 1,
+                letterSpacing: '0.02em',
+                marginBottom: 6,
+              }}>
+                {s.value}
+              </div>
+              <div className="sys-label">{s.label}</div>
+            </m.div>
+          ))}
+        </div>
+      </div>
+    </m.section>
   );
 }
 
@@ -499,223 +890,7 @@ export default function CasePage({ onMenuOpen }) {
       <CaseNavRail sections={tocSections} />
 
       <main>
-        {/* Case header */}
-        <section
-          className="relative pt-36 pb-20 overflow-hidden"
-          style={{ borderBottom: `1px solid ${RULE}` }}
-        >
-          {/* Strong blur layer — img filter on GPU, not backdrop-filter */}
-          <HeroBlur slug={caseData.slug} />
-          {/* Committed red: diagonal wash at 30% opacity — each case page has color mass */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute', inset: 0, zIndex: 2,
-              background: 'linear-gradient(135deg, rgba(255,37,64,0.18) 0%, rgba(255,37,64,0.06) 40%, transparent 65%)',
-              pointerEvents: 'none',
-            }}
-          />
-          <div className="absolute inset-0 grid-bg" aria-hidden="true" style={{ zIndex: 3, opacity: 0.45 }} />
-          <div className="relative z-10 max-w-[1400px] mx-auto px-6" style={{ zIndex: 4 }}>
-            {/* Breadcrumb */}
-            <m.div
-              className="flex items-center gap-3 mb-10"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link
-                to="/work"
-                style={{ fontFamily: MONO, fontSize: '11px', color: DIM, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}
-                onMouseEnter={e => e.currentTarget.style.color = ACCENT}
-                onMouseLeave={e => e.currentTarget.style.color = DIM}
-              >
-                ← {t.caseFiles.label}
-              </Link>
-              <span style={{ color: RULE }}>·</span>
-              <span className="sys-label">{caseData.id}</span>
-            </m.div>
-
-            {/* Eyebrow + Title */}
-            <m.div
-              className="mb-4"
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-            >
-              <span
-                className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
-                style={{ fontFamily: MONO, color: ACCENT, border: `1px solid rgba(255,37,64,0.3)` }}
-              >
-                {visibilityLabel}
-              </span>
-            </m.div>
-
-            <m.h1
-              className="uppercase mb-2"
-              style={{
-                fontFamily: BEBAS,
-                fontSize: 'clamp(2.5rem, 7vw, 6.5rem)',
-                color: FG,
-                lineHeight: 0.9,
-                letterSpacing: '0.01em',
-              }}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            >
-              {caseData.title}
-            </m.h1>
-            <m.div
-              className="mb-6"
-              style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.12 }}
-              aria-hidden="true"
-            >
-              Game UX/UI Case Study · {caseData.role} · {caseData.platform?.join(' / ')}
-            </m.div>
-
-            <m.p
-              className="mb-10"
-              style={{ fontFamily: MONO, fontSize: 'clamp(13px, 1.4vw, 15px)', color: DIM, maxWidth: '640px', lineHeight: 1.85 }}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            >
-              {lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}
-            </m.p>
-
-            {/* Meta row */}
-            <m.div
-              className="flex flex-wrap gap-6 items-center"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            >
-              <div>
-                <div className="sys-label mb-1">{t.casePage.metaRole}</div>
-                <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.role}</div>
-              </div>
-              <div>
-                <div className="sys-label mb-1">{t.casePage.metaPlatform}</div>
-                <div style={{ fontFamily: MONO, fontSize: '12px', color: FG }}>{caseData.platform?.join(' / ')}</div>
-              </div>
-              {caseData.year && (
-                <div>
-                  <div className="sys-label mb-1">{t.casePage.metaYear}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '12px', color: FG, fontVariantNumeric: 'tabular-nums' }}>{caseData.year}</div>
-                </div>
-              )}
-              <ul className="flex flex-wrap gap-1.5 ml-auto" aria-label="Tags">
-                {caseData.tags.map(tag => (
-                  <li key={tag} className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
-                    style={{ fontFamily: MONO, border: `1px solid ${RULE}`, color: 'var(--color-fg-mute)' }}>
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </m.div>
-          </div>
-        </section>
-
-        {/* ── Hero asset — cinematic full-bleed ────────────────────────────────
-             Full viewport width, no lateral padding. Scale-settle entrance:
-             starts at 1.035 (slightly zoomed) → 1.0 (settled) over 750ms with
-             expo-out curve. Vignette + bottom dissolve prevent harsh edges.    */}
-        <m.div
-          className="relative overflow-hidden"
-          style={{ borderBottom: `1px solid ${RULE}` }}
-          initial={{ opacity: 0, scale: 1.035 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
-        >
-          {/* Red accent line — solid → transparent gradient */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
-              background: `linear-gradient(to right, ${ACCENT} 0%, rgba(255,37,64,0.35) 55%, transparent 100%)`,
-              zIndex: 10, pointerEvents: 'none',
-            }}
-          />
-
-          {/* Media — 21:9 CinemaScope */}
-          <div style={{ aspectRatio: '21/9', position: 'relative', backgroundColor: '#000' }}>
-            {caseData?.heroVideoSrc ? (
-              <video
-                autoPlay muted loop playsInline
-                poster={`/thumbnails/${caseData.slug}.jpg`}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                aria-label={`${caseData.title} — gameplay footage`}
-              >
-                <source src={caseData.heroVideoSrc} type="video/mp4" />
-              </video>
-            ) : (
-              <img
-                src={`/cases/${caseData.slug}/hero.jpg`}
-                alt={`${caseData.title} hero`}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                onError={e => { e.currentTarget.style.display = 'none'; }}
-              />
-            )}
-
-            {/* Radial vignette — darkens edges, keeps center open */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'radial-gradient(ellipse at 50% 50%, transparent 42%, rgba(8,8,8,0.58) 100%)',
-              }}
-            />
-
-            {/* Bottom dissolve — asset fades into content below */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: '38%',
-                zIndex: 3, pointerEvents: 'none',
-                background: 'linear-gradient(to bottom, transparent, rgba(8,8,8,0.75))',
-              }}
-            />
-
-            {/* Corner frame brackets */}
-            {[['4px', '4px', 'top', 'left'], ['4px', 'auto', 'top', 'right'], ['auto', '4px', 'bottom', 'left'], ['auto', 'auto', 'bottom', 'right']].map(([t2, r2, v, h]) => (
-              <div
-                key={`${v}-${h}`}
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  top: v === 'top' ? 16 : 'auto',
-                  bottom: v === 'bottom' ? 16 : 'auto',
-                  left: h === 'left' ? 20 : 'auto',
-                  right: h === 'right' ? 20 : 'auto',
-                  width: 28, height: 28,
-                  borderTop: v === 'top' ? `2px solid rgba(255,37,64,0.5)` : 'none',
-                  borderBottom: v === 'bottom' ? `2px solid rgba(255,37,64,0.5)` : 'none',
-                  borderLeft: h === 'left' ? `2px solid rgba(255,37,64,0.5)` : 'none',
-                  borderRight: h === 'right' ? `2px solid rgba(255,37,64,0.5)` : 'none',
-                  zIndex: 4,
-                  pointerEvents: 'none',
-                }}
-              />
-            ))}
-
-            {/* Case ID watermark */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute', bottom: 18, right: 24, zIndex: 4,
-                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.18)',
-                pointerEvents: 'none', userSelect: 'none',
-              }}
-            >
-              {caseData.id}
-            </div>
-          </div>
-        </m.div>
+        <HeroScrollReveal caseData={caseData} t={t} lang={lang} />
 
         {/* Game trailer — only when trailerSrc is defined */}
         {caseData.trailerSrc && (
@@ -727,16 +902,25 @@ export default function CasePage({ onMenuOpen }) {
           >
             <TrailerPlayer
               src={caseData.trailerSrc}
-              poster={`/thumbnails/${caseData.slug}.jpg`}
+              poster={`/thumbnails/${caseData.slug}.webp`}
               title={caseData.title}
             />
           </m.div>
         )}
 
+        {/* ── Work screenshot gallery ─────────────────────────────────────────
+             Always rendered — shows placeholders until real images are added
+             to caseData.gallery in cases.js                                 */}
+        <CaseGallery
+          gallery={caseData.gallery}
+          caseId={caseData.id}
+          title={caseData.title}
+        />
+
         {/* NDA notice if applicable */}
         {(caseData.visibility === 'nda-safe') && content?.quickFacts?.confidentiality && (
           <div className="max-w-[1400px] mx-auto px-6 mb-4">
-            <div className="p-4 relative" style={{ border: `1px solid rgba(255,37,64,0.2)`, backgroundColor: 'rgba(255,37,64,0.03)' }}>
+            <div className="p-4 relative" style={{ border: `1px solid var(--color-accent-20)`, backgroundColor: 'rgba(255,37,64,0.03)' }}>
               <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: ACCENT }} aria-hidden="true" />
               <p style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.75 }}>
                 <span style={{ color: ACCENT, fontWeight: 700 }}>NDA-safe breakdown — </span>
@@ -801,6 +985,9 @@ export default function CasePage({ onMenuOpen }) {
           );
         })()}
 
+        {/* Outcome callout — renders only when outcomeStats is defined in cases.js */}
+        <OutcomeCallout stats={caseData.outcomeStats} />
+
         {/* Body */}
         <article className="max-w-[1400px] mx-auto px-6 pb-28">
           <div className="grid grid-cols-1 xl:grid-cols-[1fr_220px] gap-10 items-start">
@@ -825,6 +1012,9 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabelPrimary>{t.casePage.sections.executiveSummary}</SectionLabelPrimary>
+                  {(lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline) && (
+                    <PullQuote>{lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}</PullQuote>
+                  )}
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>
                     {content.summary}
                   </p>
@@ -866,14 +1056,23 @@ export default function CasePage({ onMenuOpen }) {
                   <SectionLabelPrimary>{t.casePage.sections.challenge}</SectionLabelPrimary>
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.challenge}</p>
                   {content?.challengeRisks?.length > 0 && (
-                    <ul className="mt-6 space-y-2">
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-px" style={{ backgroundColor: RULE }}>
                       {content.challengeRisks.map((r, i) => (
-                        <li key={i} className="flex gap-3 items-start">
-                          <span aria-hidden="true" style={{ color: ACCENT, flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
-                          <span style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{r}</span>
-                        </li>
+                        <m.div
+                          key={i}
+                          style={{ backgroundColor: 'var(--color-bg)', padding: '20px 24px' }}
+                          initial={{ opacity: 0, y: 12 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                        >
+                          <div aria-hidden="true" style={{ fontFamily: BEBAS, fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: 'var(--color-accent-20)', lineHeight: 1, marginBottom: 12, letterSpacing: '0.02em' }}>
+                            {String(i + 1).padStart(2, '0')}
+                          </div>
+                          <p style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.75 }}>{r}</p>
+                        </m.div>
                       ))}
-                    </ul>
+                    </div>
                   )}
                 </m.section>
               )}
@@ -999,19 +1198,34 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.uxApproach}</SectionLabel>
-                  <div className="space-y-8">
+                  <div>
                     {content.approach.map((item, i) => (
                       <m.div
                         key={i}
+                        className="relative py-8"
+                        style={{ borderTop: `1px solid ${RULE}` }}
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-80px' }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
                       >
-                        <h3 className="uppercase mb-3" style={{ fontFamily: BEBAS, fontSize: '1.4rem', color: FG, letterSpacing: '0.02em', lineHeight: 1 }}>
-                          {item.heading}
-                        </h3>
-                        <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85 }}>{item.body}</p>
+                        <div aria-hidden="true" style={{
+                          position: 'absolute', top: 16, right: 0,
+                          fontFamily: BEBAS, fontSize: 'clamp(4rem, 10vw, 6.5rem)',
+                          color: 'var(--color-accent-08)', lineHeight: 1,
+                          letterSpacing: '-0.02em', userSelect: 'none', pointerEvents: 'none',
+                        }}>
+                          {String(i + 1).padStart(2, '0')}
+                        </div>
+                        <div style={{ position: 'relative', zIndex: 1, maxWidth: '640px' }}>
+                          <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>
+                            {String(i + 1).padStart(2, '0')} / {String(content.approach.length).padStart(2, '0')}
+                          </div>
+                          <h3 className="uppercase mb-4" style={{ fontFamily: BEBAS, fontSize: 'clamp(1.6rem, 3.2vw, 2.4rem)', color: FG, letterSpacing: '0.02em', lineHeight: 1 }}>
+                            {item.heading}
+                          </h3>
+                          <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85 }}>{item.body}</p>
+                        </div>
                       </m.div>
                     ))}
                   </div>
@@ -1255,15 +1469,28 @@ export default function CasePage({ onMenuOpen }) {
               {whatThisShows && (
                 <m.section
                   id="cs-shows"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  className="py-14 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}`, position: 'relative', overflow: 'hidden' }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>{t.casePage.sections.whatThisShows || 'What this project shows'}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>
+                  <div aria-hidden="true" style={{
+                    position: 'absolute', top: 12, right: -8,
+                    fontFamily: BEBAS, fontSize: 'clamp(3rem, 7vw, 5.5rem)',
+                    color: 'rgba(240,238,234,0.04)', lineHeight: 1,
+                    letterSpacing: '0.1em', userSelect: 'none', pointerEvents: 'none',
+                  }}>
+                    {caseData.id}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+                    <div style={{ width: 28, height: 1, backgroundColor: ACCENT }} />
+                    <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.22em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>
+                      {t.casePage.sections.whatThisShows || 'What this project shows'}
+                    </span>
+                  </div>
+                  <p style={{ fontFamily: MONO, fontSize: 'clamp(14px, 1.8vw, 17px)', color: 'rgba(240,238,234,0.85)', lineHeight: 1.85, maxWidth: '58ch' }}>
                     {whatThisShows}
                   </p>
                 </m.section>
@@ -1332,7 +1559,7 @@ export default function CasePage({ onMenuOpen }) {
                           fontSize: '9px',
                           letterSpacing: '0.16em',
                           textTransform: 'uppercase',
-                          color: 'rgba(255,37,64,0.45)',
+                          color: 'var(--color-accent-45)',
                           fontWeight: 700,
                         }}
                       >
@@ -1346,7 +1573,7 @@ export default function CasePage({ onMenuOpen }) {
                         fontFamily: MONO,
                         fontSize: '9px',
                         letterSpacing: '0.14em',
-                        color: 'rgba(255,37,64,0.4)',
+                        color: 'var(--color-accent-40)',
                         fontWeight: 700,
                         textTransform: 'uppercase',
                       }}

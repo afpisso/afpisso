@@ -246,7 +246,7 @@ function GhostRail({ sections, activeId, scrollTo }) {
                   fontSize: '8px',
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: 'rgba(255,37,64,0.45)',
+                  color: 'var(--color-accent-45)',
                   fontWeight: 700,
                 }}
               >
@@ -311,7 +311,7 @@ function GhostRail({ sections, activeId, scrollTo }) {
                         fontFamily: MONO,
                         fontSize: '8px',
                         letterSpacing: '0.12em',
-                        color: isActive ? 'rgba(255,37,64,0.6)' : 'rgba(255,255,255,0.14)',
+                        color: isActive ? 'var(--color-accent-60)' : 'rgba(255,255,255,0.14)',
                         flexShrink: 0,
                         fontWeight: 700,
                       }}
@@ -408,7 +408,7 @@ function SectionStamp({ sections, activeId, scrollTo }) {
                     fontSize: '8px',
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: 'rgba(255,37,64,0.45)',
+                    color: 'var(--color-accent-45)',
                     fontWeight: 700,
                   }}
                 >
@@ -476,7 +476,7 @@ function SectionStamp({ sections, activeId, scrollTo }) {
                         fontFamily: MONO,
                         fontSize: '7px',
                         letterSpacing: '0.14em',
-                        color: isActive ? 'rgba(255,37,64,0.6)' : 'rgba(255,255,255,0.2)',
+                        color: isActive ? 'var(--color-accent-60)' : 'rgba(255,255,255,0.2)',
                         fontWeight: 700,
                       }}
                     >

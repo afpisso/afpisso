@@ -69,7 +69,7 @@ export function CardCorners({ color = 'rgba(255,255,255,0.15)', accentColor = '#
 }
 
 /** Número de paso con brackets angulares */
-export function StepNumber({ num, color = '#ff2540', dimColor = 'rgba(255,37,64,0.3)' }) {
+export function StepNumber({ num, color = '#ff2540', dimColor = 'var(--color-accent-30)' }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
       <span style={{ color: dimColor, fontFamily: '"JetBrains Mono", monospace', fontSize: 9, letterSpacing: 0 }}>[</span>

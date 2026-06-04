@@ -47,7 +47,7 @@ export default function Footer() {
                 fontSize:      '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color:         'rgba(255,37,64,0.45)',
+                color:         'var(--color-accent-45)',
                 fontWeight:    700,
               }}
             >

@@ -109,7 +109,7 @@ export default function CaseTOC({ sections }) {
             <span style={{
               fontFamily: MONO, fontSize: '8px',
               letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: 'rgba(255,37,64,0.45)', fontWeight: 700,
+              color: 'var(--color-accent-45)', fontWeight: 700,
             }}>
               // index
             </span>
@@ -122,7 +122,7 @@ export default function CaseTOC({ sections }) {
               aria-label={`Section ${activeIndex + 1} of ${sections.length}`}
               style={{
                 fontFamily: MONO, fontSize: '8px',
-                letterSpacing: '0.1em', color: 'rgba(255,37,64,0.45)',
+                letterSpacing: '0.1em', color: 'var(--color-accent-45)',
                 fontVariantNumeric: 'tabular-nums',
               }}
             >
@@ -245,7 +245,7 @@ export default function CaseTOC({ sections }) {
                         <span style={{
                           fontFamily: MONO, fontSize: '8px',
                           letterSpacing: '0.12em',
-                          color: isActive ? 'rgba(255,37,64,0.6)' : 'rgba(255,255,255,0.14)',
+                          color: isActive ? 'var(--color-accent-60)' : 'rgba(255,255,255,0.14)',
                           flexShrink: 0, fontWeight: 700,
                           transition: 'color 0.15s cubic-bezier(0.16,1,0.3,1)',
                         }}>

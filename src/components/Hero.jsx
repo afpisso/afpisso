@@ -14,12 +14,9 @@ import CyberBtn from './CyberBtn';
 
 
 const bootLines = [
-  'AFPISSO.SYS v2.6 — ONLINE',
-  'MOUNTING: 7 case studies...',
-  'SCANNING: hud clarity protocols',
-  'LOADING: player decision trees',
-  'SIGNAL: 11yrs · 0 guesses left',
-  'SYSTEM READY.',
+  'BYANDRESFE.SYS v2.6 — ONLINE',
+  'LOADING: game ux/ui systems...',
+  'SIGNAL: READY.',
 ];
 
 function CountUp({ target, suffix = '' }) {
@@ -75,10 +72,10 @@ function BootSequence({ onComplete }) {
         setTimeout(() => {
           setDone(true);
           sessionStorage.setItem('booted', '1');
-          setTimeout(onComplete, 400);
-        }, 300);
+          setTimeout(onComplete, 300);
+        }, 150);
       }
-    }, 280);
+    }, 150);
     return () => clearInterval(interval);
   }, [onComplete]);
 
@@ -141,7 +138,7 @@ function BootSequence({ onComplete }) {
             style={{
               marginTop: 20,
               height: 1,
-              backgroundColor: 'rgba(255,37,64,0.15)',
+              backgroundColor: 'var(--color-accent-15)',
               position: 'relative',
               overflow: 'hidden',
             }}
@@ -161,7 +158,7 @@ function BootSequence({ onComplete }) {
           </div>
         )}
         {/* Skip button — appears after first line */}
-        {lines.length >= 1 && !done && (
+        {!done && (
           <m.button
             onClick={skip}
             initial={{ opacity: 0 }}
@@ -458,7 +455,7 @@ export default function Hero() {
                   fontSize: '11px',
                   letterSpacing: '0.16em',
                   textTransform: 'uppercase',
-                  color: 'rgba(255,37,64,0.55)',
+                  color: 'var(--color-accent-55)',
                   fontWeight: 700,
                 }}
               >
@@ -488,9 +485,9 @@ export default function Hero() {
                 className="mb-6 md:mb-10"
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: '11px',
+                  fontSize: '13px',
                   color: 'var(--color-fg-dim)',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.04em',
                   maxWidth: '520px',
                 }}
               >
@@ -577,17 +574,12 @@ export default function Hero() {
           {t.trust.stats.map((stat, i) => (
             <m.div
               key={stat.label}
-              className="relative pl-4"
+              className="relative"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
             >
-              <div
-                aria-hidden="true"
-                className="absolute left-0 top-0 bottom-0 w-[2px]"
-                style={{ backgroundColor: 'var(--color-accent)', opacity: 0.5 }}
-              />
               <div
                 className="tabular mb-1.5"
                 style={{

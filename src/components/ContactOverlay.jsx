@@ -225,7 +225,7 @@ function ChannelRow({ channel }) {
           border: '1px solid rgba(255,255,255,0.12)', padding: '3px 8px',
           color: hover ? '#ff2540' : 'rgba(245,245,243,0.45)',
           transition: 'color 0.18s, border-color 0.18s',
-          borderColor: hover ? 'rgba(255,37,64,0.35)' : 'rgba(255,255,255,0.12)',
+          borderColor: hover ? 'var(--color-accent-35)' : 'rgba(255,255,255,0.12)',
           flexShrink: 0,
         }}>
           {channel.tag}

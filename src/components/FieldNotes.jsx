@@ -89,7 +89,7 @@ export default function FieldNotes() {
                 {/* Top border */}
                 <div
                   className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300"
-                  style={{ backgroundColor: isHovered ? 'rgba(255,37,64,0.4)' : 'var(--color-rule)' }}
+                  style={{ backgroundColor: isHovered ? 'var(--color-accent-40)' : 'var(--color-rule)' }}
                 />
 
                 {/* Left accent pulse on hover */}
@@ -110,7 +110,7 @@ export default function FieldNotes() {
                     textDecoration: 'none',
                     backgroundColor: isHovered ? 'rgba(255,37,64,0.025)' : 'transparent',
                   }}
-                  aria-label={`Read note: ${note.title}`}
+                  aria-label={`${note.title}`}
                   onFocus={() => setHovered(note.id)}
                   onBlur={() => setHovered(null)}
                 >
@@ -153,7 +153,7 @@ export default function FieldNotes() {
                         className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                         style={{
                           fontFamily: '"JetBrains Mono", monospace',
-                          border: `1px solid ${isHovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)'}`,
+                          border: `1px solid ${isHovered ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                           color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                         }}
                       >
@@ -176,7 +176,7 @@ export default function FieldNotes() {
                   {/* Meta + CTA — right side */}
                   <div
                     className="flex-shrink-0 flex flex-col items-end gap-2 pl-4 border-l ml-4"
-                    style={{ borderColor: isHovered ? 'rgba(255,37,64,0.2)' : 'var(--color-rule)', transition: 'border-color 0.2s', minWidth: '120px' }}
+                    style={{ borderColor: isHovered ? 'var(--color-accent-20)' : 'var(--color-rule)', transition: 'border-color 0.2s', minWidth: '120px' }}
                   >
                     <div className="text-right">
                       <div className="sys-label">{note.readTime}</div>

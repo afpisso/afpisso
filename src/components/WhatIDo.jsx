@@ -19,7 +19,7 @@ function ServiceRow({ item, index }) {
   return (
     <m.div
       className="relative grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-6 md:gap-12 py-10 border-t group"
-      style={{ borderColor: hovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)' }}
+      style={{ borderColor: hovered ? 'var(--color-accent-35)' : 'var(--color-rule)' }}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -27,18 +27,6 @@ function ServiceRow({ item, index }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Left accent bar */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 top-0 bottom-0 w-[2px]"
-        style={{
-          backgroundColor: 'var(--color-accent)',
-          opacity: hovered ? 1 : 0,
-          transform: hovered ? 'scaleY(1)' : 'scaleY(0)',
-          transformOrigin: 'top',
-          transition: 'opacity 0.25s, transform 0.32s cubic-bezier(0.16,1,0.3,1)',
-        }}
-      />
 
       {/* Left col — number + icon + title */}
       <div className="pl-6 md:pl-8">
@@ -49,7 +37,7 @@ function ServiceRow({ item, index }) {
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: '11px',
               letterSpacing: '0.12em',
-              color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.35)',
+              color: hovered ? 'var(--color-accent)' : 'var(--color-accent-35)',
             }}
           >
             {String(index + 1).padStart(2, '0')}
@@ -100,9 +88,10 @@ function ServiceRow({ item, index }) {
               className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-all duration-200"
               style={{
                 fontFamily: '"JetBrains Mono", monospace',
-                border: '1px solid var(--color-rule)',
-                color: 'var(--color-fg-mute)',
-                ...(hovered ? { borderColor: 'rgba(255,37,64,0.2)', color: 'var(--color-fg-dim)' } : {}),
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: hovered ? 'var(--color-accent-15)' : 'var(--color-rule)',
+                color: hovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
               }}
             >
               {tag}

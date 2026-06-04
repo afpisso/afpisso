@@ -17,8 +17,8 @@ const EASE_OUT = [0.16, 1, 0.3, 1];  // custom ease-out (snappy)
 const EASE_IN  = [0.4, 0, 1, 1];     // ease-in for exit
 
 const visibilityStyle = {
-  'public':             { color: 'var(--color-accent)', border: '1px solid rgba(255,37,64,0.3)' },
-  'nda-safe':           { color: 'var(--color-accent)', border: '1px solid rgba(255,37,64,0.3)' },
+  'public':             { color: 'var(--color-accent)', border: '1px solid var(--color-accent-30)' },
+  'nda-safe':           { color: 'var(--color-accent)', border: '1px solid var(--color-accent-30)' },
   'password-protected': { color: '#facc15',             border: '1px solid rgba(234,179,8,0.3)' },
   'coming-soon':        { color: '#facc15',             border: '1px solid rgba(234,179,8,0.3)' },
   'legacy':             { color: 'var(--color-fg-mute)',border: '1px solid var(--color-rule)' },
@@ -54,7 +54,7 @@ export default function CaseCard({ caseData, index }) {
       <div
         className="relative h-full flex flex-col"
         style={{
-          border: `1px solid ${hovered ? 'rgba(255,37,64,0.35)' : 'rgba(255,255,255,0.08)'}`,
+          border: `1px solid ${hovered ? 'var(--color-accent-35)' : 'rgba(255,255,255,0.08)'}`,
           backgroundColor: hovered ? 'rgba(18,4,7,0.62)' : 'rgba(8,8,8,0.42)',
           transition: 'border-color 0.3s, background-color 0.3s, box-shadow 0.3s',
           // Liquid glass: inner top highlight + tinted shadow
@@ -70,7 +70,7 @@ export default function CaseCard({ caseData, index }) {
           style={{ backgroundColor: 'var(--color-accent)', opacity: hovered ? 1 : 0 }}
         />
         <CardCorners
-          color={hovered ? 'rgba(255,37,64,0.4)' : 'rgba(255,255,255,0.1)'}
+          color={hovered ? 'var(--color-accent-40)' : 'rgba(255,255,255,0.1)'}
           accentColor="#ff2540"
           accent={hovered}
           arm={10}
@@ -179,7 +179,7 @@ export default function CaseCard({ caseData, index }) {
             <div className="mb-4">
               <div
                 className="flex items-center gap-1.5 mb-2"
-                style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(255,37,64,0.6)', textTransform: 'uppercase' }}
+                style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-accent-60)', textTransform: 'uppercase' }}
               >
                 <span>// case hook</span>
               </div>
@@ -210,7 +210,7 @@ export default function CaseCard({ caseData, index }) {
                 textDecoration: 'none',
               }}
               tabIndex={hovered ? 0 : -1}
-              aria-label={`Open case: ${caseData.title}`}
+              aria-label={`${caseData.title}`}
               onClick={() => analytics.caseCardClick(caseData.slug, caseData.title)}
             >
               {t.caseFiles.openCase}
@@ -265,10 +265,11 @@ export default function CaseCard({ caseData, index }) {
                 className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                 style={{
                   fontFamily: '"JetBrains Mono", monospace',
-                  border: '1px solid var(--color-rule)',
-                  color: 'var(--color-fg-mute)',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: hovered ? 'var(--color-accent-15)' : 'var(--color-rule)',
+                  color: hovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
                   transition: 'border-color 0.2s, color 0.2s',
-                  ...(hovered ? { borderColor: 'rgba(255,37,64,0.2)', color: 'var(--color-fg-dim)' } : {}),
                 }}
               >
                 {tag}

@@ -101,6 +101,8 @@ function LogoItem({ name, logo, sub, height = 30, maxWidth = 160 }) {
         {!imgFailed ? (
           <img
             src={logo}
+            width={maxWidth}
+            height={height}
             alt={name}
             onError={() => setImgFailed(true)}
             style={{

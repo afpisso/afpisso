@@ -23,7 +23,7 @@ function PrincipleRow({ p, i }) {
   return (
     <m.div
       className="relative flex items-start gap-6 py-7 border-t transition-colors duration-200"
-      style={{ borderColor: hovered ? 'rgba(255,37,64,0.35)' : 'var(--color-rule)' }}
+      style={{ borderColor: hovered ? 'var(--color-accent-35)' : 'var(--color-rule)' }}
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-80px' }}
@@ -31,16 +31,6 @@ function PrincipleRow({ p, i }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Left accent — grows in on hover */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-300"
-        style={{
-          backgroundColor: 'var(--color-accent)',
-          opacity: hovered ? 1 : 0,
-          transform: hovered ? 'scaleY(1)' : 'scaleY(0)',
-          transformOrigin: 'top',
-        }}
-      />
 
       {/* Number */}
       <div className="flex-shrink-0 w-10 pt-1.5">
@@ -48,7 +38,7 @@ function PrincipleRow({ p, i }) {
           className="text-[10px] tracking-widest transition-colors duration-200"
           style={{
             fontFamily: '"JetBrains Mono", monospace',
-            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+            color: hovered ? 'var(--color-accent)' : 'var(--color-accent-40)',
           }}
         >
           {p.id}
@@ -128,7 +118,7 @@ function ModuleCard({ mod, i }) {
         {/* Icon */}
         <div
           style={{
-            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+            color: hovered ? 'var(--color-accent)' : 'var(--color-accent-40)',
             transition: 'color 0.2s',
           }}
         >
@@ -140,7 +130,7 @@ function ModuleCard({ mod, i }) {
           className="text-[9px] font-bold tracking-widest uppercase transition-colors duration-200"
           style={{
             fontFamily: '"JetBrains Mono", monospace',
-            color: hovered ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+            color: hovered ? 'var(--color-accent)' : 'var(--color-accent-40)',
           }}
         >
           {mod.tag}

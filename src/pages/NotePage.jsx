@@ -186,7 +186,7 @@ export default function NotePage({ onMenuOpen }) {
         <Nav onMenuOpen={onMenuOpen} />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '4rem', color: 'rgba(255,37,64,0.15)', lineHeight: 1 }}>
+            <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '4rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>
               {meta ? 'COMING SOON' : '404'}
             </div>
             <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-dim)', margin: '16px 0 24px' }}>
@@ -345,7 +345,7 @@ export default function NotePage({ onMenuOpen }) {
                       <Link to={`/notes/${nextNote.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
                         <div
                           style={{ border: '1px solid var(--color-rule)', padding: '14px', transition: 'border-color 0.2s, background-color 0.2s' }}
-                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.03)'; }}
+                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent-30)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.03)'; }}
                           onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
                           <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
@@ -368,7 +368,7 @@ export default function NotePage({ onMenuOpen }) {
         <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-16">
           <div className="max-w-[860px] mx-auto px-6">
             <m.div
-              style={{ border: '1px solid rgba(255,37,64,0.2)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(255,37,64,0.04)' }}
+              style={{ border: '1px solid var(--color-accent-20)', padding: '32px 36px', position: 'relative', backgroundColor: 'rgba(255,37,64,0.04)' }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -405,7 +405,7 @@ export default function NotePage({ onMenuOpen }) {
                     letterSpacing: '0.04em',
                     minHeight: '40px',
                   }}
-                  onFocus={e => e.target.style.borderColor = 'rgba(255,37,64,0.4)'}
+                  onFocus={e => e.target.style.borderColor = 'var(--color-accent-40)'}
                   onBlur={e => e.target.style.borderColor = 'var(--color-rule)'}
                 />
                 <button

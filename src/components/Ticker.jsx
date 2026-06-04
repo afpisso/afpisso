@@ -88,7 +88,7 @@ export default function Ticker({
               <span
                 aria-hidden="true"
                 style={{
-                  color:       isAccent ? 'rgba(255,37,64,0.5)' : 'rgba(255,255,255,0.12)',
+                  color:       isAccent ? 'var(--color-accent-50)' : 'rgba(255,255,255,0.12)',
                   fontSize:    '8px',
                   flexShrink:  0,
                   lineHeight:  1,

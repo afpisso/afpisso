@@ -21,7 +21,7 @@ const MONO  = '"JetBrains Mono", monospace';
 const BEBAS = '"Bebas Neue", sans-serif';
 const EASE  = [0.16, 1, 0.3, 1];
 
-function SysLabel({ children, color = 'rgba(255,37,64,0.5)' }) {
+function SysLabel({ children, color = 'var(--color-accent-50)' }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 16 }}>
       <div style={{ width: 14, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.4 }} />
@@ -63,7 +63,7 @@ function SignalStatus({ onMenuOpen }) {
   return (
     <div style={{
       background: 'rgba(255,37,64,0.04)',
-      border: '1px solid rgba(255,37,64,0.12)',
+      border: '1px solid var(--red-dim)',
       padding: '16px 20px',
       marginBottom: 40,
       fontFamily: MONO,
@@ -118,7 +118,7 @@ export default function ClassifiedPage({ onMenuOpen }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
             <span style={{
               fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', textTransform: 'uppercase',
-              color: 'rgba(255,37,64,0.5)', fontWeight: 700,
+              color: 'var(--color-accent-50)', fontWeight: 700,
             }}>
               // CLEARANCE LEVEL — OPERATOR
             </span>
@@ -314,12 +314,12 @@ export default function ClassifiedPage({ onMenuOpen }) {
                 textTransform: 'uppercase',
                 color: 'var(--color-accent)',
                 textDecoration: 'none',
-                border: '1px solid rgba(255,37,64,0.3)',
+                border: '1px solid var(--color-accent-30)',
                 padding: '12px 20px',
                 transition: 'background 0.2s, border-color 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,37,64,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,37,64,0.5)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,37,64,0.06)'; e.currentTarget.style.borderColor = 'var(--color-accent-50)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.borderColor = 'var(--color-accent-30)'; }}
             >
               <span>◈</span>
               <span>OPEN DIRECT LINE</span>

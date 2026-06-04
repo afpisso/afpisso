@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import GlitchStrokeText from './GlitchStrokeText';
+import ScrambleText from './ScrambleText';
 import CyberBtn from './CyberBtn';
 import { CyberChevron, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
@@ -53,8 +54,8 @@ export default function Contact() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
               <GlitchStrokeText>{ct.ctaLine1}</GlitchStrokeText><br />
-              <GlitchStrokeText>{ct.ctaStroke}</GlitchStrokeText><br />
-              <GlitchStrokeText>{ct.ctaLine3}</GlitchStrokeText>
+              <ScrambleText duration={500}>{ct.ctaStroke}</ScrambleText><br />
+              <ScrambleText duration={500}>{ct.ctaLine3}</ScrambleText>
             </m.h2>
 
             <m.p
@@ -132,8 +133,8 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 0.2 + i * 0.05 }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--color-rule)')}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderTopColor = 'var(--color-accent-30)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderTopColor = 'var(--color-rule)')}
                   onClick={() => {
                     if (link.label === 'Email') analytics.emailClick('contact-channels');
                     else if (link.label === 'LinkedIn') analytics.linkedinClick('contact-channels');

@@ -73,7 +73,7 @@ export default function HowIWork() {
                 {/* Step icon + number stacked */}
                 <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-0.5" style={{ minWidth: 28 }}>
                   {StepIcon && (
-                    <div style={{ color: 'rgba(255,37,64,0.45)' }}>
+                    <div style={{ color: 'var(--color-accent-45)' }}>
                       <StepIcon size={18} />
                     </div>
                   )}

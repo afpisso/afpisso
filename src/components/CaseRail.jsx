@@ -10,10 +10,10 @@
  * All motion via transform + opacity only. Respects useReducedMotion.
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { cases }  from '../data/cases';
+import { cases, CASE_ORDER } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ function RailThumb({ slug, id, isCenter }) {
   if (!failed) {
     return (
       <img
-        src={`/thumbnails/${slug}.jpg`}
+        src={`/thumbnails/${slug}.webp`}
         alt=""
         aria-hidden="true"
         className="w-full h-full object-cover pointer-events-none"
@@ -67,7 +67,7 @@ function RailThumb({ slug, id, isCenter }) {
         style={{
           fontFamily: '"Bebas Neue", sans-serif',
           fontSize: '3.5rem',
-          color: isCenter ? 'rgba(255,37,64,0.12)' : 'rgba(255,37,64,0.05)',
+          color: isCenter ? 'var(--red-dim)' : 'rgba(255,37,64,0.05)',
           letterSpacing: '-0.02em',
           userSelect: 'none',
         }}
@@ -79,7 +79,7 @@ function RailThumb({ slug, id, isCenter }) {
 }
 
 // ── Single 3D card ────────────────────────────────────────────────────────────
-function RailCard({ item, offset, onClickOffset, shouldReduce, navigate }) {
+function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurrent }) {
   const isCenter  = offset === 0;
   const dist      = Math.abs(offset);
   const [hovered, setHovered] = useState(false);
@@ -125,7 +125,7 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate }) {
       }}
       onClick={() => {
         if (isCenter) {
-          navigate(`/case/${item.slug}`);
+          if (!isCurrent) navigate(`/case/${item.slug}`);
         } else {
           onClickOffset(offset);
         }
@@ -155,16 +155,21 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate }) {
         />
       )}
       <div
-        className="absolute top-3 left-3 pointer-events-none"
+        className="absolute top-3 left-3 pointer-events-none flex items-center gap-1.5"
         style={{
           fontFamily: '"JetBrains Mono", monospace',
           fontSize:   '8px',
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
-          color: isCenter ? 'var(--color-accent)' : 'rgba(255,37,64,0.4)',
+          color: isCenter ? 'var(--color-accent)' : 'var(--color-accent-40)',
         }}
       >
         {item.id}
+        {isCurrent && isCenter && (
+          <span style={{ fontSize: '7px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', borderLeft: '1px solid var(--color-rule)', paddingLeft: 6 }}>
+            CURRENT
+          </span>
+        )}
       </div>
 
       {/* Bottom: title overlay */}
@@ -223,16 +228,31 @@ export default function CaseRail({ currentSlug }) {
   const navigate     = useNavigate();
   const shouldReduce = useReducedMotion();
 
-  // Items: all cases with content, minus the one currently being viewed
-  const items = cases.filter(c => c.content && c.slug !== currentSlug);
+  // All cases with content, ordered by CASE_ORDER (current case included).
+  // useMemo keeps the reference stable so downstream effects don't fire on every render.
+  const items = useMemo(() =>
+    cases
+      .filter(c => c.content)
+      .sort((a, b) => {
+        const ai = CASE_ORDER.indexOf(a.slug);
+        const bi = CASE_ORDER.indexOf(b.slug);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+      }),
+  []); // cases and CASE_ORDER are module-level constants — no deps needed
   const count = items.length;
 
-  const [active,     setActive]     = useState(0);
+  const [active,     setActive]     = useState(() => {
+    const idx = items.findIndex(c => c.slug === currentSlug);
+    return idx >= 0 ? idx : 0;
+  });
   const [isHovering, setIsHovering] = useState(false);
   const lastWheelTime = useRef(0);
 
-  // Reset to 0 whenever the page case changes
-  useEffect(() => { setActive(0); }, [currentSlug]);
+  // Re-center on the current case when navigating between case pages
+  useEffect(() => {
+    const idx = items.findIndex(c => c.slug === currentSlug);
+    setActive(idx >= 0 ? idx : 0);
+  }, [currentSlug]); // items is stable (useMemo with no deps)
 
   const activeIndex = wrap(0, count, active);
   const activeItem  = items[activeIndex] ?? null;
@@ -408,6 +428,7 @@ export default function CaseRail({ currentSlug }) {
                     onClickOffset={(o) => setActive(p => p + o)}
                     shouldReduce={shouldReduce}
                     navigate={navigate}
+                    isCurrent={item.slug === currentSlug}
                   />
                 );
               })}

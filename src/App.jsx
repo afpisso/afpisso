@@ -74,7 +74,7 @@ function HomePage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
-      <main>
+      <main id="main-content">
         <Hero />
 
         {/* Ticker — breaks the hero/work transition, establishes skill set */}
@@ -110,7 +110,7 @@ function NotFoundPage({ onMenuOpen }) {
       <Nav onMenuOpen={onMenuOpen} />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '6rem', color: 'rgba(255,37,64,0.15)', lineHeight: 1 }}>404</div>
+          <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '6rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>404</div>
           <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
           <a href="/" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
         </div>
@@ -169,6 +169,8 @@ function AppRoutes() {
 
   return (
     <>
+      <a href="#main-content" className="skip-to-content">Skip to content</a>
+
       {/* ── Page transitions ── */}
       {/*
         AnimatePresence mode="wait": exit finishes before enter begins.
@@ -239,7 +241,7 @@ export default function App() {
   useEffect(() => {
     console.log(
       '%c// AFPISSO.SYS — 6 SIGNALS ACTIVE\n// explore the system. some layers are not obvious.',
-      'color:rgba(255,37,64,0.55);font-family:monospace;font-size:11px;letter-spacing:2px;line-height:1.8',
+      'color:var(--color-accent-55);font-family:monospace;font-size:11px;letter-spacing:2px;line-height:1.8',
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

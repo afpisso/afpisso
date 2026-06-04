@@ -121,7 +121,7 @@ function AcquireToast() {
         <Toast key={`new-${lastAcquired}`} toastKey={`new-${lastAcquired}`}>
           <HuntIcon size={14} />
           <div>
-            <div style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,37,64,0.6)', fontWeight: 700, marginBottom: 3 }}>
+            <div style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-60)', fontWeight: 700, marginBottom: 3 }}>
               // SIGNAL ACQUIRED
             </div>
             <div style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-fg)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -204,7 +204,7 @@ export default function HuntHUD() {
                     fontSize:      '8px',
                     letterSpacing: '0.22em',
                     textTransform: 'uppercase',
-                    color:         'rgba(255,37,64,0.5)',
+                    color:         'var(--color-accent-50)',
                     fontWeight:    700,
                   }}>
                     // SIGNAL HUNT
@@ -271,7 +271,7 @@ export default function HuntHUD() {
                             fontFamily:    MONO,
                             fontSize:      '8px',
                             letterSpacing: '0.12em',
-                            color:         'rgba(255,37,64,0.3)',
+                            color:         'var(--color-accent-30)',
                             fontStyle:     'normal',
                             lineHeight:    1.5,
                           }}>
@@ -287,7 +287,7 @@ export default function HuntHUD() {
                 {allFound && (
                   <div style={{
                     padding:      '8px 14px 0',
-                    borderTop:    '1px solid rgba(255,37,64,0.15)',
+                    borderTop:    '1px solid var(--color-accent-15)',
                     marginTop:    4,
                   }}>
                     <Link
@@ -327,7 +327,7 @@ export default function HuntHUD() {
               gap:         7,
               padding:     '6px 11px',
               cursor:      'default',
-              borderColor: allFound ? 'rgba(255,37,64,0.35)' : 'rgba(255,255,255,0.08)',
+              borderColor: allFound ? 'var(--color-accent-35)' : 'rgba(255,255,255,0.08)',
             }}
           >
             <HuntIcon size={10} opacity={allFound ? 1 : 0.5} />
@@ -335,7 +335,7 @@ export default function HuntHUD() {
               fontSize:      '8px',
               letterSpacing: '0.16em',
               fontWeight:    700,
-              color:         allFound ? ACCENT : 'rgba(255,37,64,0.55)',
+              color:         allFound ? ACCENT : 'var(--color-accent-55)',
               textTransform: 'uppercase',
               whiteSpace:    'nowrap',
             }}>

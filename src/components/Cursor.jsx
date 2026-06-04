@@ -191,9 +191,9 @@ export default function Cursor() {
                 fontSize:      '7px',
                 letterSpacing: '0.06em',
                 color: huntStrong
-                  ? 'rgba(255,37,64,0.55)'
+                  ? 'var(--color-accent-55)'
                   : state === 'cta'
-                  ? 'rgba(255,37,64,0.5)'
+                  ? 'var(--color-accent-50)'
                   : 'rgba(245,245,243,0.22)',
                 whiteSpace:    'nowrap',
                 lineHeight:    1.4,

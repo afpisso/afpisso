@@ -77,7 +77,7 @@ export default function About() {
                 fontSize: '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,37,64,0.45)',
+                color: 'var(--color-accent-45)',
                 fontWeight: 700,
               }}
             >
@@ -285,7 +285,7 @@ export default function About() {
                             color: 'var(--color-fg-dim)',
                           }}
                           onMouseEnter={e => {
-                            e.currentTarget.style.borderColor = 'rgba(255,37,64,0.3)';
+                            e.currentTarget.style.borderColor = 'var(--color-accent-30)';
                             e.currentTarget.style.color = 'var(--color-fg)';
                             e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.05)';
                           }}
