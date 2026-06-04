@@ -39,7 +39,7 @@ export const cases = [
       'Entré al proyecto como UX Lead durante una etapa media-avanzada de producción. El juego tenía muchas necesidades de UI pero ningún sistema de diseño compartido. Me enfoqué en crear assets reutilizables, documentación, patrones de interacción y una base más clara para que el equipo pudiera diseñar, implementar y revisar trabajo de interfaz con más consistencia.',
     tags: ['UX/UI Systems', 'Product Design', 'VR Interaction', 'Design Documentation', 'UX Leadership'],
     relatedNotes: ['clean-hud-vs-clear-hud', 'feedback-reduces-guesswork', 'what-is-a-game-ui-system'],
-    cta: 'View case study',
+    cta: 'View Orcs Must Die: By the Blade case',
     content: {
       summary:
         'I joined this project as UX Lead during mid-to-late production. The game had UI needs across gameplay systems, progression, world interactions, accessibility and multiplayer flows, but no shared design system to guide the work. I focused on creating a UI design system, producing reusable assets, documenting key features, supporting implementation in Unreal and leading a small UX/UI team through design decisions, reviews and production needs.',
@@ -365,7 +365,7 @@ export const cases = [
     title: 'D&D: Zombie Dragon Adventure',
     thumbnailAlt: 'D&D Zombie Dragon Adventure — UX/UI systems design case study for a UEFN adventure experience inside Fortnite',
     role: 'UX Lead',
-    platform: ['Fortnite ecosystem', 'UEFN'],
+    platform: ['UEFN', 'Fortnite'],
     focus: 'UX/UI systems, Adventure Menu, FTUX structure, stores, UI assets, copy, accessibility pass, heuristic review, production documentation',
     focusEs: 'Sistemas UX/UI, Adventure Menu, estructura FTUX, tiendas, assets UI, copy, revisión de accesibilidad, revisión heurística, documentación de producción',
     status: 'SELECTED WORK',
@@ -374,8 +374,8 @@ export const cases = [
     year: '2025',
     featured: true,
     category: 'games',
-    headline: 'Designing UX/UI systems for a fast-moving UEFN adventure — structuring player flows, reusable assets and production-ready documentation for an active D&D experience inside Fortnite.',
-    headlineEs: 'Diseño de sistemas UX/UI para una aventura UEFN de producción rápida — estructurando flujos de jugador, assets reutilizables y documentación lista para producción para una experiencia activa de D&D en Fortnite.',
+    headline: 'Structuring UX/UI systems for a complex D&D adventure inside Fortnite: player flows, reusable assets and production documentation.',
+    headlineEs: 'Estructurando sistemas UX/UI para una aventura D&D compleja dentro de Fortnite: flujos de jugador, assets reutilizables y documentación de producción.',
     description:
       'A product design case about structuring player flows, reusable UI assets and production-ready documentation for an active D&D experience in Fortnite. The work covered UX/UI systems, Adventure Menu, FTUX, stores and implementation handoff.',
     descriptionEs:
@@ -450,7 +450,7 @@ export const cases = [
         ],
         asset: '/cases/zombie-dragon-adventure/07-player-loop-diagram.png',
         assetAlt: 'D&D Zombie Dragon Adventure player experience loop diagram',
-        assetCaption: 'Player experience loop: from lobby to Dracolich — roguelike structure across sessions.',
+        assetCaption: 'Player experience loop: from lobby to Dracolich. Roguelike structure across sessions.',
       },
       approach: [
         {
@@ -477,7 +477,7 @@ export const cases = [
       keyDecisions: [
         {
           problem: 'The experience had several systems competing for player attention: classes, stats, inventory, missions, achievements, map, stores, upgrades, chests, D20 events and boss progression. The UI needed to make those systems feel connected rather than scattered.',
-          decision: 'Designed the Adventure Book as a centralized menu system where players could consult all progression information in one place — stats, inventory, missions, achievements and map.',
+          decision: 'Designed the Adventure Book as a centralized menu system where players could consult all progression information in one place: stats, inventory, missions, achievements and map.',
           why: 'Giving the player a single place to check what they had, what they needed and where they were going reduced confusion across systems without removing depth.',
         },
         {
@@ -534,7 +534,7 @@ export const cases = [
         },
       ],
       beforeAfter: {
-        context: 'The UX/UI work focused on giving structure to a complex experience — shifting from scattered systems toward a clear, documented, player-readable architecture.',
+        context: 'The UX/UI work focused on giving structure to a complex experience: shifting from scattered systems toward a clear, documented, player-readable architecture.',
         before: [
           'Player-facing systems designed without a shared information architecture',
           'Progression information spread across multiple disconnected screens',
@@ -632,7 +632,7 @@ export const cases = [
         ],
         asset: '/cases/zombie-dragon-adventure/07-player-loop-diagram.png',
         assetAlt: 'Diagrama del loop de experiencia del jugador en D&D Zombie Dragon Adventure',
-        assetCaption: 'Loop de experiencia del jugador: del lobby al Dracolich — estructura roguelike entre sesiones.',
+        assetCaption: 'Loop de experiencia del jugador: del lobby al Dracolich. Estructura roguelike entre sesiones.',
       },
       approach: [
         {
@@ -716,7 +716,7 @@ export const cases = [
         },
       ],
       beforeAfter: {
-        context: 'El trabajo UX/UI se enfocó en darle estructura a una experiencia compleja — pasando de sistemas dispersos a una arquitectura clara, documentada y legible para el jugador.',
+        context: 'El trabajo UX/UI se enfocó en darle estructura a una experiencia compleja: pasando de sistemas dispersos a una arquitectura clara, documentada y legible para el jugador.',
         before: [
           'Sistemas visibles para el jugador diseñados sin una arquitectura de información compartida',
           'Información de progresión distribuida en múltiples pantallas desconectadas',
@@ -781,11 +781,11 @@ export const cases = [
     cta: 'View The Walking Dead: Courtyard King case',
     content: {
       summary:
-        'The Walking Dead: Courtyard King is a Walking Dead Universe experience built in UEFN inside Fortnite. My work focused on interface logic for threat communication, resource readability, and survival feedback — keeping the IP\'s tension intact while working within Fortnite\'s constraints. Some details are intentionally simplified because of confidentiality. The focus here is the design problem, my role, and the type of decisions I helped shape.',
+        'The Walking Dead: Courtyard King is a Walking Dead Universe experience built in UEFN inside Fortnite. My work focused on interface logic for threat communication, resource readability, and survival feedback, keeping the IP\'s tension intact while working within Fortnite\'s constraints. Some details are intentionally simplified because of confidentiality. The focus here is the design problem, my role, and the type of decisions I helped shape.',
       quickFacts: {
         role: 'UX/UI Designer',
         platform: 'UEFN / Fortnite',
-        engine: 'UEFN',
+        year: '2025',
         status: 'In production / NDA',
         confidentiality: 'NDA-safe breakdown. Some details are intentionally redacted. Visual assets not available for public sharing.',
       },
@@ -850,7 +850,7 @@ export const cases = [
       'Este proyecto muestra cómo abordo el diseño de interfaz bajo restricciones de NDA y dentro de una plataforma con límites duros. El problema de diseño es real y transferible: el UX de supervivencia requiere comunicar urgencia sin generar ansiedad, y construir dentro de UEFN significa resolver tanto la fidelidad al IP como la restricción de plataforma al mismo tiempo. El mismo desafío existe en cualquier interfaz donde el tono, los límites técnicos y la claridad del usuario tienen que coexistir.',
     contentEs: {
       summary:
-        'The Walking Dead: Courtyard King es una experiencia del universo The Walking Dead construida en UEFN dentro de Fortnite. Mi trabajo se centró en la lógica de interfaz para comunicación de amenazas, legibilidad de recursos y retroalimentación de supervivencia — manteniendo la tensión del IP intacta mientras se trabajaba dentro de las restricciones de Fortnite. Algunos detalles se simplifican intencionalmente por confidencialidad. El enfoque aquí es el problema de diseño, mi rol y el tipo de decisiones que ayudé a dar forma.',
+        'The Walking Dead: Courtyard King es una experiencia del universo The Walking Dead construida en UEFN dentro de Fortnite. Mi trabajo se centró en la lógica de interfaz para comunicación de amenazas, legibilidad de recursos y retroalimentación de supervivencia, manteniendo la tensión del IP intacta mientras se trabajaba dentro de las restricciones de Fortnite. Algunos detalles se simplifican intencionalmente por confidencialidad. El enfoque aquí es el problema de diseño, mi rol y el tipo de decisiones que ayudé a dar forma.',
       quickFacts: {
         role: 'UX/UI Designer',
         platform: 'UEFN / Fortnite',
@@ -941,11 +941,11 @@ export const cases = [
     cta: 'View Raptor Heist case',
     content: {
       summary:
-        'Raptor Heist is a heist roguelike built in UEFN inside the Havoc Hotel franchise. My focus was UX/UI systems for orientation, rewards, progression, and pacing across repeatable runs.',
+        'Raptor Heist is a heist roguelike built in UEFN inside the Havoc Hotel franchise. My focus was making the run loop readable: orientation, reward clarity, progression communication and pacing across repeatable runs. The challenge was layering heist tension on top of the roguelike structure without creating information overload for a Fortnite-native player base.',
       quickFacts: {
         role: 'Game UX/UI Designer',
         platform: 'UEFN / Fortnite',
-        engine: 'UEFN',
+        year: '2025',
         status: 'Shipped',
         confidentiality: 'Selected details shared.',
       },
@@ -1087,7 +1087,7 @@ export const cases = [
     visibility: 'legacy',
     statusColor: 'accent',
     year: '2025',
-    featured: true,
+    featured: false,
     category: 'games',
     trailerSrc: '/cases/havoc-hotel-3/havoc-hoterl-3-Trailer.mp4',
     headline: 'Designing UX/UI systems for a co-op roguelike franchise in Fortnite focused on progression, readability, and replayability.',
@@ -1280,7 +1280,6 @@ export const cases = [
         studio: 'Pixiemeta',
         platform: 'Mobile',
         type: 'Hybrid-casual roguelite prototype',
-        stage: 'Prototype, launch paused',
         duration: '1 year',
         team: '9 people',
         tools: 'Jira · Wiki · Figma · Unity · Excel · Machinations · Adobe Suite',
@@ -1562,7 +1561,7 @@ export const cases = [
     platform: ['Web'],
     focus: 'Educational game design, interaction design, product UX, feedback systems',
     focusEs: 'Diseño de juego educativo, diseño de interacción, UX de producto, sistemas de retroalimentación',
-    status: 'LEGACY — AWARD',
+    status: 'LEGACY · AWARD',
     visibility: 'legacy',
     statusColor: 'default',
     year: null,
@@ -1604,7 +1603,7 @@ export const cases = [
       approach: [
         {
           heading: 'Mechanics as learning vehicles',
-          body: 'Designed game mechanics where the correct action to progress was also the action that reinforced the learning objective. The player was not being tested — they were practicing. The distinction matters for engagement: testing feels like evaluation, practice feels like play.',
+          body: 'Designed game mechanics where the correct action to progress was also the action that reinforced the learning objective. The player was not being tested; they were practicing. The distinction matters for engagement: testing feels like evaluation, practice feels like play.',
         },
         {
           heading: 'Feedback as the teacher',
@@ -1746,13 +1745,12 @@ export const cases = [
         role: 'Game UX/UI Designer',
         IP: 'Star Wars / Lucasfilm',
         platform: 'UEFN / Fortnite',
-        engine: 'UEFN',
-        type: 'Roguelike experience',
         year: '2026',
         status: 'Shipped',
+        confidentiality: 'Selected details shared.',
       },
       context:
-        'Building inside an IP like Star Wars creates a UX constraint that most UEFN projects do not face: every interface element has to earn its place against one of the most visually recognizable universes in entertainment. Players do not just play the game — they bring decades of expectations about how Star Wars looks, sounds, and feels. The interface cannot be generic. At the same time, UEFN imposes real technical limits on what custom UI can do inside Fortnite.',
+        'Building inside an IP like Star Wars creates a UX constraint that most UEFN projects do not face: every interface element has to earn its place against one of the most visually recognizable universes in entertainment. Players do not just play the game; they bring decades of expectations about how Star Wars looks, sounds, and feels. The interface cannot be generic. At the same time, UEFN imposes real technical limits on what custom UI can do inside Fortnite.',
       challenge:
         'Roguelikes require players to internalize the run loop quickly: understand their current state, evaluate risk, act, and repeat. That structure depends on clear feedback and predictable information hierarchy. The IP requirement adds a second constraint: that clarity must be delivered through a Star Wars lens. Generic HUD language breaks the fantasy. Too much custom UI breaks UEFN constraints. The problem was building a legible run loop that felt native to the Star Wars universe.',
       role:

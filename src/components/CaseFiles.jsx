@@ -112,45 +112,54 @@ function CursorPreview({ items, hovered }) {
     <m.div
       aria-hidden="true"
       className="fixed pointer-events-none z-[90]"
-      style={{
-        left: springX,
-        top: springY,
-        x: 28,    // offset right of cursor
-        y: -100,  // float above cursor
-        width: 400,
-      }}
+      style={{ left: springX, top: springY, x: 28, y: -100, width: 400 }}
     >
-      <AnimatePresence mode="wait">
-        {hovered && active && (
-          <m.div
-            key={hovered}
-            initial={{ opacity: 0, scale: 0.90, y: 14 }}
-            animate={{ opacity: 1, scale: 1,    y: 0 }}
-            exit={  { opacity: 0, scale: 0.95,  y: -8 }}
-            transition={{
-              opacity: { duration: 0.18, ease: EASE_OUT },
-              scale:   { duration: 0.24, ease: EASE_OUT },
-              y:       { duration: 0.22, ease: EASE_OUT },
-            }}
-            style={{
-              aspectRatio: '16/9',
-              overflow: 'hidden',
-              boxShadow: '0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06)',
-            }}
-          >
-            {/* Thumbnail image — derived from slug path */}
-            <ThumbnailOrPlaceholder case={active} />
-
-            {/* Red accent line at top */}
-            <div
+      {/* Stable aspect-ratio shell — lets mode="sync" coexist without layout shift */}
+      <div style={{
+        position: 'relative',
+        aspectRatio: '16/9',
+        overflow: 'hidden',
+        boxShadow: '0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06)',
+      }}>
+        <AnimatePresence mode="sync">
+          {hovered && active && (
+            <m.div
+              key={hovered}
+              initial={{
+                clipPath: 'inset(0% 100% 0% 0%)',
+                filter: 'saturate(0) brightness(2)',
+              }}
+              animate={{
+                clipPath: 'inset(0% 0% 0% 0%)',
+                filter: 'saturate(1) brightness(1)',
+              }}
+              exit={{
+                clipPath: 'inset(0% 0% 0% 100%)',
+                filter: 'saturate(0) brightness(2)',
+                transition: {
+                  clipPath: { duration: 0.1, ease: EASE_IN },
+                  filter:   { duration: 0.05, ease: 'linear' },
+                },
+              }}
+              transition={{
+                clipPath: { duration: 0.18, ease: [0.32, 0.72, 0, 1] },
+                filter:   { duration: 0.2, ease: EASE_OUT },
+              }}
               style={{
+                position: 'absolute',
+                inset: 0,
+                willChange: 'clip-path, filter',
+              }}
+            >
+              <ThumbnailOrPlaceholder case={active} />
+              <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
                 backgroundColor: 'var(--color-accent)', opacity: 0.6,
-              }}
-            />
-          </m.div>
-        )}
-      </AnimatePresence>
+              }} />
+            </m.div>
+          )}
+        </AnimatePresence>
+      </div>
     </m.div>
   );
 }
