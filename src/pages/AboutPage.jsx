@@ -8,7 +8,8 @@ import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import PhotoGridOverlay from '../components/PhotoGridOverlay';
-import { m, useTransform, useScroll } from 'framer-motion';
+import { m, AnimatePresence, useTransform, useScroll } from 'framer-motion';
+import { ZoomModal } from '../components/ZoomModal';
 
 function RevealLine({ delay = 0 }) {
   return (
@@ -34,7 +35,8 @@ export default function AboutPage({ onMenuOpen }) {
   });
   const photoRef = useRef(null);
   const photoMouseRef = useRef({ x: -1, y: -1 });
-  const [photoHovered, setPhotoHovered] = useState(false);
+  const [photoHovered,   setPhotoHovered]   = useState(false);
+  const [photoZoomOpen,  setPhotoZoomOpen]  = useState(false);
   const { acquireSignal } = useHunt();
 
   // SIG-ABOUT: triple-click on the core question fires the signal (mirrors About.jsx)
@@ -125,6 +127,8 @@ export default function AboutPage({ onMenuOpen }) {
                     const rect = e.currentTarget.getBoundingClientRect();
                     photoMouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
                   }}
+                  onClick={() => setPhotoZoomOpen(true)}
+                  style={{ cursor: 'zoom-in' }}
                 >
                   <m.div className="absolute inset-[-6%] w-[112%] h-[112%]" style={{ y: photoY }}>
                     <img
@@ -152,6 +156,19 @@ export default function AboutPage({ onMenuOpen }) {
                   {/* Interactive dot-grid hover overlay */}
                   <PhotoGridOverlay active={photoHovered} mousePosRef={photoMouseRef} />
                 </m.div>
+
+                {/* Photo zoom modal */}
+                <AnimatePresence>
+                  {photoZoomOpen && (
+                    <ZoomModal
+                      items={['/photo.webp']}
+                      activeIndex={0}
+                      onClose={() => setPhotoZoomOpen(false)}
+                      onNav={() => {}}
+                      title="Andres Felipe Pisso — Game UX/UI Designer"
+                    />
+                  )}
+                </AnimatePresence>
 
                 {/* Core question */}
                 <m.div

@@ -415,7 +415,7 @@ const translations = {
       label: 'Field Notes',
       sectionTitle: 'Aplicado.\nNo teórico.',
       headline: 'Notas y frameworks.',
-      description: 'Análisis, frameworks y material de referencia construido a partir de problemas reales de UX en juegos. No teoría. Cosas que han sido usadas o probadas.',
+      description: 'Análisis, frameworks y material de referencia construido a partir de problemas reales de UX en juegos. No teoría. Probado en producción.',
       readNote: 'Leer nota',
       viewAll: 'Ver todas las notas',
     },

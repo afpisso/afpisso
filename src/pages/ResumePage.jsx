@@ -115,7 +115,7 @@ export default function ResumePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
               <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.summary}</h2>
-              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', color: 'rgba(240,238,234,0.75)', lineHeight: 1.85 }}>
+              <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', color: 'rgba(240,238,234,0.75)', lineHeight: 1.85, maxWidth: '65ch' }}>
                 {r.summary}
               </p>
             </m.section>
@@ -141,7 +141,7 @@ export default function ResumePage({ onMenuOpen }) {
                       <div className="text-[12px] mb-2" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)', letterSpacing: '0.05em' }}>
                         {exp.company}
                       </div>
-                      <p className="text-[13px]" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}>
+                      <p className="text-[13px]" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.75, maxWidth: '65ch' }}>
                         {exp.description}
                       </p>
                     </dd>
