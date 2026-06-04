@@ -433,10 +433,10 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* Subtitle */}
+          {/* Subtitle — initial opacity:1 so SSG HTML is visible for LCP */}
           <m.div
             className="mb-6 md:mb-10"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 1, y: 10 }}
             animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.72 }}
           >
