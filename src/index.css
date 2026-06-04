@@ -350,6 +350,30 @@ section[id] {
   100% { transform: translate(0%,    0%); }
 }
 
+/* ─── Scroll-driven section PAGE numbers ─────────────── */
+/*
+ * Direction A (overdrive): CSS animation-timeline: view() creates a
+ * counter-parallax on the PAGE / 003 indicators in SectionHeading.
+ * As a section enters the viewport from below, the number floats up
+ * against the scroll direction — like a HUD element on a separate
+ * depth layer. Purely CSS, no JS, progressive enhancement only.
+ *
+ * Fallback: static position (the Framer Motion entrance handles the
+ * initial reveal, so there is no visual regression without support).
+ */
+@keyframes page-num-depth {
+  from { transform: translateY(28px); }
+  to   { transform: translateY(-20px); }
+}
+
+@supports (animation-timeline: view()) {
+  .section-page-num {
+    animation: page-num-depth linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% exit 100%;
+  }
+}
+
 /* ─── Page transition ────────────────────────────────── */
 /* Applied via the m.div wrapper in AppRoutes — no extra classes needed. */
 

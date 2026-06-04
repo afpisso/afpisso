@@ -69,8 +69,9 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
           </span>
         </div>
 
-        {/* PAGE number — pushed to far right */}
+        {/* PAGE number — parallax depth layer via CSS scroll-driven animation */}
         <div
+          className="section-page-num"
           style={{
             fontFamily: '"JetBrains Mono", monospace',
             fontSize: '9px',
