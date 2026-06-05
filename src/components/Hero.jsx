@@ -118,10 +118,10 @@ function BootSequence({ onComplete }) {
         <div aria-live="polite" className="space-y-2">
           {lines.map((line, i) => (
             <div key={i} className="flex items-center gap-3">
-              <span aria-hidden="true" style={{ color: 'var(--color-accent)', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace' }}>{'>'}</span>
+              <span aria-hidden="true" style={{ color: 'var(--color-accent)', fontSize: '10px', fontFamily: '"Rajdhani", sans-serif' }}>{'>'}</span>
               <span style={{
                 color: i === lines.length - 1 ? 'var(--color-fg)' : 'var(--color-fg-dim)',
-                fontSize: '12px', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.08em',
+                fontSize: '12px', fontFamily: '"Rajdhani", sans-serif', letterSpacing: '0.08em',
               }}>
                 {line}
               </span>
@@ -166,7 +166,7 @@ function BootSequence({ onComplete }) {
             transition={{ duration: 0.3, delay: 0.4 }}
             style={{
               marginTop: '28px',
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '10px',
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
@@ -451,7 +451,7 @@ export default function Hero() {
               <div style={{ width: 14, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
               <span
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   fontSize: '11px',
                   letterSpacing: '0.16em',
                   textTransform: 'uppercase',
@@ -463,7 +463,7 @@ export default function Hero() {
               </span>
             </div>
             <p style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: 'clamp(15px, 1.8vw, 20px)',
               color: 'var(--color-fg-dim)',
               lineHeight: 1.6,
@@ -484,7 +484,7 @@ export default function Hero() {
               <p
                 className="mb-6 md:mb-10"
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   fontSize: '13px',
                   color: 'var(--color-fg-dim)',
                   letterSpacing: '0.04em',
@@ -529,7 +529,7 @@ export default function Hero() {
                     key={tag}
                     className="px-3 py-1.5 text-[10px] tracking-widest uppercase"
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       border: '1px solid var(--color-rule)',
                       color: 'var(--color-fg-mute)',
                     }}

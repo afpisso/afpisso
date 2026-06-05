@@ -187,7 +187,7 @@ function PageTag({ label, page, accent, fg, entered }) {
         {entered ? txt : ' '}
       </span>
       <span style={{
-        fontFamily: '"JetBrains Mono", monospace',
+        fontFamily: '"Rajdhani", sans-serif',
         fontSize: 11, letterSpacing: '0.12em',
         color: accent, opacity: 0.95, paddingBottom: 14,
       }}>
@@ -283,7 +283,7 @@ function MenuItem({ item, lang, idx, active, onClick, onNavigate, entered, entry
       {!narrow && (
         <span style={{
           position: 'relative', zIndex: 1, marginLeft: 'auto',
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"Rajdhani", sans-serif',
           fontSize: 11, letterSpacing: '0.08em',
           color: fg,
           opacity: (hover || active) ? 1 : 0.35,
@@ -332,7 +332,7 @@ function SectionRow({ label, children, rule, fg, accent, narrow }) {
         padding: '16px 20px',
         borderRight: `1px solid ${rule}`,
         display: 'flex', alignItems: 'center', gap: 10,
-        fontFamily: '"JetBrains Mono", monospace',
+        fontFamily: '"Rajdhani", sans-serif',
         fontSize: 11, letterSpacing: '0.14em', color: fg,
       }}>
         <span style={{ width: 6, height: 6, background: accent, display: 'inline-block', flexShrink: 0 }} />
@@ -441,7 +441,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
         position: 'absolute', left: 0, top: 0, bottom: 0,
         width: narrow ? '100%' : 'min(72%, 960px)',
         background: bg, color: fg,
-        fontFamily: '"JetBrains Mono", monospace',
+        fontFamily: '"Rajdhani", sans-serif',
         overflow: 'hidden', isolation: 'isolate',
         clipPath: panelClip,
         opacity: entered ? 1 : 0,
@@ -547,7 +547,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
                 opacity: entered ? 1 : 0, transition: 'opacity 0.3s',
               }}>
                 <span style={{ width: 6, height: 6, background: accent, display: 'inline-block' }} />
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.16em', color: accent }}>
+                <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 10, letterSpacing: '0.16em', color: accent }}>
                   {lang === 'es' ? 'NAVEGACIÓN' : 'NAVIGATION'}
                 </span>
               </div>
@@ -583,7 +583,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
               alignItems: 'center', justifyContent: 'space-between',
             }}>
               <div style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: 10, letterSpacing: '0.1em',
                 writingMode: 'vertical-rl',
                 transform: 'rotate(180deg)',
@@ -818,7 +818,7 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
           transition: 'opacity 0.15s ease',
         }}>
           <span style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             fontSize: 14, letterSpacing: '0.28em', color: '#0a0a0a',
             display: 'inline-flex', alignItems: 'center', gap: 14,
             padding: '10px 22px',
@@ -836,14 +836,14 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
         {/* Sheet corner labels */}
         <div style={{
           position: 'absolute', top: 24, left: 28,
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"Rajdhani", sans-serif',
           fontSize: 11, letterSpacing: '0.16em', color: '#0a0a0a', opacity: 0.8,
         }}>
           ▢ BYANDRESFE · OS / {hashId}
         </div>
         <div style={{
           position: 'absolute', bottom: 24, right: 28,
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"Rajdhani", sans-serif',
           fontSize: 11, letterSpacing: '0.16em', color: '#0a0a0a', opacity: 0.8,
         }}>
           SWEEP · 0.98s · A

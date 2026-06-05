@@ -47,7 +47,7 @@ export default function FieldNotes() {
           <div className="flex items-start gap-12 mt-10 flex-wrap">
             <m.p
               className="text-base max-w-sm"
-              style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
+              style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -117,7 +117,7 @@ export default function FieldNotes() {
                   {/* Note ID + glyph */}
                   <div
                     className="flex-shrink-0 w-28 hidden sm:block"
-                    style={{ fontFamily: '"JetBrains Mono", monospace' }}
+                    style={{ fontFamily: '"Rajdhani", sans-serif' }}
                   >
                     <div
                       className="text-[10px] tracking-widest"
@@ -152,7 +152,7 @@ export default function FieldNotes() {
                       <span
                         className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                         style={{
-                          fontFamily: '"JetBrains Mono", monospace',
+                          fontFamily: '"Rajdhani", sans-serif',
                           border: `1px solid ${isHovered ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                           color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                         }}
@@ -163,7 +163,7 @@ export default function FieldNotes() {
                     <p
                       className="text-[12px] leading-relaxed line-clamp-2"
                       style={{
-                        fontFamily: '"JetBrains Mono", monospace',
+                        fontFamily: '"Rajdhani", sans-serif',
                         color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
                         transition: 'color 0.2s',
                         maxWidth: '680px',
@@ -185,7 +185,7 @@ export default function FieldNotes() {
                     <div
                       className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase transition-all duration-200"
                       style={{
-                        fontFamily: '"JetBrains Mono", monospace',
+                        fontFamily: '"Rajdhani", sans-serif',
                         color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                         transform: isHovered ? 'translateX(2px)' : 'translateX(0)',
                       }}

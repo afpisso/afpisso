@@ -93,7 +93,7 @@ export default function AboutPage({ onMenuOpen }) {
             <m.p
               className="mt-6"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '13px',
                 color: 'var(--color-fg-dim)',
                 letterSpacing: '0.05em',
@@ -181,7 +181,7 @@ export default function AboutPage({ onMenuOpen }) {
                   onClick={handleCoreQuestionClick}
                 >
                   <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
-                  <p className="mb-3" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                  <p className="mb-3" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                     {about.coreQuestionLabel}
                   </p>
                   <div className="flex items-center gap-3">
@@ -199,13 +199,13 @@ export default function AboutPage({ onMenuOpen }) {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  <p className="mb-5 leading-relaxed" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.75)', fontSize: '15px', lineHeight: 1.8 }}>
+                  <p className="mb-5 leading-relaxed" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.75)', fontSize: '15px', lineHeight: 1.8 }}>
                     {about.bio1}
                   </p>
-                  <p className="mb-5 leading-relaxed" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}>
+                  <p className="mb-5 leading-relaxed" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}>
                     {about.bio2}
                   </p>
-                  <p className="leading-relaxed" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}>
+                  <p className="leading-relaxed" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}>
                     {about.bio3}
                   </p>
                 </m.div>
@@ -230,7 +230,7 @@ export default function AboutPage({ onMenuOpen }) {
                         viewport={{ once: true }}
                         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.2 + gi * 0.06 }}
                       >
-                        <div className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)' }}>
+                        <div className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-accent)' }}>
                           {group.title}
                         </div>
                         <ul className="flex flex-wrap gap-1.5">
@@ -238,7 +238,7 @@ export default function AboutPage({ onMenuOpen }) {
                             <li
                               key={item}
                               className="text-[11px] tracking-wider px-2 py-1 transition-all duration-200"
-                              style={{ fontFamily: '"JetBrains Mono", monospace', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}
+                              style={{ fontFamily: '"Rajdhani", sans-serif', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}
                               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent-30)'; e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.05)'; }}
                               onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.color = 'var(--color-fg-dim)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                             >
@@ -264,12 +264,12 @@ export default function AboutPage({ onMenuOpen }) {
                         viewport={{ once: true }}
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 + i * 0.07 }}
                       >
-                        <dt className="text-[11px] font-semibold flex-shrink-0 w-32 pt-0.5" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}>
+                        <dt className="text-[11px] font-semibold flex-shrink-0 w-32 pt-0.5" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}>
                           {item.period}
                         </dt>
                         <dd>
-                          <div className="text-[14px] font-bold uppercase mb-1" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg)' }}>{item.role}</div>
-                          <div className="text-[12px]" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}>{item.context}</div>
+                          <div className="text-[14px] font-bold uppercase mb-1" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg)' }}>{item.role}</div>
+                          <div className="text-[12px]" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)' }}>{item.context}</div>
                         </dd>
                       </m.div>
                     ))}
@@ -310,13 +310,13 @@ export default function AboutPage({ onMenuOpen }) {
                   <span className="pulse-dot" />
                 </span>
                 <div>
-                  <div className="text-[10px] tracking-widest uppercase mb-0.5" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)' }}>
+                  <div className="text-[10px] tracking-widest uppercase mb-0.5" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-accent)' }}>
                     {about.availabilityLabel || 'Availability'}
                   </div>
-                  <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg)' }}>
+                  <div style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg)' }}>
                     {about.availabilityStatus || 'Available for freelance and remote contracts'}
                   </div>
-                  <div className="mt-0.5" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-fg-dim)' }}>
+                  <div className="mt-0.5" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '11px', color: 'var(--color-fg-dim)' }}>
                     {about.availabilityContext || 'Game UX/UI design, UX leadership, UI systems — remote, global'}
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export default function AboutPage({ onMenuOpen }) {
               <a
                 href="mailto:andres@byandresfe.com"
                 className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase flex-shrink-0"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: '#0a0a0a', backgroundColor: 'var(--color-accent)', padding: '8px 16px', textDecoration: 'none', clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: '#0a0a0a', backgroundColor: 'var(--color-accent)', padding: '8px 16px', textDecoration: 'none', clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
               >
                 {about.availabilityCta || 'Get in touch'}
                 <span aria-hidden>→</span>

@@ -73,7 +73,7 @@ export default function About() {
             <div style={{ width: 18, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
             <span
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
@@ -101,7 +101,7 @@ export default function About() {
           </p>
           <p
             style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '12px',
               color: 'var(--color-fg-mute)',
               letterSpacing: '0.06em',
@@ -198,7 +198,7 @@ export default function About() {
               />
               <p
                 className="mb-3"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' }}
               >
                 {about.coreQuestionLabel}
               </p>
@@ -218,19 +218,19 @@ export default function About() {
             >
               <p
                 className="mb-5 leading-relaxed"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.75)', fontSize: '15px', lineHeight: 1.8 }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.75)', fontSize: '15px', lineHeight: 1.8 }}
               >
                 {about.bio1}
               </p>
               <p
                 className="mb-5 leading-relaxed"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}
               >
                 {about.bio2}
               </p>
               <p
                 className="mb-8 leading-relaxed"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: 'rgba(240,238,234,0.6)', fontSize: '14px', lineHeight: 1.85 }}
               >
                 {about.bio3}
               </p>
@@ -238,7 +238,7 @@ export default function About() {
               <Link
                 to="/about"
                 className="flex items-center gap-2 text-[10px] tracking-widest uppercase transition-colors duration-200 w-fit"
-                style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-mute)' }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-mute)' }}
                 onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               >
@@ -270,7 +270,7 @@ export default function About() {
                   >
                     <div
                       className="text-[10px] font-bold tracking-widest uppercase mb-2"
-                      style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-accent)' }}
+                      style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-accent)' }}
                     >
                       {group.title}
                     </div>
@@ -280,7 +280,7 @@ export default function About() {
                           key={item}
                           className="text-[11px] tracking-wider px-2 py-1 transition-all duration-200"
                           style={{
-                            fontFamily: '"JetBrains Mono", monospace',
+                            fontFamily: '"Rajdhani", sans-serif',
                             border: '1px solid var(--color-rule)',
                             color: 'var(--color-fg-dim)',
                           }}
@@ -320,18 +320,18 @@ export default function About() {
                   >
                     <dt
                       className="text-[11px] font-semibold flex-shrink-0 w-32 pt-0.5"
-                      style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}
+                      style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}
                     >
                       {item.period}
                     </dt>
                     <dd>
                       <div
                         className="text-[14px] font-bold uppercase mb-1"
-                        style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg)' }}
+                        style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg)' }}
                       >
                         {item.role}
                       </div>
-                      <div className="text-[12px]" style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)' }}>
+                      <div className="text-[12px]" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)' }}>
                         {item.context}
                       </div>
                     </dd>

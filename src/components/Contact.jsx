@@ -8,7 +8,7 @@ import { analytics } from '../utils/analytics';
 import SectionTag from './SectionTag';
 import { m } from 'framer-motion';
 
-const MONO = '"JetBrains Mono", monospace';
+const MONO = '"Rajdhani", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 
 export default function Contact() {

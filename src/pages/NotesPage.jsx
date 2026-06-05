@@ -102,7 +102,7 @@ export default function NotesPage({ onMenuOpen }) {
             </m.h1>
             <m.p
               className="mt-6"
-              style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.85, maxWidth: '520px' }}
+              style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.85, maxWidth: '520px' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
@@ -163,7 +163,7 @@ export default function NotesPage({ onMenuOpen }) {
                       {/* ID + glyph column */}
                       <div
                         className="flex-shrink-0 w-28 hidden sm:block"
-                        style={{ fontFamily: '"JetBrains Mono", monospace' }}
+                        style={{ fontFamily: '"Rajdhani", sans-serif' }}
                       >
                         <div
                           className="text-[10px] tracking-widest transition-colors duration-200"
@@ -198,7 +198,7 @@ export default function NotesPage({ onMenuOpen }) {
                           <span
                             className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                             style={{
-                              fontFamily: '"JetBrains Mono", monospace',
+                              fontFamily: '"Rajdhani", sans-serif',
                               border: `1px solid ${isHov ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                               color: isHov ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                             }}
@@ -209,7 +209,7 @@ export default function NotesPage({ onMenuOpen }) {
                         <p
                           className="text-[12px] leading-relaxed line-clamp-2 transition-colors duration-200"
                           style={{
-                            fontFamily: '"JetBrains Mono", monospace',
+                            fontFamily: '"Rajdhani", sans-serif',
                             color: isHov ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
                             maxWidth: '680px',
                           }}
@@ -230,7 +230,7 @@ export default function NotesPage({ onMenuOpen }) {
                         <div
                           className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase transition-all duration-200"
                           style={{
-                            fontFamily: '"JetBrains Mono", monospace',
+                            fontFamily: '"Rajdhani", sans-serif',
                             color: isHov ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                             transform: isHov ? 'translateX(2px)' : 'translateX(0)',
                           }}

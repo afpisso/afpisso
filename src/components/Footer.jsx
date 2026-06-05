@@ -43,7 +43,7 @@ export default function Footer() {
             <div style={{ width: 18, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
             <span
               style={{
-                fontFamily:    '"JetBrains Mono", monospace',
+                fontFamily:    '"Rajdhani", sans-serif',
                 fontSize:      '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
@@ -119,7 +119,7 @@ export default function Footer() {
           <p
             className="max-w-sm"
             style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '12px',
               color: 'var(--color-fg-dim)',
               lineHeight: 1.75,
@@ -132,7 +132,7 @@ export default function Footer() {
           <Link
             to="/#contact"
             style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '11px',
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
@@ -169,7 +169,7 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center gap-1.5"
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       color: 'var(--color-fg-dim)',
                       textDecoration: 'none',
                       minHeight: '44px',
@@ -186,7 +186,7 @@ export default function Footer() {
                     to={to}
                     className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center gap-1.5"
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       color: 'var(--color-fg-dim)',
                       textDecoration: 'none',
                       minHeight: '44px',
@@ -214,7 +214,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-[11px] tracking-wider transition-colors duration-150 inline-flex items-center gap-1"
                   style={{
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontFamily: '"Rajdhani", sans-serif',
                     color: 'var(--color-fg-dim)',
                     textDecoration: 'none',
                     minHeight: '44px',

@@ -138,7 +138,7 @@ function LogoItem({ name, logo, sub, height = 30, maxWidth = 160 }) {
       {/* Sub-label */}
       <span
         style={{
-          fontFamily:   '"JetBrains Mono", monospace',
+          fontFamily:   '"Rajdhani", sans-serif',
           fontSize:     '7px',
           letterSpacing:'0.20em',
           textTransform:'uppercase',
@@ -196,7 +196,7 @@ export default function ClientLogos() {
           left:        24,
           top:         '50%',
           transform:   'translateY(-50%)',
-          fontFamily:  '"JetBrains Mono", monospace',
+          fontFamily:  '"Rajdhani", sans-serif',
           fontSize:    '8px',
           letterSpacing: '0.20em',
           textTransform: 'uppercase',

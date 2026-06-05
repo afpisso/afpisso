@@ -30,7 +30,7 @@ const MotionLink = m(Link);
 
 const CHAMFER = 8;
 const CLIP = `polygon(0 0, calc(100% - ${CHAMFER}px) 0, 100% ${CHAMFER}px, 100% 100%, ${CHAMFER}px 100%, 0 calc(100% - ${CHAMFER}px))`;
-const MONO = '"JetBrains Mono", monospace';
+const MONO = '"Rajdhani", sans-serif';
 
 const SIZE_PADDING = {
   sm: '8px 14px',

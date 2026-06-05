@@ -46,114 +46,21 @@ function _splitTitle(title) {
 const SR_COLS = 5, SR_ROWS = 3, SR_STAGGER = 0.5, SR_SCROLL_VH = 220;
 
 function HeroScrollReveal({ caseData, t, lang }) {
-  const heroRef    = useRef(null);
-  const tileEls    = useRef([]);
-  const bracketRef = useRef(null);
-  const hintRef    = useRef(null);
-  const tintRef    = useRef(null);
   const shouldReduce    = useReducedMotion();
-  const lenisRef        = useLenis();
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const imgSrc          = `/thumbnails/${caseData.slug}.webp`;
-
-  const tiles = useMemo(() => {
-    const out = [];
-    for (let r = 0; r < SR_ROWS; r++) {
-      for (let c = 0; c < SR_COLS; c++) {
-        out.push({
-          c, r,
-          metric: (c + r) / ((SR_COLS - 1) + (SR_ROWS - 1)),
-          bx: SR_COLS > 1 ? (c / (SR_COLS - 1)) * 100 : 50,
-          by: SR_ROWS > 1 ? (r / (SR_ROWS - 1)) * 100 : 50,
-        });
-      }
-    }
-    const mn = Math.min(...out.map(t => t.metric));
-    const mx = Math.max(...out.map(t => t.metric));
-    const span = (mx - mn) || 1;
-    out.forEach(t => { t.t0 = (t.metric - mn) / span; });
-    return out;
-  }, []);
-
-  tileEls.current = [];
-
-  const winLen = 0.6 - 0.42 * SR_STAGGER;
-  const imgSizeRef  = useRef({ w: 1920, h: 1080 }); // default 16:9 until image loads
-  const updateFnRef = useRef(null);
-
-  // Preload image to get intrinsic dimensions for cover calculation
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      imgSizeRef.current = { w: img.naturalWidth, h: img.naturalHeight };
-      updateFnRef.current?.(window.scrollY);
-    };
-    img.src = imgSrc;
-  }, [imgSrc]);
-
-  useEffect(() => {
-    // object-fit:cover math — scales image to fill W×H while preserving aspect ratio
-    const applyTile = (el, tile, local) => {
-      if (!el) return;
-      const W = window.innerWidth;
-      const H = window.innerHeight;
-      const { w: iW, h: iH } = imgSizeRef.current;
-      const scale = Math.max(W / iW, H / iH);
-      const rW = iW * scale, rH = iH * scale;
-      const ox = (W - rW) / 2, oy = (H - rH) / 2;
-      const tw = W / SR_COLS,  th = H / SR_ROWS;
-      el.style.backgroundSize      = `${rW}px ${rH}px`;
-      el.style.backgroundPositionX = `${ox - tile.c * tw}px`;
-      el.style.backgroundPositionY = `${oy - tile.r * th}px`;
-      el.style.opacity   = '1';
-      el.style.transform = 'none';
-      el.style.clipPath  = `inset(${(1 - local) * 100}% 0 0 0)`;
-    };
-
-    if (shouldReduce) {
-      tileEls.current.forEach((el, i) => applyTile(el, tiles[i], 1));
-      if (bracketRef.current) bracketRef.current.style.opacity = '1';
-      if (hintRef.current)    hintRef.current.style.opacity    = '0';
-      if (tintRef.current)    tintRef.current.style.opacity    = '0.28';
-      return;
-    }
-
-    const update = (scrollY) => {
-      const hero = heroRef.current;
-      if (!hero) return;
-      const total = hero.offsetHeight - window.innerHeight;
-      const p = total > 0 ? _sr_clamp((scrollY - hero.offsetTop) / total) : 0;
-      for (let i = 0; i < tiles.length; i++) {
-        const tile  = tiles[i];
-        const start = tile.t0 * (1 - winLen);
-        applyTile(tileEls.current[i], tile, _sr_ease(_sr_clamp((p - start) / winLen)));
-      }
-      if (bracketRef.current) bracketRef.current.style.opacity = String(_sr_clamp((p - 0.55) / 0.3));
-      if (tintRef.current)    tintRef.current.style.opacity    = String(0.35 * _sr_clamp((p - 0.2) / 0.6));
-      if (hintRef.current)    hintRef.current.style.opacity    = String(_sr_clamp(1 - p * 4));
-    };
-
-    updateFnRef.current = update;
-
-    const handleResize = () => update(window.scrollY);
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    const lenis = lenisRef?.current;
-    if (lenis) {
-      const handler = ({ scroll }) => update(scroll);
-      lenis.on('scroll', handler);
-      update(window.scrollY);
-      return () => { lenis.off('scroll', handler); window.removeEventListener('resize', handleResize); };
-    } else {
-      let ticking = false;
-      const handler = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(window.scrollY); ticking = false; }); } };
-      window.addEventListener('scroll', handler, { passive: true });
-      update(window.scrollY);
-      return () => { window.removeEventListener('scroll', handler); window.removeEventListener('resize', handleResize); };
-    }
-  }, [tiles, winLen, shouldReduce, lenisRef]);
+  const [imgFailed, setImgFailed] = useState(false);
 
   const [line1, line2] = _splitTitle(caseData.title.toUpperCase());
+
+  const charVariants = {
+    hidden: { opacity: 0, filter: 'blur(10px)', y: 18 },
+    visible: { opacity: 1, filter: 'blur(0px)', y: 0 },
+  };
+  const lineVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.028, delayChildren: 0 } },
+  };
 
   const brackets = [
     { top: 14, left: 14,  borderTop: `2px solid ${ACCENT}`, borderLeft:  `2px solid ${ACCENT}` },
@@ -163,87 +70,127 @@ function HeroScrollReveal({ caseData, t, lang }) {
   ];
 
   return (
-    <section
-      ref={heroRef}
-      style={{ position: 'relative', height: shouldReduce ? '100svh' : `${SR_SCROLL_VH}vh`, borderBottom: `1px solid ${RULE}` }}
-    >
-      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'grid', placeItems: 'center', backgroundColor: '#000' }}>
+    <section style={{ position: 'relative', height: '100svh', borderBottom: `1px solid ${RULE}` }}>
+      <div style={{ position: 'relative', height: '100%', overflow: 'hidden', display: 'grid', placeItems: 'center', backgroundColor: '#000' }}>
 
         {/* accent top line */}
         <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(to right, ${ACCENT} 0%, var(--color-accent-35) 55%, transparent 100%)`, zIndex: 5 }} />
 
+        {/* thumbnail background — full cover, immediate */}
+        {!imgFailed && (
+          <img
+            src={imgSrc}
+            alt=""
+            aria-hidden="true"
+            onError={() => setImgFailed(true)}
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              opacity: 0.55,
+              zIndex: 1,
+            }}
+          />
+        )}
+        {/* dark gradient so title stays legible */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0, zIndex: 2,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.6) 100%)',
+        }} />
+
         {/* breadcrumb */}
         <m.div className="flex items-center justify-center gap-3" style={{ position: 'absolute', top: 100, left: 0, right: 0, zIndex: 5, flexWrap: 'wrap', padding: '0 16px' }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}
+          initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: DIM, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}
             onMouseEnter={e => e.currentTarget.style.color = ACCENT} onMouseLeave={e => e.currentTarget.style.color = DIM}
-          >← {t.caseFiles.label}</Link>
-          <span style={{ color: RULE }}>·</span>
+          >{'←'} {t.caseFiles.label}</Link>
+          <span style={{ color: RULE }}>{'·'}</span>
           <span className="sys-label">{caseData.id}</span>
-          <span style={{ color: RULE }}>·</span>
+          <span style={{ color: RULE }}>{'·'}</span>
           <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5" style={{ fontFamily: MONO, color: ACCENT, border: `1px solid var(--color-accent-30)` }}>{visibilityLabel}</span>
         </m.div>
 
-        {/* title layer — sits behind tiles at z-index 1 */}
-        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 clamp(20px, 5vw, 48px)' }}>
-          <div style={{ marginBottom: 20 }}>
+        {/* corner brackets */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 4 }}>
+          {brackets.map((style, i) => (
+            <span key={i} aria-hidden="true" style={{ position: 'absolute', width: 26, height: 26, ...style }} />
+          ))}
+        </div>
+
+        {/* title layer */}
+        <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 clamp(20px, 5vw, 48px)' }}>
+          {/* Case ID badge — wipes in from left */}
+          <m.div style={{ marginBottom: 20, overflow: 'hidden' }}
+            initial={shouldReduce ? false : { clipPath: 'inset(0 100% 0 0)' }}
+            animate={{ clipPath: 'inset(0 0% 0 0)' }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          >
             <span style={{
               display: 'inline-block', backgroundColor: ACCENT, color: '#0a0a0a',
               fontFamily: BEBAS, fontSize: 'clamp(22px, 2.8vw, 36px)', lineHeight: 0.9,
               letterSpacing: '0.01em', padding: '5px 16px 2px',
               clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
             }}>{caseData.id}</span>
-          </div>
+          </m.div>
+
+          {/* Title — character-level stagger with blur */}
           <h1 style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 13vw, 168px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase' }}>
-            {line1}
-            {line2 && <><br /><span style={{ color: DIM }}>{line2}</span></>}
+            <m.span
+              aria-label={line1}
+              style={{ display: 'block' }}
+              variants={lineVariants}
+              initial={shouldReduce ? 'visible' : 'hidden'}
+              animate="visible"
+            >
+              {[...line1].map((ch, i) => (
+                <m.span
+                  key={i}
+                  aria-hidden="true"
+                  style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : undefined }}
+                  variants={charVariants}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {ch === ' ' ? ' ' : ch}
+                </m.span>
+              ))}
+            </m.span>
+
+            {line2 && (
+              <m.span
+                aria-label={line2}
+                style={{ display: 'block', color: DIM }}
+                variants={lineVariants}
+                initial={shouldReduce ? 'visible' : 'hidden'}
+                animate="visible"
+                transition={{ delayChildren: line1.length * 0.028 + 0.05 }}
+              >
+                {[...line2].map((ch, i) => (
+                  <m.span
+                    key={i}
+                    aria-hidden="true"
+                    style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : undefined }}
+                    variants={charVariants}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {ch === ' ' ? ' ' : ch}
+                  </m.span>
+                ))}
+              </m.span>
+            )}
           </h1>
+
+          {/* Tags — fade in after title completes */}
           {caseData.tags?.length > 0 && (
-            <div style={{ marginTop: 24, display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.32)', textTransform: 'uppercase' }}>
+            <m.div
+              style={{ marginTop: 24, display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.32)', textTransform: 'uppercase' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: (line1.length + (line2?.length ?? 0)) * 0.028 + 0.25, ease: 'easeOut' }}
+            >
               {caseData.tags.slice(0, 3).map((tag, i) => <span key={i}>{tag}</span>)}
-            </div>
+            </m.div>
           )}
-        </div>
-
-        {/* grid tile layer — assembles over title at z-index 2 */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
-          {tiles.map((tile, i) => (
-            <div
-              key={i}
-              ref={n => { tileEls.current[i] = n; }}
-              style={{
-                position: 'absolute',
-                left:   `${(tile.c / SR_COLS) * 100}%`,
-                top:    `${(tile.r / SR_ROWS) * 100}%`,
-                width:  `${100 / SR_COLS}%`,
-                height: `${100 / SR_ROWS}%`,
-                backgroundImage: `url(${imgSrc})`,
-                backgroundRepeat: 'no-repeat',
-                opacity: 0,
-                willChange: 'transform, opacity, clip-path',
-              }}
-            />
-          ))}
-          {/* dark tint — prevents title bleed-through in bright image areas */}
-          <div ref={tintRef} style={{ position: 'absolute', inset: 0, backgroundColor: '#0a0a0a', opacity: 0 }} />
-          {/* corner brackets — fade in once image is ~assembled */}
-          <div ref={bracketRef} style={{ position: 'absolute', inset: 0, opacity: 0 }}>
-            {brackets.map((style, i) => (
-              <span key={i} aria-hidden="true" style={{ position: 'absolute', width: 26, height: 26, ...style }} />
-            ))}
-          </div>
-        </div>
-
-        {/* scroll hint */}
-        <div ref={hintRef} style={{
-          position: 'absolute', bottom: 28, left: 0, right: 0, zIndex: 3,
-          display: 'flex', justifyContent: 'space-between', padding: '0 32px',
-          fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em',
-          color: DIM, textTransform: 'uppercase', pointerEvents: 'none',
-        }}>
-          <span>Scroll to assemble ↓</span>
-          <span style={{ color: 'rgba(245,245,243,0.32)' }}>{caseData.year || caseData.id}</span>
         </div>
 
       </div>
@@ -289,7 +236,7 @@ const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
 const DIM = 'var(--color-fg-dim)';
 const RULE = 'var(--color-rule)';
-const MONO = '"JetBrains Mono", monospace';
+const MONO = '"Rajdhani", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 
 function SectionLabel({ children }) {
@@ -497,69 +444,49 @@ function PullQuote({ children }) {
 
 function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
   const hasRealImage = Boolean(src);
-  const [open,    setOpen]    = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [scanKey, setScanKey] = useState(0);
+  const [open,      setOpen]      = useState(false);
+  const [hovered,   setHovered]   = useState(false);
+  const [scanKey,   setScanKey]   = useState(0);
+  const [imgFailed, setImgFailed] = useState(false);
+
+  // If a src was provided but failed to load — hide entirely, no empty space
+  if (hasRealImage && imgFailed) return null;
+  // If no src at all — also hide, don't show placeholder frame
+  if (!hasRealImage) return null;
 
   return (
     <>
       <m.div
         style={{
           aspectRatio: aspect,
-          border: `1px solid ${hovered && hasRealImage ? 'rgba(255,37,64,0.35)' : RULE}`,
+          border: `1px solid ${hovered ? 'rgba(255,37,64,0.35)' : RULE}`,
           backgroundColor: 'rgba(255,255,255,0.02)',
           position: 'relative', overflow: 'hidden',
-          cursor: hasRealImage ? 'zoom-in' : 'default',
+          cursor: 'zoom-in',
           transition: 'border-color 0.2s ease',
         }}
-        aria-hidden={hasRealImage ? undefined : 'true'}
-        onMouseEnter={() => { if (hasRealImage) { setHovered(true); setScanKey(k => k + 1); } }}
+        onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
         onMouseLeave={() => setHovered(false)}
-        onClick={() => hasRealImage && setOpen(true)}
+        onClick={() => setOpen(true)}
       >
-        {src && (
-          <img
-            src={src}
-            alt={alt || label}
-            className="absolute inset-0 w-full h-full object-cover"
-            onError={e => { e.currentTarget.style.display = 'none'; }}
-          />
-        )}
-
-        {/* Placeholder icon — shown only when no image */}
-        {!hasRealImage && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="3" width="18" height="18" rx="1" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-              <circle cx="8.5" cy="8.5" r="2" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-              <path d="M3 16l5-5 4 4 3-3 6 6" stroke="rgba(245,245,243,0.15)" strokeWidth="1.2" />
-            </svg>
-            <span style={{ fontFamily: MONO, fontSize: '10px', color: 'rgba(245,245,243,0.25)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              {label}
-            </span>
-          </div>
-        )}
+        <img
+          src={src}
+          alt={alt || label}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={() => setImgFailed(true)}
+        />
 
         {/* Corner marks on hover */}
-        {hasRealImage && (
-          <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
-            {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
-          </m.div>
-        )}
+        <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+          {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
+        </m.div>
 
         {/* Zoom hint */}
-        {hasRealImage && (
-          <m.div aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', pointerEvents: 'none' }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
-            [ zoom ]
-          </m.div>
-        )}
+        <m.div aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', pointerEvents: 'none' }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+          [ zoom ]
+        </m.div>
 
-        {/* Fallback corner marks (static, no-image state) */}
-        {!hasRealImage && [['top-2 left-2', 'border-t border-l'], ['top-2 right-2', 'border-t border-r'], ['bottom-2 left-2', 'border-b border-l'], ['bottom-2 right-2', 'border-b border-r']].map(([pos, cls]) => (
-          <div key={pos} aria-hidden="true" className={`absolute ${pos} w-4 h-4 ${cls}`} style={{ borderColor: RULE }} />
-        ))}
-
-        {hasRealImage && <ScanSweep active={hovered} scanKey={scanKey} />}
+        <ScanSweep active={hovered} scanKey={scanKey} />
       </m.div>
 
       <AnimatePresence>

@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react';
 import { useLenis } from '../contexts/LenisContext';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
-const MONO   = '"JetBrains Mono", monospace';
+const MONO   = '"Rajdhani", sans-serif';
 const ACCENT = 'var(--color-accent)';
 const RULE   = 'var(--color-rule)';
 const FG     = 'var(--color-fg)';

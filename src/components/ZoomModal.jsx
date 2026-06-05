@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const ACCENT = '#ff2540';
-const MONO   = '"JetBrains Mono", monospace';
+const MONO   = '"Rajdhani", sans-serif';
 
 const CORNER_STYLES = [
   { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },

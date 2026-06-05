@@ -57,7 +57,7 @@ export default function SectionTag({ label, page, className, style }) {
           color: '#0a0a0a',
           clipPath: chamferClip(8, ['tr', 'bl']),
           padding: '3px 10px 2px',
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"Rajdhani", sans-serif',
           fontSize: '9px',
           fontWeight: 700,
           letterSpacing: '0.18em',
@@ -73,7 +73,7 @@ export default function SectionTag({ label, page, className, style }) {
       {page && (
         <span
           style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             fontSize: '9px',
             letterSpacing: '0.14em',
             color: 'var(--color-fg-mute)',

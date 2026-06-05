@@ -53,7 +53,7 @@ export default function SignalTrigger({ id, prominence = 'medium', style = {} })
         border:      'none',
         padding,
         cursor:      'crosshair',
-        fontFamily:  '"JetBrains Mono", monospace',
+        fontFamily:  '"Rajdhani", sans-serif',
         fontSize,
         fontWeight:  700,
         letterSpacing: '0.02em',

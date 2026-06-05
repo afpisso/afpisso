@@ -37,7 +37,7 @@ function PrincipleRow({ p, i }) {
         <div
           className="text-[10px] tracking-widest transition-colors duration-200"
           style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             color: hovered ? 'var(--color-accent)' : 'var(--color-accent-40)',
           }}
         >
@@ -62,7 +62,7 @@ function PrincipleRow({ p, i }) {
         <p
           className="text-[13px] leading-relaxed transition-colors duration-200"
           style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             color: hovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
           }}
         >
@@ -129,7 +129,7 @@ function ModuleCard({ mod, i }) {
         <div
           className="text-[9px] font-bold tracking-widest uppercase transition-colors duration-200"
           style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             color: hovered ? 'var(--color-accent)' : 'var(--color-accent-40)',
           }}
         >
@@ -141,7 +141,7 @@ function ModuleCard({ mod, i }) {
       <div
         className="text-[11px] transition-colors duration-200"
         style={{
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"Rajdhani", sans-serif',
           color: hovered ? 'var(--color-fg)' : 'var(--color-fg-dim)',
           lineHeight: 1.4,
           letterSpacing: '0.01em',
@@ -170,7 +170,7 @@ export default function SystemsLab() {
           />
           <m.p
             className="text-base mt-10"
-            style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.8, maxWidth: '520px' }}
+            style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', lineHeight: 1.8, maxWidth: '520px' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

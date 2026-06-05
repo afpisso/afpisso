@@ -11,7 +11,7 @@ import { ZoomModal, ScanSweep } from '../components/ZoomModal';
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
 const ACCENT = '#ff2540';
-const MONO   = '"JetBrains Mono", monospace';
+const MONO   = '"Rajdhani", sans-serif';
 const BEBAS  = '"Bebas Neue", sans-serif';
 
 const CORNER_STYLES = [

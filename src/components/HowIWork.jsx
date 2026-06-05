@@ -34,7 +34,7 @@ export default function HowIWork() {
             <p
               className="mb-4"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '11px',
                 color: 'var(--color-accent)',
                 letterSpacing: '0.12em',
@@ -45,7 +45,7 @@ export default function HowIWork() {
             </p>
             <p
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '13px',
                 color: 'var(--color-fg-dim)',
                 lineHeight: 1.85,
@@ -83,7 +83,7 @@ export default function HowIWork() {
                   <div
                     className="text-[13px] font-bold uppercase mb-1.5"
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       color: 'var(--color-fg)',
                       letterSpacing: '0.05em',
                     }}
@@ -92,7 +92,7 @@ export default function HowIWork() {
                   </div>
                   <div
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       fontSize: '12px',
                       color: 'var(--color-fg-dim)',
                       lineHeight: 1.75,

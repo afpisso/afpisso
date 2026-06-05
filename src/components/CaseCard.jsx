@@ -121,7 +121,7 @@ export default function CaseCard({ caseData, index }) {
                   <span
                     key={p}
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Rajdhani", sans-serif',
                       fontSize: '8px',
                       letterSpacing: '0.14em',
                       textTransform: 'uppercase',
@@ -179,13 +179,13 @@ export default function CaseCard({ caseData, index }) {
             <div className="mb-4">
               <div
                 className="flex items-center gap-1.5 mb-2"
-                style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-accent-60)', textTransform: 'uppercase' }}
+                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-accent-60)', textTransform: 'uppercase' }}
               >
                 <span>// case hook</span>
               </div>
               <p
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   fontSize: '12px',
                   color: 'rgba(240,238,234,0.88)',
                   lineHeight: 1.7,
@@ -202,7 +202,7 @@ export default function CaseCard({ caseData, index }) {
               to={`/case/${caseData.slug}`}
               className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase w-fit"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 color: '#0a0a0a',
                 backgroundColor: 'var(--color-accent)',
                 padding: '6px 12px',
@@ -242,7 +242,7 @@ export default function CaseCard({ caseData, index }) {
             </div>
             <span
               className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 ml-3 mt-1"
-              style={{ fontFamily: '"JetBrains Mono", monospace', ...vstyle }}
+              style={{ fontFamily: '"Rajdhani", sans-serif', ...vstyle }}
             >
               <StatusDiamond size={5} color={vstyle.color} filled />
               {statusLabel}
@@ -252,7 +252,7 @@ export default function CaseCard({ caseData, index }) {
           {/* Description */}
           <p
             className="text-[13px] leading-relaxed flex-grow mb-4"
-            style={{ fontFamily: '"JetBrains Mono", monospace', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}
+            style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}
           >
             {lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : caseData.description}
           </p>
@@ -264,7 +264,7 @@ export default function CaseCard({ caseData, index }) {
                 key={tag}
                 className="text-[10px] font-bold tracking-widest uppercase px-2 py-1"
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   borderWidth: '1px',
                   borderStyle: 'solid',
                   borderColor: hovered ? 'var(--color-accent-15)' : 'var(--color-rule)',

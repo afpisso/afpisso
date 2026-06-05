@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shogun Scroll Effect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #0a0a0a;
+      height: 100%;
+    }
+
+    .scroll-root {
+      height: 100dvh;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: relative;
+    }
+    .scroll-root::-webkit-scrollbar { display: none; }
+
+    /* ─── Canvas: renders title entirely (solid or mosaic) ─── */
+    #mosaicCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ─── CSS title hidden — canvas owns all title rendering ─── */
+    .p-title {
+      display: none;
+    }
+
+    /* ─── Section 1: dark void, title visible ─── */
+    .titleWrap {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      background: #0a0a0a;
+    }
+
+    .titleMeta {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+      pointer-events: none;
+      font-family: 'Space Mono', 'Courier New', monospace;
+      transition: opacity 0.4s ease;
+    }
+    .titleMeta.hidden { opacity: 0; }
+    .titleMeta__role {
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #4fc3f7;
+    }
+    .titleMeta__year {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: rgba(240, 237, 232, 0.35);
+    }
+
+    /* ─── Section 2: image source (hidden — canvas reads pixels from it) ─── */
+    .imageWrap {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+
+    /* The actual img is hidden — canvas paints it as mosaic */
+    #sourceImg {
+      position: absolute;
+      width: 100%;
+      height: 130%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ─── Scroll hint ─── */
+    .scroller {
+      position: fixed;
+      bottom: 6dvh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: none;
+      z-index: 20;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    .scroller.hidden { opacity: 0; }
+    .scroller__label {
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.5);
+      animation: labelIn 0.6s 1.2s forwards ease-out;
+      opacity: 0;
+    }
+    .scroller__track {
+      position: relative;
+      width: 1px;
+      height: 2.5rem;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .scroller__bar {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f0ede8;
+      animation: barSlide 1.6s 0.6s ease-in-out infinite;
+    }
+    @keyframes labelIn { to { opacity: 1; } }
+    @keyframes barSlide {
+      0%   { top: -100%; }
+      100% { top:  100%; }
+    }
+
+    /* ─── Content below ─── */
+    .content {
+      background: #0a0a0a;
+      padding: 8rem 3rem 12rem;
+      display: flex;
+      gap: 6rem;
+      align-items: flex-start;
+      font-family: 'Space Mono', 'Courier New', monospace;
+    }
+    .content__left { flex: 0 0 38%; }
+    .content__overview {
+      font-size: 0.5rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.3);
+      margin-bottom: 1.5rem;
+    }
+    .content__name {
+      font-family: 'Barlow Condensed', 'Impact', sans-serif;
+      font-weight: 900;
+      font-size: 3.5rem;
+      line-height: 0.88;
+      text-transform: uppercase;
+      color: #f0ede8;
+      letter-spacing: -0.01em;
+    }
+    .detail { flex: 1; }
+    .detail__item {
+      display: grid;
+      grid-template-columns: 7rem 1fr;
+      gap: 0 1.5rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid rgba(240,237,232,0.08);
+    }
+    .detail__label {
+      font-size: 0.5rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #4fc3f7;
+      line-height: 1.8;
+      padding-top: 0.1rem;
+    }
+    .detail__val {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: rgba(240,237,232,0.65);
+    }
+    .detail__launch { margin-top: 2.5rem; }
+    .detail__launch a {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #f0ede8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(240,237,232,0.25);
+      padding-bottom: 3px;
+      transition: border-color 0.3s;
+    }
+    .detail__launch a:hover { border-color: #f0ede8; }
+  </style>
+</head>
+<body>
+
+<!-- Canvas renders the mosaic image band -->
+<canvas id="mosaicCanvas"></canvas>
+
+<div class="scroll-root" id="scrollRoot">
+
+  <!-- Fixed title -->
+  <h1 class="p-title" id="titleEl">SHOGUN PIZZA</h1>
+
+  <!-- Scroll hint -->
+  <div class="scroller" id="scroller">
+    <span class="scroller__label">Scroll</span>
+    <div class="scroller__track">
+      <div class="scroller__bar"></div>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="titleWrap">
+    <div class="titleMeta" id="titleMeta">
+      <span class="titleMeta__role">Frontend development / CMS development</span>
+      <span class="titleMeta__year">2026</span>
+    </div>
+  </div>
+
+  <!-- Section 2: image source (invisible — canvas reads from it) -->
+  <div class="imageWrap" id="imageWrap">
+    <img
+      id="sourceImg"
+      crossorigin="anonymous"
+      src="https://picsum.photos/seed/pizza/1600/900"
+      alt=""
+    />
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="content__left">
+      <p class="content__overview">Project Overview</p>
+      <p class="content__name">Shogun<br>Pizza</p>
+    </div>
+    <div class="detail">
+      <div class="detail__item">
+        <div class="detail__label">• Role</div>
+        <p class="detail__val">Frontend development<br>CMS development</p>
+      </div>
+      <div class="detail__item">
+        <div class="detail__label">• Year</div>
+        <p class="detail__val">2026</p>
+      </div>
+      <div class="detail__item">
+        <div class="detail__label">• Note</div>
+        <p class="detail__val">SHOGUN PIZZA, a sister brand of SHOGUN BURGER, was born as a pizza brand. Built with a headless CMS implemented with WordPress.</p>
+      </div>
+      <div class="detail__launch">
+        <a href="https://shogunpizza.com/" target="_blank">Launch Website ↗</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const canvas    = document.getElementById('mosaicCanvas')
+  const ctx       = canvas.getContext('2d')
+  const root      = document.getElementById('scrollRoot')
+  const scroller  = document.getElementById('scroller')
+  const titleMeta = document.getElementById('titleMeta')
+  const titleEl   = document.getElementById('titleEl')
+  const sourceImg = document.getElementById('sourceImg')
+  const imageWrap = document.getElementById('imageWrap')
+
+  // ─── Mosaic config ───────────────────────────────────────
+  const TILE = 22      // tile size px
+  const GAP  = 2       // gap between tiles (dark background shows through)
+
+  // ─── Canvas sizing ───────────────────────────────────────
+  function resize() {
+    canvas.width  = window.innerWidth
+    canvas.height = window.innerHeight
+  }
+  resize()
+  window.addEventListener('resize', resize)
+
+  // ─── Scroll state ────────────────────────────────────────
+  let scrollY = 0
+  let targetScrollY = 0
+
+  root.addEventListener('scroll', () => {
+    targetScrollY = root.scrollTop
+    scroller.classList.toggle('hidden', targetScrollY > 50)
+    titleMeta.classList.toggle('hidden', targetScrollY > window.innerHeight * 0.7)
+  }, { passive: true })
+
+  // ─── Offscreen canvas (reused each frame) ───────────────
+  const offscreen = document.createElement('canvas')
+  const octx = offscreen.getContext('2d')
+
+  function syncOffscreen() {
+    offscreen.width  = canvas.width
+    offscreen.height = canvas.height
+  }
+  syncOffscreen()
+  window.addEventListener('resize', syncOffscreen)
+
+  // ─── Draw frame ──────────────────────────────────────────
+  // Phase 0 (no scroll): solid cream letters
+  // Phase 1 (scroll into imageWrap): letters become a mosaic window into the image.
+  //   - A horizontal band expands from the vertical center of the title
+  //   - Inside the band: letter SHAPES are cut out and filled with the image mosaic
+  //   - Above/below the band: solid cream letters (canvas-drawn)
+  //   - Background is always black
+
+  function setFont(c) {
+    const fontSize = canvas.width * 0.185
+    c.font = `900 ${fontSize}px 'Barlow Condensed', Impact, 'Arial Narrow', sans-serif`
+    c.textAlign = 'center'
+    c.textBaseline = 'middle'
+  }
+
+  function drawFrame() {
+    const W = canvas.width
+    const H = canvas.height
+
+    ctx.clearRect(0, 0, W, H)
+    setFont(ctx)
+
+    const raw = (scrollY - H) / H   // 0 at start of imageWrap
+    const progress = Math.max(0, Math.min(1, raw))
+
+    // ── Phase 0: solid cream title ──────────────────────────
+    if (progress <= 0 || !imgReady) {
+      ctx.fillStyle = '#f0ede8'
+      ctx.fillText('SHOGUN PIZZA', W / 2, H * 0.5)
+      return
+    }
+
+    // ── Phase 1: mosaic band expands from title center ──────
+
+    // Band bounds (snapped to tile grid for pixelated edges)
+    const maxBandH = H * 0.44
+    const bandH    = maxBandH * Math.min(1, progress * 1.7)
+    const cy       = H * 0.5
+    const snapTop  = Math.floor((cy - bandH / 2) / TILE) * TILE
+    const snapBot  = Math.ceil((cy  + bandH / 2) / TILE) * TILE
+
+    // Image mapping — cover logic so image always fills the viewport
+    const imgEl = sourceImg
+    const imgW  = imgEl.naturalWidth  || W
+    const imgH  = imgEl.naturalHeight || H
+    // scale = largest factor that covers both W and H (object-fit: cover)
+    const scale    = Math.max(W / imgW, H / imgH)
+    const scaledW  = imgW * scale
+    const scaledH  = imgH * scale
+    // Center image: src offsets so the image is centered on the canvas
+    const srcCenterX = (scaledW - W) / 2 / scale
+    const srcCenterY = (scaledH - H) / 2 / scale
+    // Parallax: shift up to 20% of available vertical room as progress goes 0→1
+    const parallaxRoom = srcCenterY * 2   // total vertical travel available
+    const imgOffsetY = srcCenterY + (progress - 0.5) * parallaxRoom * 0.4
+
+    // ── Build mosaic-in-letters on offscreen canvas ─────────
+    // Step 1: draw all tiles first (source-over — no masking yet)
+    octx.clearRect(0, 0, W, H)
+    for (let ty = snapTop; ty < snapBot; ty += TILE) {
+      for (let tx = 0; tx < W; tx += TILE) {
+        const tileW = TILE - GAP
+        const tileH = TILE - GAP
+        const srcX  = tx / scale + srcCenterX
+        const srcY  = ty / scale + imgOffsetY
+        const srcW  = tileW / scale
+        const srcH  = tileH / scale
+        if (srcX < 0 || srcY < 0 || srcX + srcW > imgW || srcY + srcH > imgH) continue
+        octx.drawImage(imgEl, srcX, srcY, srcW, srcH, tx, ty, tileW, tileH)
+      }
+    }
+
+    // Step 2: destination-in with text mask — keeps tile pixels ONLY inside letters
+    octx.globalCompositeOperation = 'destination-in'
+    setFont(octx)
+    octx.fillStyle = '#fff'
+    octx.fillText('SHOGUN PIZZA', W / 2, H * 0.5)
+    octx.globalCompositeOperation = 'source-over'  // reset
+
+    // ── Compose onto main canvas ────────────────────────────
+    // 1. Solid cream title everywhere (visible above/below band)
+    ctx.fillStyle = '#f0ede8'
+    ctx.fillText('SHOGUN PIZZA', W / 2, H * 0.5)
+
+    // 2. In the band area: overwrite with the mosaic-in-letters version.
+    //    destination-out first punches out the cream letters in the band,
+    //    then source-over draws the mosaic letters in their place.
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(0, snapTop, W, snapBot - snapTop)
+    ctx.clip()
+
+    // Punch out the solid cream letters within the band
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.fillStyle = 'rgba(0,0,0,1)'
+    ctx.fillText('SHOGUN PIZZA', W / 2, H * 0.5)
+
+    // Draw the mosaic version in their place
+    ctx.globalCompositeOperation = 'source-over'
+    ctx.drawImage(offscreen, 0, 0)
+
+    ctx.restore()
+  }
+
+  // ─── Image load ──────────────────────────────────────────
+  let imgReady = false
+  sourceImg.addEventListener('load', () => { imgReady = true })
+  if (sourceImg.complete && sourceImg.naturalWidth > 0) imgReady = true
+
+  // ─── Lerp loop ───────────────────────────────────────────
+  // Smooth scroll position for inertia feel
+  let currentScrollY = 0
+
+  function tick() {
+    currentScrollY += (targetScrollY - currentScrollY) * 0.1
+    scrollY = currentScrollY
+    drawFrame()
+    requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+</script>
+
+</body>
+</html>

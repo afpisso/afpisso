@@ -80,7 +80,7 @@ function ThumbnailOrPlaceholder({ c, priority = false }) {
       <div style={{ position: 'relative', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {c.platform?.map(p => (
           <span key={p} style={{
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             fontSize: '8px', letterSpacing: '0.14em', textTransform: 'uppercase',
             color: 'var(--color-fg-mute)',
             border: '1px solid var(--color-rule)',
@@ -215,7 +215,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
           <div
             className="flex-shrink-0 w-7 sm:w-10 tabular-nums transition-colors duration-200"
             style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '11px',
               letterSpacing: '0.1em',
               color: isHovered ? 'var(--color-accent)' : 'var(--color-accent-30)',
@@ -243,7 +243,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
               <span
                 className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   color: vs.color,
                   border: `1px solid ${vs.border}`,
                   opacity: isHovered ? 1 : 0.6,
@@ -274,7 +274,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
                   key={tag}
                   className="hidden sm:inline text-[10px] tracking-widest uppercase px-2 py-0.5 transition-opacity duration-200"
                   style={{
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontFamily: '"Rajdhani", sans-serif',
                     border: '1px solid var(--color-rule)',
                     color: 'var(--color-fg-mute)',
                     opacity: isHovered ? 0.85 : 0.45,
@@ -384,7 +384,7 @@ function MobileWorkCard({ caseData, index, total }) {
             {/* ── Left: text info ─────────────────────────────── */}
             <div style={{ padding: '18px 10px 18px 16px', minWidth: 0 }}>
               <div style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '9px', letterSpacing: '0.16em',
                 color: 'var(--color-accent-45)', marginBottom: 8,
               }}>
@@ -407,7 +407,7 @@ function MobileWorkCard({ caseData, index, total }) {
 
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 5,
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '9px', fontWeight: 700,
                 letterSpacing: '0.12em', textTransform: 'uppercase',
                 color: vs.color,
@@ -470,7 +470,7 @@ function MobileWorkCard({ caseData, index, total }) {
                 {/* ID stamp */}
                 <div style={{
                   position: 'absolute', bottom: 5, right: 6,
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   fontSize: '7px', letterSpacing: '0.14em',
                   color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase',
                   userSelect: 'none',
@@ -578,7 +578,7 @@ function WorkGridCard({ caseData, index }) {
           {/* Case ID watermark */}
           <div style={{
             position: 'absolute', bottom: 10, right: 12,
-            fontFamily: '"JetBrains Mono", monospace',
+            fontFamily: '"Rajdhani", sans-serif',
             fontSize: '9px', letterSpacing: '0.18em',
             color: hovered ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.18)',
             transition: 'color 0.2s', userSelect: 'none',
@@ -596,7 +596,7 @@ function WorkGridCard({ caseData, index }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Rajdhani", sans-serif',
               fontSize: '9px', fontWeight: 700,
               letterSpacing: '0.14em', textTransform: 'uppercase',
               color: vs.color,
@@ -795,7 +795,7 @@ export default function WorkPage({ onMenuOpen }) {
 
             <m.p
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: '13px',
                 color: 'var(--color-fg-dim)',
                 lineHeight: 1.85,
@@ -826,7 +826,7 @@ export default function WorkPage({ onMenuOpen }) {
             >
               <span
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Rajdhani", sans-serif',
                   fontSize: '9px',
                   letterSpacing: '0.16em',
                   color: 'var(--color-fg-mute)',
@@ -844,7 +844,7 @@ export default function WorkPage({ onMenuOpen }) {
                   aria-pressed={active === f}
                   className="relative transition-colors duration-200"
                   style={{
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontFamily: '"Rajdhani", sans-serif',
                     fontSize: '10px',
                     fontWeight: 700,
                     letterSpacing: '0.14em',
@@ -971,7 +971,7 @@ export default function WorkPage({ onMenuOpen }) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '13px', color: 'var(--color-fg-mute)' }}>
+                <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-mute)' }}>
                   {t.caseFiles.noProjects}
                 </p>
               </m.div>

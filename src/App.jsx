@@ -35,6 +35,7 @@ const NotesPage       = lazy(() => import('./pages/NotesPage'));
 const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
+const LabHome         = lazy(() => import('./pages/LabHome')); // isolated prototype — /lab
 
 // Easing
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -87,12 +88,7 @@ function HomePage({ onMenuOpen }) {
           <HowIWork />
 
           {/* Second ticker — rhythm break before notes/about */}
-          <Ticker
-            items={TICKER_ITEMS}
-            accent={[2, 5, 10]}
-            speed={48}
-            reverse
-          />
+          <Ticker items={TICKER_ITEMS} accent={[2, 5, 10]} speed={48} reverse />
 
           <FieldNotes />
           <About />
@@ -112,8 +108,8 @@ function NotFoundPage({ onMenuOpen }) {
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '6rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>404</div>
-          <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
-          <a href="/" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
+          <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
+          <a href="/" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
         </div>
       </div>
       <Footer />
@@ -199,6 +195,7 @@ function AppRoutes() {
               <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
               <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
               <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
+              <Route path="/lab"          element={<LabHome />} />
               {/* Legacy routes */}
               <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
               <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />

@@ -74,7 +74,7 @@ export default function DigitalAura() {
 
         ctx.globalAlpha = Math.max(0, p.life) * p.opacity;
         ctx.fillStyle   = p.red ? '#ff2540' : 'rgba(245,245,243,0.9)';
-        ctx.font        = `${p.size}px "JetBrains Mono", monospace`;
+        ctx.font        = `${p.size}px "Rajdhani", sans-serif`;
         ctx.fillText(p.char, p.x, p.y);
       }
       ctx.globalAlpha = 1;
