@@ -113,6 +113,8 @@ function CursorPreview({ items, hovered }) {
       aria-hidden="true"
       className="fixed pointer-events-none z-[90]"
       style={{ left: springX, top: springY, x: 28, y: -100, width: 400 }}
+      animate={{ opacity: hovered ? 1 : 0 }}
+      transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       {/* Stable aspect-ratio shell — lets mode="sync" coexist without layout shift */}
       <div style={{
