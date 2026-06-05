@@ -3,8 +3,6 @@ import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
 import ContactOverlay from './ContactOverlay';
-import CyberBtn from './CyberBtn';
-import AudioBars from './AudioBars';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
 import { m, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useReducedMotion } from 'framer-motion';
@@ -48,12 +46,6 @@ function LogoMark({ size = 40 }) {
           <rect x="8.5" y="20" width="13" height="3" fill="#ff2540" />
         </svg>
       </div>
-      {/* Accent corner dot */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', bottom: -1, right: -1,
-        width: size > 34 ? 6 : 5, height: size > 34 ? 6 : 5,
-        backgroundColor: 'var(--color-accent)',
-      }} />
     </div>
   );
 }
@@ -65,6 +57,16 @@ function PillDivider() {
       width: 1, height: 16, flexShrink: 0,
       backgroundColor: 'rgba(255,255,255,0.08)',
     }} />
+  );
+}
+
+function LanguageLabel({ lang, target }) {
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+      <span style={{ color: 'var(--color-fg)' }}>{lang.toUpperCase()}</span>
+      <span aria-hidden="true" style={{ color: 'rgba(255,255,255,0.18)' }}>/</span>
+      <span>{target}</span>
+    </span>
   );
 }
 
@@ -203,7 +205,7 @@ export default function Nav({ onMenuOpen }) {
                 </Link>
 
                 {/* Right cluster */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
 
                   {/* Desktop nav links */}
                   <div className="hidden lg:flex items-center gap-1">
@@ -234,21 +236,6 @@ export default function Nav({ onMenuOpen }) {
                     ))}
                   </div>
 
-                  {/* Status pill */}
-                  <div
-                    aria-label={`Status: ${t.nav.status} — ${t.nav.statusSub}`}
-                    className="hidden md:flex flex-col justify-center px-3 py-1.5"
-                    style={{ border: '1px solid var(--color-rule)' }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <AudioBars active={true} color="var(--color-accent)" size={10} />
-                      <span className="sys-label">{t.nav.status}</span>
-                    </div>
-                    <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.1em', color: 'var(--color-fg-mute)', marginTop: '2px', paddingLeft: '16px' }}>
-                      {t.nav.statusSub}
-                    </span>
-                  </div>
-
                   {/* Language */}
                   <button
                     onClick={() => { analytics.languageSwitch(lang === 'en' ? 'es' : 'en'); toggleLang(); }}
@@ -257,28 +244,49 @@ export default function Nav({ onMenuOpen }) {
                     style={{
                       fontFamily: '"Rajdhani", sans-serif', fontSize: 10,
                       letterSpacing: '0.14em', textTransform: 'uppercase',
-                      border: '1px solid rgba(255,255,255,0.15)', background: 'transparent',
-                      color: 'var(--color-fg-mute)', padding: '6px 10px',
+                      border: '1px solid transparent', background: 'transparent',
+                      color: 'var(--color-fg-mute)', padding: '6px 12px',
                       cursor: 'pointer', minHeight: 44, transition: 'border-color 0.2s, color 0.2s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
                   >
-                    {t.nav.lang}
+                    <LanguageLabel lang={lang} target={t.nav.lang} />
                   </button>
 
                   {/* Contact */}
-                  <CyberBtn
-                    variant="accent-ghost" size="sm" showArrow={false}
+                  <button
                     onClick={() => setContactOpen(true)}
                     aria-label={t.nav.contact}
-                    style={{ minHeight: 44 }}
+                    style={{
+                      fontFamily: '"Rajdhani", sans-serif',
+                      fontSize: 10,
+                      letterSpacing: '0.16em',
+                      textTransform: 'uppercase',
+                      border: '1px solid rgba(255,255,255,0.18)',
+                      background: 'rgba(255,255,255,0.015)',
+                      color: 'var(--color-fg)',
+                      padding: '8px 18px',
+                      cursor: 'pointer',
+                      minHeight: 44,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
+                      transition: 'border-color 0.2s, color 0.2s, background-color 0.2s',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = 'var(--color-accent-45)';
+                      e.currentTarget.style.backgroundColor = 'var(--color-accent-08)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
+                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.015)';
+                    }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                      <ScrambleText className="hidden sm:inline" duration={280}>{t.nav.contact}</ScrambleText>
-                      <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>◉</span>
-                    </span>
-                  </CyberBtn>
+                    <span aria-hidden="true" style={{ width: 5, height: 5, backgroundColor: 'var(--color-accent)', display: 'inline-block' }} />
+                    <ScrambleText className="hidden sm:inline" duration={280}>{t.nav.contact}</ScrambleText>
+                  </button>
 
                   {/* MENU+ */}
                   <button
@@ -457,7 +465,7 @@ export default function Nav({ onMenuOpen }) {
                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
                   >
-                    {t.nav.lang}
+                    <LanguageLabel lang={lang} target={t.nav.lang} />
                   </button>
 
                   <PillDivider />

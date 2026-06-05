@@ -15,10 +15,8 @@ import MenuOverlay from './components/MenuOverlay';
 import Ticker from './components/Ticker';
 
 // Below-fold homepage sections — deferred until after hero paint
-const WhatIDo    = lazy(() => import('./components/WhatIDo'));
-const HowIWork   = lazy(() => import('./components/HowIWork'));
 const FieldNotes = lazy(() => import('./components/FieldNotes'));
-const About      = lazy(() => import('./components/About'));
+const IGStrip    = lazy(() => import('./components/IGStrip'));
 const Contact    = lazy(() => import('./components/Contact'));
 
 // Decorative / desktop-only — lowest priority
@@ -84,14 +82,8 @@ function HomePage({ onMenuOpen }) {
 
         <CaseFiles />
         <Suspense fallback={<SectionFallback />}>
-          <WhatIDo />
-          <HowIWork />
-
-          {/* Second ticker — rhythm break before notes/about */}
-          <Ticker items={TICKER_ITEMS} accent={[2, 5, 10]} speed={48} reverse />
-
           <FieldNotes />
-          <About />
+          <IGStrip />
           <Contact />
         </Suspense>
       </main>

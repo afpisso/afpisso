@@ -38,22 +38,28 @@ const SIZE_PADDING = {
   lg: '16px 32px',
 };
 
+const SIZE_MIN_HEIGHT = {
+  sm: 44,
+  md: 46,
+  lg: 52,
+};
+
 const VARIANTS = {
   solid: {
     bg:              'var(--color-accent)',
-    color:           '#0a0a0a',
+    color:           '#050505',
     border:          'none',
     borderHover:     'none',
     sweepColor:      '#cc1f34',
-    sweepTextColor:  '#0a0a0a',
+    sweepTextColor:  '#050505',
   },
   ghost: {
-    bg:              'transparent',
-    color:           'var(--color-fg-dim)',
-    border:          '1px solid var(--color-rule)',
-    borderHover:     '1px solid rgba(255,255,255,0.28)',
-    sweepColor:      'rgba(255,255,255,0.06)',
-    sweepTextColor:  'var(--color-fg)',
+    bg:              'var(--color-accent-08)',
+    color:           'var(--color-accent)',
+    border:          '1px solid var(--color-accent-30)',
+    borderHover:     '1px solid var(--color-accent)',
+    sweepColor:      'var(--color-accent)',
+    sweepTextColor:  '#050505',
   },
   'accent-ghost': {
     bg:              'transparent',
@@ -61,7 +67,7 @@ const VARIANTS = {
     border:          '1px solid var(--color-accent)',
     borderHover:     '1px solid var(--color-accent)',
     sweepColor:      'var(--color-accent)',
-    sweepTextColor:  '#0a0a0a',
+    sweepTextColor:  '#050505',
   },
 };
 
@@ -107,15 +113,19 @@ export default function CyberBtn({
   }, [magnetic, mx, my]);
 
   const padding = SIZE_PADDING[size] ?? SIZE_PADDING.md;
+  const minHeight = SIZE_MIN_HEIGHT[size] ?? SIZE_MIN_HEIGHT.md;
 
   const motionStyle = {
     position:        'relative',
     overflow:        'hidden',
     display:         'inline-flex',
     alignItems:      'center',
+    minHeight,
     fontFamily:      MONO,
-    fontSize:        11,
-    letterSpacing:   '0.12em',
+    fontSize:        12,
+    fontWeight:      700,
+    letterSpacing:   '0.14em',
+    lineHeight:      1,
     textTransform:   'uppercase',
     textDecoration:  'none',
     cursor:          disabled ? 'default' : 'pointer',

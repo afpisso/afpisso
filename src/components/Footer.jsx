@@ -36,6 +36,7 @@ export default function Footer() {
             style={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 8,
               marginBottom: 12,
             }}
@@ -65,6 +66,7 @@ export default function Footer() {
               letterSpacing: '0.01em',
               color: 'rgba(240,238,234,0.15)',
               userSelect: 'none',
+              textAlign: 'center',
             }}
           >
             <GlitchStrokeText stroke="1px rgba(255,37,64,0.18)">END TRANSMISSION</GlitchStrokeText>

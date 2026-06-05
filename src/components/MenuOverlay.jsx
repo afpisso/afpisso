@@ -76,15 +76,54 @@ const MENU_ITEMS = [
   { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019–2026',   sub_es: 'Proyectos selectos, 2019–2026'  },
   { en: 'ABOUT',   es: 'SOBRE MÍ', page: '002', href: '/about',   sub_en: 'Biography & process',             sub_es: 'Biografía y proceso'            },
   { en: 'JOURNAL', es: 'DIARIO',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
-  { en: 'CONTACT',  es: 'CONTACTO',  page: '004', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
-  { en: 'SPEAKING', es: 'SPEAKING', page: '006', href: '/speaking',  sub_en: 'Colombia 5.0 · Game UI Systems workshop',    sub_es: 'Colombia 5.0 · Taller Game UI Systems' },
+  { en: 'SPEAKING', es: 'SPEAKING', page: '004', href: '/speaking',  sub_en: 'Colombia 5.0 · Game UI Systems workshop',    sub_es: 'Colombia 5.0 · Taller Game UI Systems' },
+  { en: 'CONTACT',  es: 'CONTACTO',  page: '005', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
 ];
 
 const SOCIAL = [
-  { label: 'LINKEDIN',  handle: 'in/byandresfe',  href: 'https://linkedin.com/in/byandresfe'       },
-  { label: 'INSTAGRAM', handle: '@byandresfe',     href: 'https://instagram.com/byandresfe'         },
-  { label: 'X',         handle: '@byandresfe',     href: 'https://x.com/byandresfe'                 },
+  { label: 'LINKEDIN',  handle: 'in/byandresfe',  href: 'https://linkedin.com/in/byandresfe', icon: 'linkedin' },
+  { label: 'INSTAGRAM', handle: '@byandresfe',     href: 'https://instagram.com/byandresfe', icon: 'instagram' },
+  { label: 'X',         handle: '@byandresfe',     href: 'https://x.com/byandresfe', icon: 'x' },
 ];
+
+function SocialIcon({ type, color = '#ff2540' }) {
+  const common = {
+    width: 16,
+    height: 16,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    'aria-hidden': 'true',
+    style: { display: 'block', flexShrink: 0 },
+  };
+
+  if (type === 'linkedin') {
+    return (
+      <svg {...common}>
+        <path d="M5.5 9.5V18" stroke={color} strokeWidth="1.8" strokeLinecap="square" />
+        <path d="M5.5 6.2V6.4" stroke={color} strokeWidth="2.2" strokeLinecap="square" />
+        <path d="M10.2 18V9.5" stroke={color} strokeWidth="1.8" strokeLinecap="square" />
+        <path d="M10.2 12.1C10.9 10.8 12 9.4 14.2 9.4C16.6 9.4 18.5 10.8 18.5 14.3V18" stroke={color} strokeWidth="1.8" strokeLinecap="square" />
+      </svg>
+    );
+  }
+
+  if (type === 'instagram') {
+    return (
+      <svg {...common}>
+        <rect x="4.5" y="4.5" width="15" height="15" rx="3" stroke={color} strokeWidth="1.35" />
+        <circle cx="12" cy="12" r="3.4" stroke={color} strokeWidth="1.35" />
+        <circle cx="16.4" cy="7.6" r="0.9" fill={color} />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      <path d="M5 5L19 19M19 5L5 19" stroke={color} strokeWidth="1.7" strokeLinecap="square" />
+      <path d="M7.2 5H11.3L16.8 19H12.7L7.2 5Z" stroke={color} strokeWidth="1" opacity="0.42" />
+    </svg>
+  );
+}
 
 // ── GlitchText ─────────────────────────────────────────────────────────────
 function GlitchText({ children, active, color }) {
@@ -521,7 +560,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
                 {lang === 'es' ? 'ÍNDICE' : 'INDEX'}
               </div>
               <div style={{ opacity: 0.55, lineHeight: 1.7, fontSize: 10 }}>
-                {lang === 'es' ? <>05<br />SECCIONES</> : <>05<br />SECTIONS</>}
+                {lang === 'es' ? <>06<br />SECCIONES</> : <>06<br />SECTIONS</>}
               </div>
             </div>
           )}
@@ -600,7 +639,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
         {/* CONNECT row */}
         <SectionRow label={t.connect} rule={rule} fg={fg} accent={accent} narrow={narrow}>
           <div style={{
-            display: 'flex', gap: narrow ? 20 : 28, padding: `0 ${narrow ? 20 : 24}px`,
+            display: 'flex', gap: narrow ? 12 : 18, padding: `0 ${narrow ? 20 : 24}px`,
             flexWrap: 'wrap', fontSize: 13, letterSpacing: '0.06em',
           }}>
             {SOCIAL.map(s => (
@@ -609,12 +648,73 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: fg, textDecoration: 'none', display: 'flex', gap: 8, alignItems: 'baseline' }}
-                onMouseEnter={e => { e.currentTarget.style.color = accent; }}
-                onMouseLeave={e => { e.currentTarget.style.color = fg; }}
+                style={{
+                  color: fg,
+                  textDecoration: 'none',
+                  display: 'grid',
+                  gridTemplateColumns: '32px auto',
+                  columnGap: 10,
+                  alignItems: 'center',
+                  minHeight: 44,
+                  padding: narrow ? '4px 0' : '2px 10px 2px 0',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.querySelector('[data-social-icon]').style.borderColor = accent;
+                  e.currentTarget.querySelector('[data-social-handle]').style.opacity = '1';
+                  e.currentTarget.querySelector('[data-social-arrow]').style.opacity = '1';
+                  e.currentTarget.querySelector('[data-social-arrow]').style.transform = 'translate(2px, -2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.querySelector('[data-social-icon]').style.borderColor = 'rgba(255,37,64,0.32)';
+                  e.currentTarget.querySelector('[data-social-handle]').style.opacity = '0.86';
+                  e.currentTarget.querySelector('[data-social-arrow]').style.opacity = '0.55';
+                  e.currentTarget.querySelector('[data-social-arrow]').style.transform = 'translate(0, 0)';
+                }}
               >
-                <span>{s.label}</span>
-                {!narrow && <span style={{ opacity: 0.45, fontSize: 11 }}>↗ {s.handle}</span>}
+                <span
+                  data-social-icon
+                  style={{
+                    width: 32,
+                    height: 32,
+                    border: '1px solid rgba(255,37,64,0.32)',
+                    background: 'rgba(255,37,64,0.06)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                >
+                  <SocialIcon type={s.icon} color={accent} />
+                </span>
+                <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+                  <span style={{ color: fg, fontSize: 12, fontWeight: 700, letterSpacing: '0.13em' }}>{s.label}</span>
+                  <span
+                    data-social-handle
+                    style={{
+                      color: accent,
+                      opacity: 0.86,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      letterSpacing: '0.045em',
+                      whiteSpace: 'nowrap',
+                      transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
+                    {s.handle}
+                    <span
+                      data-social-arrow
+                      aria-hidden="true"
+                      style={{
+                        display: 'inline-block',
+                        marginLeft: 6,
+                        opacity: 0.55,
+                        transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    >
+                      ↗
+                    </span>
+                  </span>
+                </span>
               </a>
             ))}
           </div>
