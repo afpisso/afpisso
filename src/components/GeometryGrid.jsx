@@ -604,12 +604,12 @@ export default function GeometryGrid({
           p.vy += (dy / dd) * force;
         }
 
-        // Color: bottom=white (#f5f5f3) → top=red (#ff2540)
+        // Color: bottom=orange (#ff6a00) → top=red (#ff2540)
         const yt  = Math.max(0, Math.min(1, (p.baseY + 1) * 0.5));
         const k2  = yt * yt * (3 - 2 * yt); // smoothstep
-        const r   = Math.round(245 + k2 * 10);
-        const g   = Math.round(245 - k2 * 208);
-        const b   = Math.round(243 - k2 * 179);
+        const r   = 255;
+        const g   = Math.round(130 - k2 * 125);
+        const b   = Math.round(20  + k2 * 44);
         const alpha = (0.28 + persp * 0.52) * (yt > 0.78 ? 1.0 : 0.92);
 
         draws[i] = [sx, sy, rz, psize, r, g, b, alpha];
