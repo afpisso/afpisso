@@ -16,6 +16,7 @@ import LabHero from './LabHero'
 import {
   m,
   useScroll,
+  useTransform,
   useMotionValueEvent,
   AnimatePresence,
 } from 'framer-motion'
@@ -103,13 +104,15 @@ function StackCard({ caseData, offset }) {
 }
 
 // Sidebar nav — dots at rest, labels appear on hover (120ms — intentionally fast)
-function SideNav({ active, cases: list, onHover }) {
+function SideNav({ active, cases: list, onHover, visible }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div
+    <m.div
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
+      animate={{ opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }}
+      transition={{ duration: 0.4, ease: EASE_OUT }}
       style={{
         position: 'fixed', right: 28, top: '50%',
         transform: 'translateY(-50%)',
@@ -157,13 +160,15 @@ function SideNav({ active, cases: list, onHover }) {
           </div>
         )
       })}
-    </div>
+    </m.div>
   )
 }
 
 function CaseShowcase() {
   const sectionRef = useRef(null)
   const [active, setActive] = useState(0)
+
+  const [navVisible, setNavVisible] = useState(false)
 
   const { scrollYProgress } = useScroll({
     target:  sectionRef,
@@ -172,6 +177,7 @@ function CaseShowcase() {
 
   useMotionValueEvent(scrollYProgress, 'change', v => {
     setActive(Math.min(Math.floor(v * ORDERED.length), ORDERED.length - 1))
+    setNavVisible(v > 0.01)
   })
 
   const c = ORDERED[active]
@@ -315,7 +321,7 @@ function CaseShowcase() {
         </div>
 
         {/* ── Sidebar nav ── */}
-        <SideNav active={active} cases={ORDERED} onHover={handleNavHover} />
+        <SideNav active={active} cases={ORDERED} onHover={handleNavHover} visible={navVisible} />
       </div>
     </section>
   )
@@ -379,11 +385,83 @@ function CtaCloser() {
   )
 }
 
+// ── Hero → Showcase transition (Lando Norris style) ──────────────────────────
+// The hero stays sticky while a dark rounded-top panel rises from below,
+// covering the hero progressively. The panel becomes the showcase background.
+function HeroTransition({ children }) {
+  const zoneRef = useRef(null)
+
+  const { scrollYProgress } = useScroll({
+    target: zoneRef,
+    offset: ['start start', 'end end'],
+  })
+
+  // Panel rises from off-screen bottom → covering hero (starts late, feels deliberate)
+  const panelY         = useTransform(scrollYProgress, [0.45, 0.95], ['100%', '0%'])
+  // Hero subtly scales in as panel rises
+  const heroScale      = useTransform(scrollYProgress, [0.5, 0.95], [1, 0.94])
+  // Dark overlay fades in before and during panel rise
+  const overlayOpacity = useTransform(scrollYProgress, [0.35, 0.9], [0, 0.88])
+
+  return (
+    // 260vh = 100vh hero rest + 160vh scroll-out zone (generous pacing like Lando)
+    <div ref={zoneRef} style={{ height: '260vh', position: 'relative' }}>
+      {/* Hero — sticky, subtle scale + dark overlay as panel rises */}
+      <div style={{ position: 'sticky', top: 0 }}>
+        <m.div style={{ scale: heroScale, transformOrigin: 'center top', willChange: 'transform' }}>
+          {children}
+        </m.div>
+        {/* Dark overlay — fades in on top of hero as panel rises */}
+        <m.div style={{
+          position: 'absolute', inset: 0,
+          background: '#080808',
+          opacity: overlayOpacity,
+          pointerEvents: 'none',
+          zIndex: 100,
+        }} />
+      </div>
+
+      {/* Rising panel — dark card with chamfered top corners */}
+      <m.div
+        style={{
+          position: 'absolute',
+          bottom: 0, left: 0, right: 0,
+          height: '100vh',
+          background: 'var(--color-bg)',
+          borderRadius: '18px 18px 0 0',
+          boxShadow: '0 -24px 80px rgba(0,0,0,0.7)',
+          y: panelY,
+          zIndex: 10,
+          // Visual label inside the panel top edge
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        {/* Drag handle / section label */}
+        <div style={{
+          paddingTop: 18,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+        }}>
+          <div style={{ width: 36, height: 2, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} />
+          <span style={{
+            fontFamily: "'Rajdhani', monospace",
+            fontSize: '9px', letterSpacing: '0.26em', textTransform: 'uppercase',
+            color: 'rgba(240,238,234,0.22)',
+          }}>Selected Work</span>
+        </div>
+      </m.div>
+    </div>
+  )
+}
+
 // ── Root ──────────────────────────────────────────────────────────────────────
 export default function LabHome() {
   return (
     <div style={{ background: 'var(--color-bg)', position: 'relative', zIndex: 1 }}>
-      <LabHero />
+      <HeroTransition>
+        <LabHero />
+      </HeroTransition>
       <CaseShowcase />
       <CtaCloser />
     </div>
