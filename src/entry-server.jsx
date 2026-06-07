@@ -42,6 +42,7 @@ import { StaticRouter } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
 import { LangProvider } from './contexts/LangContext.jsx'
 import { HuntProvider } from './contexts/HuntContext.jsx'
+import { SignalAudioProvider } from './contexts/SignalAudioContext.jsx'
 
 // Nav + Footer — always visible, include for internal link discovery
 import Nav     from './components/Nav.jsx'
@@ -58,6 +59,7 @@ import ResumePage from './pages/ResumePage.jsx'
 import NotesPage  from './pages/NotesPage.jsx'
 import NotePage   from './pages/NotePage.jsx'
 import CasePage   from './pages/CasePage.jsx'
+import SpeakingPage from './pages/SpeakingPage.jsx'
 
 // No-op prop for event handlers that aren't needed during SSR
 const noop = () => {}
@@ -82,6 +84,7 @@ function AppSSR() {
       <Route path="/work"          element={<WorkPage   onMenuOpen={noop} />} />
       <Route path="/about"         element={<AboutPage  onMenuOpen={noop} />} />
       <Route path="/resume"        element={<ResumePage onMenuOpen={noop} />} />
+      <Route path="/speaking"      element={<SpeakingPage onMenuOpen={noop} />} />
       <Route path="/notes"         element={<NotesPage  onMenuOpen={noop} />} />
       <Route path="/notes/:slug"   element={<NotePage  onMenuOpen={noop} />} />
       <Route path="/case/:slug"    element={<CasePage  onMenuOpen={noop} />} />
@@ -93,9 +96,11 @@ export function render(url) {
   return renderToStaticMarkup(
     <StaticRouter location={url}>
       <LangProvider>
-        <HuntProvider>
-          <AppSSR />
-        </HuntProvider>
+        <SignalAudioProvider>
+          <HuntProvider>
+            <AppSSR />
+          </HuntProvider>
+        </SignalAudioProvider>
       </LangProvider>
     </StaticRouter>
   )

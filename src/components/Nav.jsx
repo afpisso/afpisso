@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
+import { useSignalAudio } from '../contexts/SignalAudioContext';
+import AudioBars from './AudioBars';
 import ContactOverlay from './ContactOverlay';
 import ScrambleText from './ScrambleText';
 import { analytics } from '../utils/analytics';
@@ -67,6 +69,66 @@ function LanguageLabel({ lang, target }) {
       <span aria-hidden="true" style={{ color: 'rgba(255,255,255,0.18)' }}>/</span>
       <span>{target}</span>
     </span>
+  );
+}
+
+function SignalAudioToggle({ compact = false }) {
+  const { signalAudioOn, toggleSignalAudio } = useSignalAudio();
+  const [hover, setHover] = useState(false);
+  const active = signalAudioOn;
+  const label = active ? 'Apagar sonido' : 'Prender sonido';
+
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      aria-pressed={active}
+      onClick={toggleSignalAudio}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        position: 'relative',
+        width: compact ? 38 : 44,
+        minWidth: compact ? 38 : 44,
+        height: 44,
+        display: 'grid',
+        placeItems: 'center',
+        padding: 0,
+        border: compact
+          ? 'none'
+          : `1px solid ${active ? 'rgba(255,37,64,0.42)' : hover ? 'rgba(255,255,255,0.22)' : 'transparent'}`,
+        background: active
+          ? 'rgba(255,37,64,0.075)'
+          : hover
+            ? 'rgba(255,255,255,0.035)'
+            : 'transparent',
+        color: active ? 'var(--color-accent)' : hover ? 'var(--color-fg)' : 'var(--color-fg-mute)',
+        cursor: 'pointer',
+        clipPath: compact
+          ? 'none'
+          : 'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px))',
+        transition: 'color 0.18s cubic-bezier(0.16,1,0.3,1), background-color 0.18s cubic-bezier(0.16,1,0.3,1), border-color 0.18s cubic-bezier(0.16,1,0.3,1)',
+      }}
+    >
+      <AudioBars active={active} color="currentColor" size={compact ? 13 : 14} />
+      {active && (
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: compact ? 6 : 5,
+            width: compact ? 14 : 16,
+            height: 1,
+            transform: 'translateX(-50%)',
+            background: 'currentColor',
+            boxShadow: '0 0 12px rgba(255,37,64,0.42)',
+            opacity: 0.75,
+          }}
+        />
+      )}
+    </button>
   );
 }
 
@@ -253,6 +315,9 @@ export default function Nav({ onMenuOpen }) {
                   >
                     <LanguageLabel lang={lang} target={t.nav.lang} />
                   </button>
+
+                  {/* Signal audio */}
+                  <SignalAudioToggle />
 
                   {/* Contact */}
                   <button
@@ -467,6 +532,11 @@ export default function Nav({ onMenuOpen }) {
                   >
                     <LanguageLabel lang={lang} target={t.nav.lang} />
                   </button>
+
+                  <PillDivider />
+
+                  {/* Signal audio */}
+                  <SignalAudioToggle compact />
 
                   <PillDivider />
 

@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { Component, useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig, m, AnimatePresence, animate } from 'framer-motion';
 import './index.css';
 import { LangProvider } from './contexts/LangContext';
 import { LenisProvider, useLenis } from './contexts/LenisContext';
 import { HuntProvider } from './contexts/HuntContext';
+import { SignalAudioProvider } from './contexts/SignalAudioContext';
 import HuntHUD from './components/HuntHUD';
 import { usePageMeta } from './hooks/usePageMeta';
 import Nav from './components/Nav';
@@ -48,6 +49,75 @@ function PageFallback() {
 // Section-level lazy fallback — invisible, no shift
 function SectionFallback() {
   return null;
+}
+
+class LabErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('[lab-error-boundary]', error, info);
+  }
+
+  render() {
+    if (!this.state.error) return this.props.children;
+
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: '#080808',
+        color: '#f5f5f3',
+        padding: '96px 24px',
+        fontFamily: '"Play", monospace',
+      }}>
+        <div style={{
+          maxWidth: 820,
+          margin: '0 auto',
+          border: '1px solid rgba(255,37,64,0.55)',
+          padding: 24,
+          background: 'rgba(255,37,64,0.04)',
+        }}>
+          <div style={{ color: 'var(--color-accent)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>
+            Lab runtime error
+          </div>
+          <pre style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: 12, color: 'rgba(245,245,243,0.82)' }}>
+            {this.state.error?.stack || this.state.error?.message || String(this.state.error)}
+          </pre>
+        </div>
+      </div>
+    );
+  }
+}
+
+function LabRoute({ onMenuOpen }) {
+  return (
+    <LabErrorBoundary>
+      <Nav onMenuOpen={onMenuOpen} />
+      <Suspense fallback={
+        <div style={{
+          minHeight: '100vh',
+          background: '#080808',
+          color: 'var(--color-accent)',
+          display: 'grid',
+          placeItems: 'center',
+          fontFamily: '"Play", monospace',
+          fontSize: 11,
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
+        }}>
+          Loading lab
+        </div>
+      }>
+        <LabHome />
+      </Suspense>
+    </LabErrorBoundary>
+  );
 }
 
 // ── Ticker content ─────────────────────────────────────────────────────────────
@@ -169,7 +239,7 @@ function AppRoutes() {
               <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
               <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
               <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
-              <Route path="/lab"          element={<LabHome />} />
+              <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
               {/* Legacy routes */}
               <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
               <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />
@@ -227,9 +297,11 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <LangProvider>
         <LenisProvider>
-          <HuntProvider>
-            <AppRoutes />
-          </HuntProvider>
+          <SignalAudioProvider>
+            <HuntProvider>
+              <AppRoutes />
+            </HuntProvider>
+          </SignalAudioProvider>
         </LenisProvider>
       </LangProvider>
     </MotionConfig>
