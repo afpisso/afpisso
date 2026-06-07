@@ -18,7 +18,7 @@ const BASE_URL = 'https://byandresfe.com';
 function Paragraph({ text }) {
   return (
     <p style={{
-      fontFamily: '"Rajdhani", sans-serif',
+      fontFamily: '"Play", sans-serif',
       fontSize: '14px',
       lineHeight: 1.9,
       color: 'rgba(245,245,243,0.72)',
@@ -49,7 +49,7 @@ function Heading({ text }) {
 function Subheading({ text }) {
   return (
     <h3 style={{
-      fontFamily: '"Rajdhani", sans-serif',
+      fontFamily: '"Play", sans-serif',
       fontSize: '11px',
       letterSpacing: '0.18em',
       color: 'var(--color-accent)',
@@ -67,7 +67,7 @@ function List({ items }) {
     <ul style={{ marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
       {items.map((item, i) => (
         <li key={i} style={{
-          fontFamily: '"Rajdhani", sans-serif',
+          fontFamily: '"Play", sans-serif',
           fontSize: '13px',
           lineHeight: 1.85,
           color: 'rgba(245,245,243,0.65)',
@@ -98,7 +98,7 @@ function Callout({ text }) {
     }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
       <p style={{
-        fontFamily: '"Rajdhani", sans-serif',
+        fontFamily: '"Play", sans-serif',
         fontSize: '13px',
         lineHeight: 1.85,
         color: 'rgba(245,245,243,0.85)',
@@ -201,10 +201,10 @@ export default function NotePage({ onMenuOpen }) {
             <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '4rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>
               {meta ? 'COMING SOON' : '404'}
             </div>
-            <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', margin: '16px 0 24px' }}>
+            <p style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', margin: '16px 0 24px' }}>
               {meta ? np.comingSoon : np.notFound}
             </p>
-            <Link to="/notes" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            <Link to="/notes" style={{ fontFamily: '"Play", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               ← {np.backToNotes}
             </Link>
           </div>
@@ -235,14 +235,14 @@ export default function NotePage({ onMenuOpen }) {
             >
               <Link
                 to="/notes"
-                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', textDecoration: 'none', transition: 'color 0.2s' }}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-accent)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
               >
                 ← {np.fieldNotesLabel}
               </Link>
               <span style={{ color: 'var(--color-rule)', fontSize: '10px' }}>/</span>
-              <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
+              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
                 {meta.id}
               </span>
             </m.div>
@@ -255,7 +255,7 @@ export default function NotePage({ onMenuOpen }) {
               transition={{ duration: 0.4, delay: 0.05 }}
             >
               <span style={{
-                fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', fontWeight: 700,
+                fontFamily: '"Play", sans-serif', fontSize: '10px', fontWeight: 700,
                 letterSpacing: '0.16em', textTransform: 'uppercase', padding: '4px 10px',
                 ...typeStyle,
               }}>
@@ -295,7 +295,7 @@ export default function NotePage({ onMenuOpen }) {
 
             {/* Lead summary */}
             <m.p
-              style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'var(--color-fg-dim)', maxWidth: '620px' }}
+              style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'var(--color-fg-dim)', maxWidth: '620px' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
@@ -343,8 +343,8 @@ export default function NotePage({ onMenuOpen }) {
                         ...(meta.date ? [{ label: 'Published', value: new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
                       ].map(({ label, value }) => (
                         <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                          <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
-                          <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', color: 'var(--color-fg-dim)', textAlign: 'right' }}>{value}</span>
+                          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
+                          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', color: 'var(--color-fg-dim)', textAlign: 'right' }}>{value}</span>
                         </div>
                       ))}
                     </div>
@@ -360,7 +360,7 @@ export default function NotePage({ onMenuOpen }) {
                           onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent-30)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.03)'; }}
                           onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
-                          <span style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
+                          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
                             {nextNote.id}
                           </span>
                           <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '17px', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>
@@ -387,13 +387,13 @@ export default function NotePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
-              <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
+              <p style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: '10px' }}>
                 {np.fieldNotesLabel}
               </p>
               <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(18px, 3vw, 26px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', marginBottom: '8px', lineHeight: 1.1 }}>
                 {np.subscribeHeadline}
               </p>
-              <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)', marginBottom: '20px', lineHeight: 1.7 }}>
+              <p style={{ fontFamily: '"Play", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)', marginBottom: '20px', lineHeight: 1.7 }}>
                 {np.subscribeBody}
               </p>
               <form
@@ -407,7 +407,7 @@ export default function NotePage({ onMenuOpen }) {
                   placeholder={np.subscribePlaceholder}
                   style={{
                     flex: '1 1 200px',
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     fontSize: '12px',
                     padding: '10px 14px',
                     backgroundColor: 'rgba(255,255,255,0.04)',
@@ -423,7 +423,7 @@ export default function NotePage({ onMenuOpen }) {
                 <button
                   type="submit"
                   style={{
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     fontSize: '10px',
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
@@ -472,10 +472,10 @@ export default function NotePage({ onMenuOpen }) {
                       <div className="uppercase mb-2" style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '1.2rem', color: 'var(--color-fg)', letterSpacing: '0.02em', lineHeight: 1.1 }}>
                         {c.title}
                       </div>
-                      <div style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '11px', color: 'var(--color-fg-dim)', lineHeight: 1.6 }}>
+                      <div style={{ fontFamily: '"Play", sans-serif', fontSize: '11px', color: 'var(--color-fg-dim)', lineHeight: 1.6 }}>
                         {c.focus}
                       </div>
-                      <div className="flex items-center gap-1.5 mt-3" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', color: 'var(--color-accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                      <div className="flex items-center gap-1.5 mt-3" style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', color: 'var(--color-accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                         <span>Open case</span>
                         <span aria-hidden>→</span>
                       </div>
@@ -492,7 +492,7 @@ export default function NotePage({ onMenuOpen }) {
           <div className="max-w-[1100px] mx-auto px-6 flex items-center justify-between flex-wrap gap-4">
             <Link
               to="/notes"
-              style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', textDecoration: 'none', transition: 'color 0.2s' }}
+              style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-fg)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-fg-mute)')}
             >
@@ -501,7 +501,7 @@ export default function NotePage({ onMenuOpen }) {
             {nextNote && nextNote.slug !== slug && (
               <Link
                 to={`/notes/${nextNote.slug}`}
-                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)', textDecoration: 'none' }}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)', textDecoration: 'none' }}
               >
                 {np.nextNoteCta} →
               </Link>

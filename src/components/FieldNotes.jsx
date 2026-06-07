@@ -55,7 +55,7 @@ export default function FieldNotes() {
           <div className="flex items-start gap-12 mt-10 flex-wrap">
             <m.p
               className="text-base max-w-sm"
-              style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
+              style={{ fontFamily: '"Play", sans-serif', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -138,7 +138,7 @@ export default function FieldNotes() {
                         <span
                           className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5"
                           style={{
-                            fontFamily: '"Rajdhani", sans-serif',
+                            fontFamily: '"Play", sans-serif',
                             border: `1px solid ${isHovered ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                             color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           }}
@@ -163,7 +163,7 @@ export default function FieldNotes() {
                       <p
                         className="mt-4 line-clamp-2"
                         style={{
-                          fontFamily: '"Rajdhani", sans-serif',
+                          fontFamily: '"Play", sans-serif',
                           fontSize: 13,
                           lineHeight: 1.8,
                           color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
@@ -179,7 +179,7 @@ export default function FieldNotes() {
                       <div className="sys-label mt-1" style={{ color: 'var(--color-fg-mute)' }}>{featuredNote.category}</div>
                       <div
                         className="mt-5 inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase"
-                        style={{ fontFamily: '"Rajdhani", sans-serif', color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)' }}
+                        style={{ fontFamily: '"Play", sans-serif', color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)' }}
                         aria-hidden="true"
                       >
                         <span>{t.fieldNotes.readNote}</span>
@@ -253,7 +253,7 @@ export default function FieldNotes() {
                       <span
                         className="flex-shrink-0 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 transition-colors duration-200"
                         style={{
-                          fontFamily: '"Rajdhani", sans-serif',
+                          fontFamily: '"Play", sans-serif',
                           border: `1px solid ${isHovered ? 'var(--color-accent-35)' : 'var(--color-rule)'}`,
                           color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                         }}
@@ -277,7 +277,7 @@ export default function FieldNotes() {
                     <p
                       className="text-[12px] leading-relaxed line-clamp-3"
                       style={{
-                        fontFamily: '"Rajdhani", sans-serif',
+                        fontFamily: '"Play", sans-serif',
                         color: isHovered ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
                         transition: 'color 0.2s',
                       }}
@@ -289,7 +289,7 @@ export default function FieldNotes() {
                   <div
                     className="mt-5 flex items-center gap-1.5 text-[10px] tracking-widest uppercase transition-all duration-200"
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif',
+                      fontFamily: '"Play", sans-serif',
                       color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                       transform: isHovered ? 'translateX(2px)' : 'translateX(0)',
                     }}

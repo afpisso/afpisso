@@ -23,7 +23,7 @@ import { useLenis } from '../contexts/LenisContext';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const MONO   = '"Rajdhani", sans-serif';
+const MONO   = '"Play", sans-serif';
 const BEBAS  = '"Bebas Neue", sans-serif';
 const ACCENT = 'var(--color-accent)';
 const FG     = 'var(--color-fg)';

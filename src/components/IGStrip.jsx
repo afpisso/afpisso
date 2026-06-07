@@ -93,7 +93,7 @@ function IGCard({ post, isClone }) {
       >
         <div style={{
           display: 'inline-block',
-          fontFamily: '"Rajdhani", sans-serif', fontSize: 9, fontWeight: 700,
+          fontFamily: '"Play", sans-serif', fontSize: 9, fontWeight: 700,
           letterSpacing: '0.16em', textTransform: 'uppercase',
           color: '#0a0a0a', backgroundColor: 'var(--color-accent)',
           padding: '2px 8px', marginBottom: 7,
@@ -110,7 +110,7 @@ function IGCard({ post, isClone }) {
           {post.title}
         </div>
         <div style={{
-          fontFamily: '"Rajdhani", sans-serif', fontSize: 9, fontWeight: 700,
+          fontFamily: '"Play", sans-serif', fontSize: 9, fontWeight: 700,
           letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)',
         }}>
           Ver en Instagram →
@@ -256,7 +256,7 @@ export default function IGStrip() {
               rel="noopener noreferrer"
               aria-label="Ver todo en Instagram — @byandresfe"
               style={{
-                fontFamily: '"Rajdhani", sans-serif', fontSize: 10, fontWeight: 700,
+                fontFamily: '"Play", sans-serif', fontSize: 10, fontWeight: 700,
                 letterSpacing: '0.16em', textTransform: 'uppercase',
                 color: 'var(--color-fg-mute)', textDecoration: 'none',
                 transition: 'color 150ms ease-out', paddingBottom: 2, marginLeft: 4,

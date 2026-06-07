@@ -75,6 +75,61 @@ const GENS = {
     }
   },
 
+  // Halo — thin orbital ring, tilted ~25° for a Saturn-ring look
+  // Most particles on the ring plane, thin vertical scatter for depth.
+  halo: (i, n) => {
+    const angle = (i / n) * Math.PI * 2
+    // Two radii bands: tight bright ring (80%) + faint inner haze (20%)
+    const u = ((i * 9301 + 49297) % 233280) / 233280
+    const v = ((i * 6271 + 7919)  % 233280) / 233280
+    let r
+    if (u < 0.80) {
+      r = 0.82 + (u / 0.80) * 0.24          // ring: 0.82–1.06
+    } else {
+      r = 0.38 + ((u - 0.80) / 0.20) * 0.38 // inner: 0.38–0.76
+    }
+    const y = (v - 0.5) * 0.10              // very thin vertical spread
+    return [Math.cos(angle) * r, y, Math.sin(angle) * r]
+  },
+
+  // Vesicle — hollow sphere: dense outer shell + sparse interior fill
+  // ~78% of particles form a thick surface shell (r 0.76–0.98),
+  // ~22% scatter inside (r 0.08–0.60) for the foggy interior look.
+  // Slight sine noise on the shell gives the organic undulation.
+  vesicle: (i, n) => {
+    const y  = 1 - (i / (n - 1)) * 2
+    const r  = Math.sqrt(Math.max(0, 1 - y * y))
+    const th = PHI * i
+    const u  = ((i * 9301 + 49297) % 233280) / 233280  // [0,1) per particle
+    const v  = ((i * 6271 + 7919)  % 233280) / 233280  // second random stream
+    let rf
+    if (u < 0.78) {
+      // Shell layer: maps u ∈ [0, 0.78) → radius ∈ [0.76, 0.98]
+      rf = 0.76 + (u / 0.78) * 0.22
+    } else {
+      // Interior: maps u ∈ [0.78, 1) → radius ∈ [0.08, 0.60]
+      rf = 0.08 + ((u - 0.78) / 0.22) * 0.52
+    }
+    // Organic surface noise (only meaningful on shell, harmless inside)
+    const noise = 0.035 * Math.sin(th * 7 + v * 6.28) * Math.cos(y * 5)
+    const rfn = rf + noise
+    return [r * Math.cos(th) * rfn, y * rfn, r * Math.sin(th) * rfn]
+  },
+
+  // Blob sphere — Fibonacci sphere with multi-frequency surface perturbations
+  blobsphere: (i, n) => {
+    const y   = 1 - (i / (n - 1)) * 2
+    const r   = Math.sqrt(Math.max(0, 1 - y * y))
+    const th  = PHI * i
+    const lat = Math.acos(Math.max(-1, Math.min(1, y)))
+    const bump = 0.22 * Math.sin(3 * th) * Math.sin(2 * lat)
+               + 0.10 * Math.sin(5 * th + 0.7) * Math.sin(lat)
+               + 0.05 * Math.cos(4 * th + 1.2) * Math.cos(3 * lat)
+    const jit = 0.97 + ((i * 9301 + 49297) % 233280) / 233280 * 0.04
+    const rf  = (1 + bump) * jit
+    return [r * Math.cos(th) * rf, y * rf * 0.92, r * Math.sin(th) * rf]
+  },
+
   // ── Semantic shapes — each maps to a content section ─────────────────────
 
   // ── Upgraded semantic shapes ─────────────────────────────────────────────
@@ -457,7 +512,10 @@ export default function GeometryGrid({
       canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     } else {
-      const getSize = () => ({ w: window.innerWidth, h: window.innerHeight });
+      const getSize = () => ({
+        w: document.documentElement.clientWidth || window.innerWidth,
+        h: window.innerHeight,
+      });
       ({ w, h } = getSize());
       const resize = () => {
         ({ w, h } = getSize());

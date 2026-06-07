@@ -4,7 +4,7 @@ import SweepFill from './SweepFill';
 import { analytics } from '../utils/analytics';
 import { m, AnimatePresence } from 'framer-motion';
 
-const MONO  = '"Rajdhani", sans-serif';
+const MONO  = '"Play", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 const EASE  = [0.32, 0.72, 0, 1];
 
@@ -208,7 +208,7 @@ function ChannelRow({ channel }) {
         borderBottom: '1px solid rgba(255,255,255,0.07)',
         color: hover ? '#ff2540' : '#f5f5f3',
         textDecoration: 'none',
-        fontFamily: '"Rajdhani", sans-serif',
+        fontFamily: '"Play", sans-serif',
         transition: 'color 0.18s, background-color 0.18s',
         backgroundColor: hover ? 'rgba(255,37,64,0.04)' : 'transparent',
       }}

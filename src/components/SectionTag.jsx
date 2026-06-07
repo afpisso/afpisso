@@ -56,13 +56,13 @@ export default function SectionTag({ label, page, className, style }) {
           background: 'var(--color-accent)',
           color: '#0a0a0a',
           clipPath: chamferClip(8, ['tr', 'bl']),
-          padding: '3px 10px 2px',
-          fontFamily: '"Rajdhani", sans-serif',
-          fontSize: '11px',
+          padding: '4px 12px 3px',
+          fontFamily: '"Play", sans-serif',
+          fontSize: '12px',
           fontWeight: 700,
-          letterSpacing: '0.16em',
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          lineHeight: 1.6,
+          lineHeight: 1.45,
           whiteSpace: 'nowrap',
         }}
       >
@@ -73,8 +73,8 @@ export default function SectionTag({ label, page, className, style }) {
       {page && (
         <span
           style={{
-            fontFamily: '"Rajdhani", sans-serif',
-            fontSize: '9px',
+            fontFamily: '"Play", sans-serif',
+            fontSize: '10px',
             letterSpacing: '0.14em',
             color: 'var(--color-fg-mute)',
             opacity: 0.7,

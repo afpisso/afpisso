@@ -84,7 +84,7 @@ export default function ResumePage({ onMenuOpen }) {
                 >
                   {r.headline}
                 </h1>
-                <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)' }}>
+                <p style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)' }}>
                   {r.subheadline}
                 </p>
               </div>
@@ -94,7 +94,7 @@ export default function ResumePage({ onMenuOpen }) {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"
                 style={{
-                  fontFamily: '"Rajdhani", sans-serif',
+                  fontFamily: '"Play", sans-serif',
                   border: '1px solid var(--color-rule)',
                   color: 'var(--color-fg-dim)',
                   clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
@@ -115,7 +115,7 @@ export default function ResumePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             >
               <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.summary}</h2>
-              <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '14px', color: 'rgba(240,238,234,0.75)', lineHeight: 1.85, maxWidth: '65ch' }}>
+              <p style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', color: 'rgba(240,238,234,0.75)', lineHeight: 1.85, maxWidth: '65ch' }}>
                 {r.summary}
               </p>
             </m.section>
@@ -131,17 +131,17 @@ export default function ResumePage({ onMenuOpen }) {
               <dl className="space-y-0">
                 {experience.map((exp, i) => (
                   <div key={i} className="py-6 border-t flex flex-col sm:flex-row gap-4 sm:gap-8" style={{ borderColor: 'var(--color-rule)' }}>
-                    <dt className="text-[11px] flex-shrink-0 sm:w-36" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}>
+                    <dt className="text-[11px] flex-shrink-0 sm:w-36" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}>
                       {exp.period}
                     </dt>
                     <dd>
-                      <div className="text-[14px] font-bold uppercase mb-0.5" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg)' }}>
+                      <div className="text-[14px] font-bold uppercase mb-0.5" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg)' }}>
                         {exp.role}
                       </div>
-                      <div className="text-[12px] mb-2" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em' }}>
+                      <div className="text-[12px] mb-2" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em' }}>
                         {exp.company}
                       </div>
-                      <p className="text-[13px]" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', lineHeight: 1.75, maxWidth: '65ch' }}>
+                      <p className="text-[13px]" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-dim)', lineHeight: 1.75, maxWidth: '65ch' }}>
                         {exp.description}
                       </p>
                     </dd>
@@ -163,14 +163,14 @@ export default function ResumePage({ onMenuOpen }) {
                 {projects.map((proj, i) => (
                   <li key={i} className="flex items-start justify-between gap-6 py-4 border-t" style={{ borderColor: 'var(--color-rule)' }}>
                     <div>
-                      <div className="text-[13px] font-bold uppercase" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg)' }}>
+                      <div className="text-[13px] font-bold uppercase" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg)' }}>
                         {proj.title}
                       </div>
-                      <div className="text-[11px]" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-dim)', letterSpacing: '0.05em' }}>
+                      <div className="text-[11px]" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-dim)', letterSpacing: '0.05em' }}>
                         {proj.type}
                       </div>
                     </div>
-                    <div className="text-[11px] tabular flex-shrink-0" style={{ fontFamily: '"Rajdhani", sans-serif', color: 'var(--color-fg-mute)' }}>
+                    <div className="text-[11px] tabular flex-shrink-0" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-mute)' }}>
                       {proj.year}
                     </div>
                   </li>
@@ -190,7 +190,7 @@ export default function ResumePage({ onMenuOpen }) {
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.skills}</h2>
                 <ul className="flex flex-wrap gap-1.5">
                   {skills.map(s => (
-                    <li key={s} className="text-[11px] px-2 py-1" style={{ fontFamily: '"Rajdhani", sans-serif', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}>
+                    <li key={s} className="text-[11px] px-2 py-1" style={{ fontFamily: '"Play", sans-serif', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}>
                       {s}
                     </li>
                   ))}
@@ -200,7 +200,7 @@ export default function ResumePage({ onMenuOpen }) {
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.tools}</h2>
                 <ul className="flex flex-wrap gap-1.5">
                   {tools.map(s => (
-                    <li key={s} className="text-[11px] px-2 py-1" style={{ fontFamily: '"Rajdhani", sans-serif', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}>
+                    <li key={s} className="text-[11px] px-2 py-1" style={{ fontFamily: '"Play", sans-serif', border: '1px solid var(--color-rule)', color: 'var(--color-fg-dim)' }}>
                       {s}
                     </li>
                   ))}
@@ -217,14 +217,14 @@ export default function ResumePage({ onMenuOpen }) {
             >
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.education}</h2>
-                <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}>
+                <p style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}>
                   Digital Design / Interactive Media<br />
                   Colombia
                 </p>
               </section>
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.languages}</h2>
-                <ul style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 2 }}>
+                <ul style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 2 }}>
                   {r.languageList.map(l => <li key={l}>{l}</li>)}
                 </ul>
               </section>
@@ -239,7 +239,7 @@ export default function ResumePage({ onMenuOpen }) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
               <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.contact}</h2>
-              <div className="flex flex-wrap gap-6" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)' }}>
+              <div className="flex flex-wrap gap-6" style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)' }}>
                 <a href="mailto:afpisso@gmail.com" style={{ color: 'var(--color-fg-dim)' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-dim)'}

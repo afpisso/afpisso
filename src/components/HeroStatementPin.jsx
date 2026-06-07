@@ -235,7 +235,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
                 ANDRES FELIPE PISSO
               </div>
               <div style={{
-                fontFamily: "'Rajdhani', monospace", fontSize: 'clamp(7px,0.8vw,9px)',
+                fontFamily: "'Play', monospace", fontSize: 'clamp(7px,0.8vw,9px)',
                 letterSpacing: '0.24em', textTransform: 'uppercase',
                 color: 'rgba(255,255,255,0.55)', marginTop: 3,
               }}>
@@ -255,7 +255,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
           <m.div style={{
             position: 'absolute', top: 'clamp(28px,5vh,56px)', left: 0, right: 0,
             textAlign: 'center', opacity: labelOpacity, zIndex: 6,
-            fontFamily: "'Rajdhani', monospace", fontSize: '10px',
+            fontFamily: "'Play', monospace", fontSize: '10px',
             letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.5)',
           }}>
             Selected Work
@@ -267,7 +267,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
           }}>
             <div style={{ width: 36, height: 1, background: 'var(--color-accent)', opacity: 0.5 }} />
             <span style={{
-              fontFamily: "'Rajdhani', monospace", fontSize: '9px',
+              fontFamily: "'Play', monospace", fontSize: '9px',
               letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.35)',
             }}>Scroll ↓</span>
             <div style={{ width: 36, height: 1, background: 'var(--color-accent)', opacity: 0.5 }} />

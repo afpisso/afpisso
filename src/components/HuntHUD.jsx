@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 import { m, AnimatePresence } from 'framer-motion';
 import { useHunt, HuntIcon, SIGNALS } from '../contexts/HuntContext';
 
-const MONO    = '"Rajdhani", sans-serif';
+const MONO    = '"Play", sans-serif';
 const EASE    = [0.16, 1, 0.3, 1];
 const ACCENT  = 'var(--color-accent)';
 

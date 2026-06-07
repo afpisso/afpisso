@@ -151,7 +151,7 @@ export default function Nav({ onMenuOpen }) {
       <a
         href="#home"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[300] focus:px-4 focus:py-2 focus:text-[11px] focus:uppercase focus:tracking-widest"
-        style={{ fontFamily: '"Rajdhani", sans-serif', backgroundColor: 'var(--color-accent)', color: '#0a0a0a' }}
+        style={{ fontFamily: '"Play", sans-serif', backgroundColor: 'var(--color-accent)', color: '#0a0a0a' }}
       >
         Skip to content
       </a>
@@ -217,7 +217,7 @@ export default function Nav({ onMenuOpen }) {
                         key={to}
                         to={to}
                         style={({ isActive }) => ({
-                          fontFamily: '"Rajdhani", sans-serif',
+                          fontFamily: '"Play", sans-serif',
                           fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
                           color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           textDecoration: 'none', padding: '6px 12px',
@@ -242,7 +242,7 @@ export default function Nav({ onMenuOpen }) {
                     aria-label={`Switch language to ${t.nav.lang}`}
                     className="hidden sm:flex items-center justify-center"
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif', fontSize: 10,
+                      fontFamily: '"Play", sans-serif', fontSize: 10,
                       letterSpacing: '0.14em', textTransform: 'uppercase',
                       border: '1px solid transparent', background: 'transparent',
                       color: 'var(--color-fg-mute)', padding: '6px 12px',
@@ -259,7 +259,7 @@ export default function Nav({ onMenuOpen }) {
                     onClick={() => setContactOpen(true)}
                     aria-label={t.nav.contact}
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif',
+                      fontFamily: '"Play", sans-serif',
                       fontSize: 10,
                       letterSpacing: '0.16em',
                       textTransform: 'uppercase',
@@ -293,7 +293,7 @@ export default function Nav({ onMenuOpen }) {
                     onClick={onMenuOpen}
                     aria-label="Open navigation menu"
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif', fontSize: 11, letterSpacing: '0.14em',
+                      fontFamily: '"Play", sans-serif', fontSize: 11, letterSpacing: '0.14em',
                       border: '1px solid rgba(255,255,255,0.2)', background: 'transparent',
                       color: 'var(--color-fg)', padding: '8px 16px', cursor: 'pointer',
                       clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
@@ -431,7 +431,7 @@ export default function Nav({ onMenuOpen }) {
                         key={to}
                         to={to}
                         style={({ isActive }) => ({
-                          fontFamily: '"Rajdhani", sans-serif',
+                          fontFamily: '"Play", sans-serif',
                           fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase',
                           color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           textDecoration: 'none', padding: '8px 10px',
@@ -455,7 +455,7 @@ export default function Nav({ onMenuOpen }) {
                     onClick={() => { analytics.languageSwitch(lang === 'en' ? 'es' : 'en'); toggleLang(); }}
                     aria-label={`Switch language to ${t.nav.lang}`}
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif', fontSize: 9,
+                      fontFamily: '"Play", sans-serif', fontSize: 9,
                       letterSpacing: '0.14em', textTransform: 'uppercase',
                       background: 'transparent', border: 'none',
                       color: 'var(--color-fg-mute)', padding: '8px 10px',
@@ -494,7 +494,7 @@ export default function Nav({ onMenuOpen }) {
                     onClick={onMenuOpen}
                     aria-label="Open navigation menu"
                     style={{
-                      fontFamily: '"Rajdhani", sans-serif', fontSize: 9,
+                      fontFamily: '"Play", sans-serif', fontSize: 9,
                       letterSpacing: '0.14em', textTransform: 'uppercase',
                       background: 'transparent', border: 'none',
                       color: 'var(--color-fg)', padding: '8px 12px',

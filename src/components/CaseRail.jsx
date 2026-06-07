@@ -5,7 +5,7 @@
  * pauses on hover. Supports drag-to-swipe, keyboard (←/→), and
  * scroll-wheel navigation.
  *
- * Design: 16:9 landscape cards, Bebas Neue titles, Rajdhani meta,
+ * Design: 16:9 landscape cards, Bebas Neue titles, Play meta,
  * --color-accent red on active card, ambient bg blur from active thumbnail.
  * All motion via transform + opacity only. Respects useReducedMotion.
  */
@@ -157,7 +157,7 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
       <div
         className="absolute top-3 left-3 pointer-events-none flex items-center gap-1.5"
         style={{
-          fontFamily: '"Rajdhani", sans-serif',
+          fontFamily: '"Play", sans-serif',
           fontSize:   '8px',
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
@@ -202,7 +202,7 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
         >
           <span
             style={{
-              fontFamily:    '"Rajdhani", sans-serif',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
@@ -357,7 +357,7 @@ export default function CaseRail({ currentSlug }) {
         <div className="mb-14 flex items-center gap-4">
           <span
             style={{
-              fontFamily:    '"Rajdhani", sans-serif',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
@@ -373,7 +373,7 @@ export default function CaseRail({ currentSlug }) {
           />
           <span
             style={{
-              fontFamily:    '"Rajdhani", sans-serif',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.14em',
               color:         'var(--color-fg-mute)',
@@ -455,7 +455,7 @@ export default function CaseRail({ currentSlug }) {
                 <div
                   className="mb-1"
                   style={{
-                    fontFamily:    '"Rajdhani", sans-serif',
+                    fontFamily:    '"Play", sans-serif',
                     fontSize:      '9px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
@@ -485,7 +485,7 @@ export default function CaseRail({ currentSlug }) {
                     <span
                       key={p}
                       style={{
-                        fontFamily:    '"Rajdhani", sans-serif',
+                        fontFamily:    '"Play", sans-serif',
                         fontSize:      '8px',
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
@@ -541,7 +541,7 @@ export default function CaseRail({ currentSlug }) {
 
               <span
                 style={{
-                  fontFamily:    '"Rajdhani", sans-serif',
+                  fontFamily:    '"Play", sans-serif',
                   fontSize:      '9px',
                   letterSpacing: '0.1em',
                   color:         'var(--color-fg-mute)',
@@ -593,7 +593,7 @@ export default function CaseRail({ currentSlug }) {
                 height:         40,
                 backgroundColor:'var(--color-accent)',
                 color:          '#fff',
-                fontFamily:     '"Rajdhani", sans-serif',
+                fontFamily:     '"Play", sans-serif',
                 fontSize:       '9px',
                 letterSpacing:  '0.18em',
                 textTransform:  'uppercase',
@@ -617,7 +617,7 @@ export default function CaseRail({ currentSlug }) {
         >
           <span
             style={{
-              fontFamily:    '"Rajdhani", sans-serif',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '8px',
               letterSpacing: '0.16em',
               textTransform: 'uppercase',

@@ -236,7 +236,7 @@ const ACCENT = 'var(--color-accent)';
 const FG = 'var(--color-fg)';
 const DIM = 'var(--color-fg-dim)';
 const RULE = 'var(--color-rule)';
-const MONO = '"Rajdhani", sans-serif';
+const MONO = '"Play", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 
 function SectionLabel({ children }) {

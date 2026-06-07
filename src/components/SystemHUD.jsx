@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const MONO = '"Rajdhani", sans-serif';
+const MONO = '"Play", sans-serif';
 
 // Ambient system readout — cursor position, scroll progress, session time.
 // Updates via RAF + direct DOM mutation (no React re-renders at 60fps).

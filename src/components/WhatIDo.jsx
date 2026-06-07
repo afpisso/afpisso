@@ -34,7 +34,7 @@ function ServiceRow({ item, index }) {
           <div
             className="transition-colors duration-200"
             style={{
-              fontFamily: '"Rajdhani", sans-serif',
+              fontFamily: '"Play", sans-serif',
               fontSize: '11px',
               letterSpacing: '0.12em',
               color: hovered ? 'var(--color-accent)' : 'var(--color-accent-35)',
@@ -71,7 +71,7 @@ function ServiceRow({ item, index }) {
         <p
           className="mb-6 leading-relaxed transition-colors duration-200"
           style={{
-            fontFamily: '"Rajdhani", sans-serif',
+            fontFamily: '"Play", sans-serif',
             fontSize: '13px',
             color: hovered ? 'var(--color-fg)' : 'var(--color-fg-dim)',
             lineHeight: 1.85,
@@ -87,7 +87,7 @@ function ServiceRow({ item, index }) {
               key={tag}
               className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-all duration-200"
               style={{
-                fontFamily: '"Rajdhani", sans-serif',
+                fontFamily: '"Play", sans-serif',
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: hovered ? 'var(--color-accent-15)' : 'var(--color-rule)',

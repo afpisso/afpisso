@@ -138,7 +138,7 @@ function SideNav({ active, cases: list, onHover, visible }) {
               animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : 8 }}
               transition={{ duration: 0.12, ease: EASE_OUT }} // fast, intentional
               style={{
-                fontFamily: "'Rajdhani', monospace",
+                fontFamily: "'Play', monospace",
                 fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
                 color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                 fontWeight: isActive ? 500 : 400,
@@ -236,7 +236,7 @@ function CaseShowcase() {
         }}>
           {/* counter */}
           <div style={{
-            fontFamily: "'Rajdhani', monospace",
+            fontFamily: "'Play', monospace",
             fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
             color: 'var(--color-fg-mute)', marginBottom: 24,
             display: 'flex', alignItems: 'center', gap: 8,
@@ -272,7 +272,7 @@ function CaseShowcase() {
               </h2>
 
               <p style={{
-                fontFamily: "'Rajdhani', monospace",
+                fontFamily: "'Play', monospace",
                 fontSize: 'clamp(11px, 1vw, 13px)', lineHeight: 1.75,
                 color: 'var(--color-fg-dim)', maxWidth: '40ch', marginBottom: 28,
               }}>
@@ -283,7 +283,7 @@ function CaseShowcase() {
                 to={`/case/${c.slug}`}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,
-                  fontFamily: "'Rajdhani', monospace",
+                  fontFamily: "'Play', monospace",
                   fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase',
                   color: 'var(--color-fg-dim)',
                   textDecoration: 'none',
@@ -306,7 +306,7 @@ function CaseShowcase() {
             transition={{ duration: 0.4 }}
             style={{
               marginTop: 'auto', paddingTop: 32,
-              fontFamily: "'Rajdhani', monospace",
+              fontFamily: "'Play', monospace",
               fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
               color: 'var(--color-fg-mute)',
               display: 'flex', alignItems: 'center', gap: 8,
@@ -362,7 +362,7 @@ function CtaCloser() {
         <a
           href="mailto:afp.fenrir@gmail.com"
           style={{
-            fontFamily: "'Rajdhani', monospace",
+            fontFamily: "'Play', monospace",
             fontSize: '12px', letterSpacing: '0.16em', textTransform: 'uppercase',
             color: 'var(--color-bg)', background: 'var(--color-accent)',
             padding: '14px 28px', textDecoration: 'none',
@@ -373,7 +373,7 @@ function CtaCloser() {
         <Link
           to="/"
           style={{
-            fontFamily: "'Rajdhani', monospace",
+            fontFamily: "'Play', monospace",
             fontSize: '12px', letterSpacing: '0.16em', textTransform: 'uppercase',
             color: 'var(--color-fg-dim)', border: '1px solid var(--border)',
             padding: '14px 28px', textDecoration: 'none',

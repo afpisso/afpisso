@@ -8,7 +8,7 @@ import { analytics } from '../utils/analytics';
 import SectionHeading from './SectionHeading';
 import { m } from 'framer-motion';
 
-const MONO = '"Rajdhani", sans-serif';
+const MONO = '"Play", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 
 function ContactChannelIcon({ type, size = 18, color = 'var(--color-accent)' }) {
@@ -120,24 +120,23 @@ export default function Contact() {
             </m.p>
 
             {/* Secondary CTA — LinkedIn */}
-            <m.a
+            <CyberBtn
+              variant="ghost"
+              size="sm"
               href={`https://${ct.linkedin}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Connect on LinkedIn"
-              className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase mb-4"
-              style={{ fontFamily: MONO, color: 'var(--color-fg-mute)', textDecoration: 'none' }}
+              showArrow={false}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: 0.2 }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--color-fg)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               onClick={() => analytics.linkedinClick('contact-section-cta')}
+              style={{ marginBottom: 16 }}
             >
-              <span>{t.contact.linkedinCta}</span>
-              <span aria-hidden="true">↗</span>
-            </m.a>
+              {t.contact.linkedinCta} ↗
+            </CyberBtn>
 
             <CyberBtn
               href={`mailto:${ct.email}`}

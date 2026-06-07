@@ -74,7 +74,7 @@ export default function Ticker({
             >
               <span
                 style={{
-                  fontFamily:    '"Rajdhani", sans-serif',
+                  fontFamily:    '"Play", sans-serif',
                   fontSize:      '9px',
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',

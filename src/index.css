@@ -11,7 +11,7 @@
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
     U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-/* Rajdhani served via Google Fonts (index.html preconnect + stylesheet link) */
+/* Play served via Google Fonts (index.html preconnect + stylesheet link) */
 
 /* ─── Design Tokens ─────────────────────────────────── */
 :root {
@@ -86,7 +86,7 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  font-family: 'Rajdhani', monospace;
+  font-family: 'Play', monospace;
   font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -168,7 +168,7 @@ section[id] {
 
 /* ─── System label ───────────────────────────────────── */
 .sys-label {
-  font-family: 'Rajdhani', monospace;
+  font-family: 'Play', monospace;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -178,7 +178,7 @@ section[id] {
 
 /* Micro labels at 10px bold — floor raised from 9px for legibility */
 .micro-label {
-  font-family: 'Rajdhani', monospace;
+  font-family: 'Play', monospace;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -187,7 +187,7 @@ section[id] {
 
 /* ─── Mono body text ─────────────────────────────────── */
 .mono-body {
-  font-family: 'Rajdhani', monospace;
+  font-family: 'Play', monospace;
   font-size: 13px;
   letter-spacing: 0.02em;
   line-height: 1.75;
@@ -516,7 +516,7 @@ section[id] {
   white-space: normal;
   background-color: var(--color-accent);
   color: #0a0a0a;
-  font-family: 'Rajdhani', monospace;
+  font-family: 'Play', monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;

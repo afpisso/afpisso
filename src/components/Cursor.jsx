@@ -187,7 +187,7 @@ export default function Cursor() {
                 position:      'absolute',
                 top:           GAP + ARM + 4,
                 left:          GAP + 2,
-                fontFamily:    '"Rajdhani", sans-serif',
+                fontFamily:    '"Play", sans-serif',
                 fontSize:      '7px',
                 letterSpacing: '0.06em',
                 color: huntStrong

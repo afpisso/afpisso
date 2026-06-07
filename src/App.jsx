@@ -82,8 +82,8 @@ function NotFoundPage({ onMenuOpen }) {
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '6rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>404</div>
-          <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
-          <a href="/" style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
+          <p style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
+          <a href="/" style={{ fontFamily: '"Play", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
         </div>
       </div>
       <Footer />

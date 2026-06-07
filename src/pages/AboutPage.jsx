@@ -230,7 +230,7 @@ export default function AboutPage({ onMenuOpen }) {
                     <span
                       key={i}
                       style={{
-                        fontFamily: '"Rajdhani", sans-serif',
+                        fontFamily: '"Play", sans-serif',
                         fontSize: 10,
                         fontWeight: 700,
                         letterSpacing: '0.16em',
@@ -353,7 +353,7 @@ export default function AboutPage({ onMenuOpen }) {
                 <p
                   className="mb-7"
                   style={{
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     color: 'var(--color-fg)',
                     fontSize: 'clamp(14px, 1.55vw, 17px)',
                     lineHeight: 1.88,
@@ -365,7 +365,7 @@ export default function AboutPage({ onMenuOpen }) {
                 <p
                   className="mb-7"
                   style={{
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     color: 'var(--color-fg-dim)',
                     fontSize: 'clamp(13px, 1.45vw, 15px)',
                     lineHeight: 1.92,
@@ -376,7 +376,7 @@ export default function AboutPage({ onMenuOpen }) {
                 </p>
                 <p
                   style={{
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     color: 'var(--color-fg-dim)',
                     fontSize: 'clamp(13px, 1.45vw, 15px)',
                     lineHeight: 1.92,
@@ -437,7 +437,7 @@ export default function AboutPage({ onMenuOpen }) {
                       <m.li
                         key={item}
                         style={{
-                          fontFamily: '"Rajdhani", sans-serif',
+                          fontFamily: '"Play", sans-serif',
                           fontSize: 13,
                           letterSpacing: '0.04em',
                           color: 'var(--color-fg-dim)',
@@ -456,7 +456,7 @@ export default function AboutPage({ onMenuOpen }) {
                         onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; }}
                         onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-dim)'; }}
                       >
-                        <span aria-hidden style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 9, color: 'var(--color-accent)', opacity: 0.4, flexShrink: 0, width: '1.4rem', letterSpacing: 0 }}>
+                        <span aria-hidden style={{ fontFamily: '"Play", sans-serif', fontSize: 9, color: 'var(--color-accent)', opacity: 0.4, flexShrink: 0, width: '1.4rem', letterSpacing: 0 }}>
                           {String(ii + 1).padStart(2, '0')}
                         </span>
                         {item}
@@ -494,14 +494,14 @@ export default function AboutPage({ onMenuOpen }) {
                       viewport={{ once: true, margin: '-100px' }}
                       transition={{ duration: 0.4, ease: EASE, delay: i * 0.06 }}
                     >
-                      <dt style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 11, letterSpacing: '0.07em', color: 'var(--color-accent)', flexShrink: 0, width: '8.5rem', paddingRight: '1.5rem', paddingTop: 3, lineHeight: 1.4 }}>
+                      <dt style={{ fontFamily: '"Play", sans-serif', fontSize: 11, letterSpacing: '0.07em', color: 'var(--color-accent)', flexShrink: 0, width: '8.5rem', paddingRight: '1.5rem', paddingTop: 3, lineHeight: 1.4 }}>
                         {item.period}
                       </dt>
                       <dd>
                         <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(1.15rem, 1.9vw, 1.65rem)', letterSpacing: '0.02em', color: 'var(--color-fg)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
                           {item.role}
                         </div>
-                        <div style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 13, color: 'var(--color-fg-dim)', letterSpacing: '0.03em', lineHeight: 1.5 }}>
+                        <div style={{ fontFamily: '"Play", sans-serif', fontSize: 13, color: 'var(--color-fg-dim)', letterSpacing: '0.03em', lineHeight: 1.5 }}>
                           {item.context}
                         </div>
                       </dd>
@@ -530,14 +530,14 @@ export default function AboutPage({ onMenuOpen }) {
                       viewport={{ once: true, margin: '-60px' }}
                       transition={{ duration: 0.35, ease: EASE, delay: i * 0.06 }}
                     >
-                      <div style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 11, letterSpacing: '0.07em', color: 'var(--color-accent)', flexShrink: 0, width: '4.5rem', paddingRight: '1rem', paddingTop: 2, lineHeight: 1.4 }}>
+                      <div style={{ fontFamily: '"Play", sans-serif', fontSize: 11, letterSpacing: '0.07em', color: 'var(--color-accent)', flexShrink: 0, width: '4.5rem', paddingRight: '1rem', paddingTop: 2, lineHeight: 1.4 }}>
                         {item.year}
                       </div>
                       <div>
                         <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(1.05rem, 1.7vw, 1.5rem)', letterSpacing: '0.02em', color: 'var(--color-fg)', lineHeight: 1.1, marginBottom: 4 }}>
                           {item.degree}
                         </div>
-                        <div style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 12, color: 'var(--color-fg-mute)', letterSpacing: '0.04em', lineHeight: 1.4 }}>
+                        <div style={{ fontFamily: '"Play", sans-serif', fontSize: 12, color: 'var(--color-fg-mute)', letterSpacing: '0.04em', lineHeight: 1.4 }}>
                           {item.institution}
                         </div>
                       </div>
@@ -585,7 +585,7 @@ export default function AboutPage({ onMenuOpen }) {
             {...inView(0, shouldReduce)}
           >
             <div>
-              <p style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 'clamp(1rem, 1.6vw, 1.3rem)', color: 'var(--color-fg-dim)', lineHeight: 1.6, maxWidth: '52ch', marginBottom: '0.5rem' }}>
+              <p style={{ fontFamily: '"Play", sans-serif', fontSize: 'clamp(1rem, 1.6vw, 1.3rem)', color: 'var(--color-fg-dim)', lineHeight: 1.6, maxWidth: '52ch', marginBottom: '0.5rem' }}>
                 {about.aboutCtaHeadline}
               </p>
               <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(2.2rem, 4.5vw, 5rem)', color: 'var(--color-fg)', lineHeight: 0.95, letterSpacing: '0.01em' }}>
@@ -597,7 +597,7 @@ export default function AboutPage({ onMenuOpen }) {
                 href={`https://${t.contact.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', padding: '12px 20px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-rule)', clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', transition: 'color 150ms ease-out, border-color 150ms ease-out' }}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', padding: '12px 20px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-rule)', clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', transition: 'color 150ms ease-out, border-color 150ms ease-out' }}
                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-accent-35)'; }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
               >
@@ -605,7 +605,7 @@ export default function AboutPage({ onMenuOpen }) {
               </a>
               <a
                 href={`mailto:${t.contact.email}`}
-                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#050505', backgroundColor: 'var(--color-accent)', padding: '12px 24px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', transition: 'opacity 150ms ease-out' }}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#050505', backgroundColor: 'var(--color-accent)', padding: '12px 24px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', transition: 'opacity 150ms ease-out' }}
                 onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
               >

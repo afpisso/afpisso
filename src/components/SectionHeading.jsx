@@ -73,7 +73,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
         <div
           className="section-page-num"
           style={{
-            fontFamily: '"Rajdhani", sans-serif',
+            fontFamily: '"Play", sans-serif',
             fontSize: '9px',
             color: 'var(--color-accent)',
             letterSpacing: '0.14em',

@@ -71,7 +71,7 @@ function ThumbnailOrPlaceholder({ case: c }) {
       <div style={{ position: 'relative', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {c.platform?.map(p => (
           <span key={p} style={{
-            fontFamily: '"Rajdhani", sans-serif',
+            fontFamily: '"Play", sans-serif',
             fontSize: '8px', letterSpacing: '0.14em', textTransform: 'uppercase',
             color: 'var(--color-fg-mute)',
             border: '1px solid var(--color-rule)',
@@ -226,7 +226,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
           <div
             className="flex-shrink-0 w-7 sm:w-10 tabular-nums transition-colors duration-200"
             style={{
-              fontFamily: '"Rajdhani", sans-serif',
+              fontFamily: '"Play", sans-serif',
               fontSize: '11px',
               letterSpacing: '0.1em',
               color: isHovered ? 'var(--color-accent)' : 'var(--color-accent-30)',
@@ -255,7 +255,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
               <span
                 className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
                 style={{
-                  fontFamily: '"Rajdhani", sans-serif',
+                  fontFamily: '"Play", sans-serif',
                   color: vs.color,
                   border: `1px solid ${vs.border}`,
                   opacity: isHovered ? 1 : 0.65,
@@ -288,7 +288,7 @@ function ProjectRow({ caseData, index, onHover, isHovered }) {
                   key={tag}
                   className="hidden sm:inline text-[10px] tracking-widest uppercase px-2 py-0.5 transition-opacity duration-200"
                   style={{
-                    fontFamily: '"Rajdhani", sans-serif',
+                    fontFamily: '"Play", sans-serif',
                     border: '1px solid var(--color-rule)',
                     color: 'var(--color-fg-mute)',
                     opacity: isHovered ? 0.9 : 0.5,
@@ -363,7 +363,7 @@ export default function CaseFiles() {
             <div className="flex items-start gap-12 mt-10 flex-wrap">
               <m.p
                 className="text-base max-w-sm"
-                style={{ fontFamily: '"Rajdhani", sans-serif', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: 12, color: 'var(--color-fg-dim)', lineHeight: 1.85 }}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

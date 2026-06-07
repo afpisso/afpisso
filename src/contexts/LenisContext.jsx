@@ -38,6 +38,8 @@ export function LenisProvider({ children }) {
     });
 
     lenisRef.current = lenis;
+    // Dev-only: expose for debugging scroll-driven animations
+    if (import.meta.env.DEV) window.lenis = lenis;
 
     // ── RAF loop ────────────────────────────────────────────────────────────
     let rafId = null;

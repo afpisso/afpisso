@@ -17,7 +17,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useState } from 'react';
 
-const MONO  = '"Rajdhani", sans-serif';
+const MONO  = '"Play", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 const EASE  = [0.16, 1, 0.3, 1];
 
@@ -285,7 +285,7 @@ export default function ClassifiedPage({ onMenuOpen }) {
             <DataRow label="LANGUAGE" value="EN / ES bilingual — full content parity" />
             <DataRow label="HUNT STORAGE" value="localStorage — persists across sessions, no backend" />
             <DataRow label="HUNT TRIGGERS" value="5 DOM events + 1 keyboard sequence (Konami)" />
-            <DataRow label="DESIGN SYSTEM" value="Bebas Neue (display) + Rajdhani (UI)" />
+            <DataRow label="DESIGN SYSTEM" value="Bebas Neue (display) + Play (UI)" />
             <DataRow label="COLOR" value="#080808 bg · #ff2540 accent · CSS custom properties" />
             <DataRow label="MOTION" value="Emil Kowalski rules — transform + opacity only, ≤300ms" />
             <DataRow label="DEPLOYED" value="Vercel — preview + production on push" />

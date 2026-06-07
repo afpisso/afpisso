@@ -72,9 +72,9 @@ export function CardCorners({ color = 'rgba(255,255,255,0.15)', accentColor = '#
 export function StepNumber({ num, color = '#ff2540', dimColor = 'var(--color-accent-30)' }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
-      <span style={{ color: dimColor, fontFamily: '"Rajdhani", sans-serif', fontSize: 9, letterSpacing: 0 }}>[</span>
-      <span style={{ color, fontFamily: '"Rajdhani", sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', minWidth: '1.8ch', textAlign: 'center' }}>{num}</span>
-      <span style={{ color: dimColor, fontFamily: '"Rajdhani", sans-serif', fontSize: 9, letterSpacing: 0 }}>]</span>
+      <span style={{ color: dimColor, fontFamily: '"Play", sans-serif', fontSize: 9, letterSpacing: 0 }}>[</span>
+      <span style={{ color, fontFamily: '"Play", sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', minWidth: '1.8ch', textAlign: 'center' }}>{num}</span>
+      <span style={{ color: dimColor, fontFamily: '"Play", sans-serif', fontSize: 9, letterSpacing: 0 }}>]</span>
     </span>
   );
 }
