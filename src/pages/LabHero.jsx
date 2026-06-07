@@ -40,6 +40,7 @@ function useHeroScrollProgress(ref) {
 }
 import GeometryGrid from '../components/GeometryGrid'
 import { useLang } from '../contexts/LangContext'
+import CyberBtn from '../components/CyberBtn'
 
 // ── Asset paths ────────────────────────────────────────────────────────────────
 const FACE_SRC        = '/lab/face.png'
@@ -1396,25 +1397,14 @@ export default function LabHero({ hideTopBar = false }) {
         zIndex: 10,
         pointerEvents: 'none',
       }}>
-        <a
+        <CyberBtn
+          variant="accent-ghost"
+          size="md"
           href="#cases"
-          style={{
-            fontFamily: "'Play', monospace",
-            fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'var(--color-accent)', background: 'transparent',
-            border: '1px solid var(--color-accent)',
-            padding: '12px 32px', cursor: 'pointer',
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
-            transition: 'background-color 0.2s',
-            pointerEvents: 'auto',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,37,64,0.1)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+          style={{ pointerEvents: 'auto' }}
         >
-          {lh.cta} <span style={{ fontSize: 14 }}>→</span>
-        </a>
+          {lh.cta}
+        </CyberBtn>
 
         {/* Scroll mouse icon */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
