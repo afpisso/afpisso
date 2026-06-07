@@ -7,9 +7,9 @@ export const fieldNotes = [
     category: 'Systems',
     date: '2026-04-10',
     summary:
-      'A game UI system is not a style guide. It is a set of rules, components, states, and documented decisions that let a team build consistent interface pieces faster and with less ambiguity.',
+      'A game UI system is the shared structure behind how the interface behaves, scales, responds, changes state, and stays understandable across the whole player experience.',
     summaryEs:
-      'Un sistema de UI para juegos no es una guía de estilos. Es un conjunto de reglas, componentes, estados y decisiones documentadas que permiten a un equipo construir piezas de interfaz consistentes más rápido y con menos ambigüedad.',
+      'Un sistema de UI para juegos es la estructura compartida detrás de cómo la interfaz se comporta, escala, responde, cambia de estado y se mantiene entendible durante toda la experiencia del jugador.',
     readTime: '8 min',
     type: 'Deep Dive',
     relatedCases: ['courtyard-king', 'havoc-hotel-3'],
@@ -22,9 +22,9 @@ export const fieldNotes = [
     category: 'HUD Design',
     date: '2026-04-17',
     summary:
-      'Removing elements makes a HUD look cleaner. Removing the right elements makes it clearer. The difference is understanding what information the player actually needs to act, and when.',
+      'A HUD can look elegant, minimal, and polished while still leaving the player unsure about what changed, what matters now, or what action comes next.',
     summaryEs:
-      'Eliminar elementos hace que un HUD se vea más limpio. Eliminar los elementos correctos lo hace más claro. La diferencia está en entender qué información necesita realmente el jugador para actuar, y cuándo.',
+      'Un HUD puede verse elegante, mínimo y pulido, y aun así dejar al jugador sin entender qué cambió, qué importa ahora o qué acción sigue.',
     readTime: '6 min',
     type: 'Analysis',
     relatedCases: ['orcs-must-die-by-the-blade', 'courtyard-king'],
@@ -37,9 +37,9 @@ export const fieldNotes = [
     category: 'Feedback Systems',
     date: '2026-04-24',
     summary:
-      'When feedback is weak, players start guessing. When players guess, they slow down, make avoidable mistakes, or disengage. Strong feedback is not about noise. It is about confirmation at the right moment.',
+      'Feedback tells the player that something happened, what changed, and what they can do next. When it is weak, players start filling the gaps themselves.',
     summaryEs:
-      'Cuando la retroalimentación es débil, los jugadores empiezan a adivinar. Cuando los jugadores adivinan, se frenan, cometen errores evitables o se desenganchan. La buena retroalimentación no es ruido. Es confirmación en el momento correcto.',
+      'La retroalimentación le dice al jugador que algo ocurrió, qué cambió y qué puede hacer después. Cuando es débil, el jugador empieza a llenar los vacíos por su cuenta.',
     readTime: '7 min',
     type: 'Framework',
     relatedCases: ['orcs-must-die-by-the-blade', 'raptor-heist'],
@@ -52,9 +52,9 @@ export const fieldNotes = [
     category: 'Reference',
     date: '2026-05-01',
     summary:
-      'Shared language makes better products. A working glossary of game UI terms: HUD, diegetic versus non-diegetic UI, spatial UI, stacking states, feedback layers, and how using the same words reduces handoff friction.',
+      'A lot of UI problems start before anyone opens Figma. They start in language: HUD, menu, modal, overlay, tooltip, hint, notification, inventory, loadout.',
     summaryEs:
-      'Un lenguaje compartido produce mejores productos. Un glosario funcional de términos de UI para juegos: HUD, UI diegética versus no diegética, UI espacial, estados apilados, capas de retroalimentación, y cómo usar las mismas palabras reduce la fricción en el handoff.',
+      'Muchos problemas de UI empiezan antes de abrir Figma. Empiezan en el lenguaje: HUD, menú, modal, overlay, tooltip, pista, notificación, inventario, loadout.',
     readTime: '5 min',
     type: 'Reference',
     relatedCases: [],
@@ -67,9 +67,9 @@ export const fieldNotes = [
     category: 'Accessibility',
     date: '2026-05-08',
     summary:
-      'Accessibility settings are often treated as a compliance requirement. They are actually one of the best tools for understanding whether your interface works under real constraints, and how to make it better for every player.',
+      'Accessibility settings reveal what the base design assumes. They show what happens when vision, hearing, motor control, cognition, display conditions, or player context change.',
     summaryEs:
-      'Las opciones de accesibilidad suelen tratarse como un requisito de cumplimiento. Son en realidad una de las mejores herramientas para entender si tu interfaz funciona bajo restricciones reales, y cómo mejorarla para cada jugador.',
+      'Las opciones de accesibilidad revelan qué asume el diseño base. Muestran qué pasa cuando cambian la visión, la audición, el control motor, la cognición, las condiciones de pantalla o el contexto del jugador.',
     readTime: '6 min',
     type: 'Checklist',
     relatedCases: ['zombie-dragon-adventure'],
@@ -82,56 +82,11 @@ export const fieldNotes = [
     category: 'VR UX',
     date: '2026-05-15',
     summary:
-      'Spatial UI follows different rules than flat screen UI. Text must be legible at distance. Information must be placed where the player is already looking. And every floating element competes with the physical environment for attention.',
+      'Designing UI for VR is not the same as placing a flat screen inside a headset. In VR, interface design is spatial, physical, and tied to comfort.',
     summaryEs:
-      'La UI espacial sigue reglas distintas a la UI de pantalla plana. El texto debe ser legible a distancia. La información debe colocarse donde el jugador ya está mirando. Y cada elemento flotante compite con el entorno físico por la atención.',
+      'Diseñar UI para VR no es poner una pantalla plana dentro de un headset. En VR, la interfaz es espacial, física y está ligada a la comodidad.',
     readTime: '9 min',
     type: 'Deep Dive',
     relatedCases: ['orcs-must-die-by-the-blade'],
-  },
-  {
-    id: 'FN-008',
-    slug: 'liveops-ux-for-games',
-    title: 'LiveOps UX: Designing for Players Who Already Know the Game',
-    titleEs: 'LiveOps UX: diseñar para jugadores que ya conocen el juego',
-    category: 'LiveOps',
-    date: '2026-05-29',
-    summary:
-      'LiveOps UX is not onboarding. It targets players who are already engaged and need to understand what is new, what is limited, and whether it is worth their time. The interface has to communicate value fast, without breaking the loop they are already in.',
-    summaryEs:
-      'El LiveOps UX no es onboarding. Se dirige a jugadores que ya están comprometidos y necesitan entender qué es nuevo, qué es limitado y si vale su tiempo. La interfaz tiene que comunicar valor rápido, sin romper el loop en el que ya están.',
-    readTime: '7 min',
-    type: 'Framework',
-    relatedCases: ['havoc-hotel-3', 'raptor-heist'],
-  },
-  {
-    id: 'FN-009',
-    slug: 'player-decision-making-ux',
-    title: 'How Game UX Shapes Player Decisions',
-    titleEs: 'Cómo el UX del juego moldea las decisiones del jugador',
-    category: 'Decision UX',
-    date: '2026-06-05',
-    summary:
-      'Every interface choice the player makes is also a UX problem. Which path to take, which upgrade to buy, when to use a resource. When players make bad decisions, the game often blames their skill. The real question is whether the interface gave them enough to decide well.',
-    summaryEs:
-      'Cada elección de interfaz que hace el jugador también es un problema de UX. Qué ruta tomar, qué mejora comprar, cuándo usar un recurso. Cuando los jugadores toman malas decisiones, el juego suele culpar a su habilidad. La pregunta real es si la interfaz les dio suficiente para decidir bien.',
-    readTime: '8 min',
-    type: 'Analysis',
-    relatedCases: ['zombie-dragon-adventure', 'courtyard-king'],
-  },
-  {
-    id: 'FN-007',
-    slug: 'uefn-ux-lessons',
-    title: 'UEFN UX Lessons: Designing Inside Fortnite',
-    titleEs: 'Lecciones de UX en UEFN: diseñar dentro de Fortnite',
-    category: 'UEFN',
-    date: '2026-05-22',
-    summary:
-      'UEFN gives creators significant UI flexibility inside Fortnite, but it also imposes hard constraints. Understanding what you can control, what you cannot, and how to design around the platform\'s limitations is the real UEFN UX skill.',
-    summaryEs:
-      'UEFN ofrece flexibilidad de UI significativa dentro de Fortnite, pero también impone restricciones duras. Entender qué puedes controlar, qué no, y cómo diseñar alrededor de las limitaciones de la plataforma es la verdadera habilidad UX en UEFN.',
-    readTime: '8 min',
-    type: 'Analysis',
-    relatedCases: ['zombie-dragon-adventure', 'raptor-heist', 'havoc-hotel-3'],
   },
 ];
