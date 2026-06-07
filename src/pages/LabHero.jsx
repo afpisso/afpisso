@@ -959,6 +959,125 @@ function LiveOscilloscope({ active, width = 56, height = 20 }) {
   )
 }
 
+// ── Bogotá live clock (COT = UTC-5, no DST) ──────────────────────────────────
+// Kowalski: purposeful motion only — seconds updating = system is live.
+// Crosshair draws in once on mount (strokeDashoffset), then holds.
+function BogotaClock({ active }) {
+  const [time, setTime] = useState(() => {
+    const d = new Date()
+    const cot = new Date(d.toLocaleString('en-US', { timeZone: 'America/Bogota' }))
+    return cot
+  })
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const d = new Date()
+      setTime(new Date(d.toLocaleString('en-US', { timeZone: 'America/Bogota' })))
+    }, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const hh = String(time.getHours()).padStart(2, '0')
+  const mm = String(time.getMinutes()).padStart(2, '0')
+  const ss = String(time.getSeconds()).padStart(2, '0')
+
+  // Crosshair line lengths for dash animation
+  const LINE = 28
+
+  return (
+    <m.div
+      initial={{ opacity: 0 }}
+      animate={active ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 2 }}
+    >
+      {/* Crosshair — draws in once */}
+      <div style={{ position: 'relative', width: 36, height: 36, flexShrink: 0 }}>
+        <svg width={36} height={36} viewBox="0 0 36 36" fill="none"
+          style={{ position: 'absolute', inset: 0 }}>
+          {/* outer circle */}
+          <m.circle cx={18} cy={18} r={14}
+            stroke="rgba(255,37,64,0.2)" strokeWidth={0.6}
+            initial={{ pathLength: 0 }}
+            animate={active ? { pathLength: 1 } : { pathLength: 0 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+          />
+          {/* inner circle */}
+          <m.circle cx={18} cy={18} r={5}
+            stroke="rgba(255,37,64,0.35)" strokeWidth={0.6}
+            initial={{ pathLength: 0 }}
+            animate={active ? { pathLength: 1 } : { pathLength: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
+          />
+          {/* crosshair lines — H */}
+          <m.line x1={1} y1={18} x2={10} y2={18}
+            stroke="rgba(255,37,64,0.45)" strokeWidth={0.7}
+            initial={{ scaleX: 0 }} animate={active ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.1 }}
+            style={{ transformOrigin: '1px 18px' }}
+          />
+          <m.line x1={26} y1={18} x2={35} y2={18}
+            stroke="rgba(255,37,64,0.45)" strokeWidth={0.7}
+            initial={{ scaleX: 0 }} animate={active ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.1 }}
+            style={{ transformOrigin: '35px 18px' }}
+          />
+          {/* crosshair lines — V */}
+          <m.line x1={18} y1={1} x2={18} y2={10}
+            stroke="rgba(255,37,64,0.45)" strokeWidth={0.7}
+            initial={{ scaleY: 0 }} animate={active ? { scaleY: 1 } : { scaleY: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.15 }}
+            style={{ transformOrigin: '18px 1px' }}
+          />
+          <m.line x1={18} y1={26} x2={18} y2={35}
+            stroke="rgba(255,37,64,0.45)" strokeWidth={0.7}
+            initial={{ scaleY: 0 }} animate={active ? { scaleY: 1 } : { scaleY: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 1.15 }}
+            style={{ transformOrigin: '18px 35px' }}
+          />
+          {/* center dot */}
+          <m.circle cx={18} cy={18} r={1.4}
+            fill="var(--color-accent)"
+            initial={{ scale: 0 }} animate={active ? { scale: 1 } : { scale: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 1.3 }}
+            style={{ transformOrigin: '18px 18px' }}
+          />
+        </svg>
+      </div>
+
+      {/* Time readout */}
+      <div>
+        <div style={{
+          fontFamily: "'Play', monospace",
+          fontSize: '16px', letterSpacing: '0.08em',
+          color: 'var(--color-fg)', lineHeight: 1, fontWeight: 700,
+          fontVariantNumeric: 'tabular-nums',
+        }}>
+          {hh}<span style={{ color: 'rgba(255,37,64,0.6)', margin: '0 1px' }}>:</span>
+          {mm}<span style={{ color: 'rgba(255,37,64,0.6)', margin: '0 1px' }}>:</span>
+          <m.span
+            key={ss}
+            initial={{ opacity: 0.3, y: -3 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            style={{ display: 'inline-block' }}
+          >
+            {ss}
+          </m.span>
+        </div>
+        <div style={{
+          fontFamily: "'Play', monospace",
+          fontSize: '8px', letterSpacing: '0.26em',
+          color: 'rgba(255,37,64,0.5)', marginTop: 3,
+          textTransform: 'uppercase',
+        }}>
+          COT · UTC−5
+        </div>
+      </div>
+    </m.div>
+  )
+}
+
 // ── Radar ping for location ───────────────────────────────────────────────────
 function RadarPing() {
   return (
@@ -1613,7 +1732,7 @@ export default function LabHero({ hideTopBar = false }) {
         <HudLabel style={{ color: 'rgba(255,255,255,0.22)', fontSize: '8px', letterSpacing: '0.14em', marginBottom: 8 }}>
           4.7110° N · 74.0721° W
         </HudLabel>
-        <RadarPing />
+        <BogotaClock active={hudVisible} />
       </HudPanel>
 
       {/* ══ BOTTOM-RIGHT ══ */}
