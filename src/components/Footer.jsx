@@ -426,6 +426,43 @@ function FooterConnectItem({ label, handle, href }) {
   );
 }
 
+function MobileFooterIndex({ navLinks, isEs }) {
+  return (
+    <div className="lab-footer-mobile-index" aria-label={isEs ? 'Índice de transmisión' : 'Transmission index'}>
+      <div className="lab-footer-mobile-kicker">
+        {isEs ? 'ÍNDICE DE TRANSMISIÓN' : 'TRANSMISSION INDEX'}
+      </div>
+
+      <nav className="lab-footer-mobile-nav" aria-label={isEs ? 'Navegación del footer' : 'Footer navigation'}>
+        {navLinks.map(({ label, to }) => (
+          <Link key={to} to={to} className="lab-footer-mobile-link">
+            <span>{label}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <div className="lab-footer-mobile-kicker lab-footer-mobile-kicker--channels">
+        {isEs ? 'CANALES' : 'CHANNELS'}
+      </div>
+
+      <div className="lab-footer-mobile-connect">
+        {CONNECT_LINKS.map(({ label, handle, href }) => (
+          <a
+            key={label}
+            href={href}
+            target={href.startsWith('mailto') ? undefined : '_blank'}
+            rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+            className="lab-footer-mobile-channel"
+          >
+            <span>{label}</span>
+            <span>{handle}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   const year = new Date().getFullYear();
   const { lang } = useLang();
@@ -620,7 +657,6 @@ export default function Footer() {
               {navLinks.map(({ label, to }) => (
                 <FooterNavItem key={to} label={label} to={to} />
               ))}
-              <FooterNavItem label={isEs ? 'CONTACTO' : 'CONTACT'} to="/#contact" accent />
             </m.nav>
 
             <div className="lab-footer-center" style={{ gridColumn: 2, position: 'relative', height: '100%', minWidth: 0 }}>
@@ -699,6 +735,8 @@ export default function Footer() {
                 <FooterConnectItem key={label} label={label} handle={handle} href={href} />
               ))}
             </m.div>
+
+            <MobileFooterIndex navLinks={navLinks} isEs={isEs} />
           </div>
 
           <div style={{ borderTop: '1px solid rgba(255,37,64,0.07)', zIndex: 6 }}>
