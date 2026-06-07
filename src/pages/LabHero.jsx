@@ -43,9 +43,9 @@ import { useLang } from '../contexts/LangContext'
 import CyberBtn from '../components/CyberBtn'
 
 // ── Asset paths ────────────────────────────────────────────────────────────────
-const FACE_SRC        = '/lab/face.png'
-const FACE_HELMET_SRC = '/lab/face-helmet.png'
-const HELMET_SRC      = '/lab/helmet.png'
+const FACE_SRC        = '/lab/face.webp'
+const FACE_HELMET_SRC = '/lab/face-helmet.webp'
+const HELMET_SRC      = '/lab/helmet.webp'
 
 // ── Motion tokens ──────────────────────────────────────────────────────────────
 const EASE_OUT     = [0.16, 1, 0.3, 1]
@@ -1725,10 +1725,8 @@ export default function LabHero({ hideTopBar = false }) {
 
       {/* ══ BOTTOM-LEFT ══ */}
       <HudPanel visible={hudVisible} delay={0.3} style={{
-        position: 'absolute', bottom: 'clamp(16px,3vh,36px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
+        position: 'absolute', bottom: 'clamp(48px,7vh,80px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
-        <HudLabel dim style={{ marginBottom: 4 }}>{lh.locationLabel}</HudLabel>
-        <HudLabel accent style={{ marginBottom: 6 }}>{lh.locationValue}</HudLabel>
         <HudLabel style={{ color: 'rgba(255,255,255,0.22)', fontSize: '8px', letterSpacing: '0.14em', marginBottom: 8 }}>
           4.7110° N · 74.0721° W
         </HudLabel>

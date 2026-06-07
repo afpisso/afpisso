@@ -205,17 +205,17 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
               opacity: borderOp,
             }} />
 
-            <m.img src="/lab/helmet.png" alt="Andres Pisso"
+            <m.img src="/lab/helmet.webp" alt="Andres Pisso"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center top', display: 'block',
                 opacity: helmetOp }}
             />
-            <m.img src="/lab/face-helmet.png" alt="" aria-hidden
+            <m.img src="/lab/face-helmet.webp" alt="" aria-hidden
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
                 opacity: faceHelmOp, mixBlendMode: 'screen' }}
             />
-            <m.img src="/lab/face.png" alt="" aria-hidden
+            <m.img src="/lab/face.webp" alt="" aria-hidden
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
                 opacity: faceOp, mixBlendMode: 'screen' }}

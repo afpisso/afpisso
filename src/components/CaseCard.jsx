@@ -152,6 +152,7 @@ export default function CaseCard({ caseData, index }) {
               preload="none"
               aria-hidden="true"
             >
+              <source src={caseData.trailerSrc.replace('.mp4', '.webm')} type="video/webm" />
               <source src={caseData.trailerSrc} type="video/mp4" />
             </video>
           )}

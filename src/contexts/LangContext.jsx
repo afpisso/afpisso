@@ -87,7 +87,7 @@ const translations = {
       label: 'How I work',
       sectionTitle: 'From hesitation\nto signal.',
       headline: 'From hesitation to signal.',
-      body: 'Every project starts with a loop, a gap, and a signal. The process is systematic, not decorative.',
+      body: 'Every project starts with a loop, a gap, and a signal. Systematic, not decorative.',
       steps: [
         { num: '01', title: 'Understand the loop', body: 'Map the player or user journey. Identify where actions, consequences, and feedback happen.' },
         { num: '02', title: 'Find where hesitation starts', body: 'Locate the friction points. What forces a guess? What creates doubt or confusion?' },
@@ -137,6 +137,11 @@ const translations = {
         { label: 'Documentation', tag: 'Handoff' },
       ],
     },
+    igStrip: {
+      label: 'In the field',
+      viewProfile: 'View profile',
+      viewPost: 'View on Instagram',
+    },
     fieldNotes: {
       label: 'Field Notes',
       sectionTitle: 'Applied.\nNot theoretical.',
@@ -151,7 +156,7 @@ const translations = {
       fullProfile: 'Full profile',
       headline: 'Where does clarity break?',
       bio1: 'I started in systems engineering and ended up building the feedback loops players never notice when they work. Eleven years across shipped games, UEFN live experiences, VR, and digital product.',
-      bio2: 'My work starts with one question: where does clarity break? In games, that shows up as a HUD pulling attention from the action, a reward flow that creates hesitation, or a progression system that makes players guess what changed. In product, it is unclear navigation, weak feedback, or screens that look clean but do not help anyone decide.',
+      bio2: 'My work starts with one question: where does clarity break? In games, it shows up as a HUD pulling attention from the action, a reward flow that creates hesitation, a progression system that makes players guess what changed. In product it is unclear navigation, weak feedback, screens that look clean but do not help anyone decide.',
       bio3: 'I care about interfaces that reduce doubt. Clear signals. Useful feedback. Systems that help teams move faster without losing consistency.',
       coreQuestion: '"Where is the player guessing?"',
       coreQuestionLabel: 'Core question',
@@ -336,7 +341,7 @@ const translations = {
       visualsLabel: 'From the event',
       closingLabel: 'Design is also communication',
       closingHeadline: 'A strong design perspective should be useful beyond the file.',
-      closingBody: 'It should help teams, students and professionals see where friction starts, why a system matters more than a screen, and how better structure leads to better decisions, both in the interface and in production.',
+      closingBody: 'It should help people see where friction starts, why a system matters more than a screen, and how better structure leads to better decisions, in the interface and in the work around it.',
       closingCta: 'Get in touch',
     },
     caseStatuses: {
@@ -482,6 +487,11 @@ const translations = {
         { label: 'Workflows en UEFN', tag: 'Plataforma' },
         { label: 'Documentación', tag: 'Handoff' },
       ],
+    },
+    igStrip: {
+      label: 'En el campo',
+      viewProfile: 'Ver perfil',
+      viewPost: 'Ver en Instagram',
     },
     fieldNotes: {
       label: 'Field Notes',

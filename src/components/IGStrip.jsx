@@ -1,23 +1,25 @@
 import { useRef, useState, useEffect } from 'react';
 import { m, useReducedMotion, useMotionValue, animate } from 'framer-motion';
 import SectionHeading from './SectionHeading';
+import { useLang } from '../contexts/LangContext';
 
 const EASE    = [0.16, 1, 0.3, 1];
 const SPEED   = 0.75; // px per frame ~45px/s at 60fps
 const IG_PROFILE = 'https://www.instagram.com/byandresfe/';
 
 const POSTS = [
-  { video: '/ig/01.mp4', poster: '/ig/01.webp', category: 'Breakdown Heurístico', title: 'Consistencia y\nestándares',                  href: 'https://www.instagram.com/p/DX9SxLxgMlL/?img_index=1' },
-  { video: '/ig/02.mp4', poster: '/ig/02.webp', category: 'Accesibilidad',        title: 'Decisiones de accesibilidad\npara Game UX/UI', href: 'https://www.instagram.com/p/DYmldS1gCoR/?img_index=1' },
-  { video: '/ig/03.mp4', poster: '/ig/03.webp', category: 'Game UX Breakdown',    title: 'Balatro',                                     href: 'https://www.instagram.com/p/DYXfX_BgI1f/?img_index=1' },
-  { video: '/ig/04.mp4', poster: '/ig/04.webp', category: 'Game UX/UI',           title: 'La complejidad no es mala.\nLa confusión sí.', href: 'https://www.instagram.com/p/DYAciUPlN_2/?img_index=1' },
-  { video: '/ig/05.mp4', poster: '/ig/05.webp', category: 'UX/UI Picks',          title: '5 sitios web para\nreferencias de Game UI',    href: 'https://www.instagram.com/p/DY5pDw0gOrk/?img_index=1' },
-  { video: '/ig/06.mp4', poster: '/ig/06.webp', category: 'Breakdown Heurístico', title: 'Estética y\ndiseño minimalista',               href: 'https://www.instagram.com/p/DZGu4VdgLmd/?img_index=1' },
+  { webm: '/ig/01.webm', video: '/ig/01.mp4', poster: '/ig/01.webp', category: 'Breakdown Heurístico', title: 'Consistencia y\nestándares',                  href: 'https://www.instagram.com/p/DX9SxLxgMlL/?img_index=1' },
+  { webm: '/ig/02.webm', video: '/ig/02.mp4', poster: '/ig/02.webp', category: 'Accesibilidad',        title: 'Decisiones de accesibilidad\npara Game UX/UI', href: 'https://www.instagram.com/p/DYmldS1gCoR/?img_index=1' },
+  { webm: '/ig/03.webm', video: '/ig/03.mp4', poster: '/ig/03.webp', category: 'Game UX Breakdown',    title: 'Balatro',                                     href: 'https://www.instagram.com/p/DYXfX_BgI1f/?img_index=1' },
+  { webm: '/ig/04.webm', video: '/ig/04.mp4', poster: '/ig/04.webp', category: 'Game UX/UI',           title: 'La complejidad no es mala.\nLa confusión sí.', href: 'https://www.instagram.com/p/DYAciUPlN_2/?img_index=1' },
+  { webm: '/ig/05.webm', video: '/ig/05.mp4', poster: '/ig/05.webp', category: 'UX/UI Picks',          title: '5 sitios web para\nreferencias de Game UI',    href: 'https://www.instagram.com/p/DY5pDw0gOrk/?img_index=1' },
+  { webm: '/ig/06.webm', video: '/ig/06.mp4', poster: '/ig/06.webp', category: 'Breakdown Heurístico', title: 'Estética y\ndiseño minimalista',               href: 'https://www.instagram.com/p/DZGu4VdgLmd/?img_index=1' },
 ];
 
 const GAP = 10;
 
 function IGCard({ post, isClone }) {
+  const { t } = useLang();
   const [hovered, setHovered] = useState(false);
   const videoRef  = useRef(null);
   const shouldReduce = useReducedMotion();
@@ -56,7 +58,6 @@ function IGCard({ post, isClone }) {
     >
       <video
         ref={videoRef}
-        src={post.video}
         poster={post.poster}
         muted loop playsInline preload="none"
         draggable={false}
@@ -69,7 +70,10 @@ function IGCard({ post, isClone }) {
           transition: 'transform 420ms cubic-bezier(0.16,1,0.3,1)',
           pointerEvents: 'none', userSelect: 'none',
         }}
-      />
+      >
+        {post.webm && <source src={post.webm} type="video/webm" />}
+        <source src={post.video} type="video/mp4" />
+      </video>
 
       {/* Bottom vignette */}
       <div aria-hidden style={{
@@ -113,7 +117,7 @@ function IGCard({ post, isClone }) {
           fontFamily: '"Play", sans-serif', fontSize: 9, fontWeight: 700,
           letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)',
         }}>
-          Ver en Instagram →
+          {t.igStrip.viewPost} →
         </div>
       </m.div>
     </a>
@@ -146,6 +150,8 @@ function CtrlBtn({ onClick, label, children }) {
 }
 
 export default function IGStrip() {
+  const { t } = useLang();
+  const ig = t.igStrip;
   const x            = useMotionValue(0);
   const trackRef     = useRef(null);
   const firstCardRef = useRef(null);
@@ -217,7 +223,7 @@ export default function IGStrip() {
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
           >
-            <SectionHeading label="En el campo" page="009" />
+            <SectionHeading label={ig.label} page="009" />
           </m.div>
 
           {/* Controls + link */}
@@ -264,7 +270,7 @@ export default function IGStrip() {
               onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; }}
               onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
             >
-              @byandresfe · Ver todo →
+              @byandresfe · {ig.viewProfile} →
             </a>
           </m.div>
         </div>

@@ -377,6 +377,7 @@ function TrailerPlayer({ src, poster, title, label }) {
             poster={poster}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000' }}
           >
+            <source src={src.replace('.mp4', '.webm')} type="video/webm" />
             <source src={src} type="video/mp4" />
             Your browser doesn't support HTML5 video.
           </video>
