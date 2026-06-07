@@ -19,17 +19,16 @@ function LogoMark({ size = 40 }) {
     <div
       style={{
         width: size, height: size, flexShrink: 0,
-        border: '1px solid rgba(255,255,255,0.15)',
         position: 'relative',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <img
         src="/logo-mark.png"
         alt=""
         aria-hidden="true"
-        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: size > 34 ? 4 : 3 }}
+        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: size > 34 ? 2 : 1 }}
         onError={e => {
           e.currentTarget.style.display = 'none';
           if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';

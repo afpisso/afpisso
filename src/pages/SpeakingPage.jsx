@@ -405,8 +405,8 @@ export default function SpeakingPage({ onMenuOpen }) {
                 transition={{ duration: 0.55, ease: EASE_OUT }}
               >
                 <AssetSlot
-                  src="/speaking/stage.webp"
-                  alt="Andres Felipe Pisso presenting at Colombia 5.0"
+                  src="/speaking/stage2.webp"
+                  alt="Andres Felipe Pisso presenting the Game UI Systems workshop at Colombia 5.0"
                   aspectRatio="16/9"
                 />
               </m.div>
@@ -431,8 +431,8 @@ export default function SpeakingPage({ onMenuOpen }) {
                   transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.1 }}
                 >
                   <AssetSlot
-                    src="/speaking/stage2.webp"
-                    alt="Colombia 5.0 event scene"
+                    src="/speaking/stage3.webp"
+                    alt="Colombia 5.0 workshop stage view"
                     aspectRatio="4/3"
                   />
                 </m.div>
