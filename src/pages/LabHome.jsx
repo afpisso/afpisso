@@ -12,15 +12,16 @@
  */
 
 import { useRef, useState, useCallback } from 'react'
-import LabHero from './LabHero'
 import {
   m,
   useScroll,
   useTransform,
+  useMotionValue,
   useMotionValueEvent,
   AnimatePresence,
 } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import HeroStatementPin from '../components/HeroStatementPin'
 import { cases, CASE_ORDER } from '../data/cases'
 
 // ── Motion tokens (Emil Kowalski) ─────────────────────────────────────────────
@@ -385,83 +386,11 @@ function CtaCloser() {
   )
 }
 
-// ── Hero → Showcase transition (Lando Norris style) ──────────────────────────
-// The hero stays sticky while a dark rounded-top panel rises from below,
-// covering the hero progressively. The panel becomes the showcase background.
-function HeroTransition({ children }) {
-  const zoneRef = useRef(null)
-
-  const { scrollYProgress } = useScroll({
-    target: zoneRef,
-    offset: ['start start', 'end end'],
-  })
-
-  // Panel rises from off-screen bottom → covering hero (starts late, feels deliberate)
-  const panelY         = useTransform(scrollYProgress, [0.45, 0.95], ['100%', '0%'])
-  // Hero subtly scales in as panel rises
-  const heroScale      = useTransform(scrollYProgress, [0.5, 0.95], [1, 0.94])
-  // Dark overlay fades in before and during panel rise
-  const overlayOpacity = useTransform(scrollYProgress, [0.35, 0.9], [0, 0.88])
-
-  return (
-    // 260vh = 100vh hero rest + 160vh scroll-out zone (generous pacing like Lando)
-    <div ref={zoneRef} style={{ height: '260vh', position: 'relative' }}>
-      {/* Hero — sticky, subtle scale + dark overlay as panel rises */}
-      <div style={{ position: 'sticky', top: 0 }}>
-        <m.div style={{ scale: heroScale, transformOrigin: 'center top', willChange: 'transform' }}>
-          {children}
-        </m.div>
-        {/* Dark overlay — fades in on top of hero as panel rises */}
-        <m.div style={{
-          position: 'absolute', inset: 0,
-          background: '#080808',
-          opacity: overlayOpacity,
-          pointerEvents: 'none',
-          zIndex: 100,
-        }} />
-      </div>
-
-      {/* Rising panel — dark card with chamfered top corners */}
-      <m.div
-        style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: '100vh',
-          background: 'var(--color-bg)',
-          borderRadius: '18px 18px 0 0',
-          boxShadow: '0 -24px 80px rgba(0,0,0,0.7)',
-          y: panelY,
-          zIndex: 10,
-          // Visual label inside the panel top edge
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        {/* Drag handle / section label */}
-        <div style={{
-          paddingTop: 18,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-        }}>
-          <div style={{ width: 36, height: 2, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} />
-          <span style={{
-            fontFamily: "'Rajdhani', monospace",
-            fontSize: '9px', letterSpacing: '0.26em', textTransform: 'uppercase',
-            color: 'rgba(240,238,234,0.22)',
-          }}>Selected Work</span>
-        </div>
-      </m.div>
-    </div>
-  )
-}
-
 // ── Root ──────────────────────────────────────────────────────────────────────
 export default function LabHome() {
   return (
     <div style={{ background: 'var(--color-bg)', position: 'relative', zIndex: 1 }}>
-      <HeroTransition>
-        <LabHero />
-      </HeroTransition>
+      <HeroStatementPin />
       <CaseShowcase />
       <CtaCloser />
     </div>

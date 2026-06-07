@@ -19,6 +19,25 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, useReducedMotion, useSpring, useTransform, useMotionValue, animate } from 'framer-motion'
+import { useScramble } from '../hooks/useScramble'
+
+// Scroll progress for hero section: 0 at top, 1 when fully scrolled past
+function useHeroScrollProgress(ref) {
+  const progress = useMotionValue(0)
+  useEffect(() => {
+    const update = () => {
+      const el = ref.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const p = Math.min(Math.max(-rect.top / rect.height, 0), 1)
+      progress.set(p)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [ref, progress])
+  return progress
+}
 import GeometryGrid from '../components/GeometryGrid'
 import { useLang } from '../contexts/LangContext'
 
@@ -37,6 +56,13 @@ const P = { BOOT: 0, SCAN: 1, REVEAL: 2, TITLE: 3, ACTIVE: 4 }
 // ── Scramble chars ────────────────────────────────────────────────────────────
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&'
 
+// ── Discipline data for arc gauges ───────────────────────────────────────────
+const SKILL_DATA = [
+  { value: 0.92, tag: 'LEAD · UX',    metric: '11Y' },
+  { value: 0.78, tag: 'SENIOR · GX',  metric: '8Y'  },
+  { value: 0.84, tag: 'DIRECTOR · PD', metric: '9Y' },
+]
+
 // ══════════════════════════════════════════════════════════════════════════════
 // SCRAMBLE LABEL — characters shuffle before settling on the real text
 // ══════════════════════════════════════════════════════════════════════════════
@@ -48,7 +74,7 @@ function ScrambleLabel({ text, active, style: s, className }) {
   useEffect(() => {
     if (!active) { setDisplay(text); return }
     let step = 0
-    const total = 18   // frames to run scramble
+    const total = 26   // frames to run scramble
     const run = () => {
       step++
       setDisplay(
@@ -655,27 +681,48 @@ function HudPanel({ visible, delay = 0, style: s, children }) {
 }
 
 function TitleWord({ children, delay, accent, scramble = false, style: s }) {
+  const [trigger, setTrigger] = useState(0)
   const [glitching, setGlitching] = useState(false)
+  const glitchTimer = useRef(null)
   const text = typeof children === 'string' ? children : ''
 
+  const displayed = useScramble(text, {
+    duration: 480,
+    trigger,
+    delay: scramble ? delay * 1000 : 0,
+    enabled: scramble && !!text,
+  })
+
+  // Fire once on mount
   useEffect(() => {
     if (!scramble || !text) return
-    const t1 = setTimeout(() => setGlitching(true), Math.max(0, delay * 1000 + 120))
-    const t2 = setTimeout(() => setGlitching(false), Math.max(0, delay * 1000 + 520))
-    return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
-    }
-  }, [delay, scramble, text])
+    setTrigger(1)
+    const t1 = setTimeout(() => setGlitching(true),  Math.max(0, delay * 1000 + 80))
+    const t2 = setTimeout(() => setGlitching(false), Math.max(0, delay * 1000 + 580))
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleHover = () => {
+    if (!scramble || !text) return
+    setTrigger(t => t + 1)
+    setGlitching(true)
+    clearTimeout(glitchTimer.current)
+    glitchTimer.current = setTimeout(() => setGlitching(false), 520)
+  }
 
   return (
-    <span style={{ display: 'inline-block', overflow: 'hidden', paddingBottom: '0.03em', ...s }}>
+    <span
+      style={{ display: 'inline-block', overflow: 'hidden', paddingTop: '0.14em', paddingBottom: '0.03em', ...s }}
+      onMouseEnter={handleHover}
+    >
       <m.span
         style={{
           display: 'inline-block',
           color: accent ? 'var(--color-accent)' : 'var(--color-fg)',
           position: 'relative',
           willChange: 'transform',
+          pointerEvents: 'none',
         }}
         initial={{ y: '108%' }}
         animate={{ y: '0%' }}
@@ -683,41 +730,293 @@ function TitleWord({ children, delay, accent, scramble = false, style: s }) {
       >
         {scramble && text && glitching && (
           <>
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                color: '#ff2540',
-                transform: 'translate(-5px, 1px)',
-                mixBlendMode: 'screen',
-                opacity: 0.55,
-                pointerEvents: 'none',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {text}
-            </span>
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                color: '#7dd3fc',
-                transform: 'translate(5px, -1px)',
-                mixBlendMode: 'screen',
-                opacity: 0.35,
-                pointerEvents: 'none',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {text}
-            </span>
+            <span aria-hidden="true" style={{
+              position: 'absolute', inset: 0,
+              color: '#ff2540', transform: 'translate(-7px, 2px)',
+              mixBlendMode: 'screen', opacity: 0.55,
+              pointerEvents: 'none', whiteSpace: 'nowrap',
+            }}>{displayed}</span>
+            <span aria-hidden="true" style={{
+              position: 'absolute', inset: 0,
+              color: '#00f0ff', transform: 'translate(7px, -2px)',
+              mixBlendMode: 'screen', opacity: 0.35,
+              pointerEvents: 'none', whiteSpace: 'nowrap',
+            }}>{displayed}</span>
           </>
         )}
-        {scramble && text ? <ScrambleLabel text={text} active /> : children}
+        {scramble && text ? displayed : children}
       </m.span>
     </span>
+  )
+}
+
+// ── Arc gauge — reads as "system utilization", not "skill level" ─────────────
+function ArcGauge({ value, active, delay, metric }) {
+  const SIZE = 34, R = 13, CX = SIZE / 2, CY = SIZE / 2
+  const C    = 2 * Math.PI * R
+  const ARC  = C * (240 / 360)   // 240° sweep
+  const GAP  = C - ARC
+  const filled = value * ARC
+
+  return (
+    <m.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={active ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+      transition={{ type: 'spring', stiffness: 220, damping: 22, delay }}
+      style={{ width: SIZE, height: SIZE, flexShrink: 0 }}
+    >
+      <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} fill="none">
+        {/* bg track */}
+        <circle cx={CX} cy={CY} r={R}
+          stroke="rgba(255,255,255,0.07)" strokeWidth={1.8}
+          strokeDasharray={`${ARC} ${GAP}`}
+          style={{ transform: 'rotate(150deg)', transformOrigin: `${CX}px ${CY}px` }}
+        />
+        {/* fill arc */}
+        <m.circle cx={CX} cy={CY} r={R}
+          stroke="var(--color-accent)" strokeWidth={1.8}
+          strokeDasharray={`${ARC} ${GAP}`}
+          initial={{ strokeDashoffset: ARC }}
+          animate={active ? { strokeDashoffset: ARC - filled } : { strokeDashoffset: ARC }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: delay + 0.2 }}
+          style={{ transform: 'rotate(150deg)', transformOrigin: `${CX}px ${CY}px`,
+            filter: 'drop-shadow(0 0 3px rgba(255,37,64,0.6))' }}
+        />
+        {/* tip dot at arc end */}
+        <m.circle cx={CX + R} cy={CY} r={1.5}
+          fill="var(--color-accent)"
+          initial={{ opacity: 0 }}
+          animate={active ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.3, delay: delay + 1.5 }}
+          style={{ transform: 'rotate(150deg)', transformOrigin: `${CX}px ${CY}px` }}
+        />
+        {/* inner metric */}
+        <text x={CX} y={CY + 1} textAnchor="middle" dominantBaseline="middle"
+          style={{ fontFamily: "'Rajdhani', monospace", fontSize: '7.5px',
+            fill: 'rgba(255,37,64,0.8)', letterSpacing: '0.06em', fontWeight: 600 }}
+        >
+          {metric}
+        </text>
+      </svg>
+    </m.div>
+  )
+}
+
+function SpinningGlobe({ size = 40 }) {
+  return (
+    <>
+      <style>{`
+        @keyframes globe-lon  { from { transform: rotateY(0deg)   } to { transform: rotateY(360deg)  } }
+        @keyframes globe-lon2 { from { transform: rotateY(90deg)  } to { transform: rotateY(450deg)  } }
+        @keyframes globe-pulse { 0%,100% { opacity:.9 } 50% { opacity:.4 } }
+      `}</style>
+      <div style={{ width: size, height: size, position: 'relative', flexShrink: 0 }}>
+        {/* static base — outer circle + latitudes + location dot */}
+        <svg viewBox="0 0 44 44" fill="none" width={size} height={size}
+          style={{ position: 'absolute', inset: 0 }}>
+          <circle cx="22" cy="22" r="19" stroke="rgba(255,37,64,0.5)" strokeWidth="0.8" />
+          {/* latitude lines */}
+          <ellipse cx="22" cy="15" rx="17" ry="4" stroke="rgba(255,37,64,0.18)" strokeWidth="0.6" />
+          <ellipse cx="22" cy="22" rx="19" ry="6" stroke="rgba(255,37,64,0.18)" strokeWidth="0.6" />
+          <ellipse cx="22" cy="29" rx="17" ry="4" stroke="rgba(255,37,64,0.18)" strokeWidth="0.6" />
+          {/* equator crosshair ticks */}
+          <line x1="3" y1="22" x2="8"  y2="22" stroke="rgba(255,37,64,0.22)" strokeWidth="0.6" />
+          <line x1="36" y1="22" x2="41" y2="22" stroke="rgba(255,37,64,0.22)" strokeWidth="0.6" />
+          {/* Bogotá dot */}
+          <circle cx="17" cy="25" r="1.6" fill="var(--color-accent)"
+            style={{ animation: 'globe-pulse 2.4s ease-in-out infinite' }} />
+          <circle cx="17" cy="25" r="3.5" fill="none"
+            stroke="var(--color-accent)" strokeWidth="0.5" opacity="0.4" />
+        </svg>
+        {/* spinning longitude 1 */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          perspective: '80px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{ width: size, height: size, animation: 'globe-lon 7s linear infinite', transformStyle: 'preserve-3d' }}>
+            <svg viewBox="0 0 44 44" fill="none" width={size} height={size}>
+              <ellipse cx="22" cy="22" rx="9" ry="19" stroke="rgba(255,37,64,0.28)" strokeWidth="0.7" />
+            </svg>
+          </div>
+        </div>
+        {/* spinning longitude 2 (90° offset) */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          perspective: '80px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{ width: size, height: size, animation: 'globe-lon2 7s linear infinite', transformStyle: 'preserve-3d' }}>
+            <svg viewBox="0 0 44 44" fill="none" width={size} height={size}>
+              <ellipse cx="22" cy="22" rx="9" ry="19" stroke="rgba(255,37,64,0.18)" strokeWidth="0.7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+// ── Live canvas EQ bars ───────────────────────────────────────────────────────
+// RAF-based, targets drift randomly each frame, current lerps toward target.
+// Uses canvas so Framer Motion reconciliation never causes jitter.
+function LiveEQ({ active, width = 80, height = 24, bars = 11 }) {
+  const canvasRef = useRef(null)
+  const rafRef    = useRef(null)
+  const targets   = useRef(Array.from({ length: bars }, () => 0.3 + Math.random() * 0.5))
+  const current   = useRef(targets.current.map(v => v * 0.2))
+
+  useEffect(() => {
+    if (!active) return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const W = canvas.width, H = canvas.height
+    const gap = 2
+    const bw  = (W - gap * (bars - 1)) / bars
+
+    const tick = () => {
+      targets.current = targets.current.map(t => {
+        const n = t + (Math.random() - 0.5) * 0.18
+        return Math.min(Math.max(n, 0.12), 1)
+      })
+      current.current = current.current.map((c, i) =>
+        c + (targets.current[i] - c) * 0.14
+      )
+      ctx.clearRect(0, 0, W, H)
+      current.current.forEach((v, i) => {
+        const x = i * (bw + gap)
+        const h = Math.max(2, v * H)
+        const g = ctx.createLinearGradient(0, H - h, 0, H)
+        g.addColorStop(0, `rgba(255,37,64,${0.45 + v * 0.55})`)
+        g.addColorStop(1, `rgba(255,37,64,0.15)`)
+        ctx.fillStyle = g
+        ctx.fillRect(x, H - h, bw, h)
+      })
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [active, bars])
+
+  return (
+    <canvas ref={canvasRef} width={width} height={height}
+      style={{ display: 'block', imageRendering: 'pixelated' }} />
+  )
+}
+
+// ── Live oscilloscope waveform ────────────────────────────────────────────────
+function LiveOscilloscope({ active, width = 56, height = 20 }) {
+  const canvasRef = useRef(null)
+  const rafRef    = useRef(null)
+  const phase     = useRef(0)
+  const amp       = useRef({ a: 1, b: 0.6, c: 0.3 })
+
+  useEffect(() => {
+    if (!active) return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const W = canvas.width, H = canvas.height
+    const MID = H / 2
+
+    const tick = () => {
+      phase.current += 0.055
+      // amplitudes drift slowly for organic feel
+      amp.current.a += (0.85 + Math.random() * 0.3 - amp.current.a) * 0.02
+      amp.current.b += (0.45 + Math.random() * 0.3 - amp.current.b) * 0.02
+      amp.current.c += (0.2  + Math.random() * 0.2 - amp.current.c) * 0.02
+
+      ctx.clearRect(0, 0, W, H)
+      const g = ctx.createLinearGradient(0, 0, W, 0)
+      g.addColorStop(0, 'rgba(255,37,64,0)')
+      g.addColorStop(0.15, 'rgba(255,37,64,0.75)')
+      g.addColorStop(0.85, 'rgba(255,37,64,0.75)')
+      g.addColorStop(1, 'rgba(255,37,64,0)')
+      ctx.strokeStyle = g
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      const p = phase.current
+      for (let x = 0; x <= W; x++) {
+        const t = (x / W) * Math.PI * 2
+        const y = MID
+          + Math.sin(t * 3.1 + p)         * MID * 0.5  * amp.current.a
+          + Math.sin(t * 5.7 + p * 1.6)   * MID * 0.3  * amp.current.b
+          + Math.sin(t * 11  + p * 2.4)   * MID * 0.18 * amp.current.c
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [active])
+
+  return (
+    <canvas ref={canvasRef} width={width} height={height}
+      style={{ display: 'block' }} />
+  )
+}
+
+// ── Radar ping for location ───────────────────────────────────────────────────
+function RadarPing() {
+  return (
+    <>
+      <style>{`
+        @keyframes radar-sweep { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
+        @keyframes blip-fade   { 0%,18% { opacity:1 } 100% { opacity:0 } }
+      `}</style>
+      <div style={{ position: 'relative', width: 76, height: 76 }}>
+        {/* static: rings + crosshair + blip */}
+        <svg width={76} height={76} viewBox="0 0 76 76" fill="none"
+          style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
+          <circle cx="38" cy="38" r="34" stroke="rgba(255,37,64,0.14)" strokeWidth="0.6" />
+          <circle cx="38" cy="38" r="22" stroke="rgba(255,37,64,0.09)" strokeWidth="0.5" />
+          <circle cx="38" cy="38" r="11" stroke="rgba(255,37,64,0.06)" strokeWidth="0.5" />
+          <line x1="4"  y1="38" x2="72" y2="38" stroke="rgba(255,37,64,0.08)" strokeWidth="0.5" />
+          <line x1="38" y1="4"  x2="38" y2="72" stroke="rgba(255,37,64,0.08)" strokeWidth="0.5" />
+          {/* diagonal guides */}
+          <line x1="14" y1="14" x2="62" y2="62" stroke="rgba(255,37,64,0.04)" strokeWidth="0.5" />
+          <line x1="62" y1="14" x2="14" y2="62" stroke="rgba(255,37,64,0.04)" strokeWidth="0.5" />
+          {/* Bogotá blip */}
+          <circle cx="29" cy="44" r="2" fill="var(--color-accent)"
+            style={{ animation: 'blip-fade 3.8s ease-out infinite 0.4s' }} />
+          <circle cx="29" cy="44" r="5.5" fill="none" stroke="var(--color-accent)" strokeWidth="0.5"
+            style={{ animation: 'blip-fade 3.8s ease-out infinite 0.55s' }} />
+          <circle cx="38" cy="38" r="1.2" fill="rgba(255,37,64,0.55)" />
+          {/* tick marks on outer ring */}
+          {[0,45,90,135,180,225,270,315].map(deg => {
+            const r = deg % 90 === 0 ? 30 : 32
+            const rad = (deg * Math.PI) / 180
+            const x1 = 38 + Math.cos(rad) * r, y1 = 38 + Math.sin(rad) * r
+            const x2 = 38 + Math.cos(rad) * 34, y2 = 38 + Math.sin(rad) * 34
+            return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2}
+              stroke="rgba(255,37,64,0.25)" strokeWidth="0.6" />
+          })}
+        </svg>
+
+        {/* conic sweep trail */}
+        <div style={{
+          position: 'absolute', inset: 0, borderRadius: '50%', zIndex: 0, overflow: 'hidden',
+          background: 'conic-gradient(from 270deg, rgba(255,37,64,0.28) 0deg, rgba(255,37,64,0.06) 50deg, transparent 90deg)',
+          animation: 'radar-sweep 3.8s linear infinite',
+          mixBlendMode: 'screen',
+        }} />
+
+        {/* sweep line */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 2,
+          animation: 'radar-sweep 3.8s linear infinite',
+          transformOrigin: 'center',
+        }}>
+          <svg width={76} height={76} viewBox="0 0 76 76" fill="none">
+            <line x1="38" y1="38" x2="72" y2="38"
+              stroke="rgba(255,37,64,0.9)" strokeWidth="0.8"
+              style={{ filter: 'drop-shadow(0 0 3px rgba(255,37,64,0.7))' }} />
+          </svg>
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -960,7 +1259,7 @@ export default function LabHero({ hideTopBar = false }) {
   // Portrait sits at vertical centre-top; title overlaps its lower third.
   // All centre elements are absolutely positioned so text can float over photo.
   // Fixed aspect ratio (3:4) — objectFit:cover always crops identically across viewports
-  const PORTRAIT_W = 'clamp(260px,28vw,420px)'
+  const PORTRAIT_W = 'clamp(390px,42vw,630px)'
   const PORTRAIT_H = 'unset'   // driven by aspectRatio below
 
   return (
@@ -1017,14 +1316,6 @@ export default function LabHero({ hideTopBar = false }) {
         width: PORTRAIT_W, aspectRatio: '3/4',
         willChange: 'transform',
       }}>
-        {['top-left','top-right','bottom-left','bottom-right'].map(pos => (
-          <m.div key={pos}
-            animate={{ opacity: phase >= P.REVEAL ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <Corner pos={pos} size={20} thickness={1.5} />
-          </m.div>
-        ))}
         <SpotlightPortrait phase={phase} />
       </m.div>
       </div>
@@ -1038,24 +1329,35 @@ export default function LabHero({ hideTopBar = false }) {
           textAlign: 'center',
           zIndex: 10,
           filter: 'drop-shadow(0 2px 24px rgba(8,8,8,0.9))',
-          pointerEvents: 'none',
+          pointerEvents: 'auto',
         }}>
-          {/* nameplate */}
-          <div style={{
-            marginBottom: 'clamp(10px,1.4vh,18px)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-          }}>
+          {/* nameplate + decorative separator */}
+          <m.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.05 }}
+            style={{
+              marginBottom: 'clamp(12px,1.8vh,22px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+            }}
+          >
+            {/* Thin rule with logo */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 'clamp(28px,4vw,56px)', height: 1, background: 'rgba(255,37,64,0.35)' }} />
+              <img src="/logo-mark.png" alt="" aria-hidden
+                style={{ width: 18, height: 18, objectFit: 'contain', opacity: 0.45 }}
+                onError={e => { e.currentTarget.style.display = 'none' }}
+              />
+              <div style={{ width: 'clamp(28px,4vw,56px)', height: 1, background: 'rgba(255,37,64,0.35)' }} />
+            </div>
+            {/* Nameplate */}
             <TitleWord delay={0} style={{
               fontFamily: "'Rajdhani', monospace",
-              fontSize: 'clamp(11px,1vw,14px)',
-              letterSpacing: '0.32em', textTransform: 'uppercase',
-              color: 'rgba(240,238,234,0.7)', fontWeight: 500,
+              fontSize: 'clamp(10px,0.9vw,13px)',
+              letterSpacing: '0.38em', textTransform: 'uppercase',
+              color: 'rgba(240,238,234,0.55)', fontWeight: 500,
             }}>{lh.nameplate}</TitleWord>
-            <img src="/logo-mark.png" alt="" aria-hidden
-              style={{ width: 22, height: 22, objectFit: 'contain', opacity: 0.5 }}
-              onError={e => { e.currentTarget.style.display = 'none' }}
-            />
-          </div>
+          </m.div>
 
           {/* title lines — lineHeight 0.78 compresses vertical footprint */}
           <div style={{
@@ -1064,11 +1366,11 @@ export default function LabHero({ hideTopBar = false }) {
             lineHeight: 0.78, letterSpacing: '0.06em', textTransform: 'uppercase',
           }}>
             <div><TitleWord delay={0.09} scramble>{lh.titleLines[0]}</TitleWord></div>
-            <div><TitleWord delay={0.18} accent scramble>{lh.titleLines[1]}</TitleWord></div>
+            <div><TitleWord delay={0.18} accent scramble periodic>{lh.titleLines[1]}</TitleWord></div>
             <div><TitleWord delay={0.27} scramble>{lh.titleLines[2]}</TitleWord></div>
           </div>
 
-          {/* roles — flows directly below title, no separate absolute positioning */}
+          {/* roles */}
           <TitleWord delay={0.42} style={{
             display: 'block',
             marginTop: 'clamp(14px,2vh,22px)',
@@ -1078,9 +1380,9 @@ export default function LabHero({ hideTopBar = false }) {
             color: 'rgba(240,238,234,0.65)', fontWeight: 400,
           }}>
             {lh.roles[0]}
-            <span style={{ color: 'var(--color-accent)', opacity: 0.6, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
+            <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
             {lh.roles[1]}
-            <span style={{ color: 'var(--color-accent)', opacity: 0.6, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
+            <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
             {lh.roles[2]}
           </TitleWord>
         </div>
@@ -1094,7 +1396,8 @@ export default function LabHero({ hideTopBar = false }) {
         zIndex: 10,
         pointerEvents: 'none',
       }}>
-        <button
+        <a
+          href="#cases"
           style={{
             fontFamily: "'Rajdhani', monospace",
             fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase',
@@ -1105,12 +1408,13 @@ export default function LabHero({ hideTopBar = false }) {
             clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
             transition: 'background-color 0.2s',
             pointerEvents: 'auto',
+            textDecoration: 'none',
           }}
           onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,37,64,0.1)' }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
         >
           {lh.cta} <span style={{ fontSize: 14 }}>→</span>
-        </button>
+        </a>
 
         {/* Scroll mouse icon */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
@@ -1146,59 +1450,137 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>
 
       {/* ══ LEFT HUD ══ */}
-      <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none', minWidth: 140 }}>
         <m.div style={{ x: leftPX, y: leftPY }}>
-          <HudPanel visible={hudVisible} delay={0.2} style={{}}>
-            {lh.skills.map((label, i) => (
-              <div key={label} style={{ marginBottom: i < 2 ? 28 : 0 }}>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.7rem', color: 'var(--color-accent)', lineHeight: 1 }}>
-                  <TickCounter target={i + 1} active={hudVisible} />
-                </div>
-                <div style={{ fontFamily: "'Rajdhani', monospace", fontSize: 'clamp(11px,1vw,13px)', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.65)', marginTop: 4 }}>
-                  <ScrambleLabel text={label} active={hudVisible} />
+          {lh.skills.map((label, i) => (
+            <m.div
+              key={label}
+              initial={{ opacity: 0, x: -16 }}
+              animate={hudVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 28, delay: 0.18 + i * 0.09 }}
+              style={{ marginBottom: i < lh.skills.length - 1 ? 22 : 0 }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* Arc gauge */}
+                <ArcGauge
+                  value={SKILL_DATA[i].value}
+                  active={isActive}
+                  delay={0.7 + i * 0.12}
+                  metric={SKILL_DATA[i].metric}
+                />
+
+                {/* Text column */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {/* Index + rule */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <span style={{
+                      fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.2rem',
+                      color: 'var(--color-accent)', lineHeight: 1, flexShrink: 0,
+                    }}>
+                      <TickCounter target={i + 1} active={hudVisible} />
+                    </span>
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,37,64,0.18)' }} />
+                  </div>
+
+                  {/* Label */}
+                  <div style={{
+                    fontFamily: "'Rajdhani', monospace",
+                    fontSize: 'clamp(9px,0.8vw,11px)', letterSpacing: '0.18em',
+                    textTransform: 'uppercase', color: 'rgba(240,238,234,0.75)',
+                    lineHeight: 1.2,
+                  }}>
+                    <ScrambleLabel text={label} active={hudVisible} />
+                  </div>
+
+                  {/* Tag */}
+                  <m.div
+                    initial={{ opacity: 0 }}
+                    animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ duration: 0.4, delay: 1.0 + i * 0.12 }}
+                    style={{
+                      marginTop: 3,
+                      fontFamily: "'Rajdhani', monospace", fontSize: '8px',
+                      letterSpacing: '0.22em', color: 'rgba(255,37,64,0.5)',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {SKILL_DATA[i].tag}
+                  </m.div>
                 </div>
               </div>
-            ))}
-          </HudPanel>
+            </m.div>
+          ))}
         </m.div>
       </div>
 
       {/* ══ RIGHT HUD ══ */}
       <div style={{ position: 'absolute', right: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
       <m.div style={{ x: rightPX, y: rightPY }}>
-      <HudPanel visible={hudVisible} delay={0.2} style={{
-        maxWidth: 190, textAlign: 'right',
-      }}>
-        <HudLabel style={{ lineHeight: 1.7, marginBottom: 18 }}>
-          {lh.rightCopy.map((line) => (
-            <span key={line}>{line}<br /></span>
-          ))}
-        </HudLabel>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14, marginBottom: 14 }}>
-          <HudLabel dim>{lh.basedInLabel}</HudLabel>
-          <HudLabel style={{ color: 'rgba(240,238,234,0.35)', marginTop: 2 }}>{lh.coordinates}</HudLabel>
-        </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14, marginBottom: 14 }}>
-          <HudLabel dim>{lh.systemsLabel}</HudLabel>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 3, marginTop: 5 }}>
-            {Array.from({ length: 7 }).map((_, i) => (
-              <m.span key={i}
-                animate={{ scaleY: [0.3, 1, 0.3] }}
-                transition={{ duration: 0.65 + i * 0.08, repeat: Infinity, delay: i * 0.1 }}
-                style={{ display: 'inline-block', width: 3, height: 14, background: 'var(--color-accent)', transformOrigin: 'bottom' }}
-              />
+      <m.div
+        initial={{ opacity: 0, x: 16 }}
+        animate={hudVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28, delay: 0.22 }}
+        style={{ maxWidth: 190, textAlign: 'right' }}
+      >
+        {/* Copy — enter with blur bridge */}
+        <m.div
+          initial={{ filter: 'blur(6px)', opacity: 0 }}
+          animate={hudVisible ? { filter: 'blur(0px)', opacity: 1 } : {}}
+          transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.28 }}
+          style={{ marginBottom: 20 }}
+        >
+          <HudLabel style={{ lineHeight: 1.85 }}>
+            {lh.rightCopy.map((line) => (
+              <span key={line}>{line}<br /></span>
             ))}
+          </HudLabel>
+        </m.div>
+
+        {/* Location + globe */}
+        <m.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={hudVisible ? { opacity: 1, x: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 240, damping: 26, delay: 0.34 }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 12, marginBottom: 14 }}
+        >
+          <HudLabel dim>{lh.basedInLabel}</HudLabel>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10, marginTop: 6 }}>
+            <div style={{ textAlign: 'right' }}>
+              <HudLabel accent>{lh.locationValue}</HudLabel>
+              <HudLabel style={{ color: 'rgba(255,255,255,0.22)', marginTop: 1, fontSize: '9px', letterSpacing: '0.16em' }}>{lh.coordinates}</HudLabel>
+            </div>
+            <SpinningGlobe size={38} />
           </div>
-          <HudLabel accent style={{ marginTop: 3 }}>{lh.systemsStatus}</HudLabel>
-        </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14 }}>
+        </m.div>
+
+        {/* Systems + audio bars */}
+        <m.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={hudVisible ? { opacity: 1, x: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 240, damping: 26, delay: 0.42 }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 12, marginBottom: 14 }}
+        >
+          <HudLabel dim>{lh.systemsLabel}</HudLabel>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
+            <LiveEQ active={hudVisible} width={80} height={22} bars={11} />
+          </div>
+          <HudLabel accent style={{ marginTop: 4, fontSize: '9px', letterSpacing: '0.2em' }}>{lh.systemsStatus}</HudLabel>
+        </m.div>
+
+        {/* Response + waveform */}
+        <m.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={hudVisible ? { opacity: 1, x: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 240, damping: 26, delay: 0.50 }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 12 }}
+        >
           <HudLabel dim>{lh.responseLabel}</HudLabel>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, marginTop: 5 }}>
-            <Waveform />
-            <HudLabel accent>0.01ms</HudLabel>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10, marginTop: 6 }}>
+            <LiveOscilloscope active={hudVisible} width={56} height={20} />
+            <HudLabel accent style={{ fontSize: '11px' }}>0.01ms</HudLabel>
           </div>
-        </div>
-      </HudPanel>
+        </m.div>
+      </m.div>
       </m.div>
       </div>
 
@@ -1236,9 +1618,12 @@ export default function LabHero({ hideTopBar = false }) {
       <HudPanel visible={hudVisible} delay={0.3} style={{
         position: 'absolute', bottom: 'clamp(16px,3vh,36px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
-        <HudLabel dim style={{ marginBottom: 6 }}>{lh.locationLabel}</HudLabel>
-        <HudLabel accent style={{ marginBottom: 8 }}>{lh.locationValue}</HudLabel>
-        <WorldMapMini />
+        <HudLabel dim style={{ marginBottom: 4 }}>{lh.locationLabel}</HudLabel>
+        <HudLabel accent style={{ marginBottom: 6 }}>{lh.locationValue}</HudLabel>
+        <HudLabel style={{ color: 'rgba(255,255,255,0.22)', fontSize: '8px', letterSpacing: '0.14em', marginBottom: 8 }}>
+          4.7110° N · 74.0721° W
+        </HudLabel>
+        <RadarPing />
       </HudPanel>
 
       {/* ══ BOTTOM-RIGHT ══ */}

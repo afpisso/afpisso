@@ -8,11 +8,12 @@ import { HuntProvider } from './contexts/HuntContext';
 import HuntHUD from './components/HuntHUD';
 import { usePageMeta } from './hooks/usePageMeta';
 import Nav from './components/Nav';
-import Hero from './components/Hero';
+import HeroStatementPin from './components/HeroStatementPin';
 import CaseFiles from './components/CaseFiles';
 import Footer from './components/Footer';
 import MenuOverlay from './components/MenuOverlay';
-import Ticker from './components/Ticker';
+import StatsStrip from './components/StatsStrip';
+import HomeGeometryLayer from './components/HomeGeometryLayer';
 
 // Below-fold homepage sections — deferred until after hero paint
 const FieldNotes = lazy(() => import('./components/FieldNotes'));
@@ -50,23 +51,6 @@ function SectionFallback() {
 }
 
 // ── Ticker content ─────────────────────────────────────────────────────────────
-const TICKER_ITEMS = [
-  'Game UX/UI Design',
-  'HUD Clarity',
-  'UI Systems',
-  'Player Decision-Making',
-  'UX Lead',
-  'LiveOps UX',
-  'UEFN / Fortnite',
-  'VR Interfaces',
-  'Accessibility',
-  '11+ Years',
-  'Bogotá — Remote',
-  'Clarity before polish',
-];
-// Accent highlight: items at these indices render in red
-const TICKER_ACCENT = [0, 4, 7];
-
 // ── HomePage ───────────────────────────────────────────────────────────────────
 function HomePage({ onMenuOpen }) {
   usePageMeta({});
@@ -74,11 +58,9 @@ function HomePage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
+      <HomeGeometryLayer />
       <main id="main-content">
-        <Hero />
-
-        {/* Ticker — breaks the hero/work transition, establishes skill set */}
-        <Ticker items={TICKER_ITEMS} accent={TICKER_ACCENT} speed={42} />
+        <HeroStatementPin hideLabHeroTopBar />
 
         <CaseFiles />
         <Suspense fallback={<SectionFallback />}>
