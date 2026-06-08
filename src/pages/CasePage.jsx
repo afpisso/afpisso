@@ -1099,13 +1099,43 @@ export default function CasePage({ onMenuOpen }) {
         )}
 
         {/* ── Work screenshot gallery ─────────────────────────────────────────
-             Always rendered — shows placeholders until real images are added
-             to caseData.gallery in cases.js                                 */}
-        <CaseGallery
-          gallery={caseData.gallery}
-          caseId={caseData.id}
-          title={caseData.title}
-        />
+             Shows gallery when images are defined; WIP notice otherwise.   */}
+        {caseData.gallery?.length > 0 ? (
+          <CaseGallery
+            gallery={caseData.gallery}
+            caseId={caseData.id}
+            title={caseData.title}
+          />
+        ) : (
+          <m.div
+            className="max-w-[1400px] mx-auto px-6 py-10"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          >
+            <div
+              style={{
+                border: `1px solid var(--color-rule)`,
+                borderLeft: `3px solid var(--color-accent)`,
+                backgroundColor: 'rgba(255,37,64,0.025)',
+                padding: '20px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 16,
+              }}
+            >
+              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: '18px', color: 'var(--color-accent)', flexShrink: 0 }}>{'⚠'}</span>
+              <div>
+                <div style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.2em', color: 'var(--color-accent)', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>
+                  // Work in progress
+                </div>
+                <p style={{ fontFamily: MONO, fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.7, margin: 0 }}>
+                  Screen captures for this case are not yet available for public sharing. Check back soon.
+                </p>
+              </div>
+            </div>
+          </m.div>
+        )}
 
         {/* NDA notice if applicable */}
         {(caseData.visibility === 'nda-safe') && content?.quickFacts?.confidentiality && (

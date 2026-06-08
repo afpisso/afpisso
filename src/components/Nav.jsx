@@ -272,7 +272,6 @@ export default function Nav({ onMenuOpen }) {
                   <div className="hidden lg:flex items-center gap-1">
                     {[
                       { to: '/work', label: t.nav.work },
-                      { to: '/notes', label: t.nav.notes },
                     ].map(({ to, label }) => (
                       <NavLink
                         key={to}
@@ -489,7 +488,6 @@ export default function Nav({ onMenuOpen }) {
                   <div className="hidden sm:flex items-center">
                     {[
                       { to: '/work', label: t.nav.work },
-                      { to: '/notes', label: t.nav.notes },
                     ].map(({ to, label }) => (
                       <NavLink
                         key={to}

@@ -1272,6 +1272,17 @@ export const cases = [
     tags: ['Game Design', 'Product Design', 'Mobile Games', 'Systems Design', 'Progression Design', 'UX Flows', 'Documentation', 'Prototype Design'],
     relatedNotes: ['feedback-reduces-guesswork', 'player-decision-making-ux'],
     cta: 'View Zomvilles case',
+    gallery: [
+      '/cases/zomvilles/zomvilles-01.webp',
+      '/cases/zomvilles/zomvilles-02.webp',
+      '/cases/zomvilles/zomvilles-03.webp',
+      '/cases/zomvilles/zomvilles-04.webp',
+      '/cases/zomvilles/zomvilles-05.webp',
+      '/cases/zomvilles/zomvilles-06.webp',
+      '/cases/zomvilles/zomvilles-07.webp',
+      '/cases/zomvilles/zomvilles-08.webp',
+      '/cases/zomvilles/zomvilles-09.webp',
+    ],
     content: {
       summary:
         'Zomvilles was a mobile hybrid-casual roguelite prototype inspired by the fast survival loop of games like Survivor.io and Vampire Survivors. I worked on the project for one year as Lead Game Designer, helping structure the product from core mechanics to UX flows, documentation, combat balance, progression and stakeholder communication.\n\nThe project reached prototype stage and its launch was later paused before live performance data could be collected. Because of that, this case focuses on product structure, systems, UX flows and the decisions that helped turn an early idea into a playable mobile roguelite prototype.',
@@ -1729,6 +1740,14 @@ export const cases = [
     category: 'games',
     thumbnail: '/cases/star-wars-roguelike-one/hero.webp',
     trailerSrc: '/cases/star-wars-roguelike-one/roguelike-one-trailer.mp4',
+    gallery: [
+      '/cases/star-wars-roguelike-one/starwars-fortnite-01.webp',
+      '/cases/star-wars-roguelike-one/starwars-fortnite-02.webp',
+      '/cases/star-wars-roguelike-one/starwars-fortnite-03.webp',
+      '/cases/star-wars-roguelike-one/starwars-fortnite-04.webp',
+      '/cases/star-wars-roguelike-one/starwars-fortnite-05.webp',
+      '/cases/star-wars-roguelike-one/starwars-fortnite-06.webp',
+    ],
     headline: 'Designing UX/UI for a Star Wars roguelike built inside Fortnite Creative.',
     headlineEs: 'Diseño de UX/UI para un roguelike de Star Wars construido dentro de Fortnite Creative.',
     description:
