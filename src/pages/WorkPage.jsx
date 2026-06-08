@@ -793,6 +793,25 @@ export default function WorkPage({ onMenuOpen }) {
               </ScrambleText>
             </m.h1>
 
+            {t.caseFiles.sectionTitle && (
+              <m.p
+                className="uppercase mb-6"
+                style={{
+                  fontFamily: '"Bebas Neue", sans-serif',
+                  fontSize: 'clamp(1rem, 2vw, 1.45rem)',
+                  color: 'var(--color-fg-dim)',
+                  lineHeight: 1.3,
+                  letterSpacing: '0.04em',
+                  whiteSpace: 'pre-line',
+                }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.08 }}
+              >
+                {t.caseFiles.sectionTitle}
+              </m.p>
+            )}
+
             <m.p
               style={{
                 fontFamily: '"Play", sans-serif',
@@ -803,7 +822,7 @@ export default function WorkPage({ onMenuOpen }) {
               }}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.1 }}
+              transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.14 }}
             >
               {t.caseFiles.description}
             </m.p>
