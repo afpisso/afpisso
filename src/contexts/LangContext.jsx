@@ -503,7 +503,7 @@ const translations = {
     },
     about: {
       label: 'Sobre mí',
-      sectionTitle: 'Donde falla\nla claridad.',
+      sectionTitle: 'Diseño entre\nidea, producto y experiencia.',
       fullProfile: 'Perfil completo',
       headline: '¿Dónde se rompe la claridad?',
       bio1: 'Empecé en ingeniería de sistemas y terminé construyendo los loops de retroalimentación que los jugadores no notan cuando funcionan. Once años en juegos lanzados, experiencias UEFN en vivo, VR y producto digital.',
