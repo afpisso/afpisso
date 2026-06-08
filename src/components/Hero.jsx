@@ -543,12 +543,13 @@ export default function Hero() {
               </span>
             </div>
             <p style={{
-              fontFamily: '"Play", sans-serif',
-              fontSize: 'clamp(15px, 1.8vw, 20px)',
-              color: 'var(--color-fg-dim)',
-              lineHeight: 1.6,
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: 'clamp(1.6rem, 3.5vw, 3rem)',
+              color: 'var(--color-fg)',
+              lineHeight: 1.1,
               maxWidth: '600px',
-              letterSpacing: '0.01em',
+              letterSpacing: '0.02em',
+              whiteSpace: 'pre-line',
             }}>
               {t.hero.subtitle}
             </p>
