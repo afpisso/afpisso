@@ -328,6 +328,114 @@ section[id] {
   }
 }
 
+@media (min-width: 681px) and (max-width: 1100px) {
+  .lab-footer-section {
+    padding: 18px !important;
+  }
+
+  .lab-footer-shell {
+    height: auto !important;
+    min-height: clamp(760px, 92svh, 900px) !important;
+  }
+
+  .lab-footer-body {
+    display: grid !important;
+    flex-direction: initial !important;
+    align-items: center !important;
+    height: 100% !important;
+    grid-template-columns: minmax(118px, 0.26fr) minmax(300px, 1fr) minmax(118px, 0.26fr) !important;
+    padding-top: clamp(34px, 5vw, 58px) !important;
+    padding-bottom: clamp(22px, 3vw, 38px) !important;
+  }
+
+  .lab-footer-center,
+  .lab-footer-nav {
+    order: initial !important;
+  }
+
+  .lab-footer-connect {
+    order: initial !important;
+  }
+
+  .lab-footer-center {
+    grid-column: 2 !important;
+    align-self: stretch !important;
+    min-height: 0 !important;
+    width: auto !important;
+  }
+
+  .lab-footer-nav {
+    grid-column: 1 !important;
+    align-items: flex-start !important;
+    align-self: start !important;
+    padding: clamp(34px, 5vh, 58px) 10px clamp(20px, 3vw, 34px) clamp(18px, 3vw, 34px) !important;
+  }
+
+  .lab-footer-connect {
+    grid-column: 3 !important;
+    align-items: flex-end !important;
+    align-self: start !important;
+    padding: clamp(34px, 5vh, 58px) clamp(18px, 2.4vw, 28px) clamp(20px, 3vw, 34px) 10px !important;
+  }
+
+  .lab-footer-center > div:nth-child(2) {
+    top: clamp(78px, 8.4vw, 104px) !important;
+    font-size: clamp(3.2rem, 7.2vw, 5.4rem) !important;
+  }
+
+  .lab-footer-figure {
+    width: clamp(240px, 29%, 340px) !important;
+    transform: translateX(-50%) translateY(6%) !important;
+  }
+
+  .lab-footer-skillbar {
+    justify-content: center !important;
+    padding-left: 8% !important;
+    padding-right: 8% !important;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 820px) {
+  .lab-footer-shell {
+    height: 820px !important;
+  }
+
+  .lab-footer-body {
+    padding-top: 42px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .lab-footer-nav,
+  .lab-footer-connect {
+    align-self: start !important;
+    padding-top: 48px !important;
+  }
+
+  .lab-footer-center > div:nth-child(2) {
+    top: 86px !important;
+    font-size: clamp(3.6rem, 5vw, 5.8rem) !important;
+  }
+
+  .lab-footer-figure {
+    width: clamp(250px, 22%, 340px) !important;
+    transform: translateX(-50%) translateY(7%) !important;
+  }
+}
+
+@media (min-width: 981px) and (max-width: 1320px) {
+  .lab-footer-body {
+    grid-template-columns: minmax(128px, 0.26fr) minmax(340px, 1fr) minmax(128px, 0.26fr) !important;
+  }
+
+  .lab-footer-nav {
+    padding-left: clamp(24px, 3vw, 44px) !important;
+  }
+
+  .lab-footer-connect {
+    padding-right: clamp(20px, 2.6vw, 34px) !important;
+  }
+}
+
 @media (max-width: 680px) {
   .lab-footer-shell {
     min-height: max(1040px, 112svh) !important;

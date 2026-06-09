@@ -346,7 +346,7 @@ export default function CaseFiles() {
 
       <section
         id="cases"
-        className="py-36 relative"
+        className="py-28 md:py-32 lg:py-36 relative"
         style={{ borderTop: '1px solid var(--color-rule)' }}
       >
         {/* Mobile: solid bg — on desktop the gradient does the work */}
@@ -355,7 +355,7 @@ export default function CaseFiles() {
         <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
           background: 'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 60%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.55) 70%, rgba(10,10,10,0.15) 78%, transparent 85%)',
         }} />
-        <div className="relative z-10 lg:max-w-[62%] lg:mr-auto px-6">
+        <div className="relative z-10 md:max-w-[82ch] md:mx-auto lg:max-w-[62%] lg:mx-0 lg:mr-auto px-6">
 
           {/* Section header */}
           <div className="mb-16">

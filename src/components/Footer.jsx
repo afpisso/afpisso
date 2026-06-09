@@ -518,7 +518,7 @@ export default function Footer() {
         style={{
           position: 'relative',
           width: '100%',
-          height: 'clamp(560px, 80vh, 860px)',
+          height: 'clamp(720px, 88vh, 900px)',
           filter: 'drop-shadow(0 0 34px rgba(255,37,64,0.18))',
         }}
       >
@@ -632,14 +632,14 @@ export default function Footer() {
               viewport={{ once: true, amount: 0.1 }}
               transition={SPRING}
               style={{
-                gridColumn: 1,
-                minWidth: 0,
-                padding: 'clamp(36px, 5vh, 68px) clamp(12px, 1.4vw, 22px) clamp(22px, 3vw, 40px) clamp(28px, 4vw, 64px)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                alignSelf: 'center',
-              }}
+              gridColumn: 1,
+              minWidth: 0,
+              padding: 'clamp(36px, 5vh, 68px) clamp(12px, 1.4vw, 22px) clamp(22px, 3vw, 40px) clamp(28px, 4vw, 64px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              alignSelf: 'start',
+            }}
             >
               <div
                 style={{
@@ -714,7 +714,7 @@ export default function Footer() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-end',
-                alignSelf: 'center',
+                alignSelf: 'start',
               }}
             >
               <div

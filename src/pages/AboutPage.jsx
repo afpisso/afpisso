@@ -260,7 +260,7 @@ export default function AboutPage({ onMenuOpen }) {
                 ref={photoRef}
                 className="relative overflow-hidden self-end flex-shrink-0"
                 style={{
-                  width: 'clamp(200px, 26vw, 400px)',
+                  width: 'clamp(240px, 34vw, 400px)',
                   aspectRatio: '3 / 4',
                   cursor: 'zoom-in',
                 }}

@@ -1320,9 +1320,15 @@ function HeroTopBar({ visible }) {
 
 export default function LabHero({ hideTopBar = false }) {
   const [phase, setPhase] = useState(P.BOOT)
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth <= 680
+  const [viewport, setViewport] = useState(
+    () => {
+      const width = typeof window !== 'undefined' ? window.innerWidth : 1440
+      return { mobile: width <= 680, tablet: width > 680 && width <= 1023 }
+    }
   )
+  const isMobile = viewport.mobile
+  const isTablet = viewport.tablet
+  const isCompact = isMobile || isTablet
   const reduced = useReducedMotion()
   const { t } = useLang()
   const lh = t.labHero
@@ -1340,11 +1346,16 @@ export default function LabHero({ hideTopBar = false }) {
   const portraitPY = useSpring(useMotionValue(0), portraitSpringCfg)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 680px)')
-    const sync = () => setIsMobile(mq.matches)
+    const mobileMq = window.matchMedia('(max-width: 680px)')
+    const tabletMq = window.matchMedia('(min-width: 681px) and (max-width: 1023px)')
+    const sync = () => setViewport({ mobile: mobileMq.matches, tablet: tabletMq.matches })
     sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
+    mobileMq.addEventListener('change', sync)
+    tabletMq.addEventListener('change', sync)
+    return () => {
+      mobileMq.removeEventListener('change', sync)
+      tabletMq.removeEventListener('change', sync)
+    }
   }, [])
 
   useEffect(() => {
@@ -1398,7 +1409,11 @@ export default function LabHero({ hideTopBar = false }) {
   // Portrait sits at vertical centre-top; title overlaps its lower third.
   // All centre elements are absolutely positioned so text can float over photo.
   // Fixed aspect ratio (3:4) — objectFit:cover always crops identically across viewports
-  const PORTRAIT_W = isMobile ? 'min(76vw,310px)' : 'clamp(390px,42vw,630px)'
+  const PORTRAIT_W = isMobile
+    ? 'min(76vw,310px)'
+    : isTablet
+      ? 'clamp(340px,44vw,470px)'
+      : 'clamp(390px,42vw,630px)'
 
   return (
     <section
@@ -1415,10 +1430,10 @@ export default function LabHero({ hideTopBar = false }) {
       <DynamicBackground phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} mobile={isMobile} />
 
       {/* ── Data connectors ── */}
-      {!isMobile && <DataConnectors phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />}
+      {!isCompact && <DataConnectors phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />}
 
       {/* ── Top HUD bar ── */}
-      {!hideTopBar && <HeroTopBar visible={hudVisible} />}
+      {!hideTopBar && !isCompact && <HeroTopBar visible={hudVisible} />}
 
       {/* ── Viewport corner brackets ── */}
       {['top-left','top-right','bottom-left','bottom-right'].map(pos => (
@@ -1436,7 +1451,7 @@ export default function LabHero({ hideTopBar = false }) {
       ))}
 
       {/* ══ Portrait + orbit — shared parallax wrapper ══ */}
-      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 4, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : isTablet ? '51%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 4, pointerEvents: 'none' }}>
         <m.div style={{ x: portraitPX, y: portraitPY }}>
           <m.div
             animate={{ opacity: phase >= P.SCAN ? 1 : 0 }}
@@ -1448,7 +1463,7 @@ export default function LabHero({ hideTopBar = false }) {
       </div>
 
       {/* ══ PORTRAIT — parallax driven, upper portion ══ */}
-      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
+      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : isTablet ? '51%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
       <m.div style={{
         x: portraitPX, y: portraitPY,
         width: PORTRAIT_W, aspectRatio: '3/4',
@@ -1462,11 +1477,11 @@ export default function LabHero({ hideTopBar = false }) {
       {titleVisible && (
         <div style={{
           position: 'absolute',
-          bottom: isMobile ? 'clamp(150px,18svh,178px)' : 'clamp(88px,12vh,140px)',
+          bottom: isMobile ? 'clamp(150px,18svh,178px)' : isTablet ? 'clamp(108px,13svh,150px)' : 'clamp(88px,12vh,140px)',
           left: 0, right: 0,
           textAlign: 'center',
           zIndex: 10,
-          filter: isMobile ? 'drop-shadow(0 2px 16px rgba(8,8,8,0.88))' : 'drop-shadow(0 2px 24px rgba(8,8,8,0.9))',
+          filter: isCompact ? 'drop-shadow(0 2px 16px rgba(8,8,8,0.88))' : 'drop-shadow(0 2px 24px rgba(8,8,8,0.9))',
           pointerEvents: 'auto',
         }}>
           {/* nameplate + decorative separator */}
@@ -1475,8 +1490,8 @@ export default function LabHero({ hideTopBar = false }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.05 }}
             style={{
-              marginBottom: isMobile ? 6 : 'clamp(12px,1.8vh,22px)',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? 8 : 10,
+              marginBottom: isMobile ? 6 : isTablet ? 8 : 'clamp(12px,1.8vh,22px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isCompact ? 8 : 10,
             }}
           >
             {/* Thin rule with logo */}
@@ -1491,22 +1506,22 @@ export default function LabHero({ hideTopBar = false }) {
             {/* Nameplate */}
             <TitleWord delay={0} style={{
               fontFamily: "'Play', monospace",
-              fontSize: isMobile ? '9px' : 'clamp(10px,0.9vw,13px)',
-              letterSpacing: isMobile ? '0.18em' : '0.38em', textTransform: 'uppercase',
+              fontSize: isMobile ? '9px' : isTablet ? '10px' : 'clamp(10px,0.9vw,13px)',
+              letterSpacing: isCompact ? '0.18em' : '0.38em', textTransform: 'uppercase',
               color: 'rgba(240,238,234,0.55)', fontWeight: 500,
-              maxWidth: isMobile ? '30ch' : undefined,
-              lineHeight: isMobile ? 1.35 : undefined,
+              maxWidth: isCompact ? '30ch' : undefined,
+              lineHeight: isCompact ? 1.35 : undefined,
             }}>{lh.nameplate}</TitleWord>
           </m.div>
 
           {/* title lines — lineHeight 0.78 compresses vertical footprint */}
           <div style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: isMobile ? 'clamp(2.06rem,9.8vw,2.72rem)' : 'clamp(2.6rem,5.6vw,6.2rem)',
-            lineHeight: isMobile ? 0.76 : 0.78,
-            letterSpacing: isMobile ? '0.018em' : '0.06em',
+            fontSize: isMobile ? 'clamp(2.06rem,9.8vw,2.72rem)' : isTablet ? 'clamp(2.45rem,6.1vw,4.3rem)' : 'clamp(2.6rem,5.6vw,6.2rem)',
+            lineHeight: isCompact ? 0.76 : 0.78,
+            letterSpacing: isCompact ? '0.018em' : '0.06em',
             textTransform: 'uppercase',
-            padding: isMobile ? '0 18px' : undefined,
+            padding: isCompact ? '0 18px' : undefined,
             overflowWrap: 'normal',
           }}>
             {titleLines.map((line, i) => (
@@ -1614,7 +1629,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>
 
       {/* ── "move cursor to reveal" hint ── */}
-      <HudPanel visible={isActive && !isMobile} delay={0.4} style={{
+      <HudPanel visible={isActive && !isCompact} delay={0.4} style={{
         position: 'absolute',
         left: '50%', top: isMobile ? 'auto' : 'calc(42% + clamp(170px,26vh,330px))',
         bottom: isMobile ? 'clamp(78px,10svh,96px)' : undefined,
@@ -1627,7 +1642,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>
 
       {/* ══ LEFT HUD ══ */}
-      {!isMobile && <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none', minWidth: 140 }}>
+      {!isCompact && <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none', minWidth: 140 }}>
         <m.div style={{ x: leftPX, y: leftPY }}>
           {lh.skills.map((label, i) => (
             <m.div
@@ -1691,7 +1706,7 @@ export default function LabHero({ hideTopBar = false }) {
       </div>}
 
       {/* ══ RIGHT HUD ══ */}
-      {!isMobile && <div style={{ position: 'absolute', right: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
+      {!isCompact && <div style={{ position: 'absolute', right: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
       <m.div style={{ x: rightPX, y: rightPY }}>
       <m.div
         initial={{ opacity: 0, x: 16 }}
@@ -1762,7 +1777,7 @@ export default function LabHero({ hideTopBar = false }) {
       </div>}
 
       {/* ══ TOP-LEFT HUD ══ */}
-      {!isMobile && <HudPanel visible={hudVisible} delay={0.1} style={{
+      {!isCompact && <HudPanel visible={hudVisible} delay={0.1} style={{
         position: 'absolute', top: 'clamp(60px,11vh,100px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
         <HudLabel dim><ScrambleLabel text={lh.interfaceMode} active={hudVisible} /></HudLabel>
@@ -1777,7 +1792,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>}
 
       {/* ══ TOP-RIGHT HUD ══ */}
-      {!isMobile && <HudPanel visible={hudVisible} delay={0.15} style={{
+      {!isCompact && <HudPanel visible={hudVisible} delay={0.15} style={{
         position: 'absolute', top: 'clamp(60px,11vh,100px)', right: 'clamp(24px,3vw,52px)',
         textAlign: 'right', zIndex: 10, pointerEvents: 'none',
       }}>
@@ -1792,7 +1807,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>}
 
       {/* ══ BOTTOM-LEFT ══ */}
-      {!isMobile && <HudPanel visible={hudVisible} delay={0.3} style={{
+      {!isCompact && <HudPanel visible={hudVisible} delay={0.3} style={{
         position: 'absolute', bottom: 'clamp(48px,7vh,80px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
         <HudLabel style={{ color: 'rgba(255,255,255,0.22)', fontSize: '8px', letterSpacing: '0.14em', marginBottom: 8 }}>
@@ -1802,7 +1817,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>}
 
       {/* ══ BOTTOM-RIGHT ══ */}
-      {!isMobile && <HudPanel visible={isActive} delay={0.4} style={{
+      {!isCompact && <HudPanel visible={isActive} delay={0.4} style={{
         position: 'absolute', bottom: 'clamp(16px,3vh,36px)', right: 'clamp(24px,3vw,52px)', zIndex: 10, textAlign: 'right', pointerEvents: 'none',
       }}>
         <div style={{

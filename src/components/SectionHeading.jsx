@@ -23,31 +23,40 @@ import { useEffect, useState } from 'react';
  */
 
 // Indent per line (not per word) — subtle, editorial
-const getLineIndent = (i, mobile) => {
+const getLineIndent = (i, compact, mobile) => {
   if (i === 0) return '0';
   if (mobile) return 'clamp(10px, 3vw, 16px)';
+  if (compact) return 'clamp(16px, 3vw, 32px)';
   // Clamp: generous on desktop, contained on mobile
   return `clamp(24px, 4vw, 72px)`;
 };
 
-function useIsMobile() {
-  const [mobile, setMobile] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth <= 680
+function useViewportBand() {
+  const [viewport, setViewport] = useState(
+    () => {
+      const width = typeof window !== 'undefined' ? window.innerWidth : 1440;
+      return { compact: width <= 1023, mobile: width <= 680 };
+    }
   );
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 680px)');
-    const sync = () => setMobile(mq.matches);
+    const compactMq = window.matchMedia('(max-width: 1023px)');
+    const mobileMq = window.matchMedia('(max-width: 680px)');
+    const sync = () => setViewport({ compact: compactMq.matches, mobile: mobileMq.matches });
     sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+    compactMq.addEventListener('change', sync);
+    mobileMq.addEventListener('change', sync);
+    return () => {
+      compactMq.removeEventListener('change', sync);
+      mobileMq.removeEventListener('change', sync);
+    };
   }, []);
 
-  return mobile;
+  return viewport;
 }
 
 export default function SectionHeading({ label, title, page, delay = 0 }) {
-  const isMobile = useIsMobile();
+  const { compact: isCompact, mobile: isMobile } = useViewportBand();
 
   // Split on \n for explicit line control; uppercase each line
   const lines = title
@@ -59,7 +68,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
       {/* ── Top row: chamfered red chip + PAGE number ── */}
       <m.div
         className="flex items-center justify-between mb-5"
-        style={{ gap: isMobile ? 14 : 20, alignItems: isMobile ? 'flex-start' : 'center' }}
+        style={{ gap: isCompact ? 14 : 20, alignItems: isCompact ? 'flex-start' : 'center' }}
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
@@ -71,21 +80,21 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
             backgroundColor: 'var(--color-accent)',
             clipPath:
               'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
-            padding: isMobile ? '7px 16px 7px 12px' : '8px 22px 8px 14px',
+            padding: isCompact ? '7px 16px 7px 12px' : '8px 22px 8px 14px',
             display: 'inline-block',
-            maxWidth: isMobile ? 'calc(100% - 64px)' : undefined,
+            maxWidth: isCompact ? 'calc(100% - 64px)' : undefined,
           }}
         >
           <span
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: isMobile ? 'clamp(1.35rem, 7vw, 1.85rem)' : 'clamp(1.6rem, 2.8vw, 2.4rem)',
+              fontSize: isMobile ? 'clamp(1.35rem, 7vw, 1.85rem)' : isCompact ? 'clamp(1.45rem, 4.5vw, 2.05rem)' : 'clamp(1.6rem, 2.8vw, 2.4rem)',
               color: '#0a0a0a',
-              letterSpacing: isMobile ? '0.045em' : '0.06em',
-              lineHeight: isMobile ? 0.95 : 1,
+              letterSpacing: isCompact ? '0.045em' : '0.06em',
+              lineHeight: isCompact ? 0.95 : 1,
               display: 'block',
-              whiteSpace: isMobile ? 'normal' : 'nowrap',
-              textWrap: isMobile ? 'balance' : undefined,
+              whiteSpace: isCompact ? 'normal' : 'nowrap',
+              textWrap: isCompact ? 'balance' : undefined,
             }}
           >
             {label.toUpperCase()}
@@ -97,14 +106,14 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
           className="section-page-num"
           style={{
             fontFamily: '"Play", sans-serif',
-            fontSize: isMobile ? '8px' : '9px',
+            fontSize: isCompact ? '8px' : '9px',
             color: 'var(--color-accent)',
-            letterSpacing: isMobile ? '0.12em' : '0.14em',
+            letterSpacing: isCompact ? '0.12em' : '0.14em',
             textTransform: 'uppercase',
             textAlign: 'right',
-            lineHeight: isMobile ? 1.45 : 1.7,
+            lineHeight: isCompact ? 1.45 : 1.7,
             flexShrink: 0,
-            paddingTop: isMobile ? 4 : 0,
+            paddingTop: isCompact ? 4 : 0,
           }}
         >
           PAGE<br />{page}
@@ -114,7 +123,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
       {/* ── Thin rule between chip and title ── */}
       {lines.length > 0 && (
         <m.div
-          style={{ height: 1, backgroundColor: 'var(--color-rule)', marginBottom: isMobile ? '1.15rem' : '1.75rem' }}
+          style={{ height: 1, backgroundColor: 'var(--color-rule)', marginBottom: isCompact ? '1.15rem' : '1.75rem' }}
           initial={{ scaleX: 0, originX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
@@ -126,17 +135,17 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
       {lines.length > 0 && (
         <h2
           aria-label={lines.join(' ')}
-          style={{ lineHeight: isMobile ? 0.86 : 1.0, maxWidth: '100%' }}
+          style={{ lineHeight: isCompact ? 0.88 : 1.0, maxWidth: '100%' }}
         >
           {lines.map((line, i) => (
             <m.div
               key={i}
               style={{
-                paddingLeft: getLineIndent(i, isMobile),
+                paddingLeft: getLineIndent(i, isCompact, isMobile),
                 overflow: 'hidden',
                 display: 'block',
                 // Second line slightly smaller for visual hierarchy
-                marginTop: i > 0 ? (isMobile ? '0.04em' : '0.08em') : 0,
+                marginTop: i > 0 ? (isCompact ? '0.04em' : '0.08em') : 0,
                 maxWidth: '100%',
               }}
               initial={{ y: '106%' }}
@@ -153,22 +162,22 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
                   fontFamily: '"Bebas Neue", sans-serif',
                   fontSize:
                     i === 0
-                      ? (isMobile ? 'clamp(2.7rem, 13.8vw, 4rem)' : 'clamp(3.8rem, 7.5vw, 8.5rem)')
-                      : (isMobile ? 'clamp(2.35rem, 12.2vw, 3.55rem)' : 'clamp(3.4rem, 6.8vw, 7.6rem)'),
-                  letterSpacing: isMobile ? '0.005em' : '0.01em',
+                      ? (isMobile ? 'clamp(2.7rem, 13.8vw, 4rem)' : isCompact ? 'clamp(3.25rem, 8.2vw, 5.8rem)' : 'clamp(3.8rem, 7.5vw, 8.5rem)')
+                      : (isMobile ? 'clamp(2.35rem, 12.2vw, 3.55rem)' : isCompact ? 'clamp(2.9rem, 7.3vw, 5.1rem)' : 'clamp(3.4rem, 6.8vw, 7.6rem)'),
+                  letterSpacing: isCompact ? '0.005em' : '0.01em',
                   // Second line: stroke/ghost treatment for contrast
                   color: i === 0 ? 'var(--color-fg)' : 'var(--color-fg)',
                   opacity: i === 0 ? 1 : 0.72,
                   display: 'block',
-                  whiteSpace: isMobile ? 'normal' : 'nowrap',
-                  textWrap: isMobile ? 'balance' : undefined,
-                  overflowWrap: isMobile ? 'normal' : undefined,
+                  whiteSpace: isCompact ? 'normal' : 'nowrap',
+                  textWrap: isCompact ? 'balance' : undefined,
+                  overflowWrap: isCompact ? 'normal' : undefined,
                   maxWidth: '100%',
                 }}
               >
                 <GlitchStrokeText
                   silent
-                  style={isMobile ? {
+                  style={isCompact ? {
                     display: 'block',
                     maxWidth: '100%',
                     whiteSpace: 'normal',

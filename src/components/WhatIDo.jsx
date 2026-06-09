@@ -110,7 +110,7 @@ export default function WhatIDo() {
   return (
     <section
       id="what-i-do"
-      className="py-20 relative"
+      className="py-20 md:py-24 lg:py-20 relative"
       style={{ borderTop: '1px solid var(--color-rule)' }}
     >
       {/* Mobile: solid bg */}
@@ -119,7 +119,7 @@ export default function WhatIDo() {
       <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
         background: 'linear-gradient(to left, #0a0a0a 0%, #0a0a0a 60%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.55) 70%, rgba(10,10,10,0.15) 78%, transparent 85%)',
       }} />
-      <div className="relative z-10 lg:max-w-[62%] lg:ml-auto px-6">
+      <div className="relative z-10 md:max-w-[82ch] md:mx-auto lg:max-w-[62%] lg:mx-0 lg:ml-auto px-6">
 
         {/* Header */}
         <div className="mb-16">
