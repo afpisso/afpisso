@@ -443,7 +443,7 @@ function PullQuote({ children }) {
   );
 }
 
-function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
+function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt, fit = 'cover', position = 'center' }) {
   const hasRealImage = Boolean(src);
   const [open,      setOpen]      = useState(false);
   const [hovered,   setHovered]   = useState(false);
@@ -473,7 +473,8 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt }) {
         <img
           src={src}
           alt={alt || label}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full"
+          style={{ objectFit: fit, objectPosition: position }}
           onError={() => setImgFailed(true)}
         />
 
@@ -547,12 +548,9 @@ function GalleryHero({ src, caseId, title, onOpen }) {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const imgY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
 
-  // Clip-path: curtain lifts from bottom; opacity fallback for reduced-motion
-  const revealInitial    = reduced ? { opacity: 0 }            : { clipPath: 'inset(100% 0% 0% 0%)' };
-  const revealAnimate    = reduced ? { opacity: 1 }            : { clipPath: 'inset(0% 0% 0% 0%)' };
-  const revealTransition = reduced
-    ? { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-    : { duration: 0.75, ease: [0.16, 1, 0.3, 1] };
+  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0, filter: 'brightness(0.72) blur(8px)' };
+  const revealAnimate    = { opacity: 1, filter: 'brightness(1) blur(0px)' };
+  const revealTransition = { duration: 0.55, ease: [0.16, 1, 0.3, 1] };
 
   return (
     <m.div
@@ -604,24 +602,16 @@ function GalleryHero({ src, caseId, title, onOpen }) {
   );
 }
 
-// Standard tile: clip-path wipe from a given edge + brightness+scale hover + scan sweep
-function GalleryTile({ src, index, caseId, title, tierDelay = 0, clipFrom = 'bottom', onOpen }) {
+// Standard tile: soft reveal + brightness/scale hover + scan sweep
+function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
   const [hovered, setHovered] = useState(false);
   const [failed,  setFailed]  = useState(!src);
   const [scanKey, setScanKey] = useState(0);
   const reduced = useReducedMotion();
 
-  const CLIP_START = {
-    bottom: 'inset(0% 0% 100% 0%)',
-    left:   'inset(0% 0% 0% 100%)',
-    right:  'inset(0% 100% 0% 0%)',
-  };
-
-  const revealInitial    = reduced ? { opacity: 0 }                            : { clipPath: CLIP_START[clipFrom] ?? CLIP_START.bottom };
-  const revealAnimate    = reduced ? { opacity: 1 }                            : { clipPath: 'inset(0% 0% 0% 0%)' };
-  const revealTransition = reduced
-    ? { duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: tierDelay }
-    : { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: tierDelay };
+  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0, filter: 'brightness(0.78) blur(6px)', y: 10 };
+  const revealAnimate    = { opacity: 1, filter: 'brightness(1) blur(0px)', y: 0 };
+  const revealTransition = { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: tierDelay };
 
   const num = String(index + 1).padStart(2, '0');
 
@@ -714,7 +704,7 @@ function FlowDiagramBlock({ src, alt, caption }) {
         <img
           src={src}
           alt={alt}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left center', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left center', display: 'block' }}
         />
 
         {/* Corner marks */}
@@ -1395,6 +1385,7 @@ export default function CasePage({ onMenuOpen }) {
                         aspect="16/7"
                         src={content.playerLoop.asset}
                         alt={content.playerLoop.assetAlt}
+                        fit="contain"
                       />
                       {content.playerLoop.assetCaption && (
                         <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
@@ -1511,8 +1502,9 @@ export default function CasePage({ onMenuOpen }) {
                           aspect="16/9"
                           src={sys.asset}
                           alt={sys.assetAlt || sys.title}
+                          fit="contain"
                         />
-                        {sys.assetCaption && (
+                        {sys.asset && sys.assetCaption && (
                           <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>
                             {sys.assetCaption}
                           </p>
@@ -1591,6 +1583,7 @@ export default function CasePage({ onMenuOpen }) {
                         aspect="16/7"
                         src={content.beforeAfter.asset}
                         alt={content.beforeAfter.assetAlt || 'Before and after comparison'}
+                        fit="contain"
                       />
                       {content.beforeAfter.assetCaption && (
                         <p className="mt-3" style={{ fontFamily: MONO, fontSize: '12px', color: 'rgba(240,238,234,0.55)', letterSpacing: '0.04em', lineHeight: 1.6 }}>

@@ -125,7 +125,7 @@ function TickCounter({ target, active, style: s }) {
 // DYNAMIC BACKGROUND CANVAS
 // ══════════════════════════════════════════════════════════════════════════════
 
-function DynamicBackground({ phase, mouseX, mouseY }) {
+function DynamicBackground({ phase, mouseX, mouseY, mobile = false }) {
   const canvasRef  = useRef(null)
   const rafRef     = useRef(null)
   const stateRef   = useRef(null)
@@ -143,7 +143,7 @@ function DynamicBackground({ phase, mouseX, mouseY }) {
     window.addEventListener('resize', resize)
 
     // ── Particles ──────────────────────────────────────────────────────────
-    const N = 55
+    const N = mobile ? 28 : 55
     const particles = Array.from({ length: N }, () => ({
       x:  Math.random() * window.innerWidth,
       y:  Math.random() * window.innerHeight,
@@ -172,7 +172,7 @@ function DynamicBackground({ phase, mouseX, mouseY }) {
 
       // ── Dot grid ────────────────────────────────────────────────────────
       const GRID = 42
-      ctx.fillStyle = 'rgba(255,37,64,0.06)'
+      ctx.fillStyle = mobile ? 'rgba(255,37,64,0.028)' : 'rgba(255,37,64,0.06)'
       for (let gx = 0; gx < W; gx += GRID) {
         for (let gy = 0; gy < H; gy += GRID) {
           // subtle parallax: dots drift toward mouse
@@ -181,7 +181,7 @@ function DynamicBackground({ phase, mouseX, mouseY }) {
           const dist = Math.hypot(gx + ox - mx, gy + oy - my)
           const proximity = Math.max(0, 1 - dist / 340)
           const radius = 1.1 + proximity * 1.8
-          ctx.globalAlpha = 0.06 + proximity * 0.22
+          ctx.globalAlpha = mobile ? 0.035 + proximity * 0.09 : 0.06 + proximity * 0.22
           ctx.beginPath()
           ctx.arc(gx + ox, gy + oy, radius, 0, Math.PI * 2)
           ctx.fill()
@@ -211,12 +211,13 @@ function DynamicBackground({ phase, mouseX, mouseY }) {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r + pglow * 1.6, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,37,64,${p.a + pglow * 0.5})`
+        const alphaScale = mobile ? 0.45 : 1
+        ctx.fillStyle = `rgba(255,37,64,${(p.a + pglow * 0.5) * alphaScale})`
         ctx.fill()
       })
 
       // ── Draw connection lines between nearby particles ───────────────────
-      ctx.strokeStyle = 'rgba(255,37,64,0.04)'
+      ctx.strokeStyle = mobile ? 'rgba(255,37,64,0.018)' : 'rgba(255,37,64,0.04)'
       ctx.lineWidth = 0.5
       for (let i = 0; i < N; i++) {
         for (let j = i + 1; j < N; j++) {
@@ -274,7 +275,7 @@ function DynamicBackground({ phase, mouseX, mouseY }) {
       window.removeEventListener('resize', resize)
       cancelAnimationFrame(rafRef.current)
     }
-  }, [phase])
+  }, [phase, mobile])
 
   return (
     <canvas
@@ -1319,6 +1320,9 @@ function HeroTopBar({ visible }) {
 
 export default function LabHero({ hideTopBar = false }) {
   const [phase, setPhase] = useState(P.BOOT)
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= 680
+  )
   const reduced = useReducedMotion()
   const { t } = useLang()
   const lh = t.labHero
@@ -1334,6 +1338,14 @@ export default function LabHero({ hideTopBar = false }) {
   const portraitSpringCfg = { stiffness: 35, damping: 18, mass: 1.2 }
   const portraitPX = useSpring(useMotionValue(0), portraitSpringCfg)
   const portraitPY = useSpring(useMotionValue(0), portraitSpringCfg)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 680px)')
+    const sync = () => setIsMobile(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
 
   useEffect(() => {
     if (reduced) { setPhase(P.ACTIVE); return }
@@ -1373,31 +1385,37 @@ export default function LabHero({ hideTopBar = false }) {
   const titleVisible = phase >= P.TITLE
   const isActive     = phase >= P.ACTIVE
 
-  // GeometryGrid: sphere on boot → halo (orbital ring) once revealed
-  const gridShape = phase >= P.REVEAL ? 'halo' : 'sphere'
+  const titleLines = isMobile
+    ? [
+        lh.titleLines[0].replace(/\s+/g, ' ').split(' ')[0],
+        lh.titleLines[0].replace(/\s+/g, ' ').split(' ').slice(1).join(' '),
+        lh.titleLines[1].replace(/\s+/g, ' ').split(' ').slice(0, 2).join(' '),
+        lh.titleLines[1].replace(/\s+/g, ' ').split(' ').slice(2).join(' '),
+        lh.titleLines[2],
+      ].filter(Boolean)
+    : lh.titleLines
 
   // Portrait sits at vertical centre-top; title overlaps its lower third.
   // All centre elements are absolutely positioned so text can float over photo.
   // Fixed aspect ratio (3:4) — objectFit:cover always crops identically across viewports
-  const PORTRAIT_W = 'clamp(390px,42vw,630px)'
-  const PORTRAIT_H = 'unset'   // driven by aspectRatio below
+  const PORTRAIT_W = isMobile ? 'min(76vw,310px)' : 'clamp(390px,42vw,630px)'
 
   return (
     <section
       onMouseMove={handleSectionMouseMove}
       style={{
-        position: 'relative', width: '100%', height: '100vh',
+        position: 'relative', width: '100%', height: '100svh',
         overflow: 'hidden', background: '#080808',
       }}
     >
       {/* ── SVG orbital rings ── */}
-      <SvgRings phase={phase} parallaxX={parallaxX} parallaxY={parallaxY} reduced={!!reduced} />
+      {!isMobile && <SvgRings phase={phase} parallaxX={parallaxX} parallaxY={parallaxY} reduced={!!reduced} />}
 
       {/* ── Dynamic canvas background ── */}
-      <DynamicBackground phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />
+      <DynamicBackground phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} mobile={isMobile} />
 
       {/* ── Data connectors ── */}
-      <DataConnectors phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />
+      {!isMobile && <DataConnectors phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />}
 
       {/* ── Top HUD bar ── */}
       {!hideTopBar && <HeroTopBar visible={hudVisible} />}
@@ -1418,19 +1436,19 @@ export default function LabHero({ hideTopBar = false }) {
       ))}
 
       {/* ══ Portrait + orbit — shared parallax wrapper ══ */}
-      <div style={{ position: 'absolute', left: '50%', top: '52%', transform: 'translate(-50%, -50%)', zIndex: 4, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 4, pointerEvents: 'none' }}>
         <m.div style={{ x: portraitPX, y: portraitPY }}>
           <m.div
             animate={{ opacity: phase >= P.SCAN ? 1 : 0 }}
             transition={{ duration: 1, ease: EASE_OUT }}
           >
-            <PortraitOrbit phase={phase} />
+            {!isMobile && <PortraitOrbit phase={phase} />}
           </m.div>
         </m.div>
       </div>
 
       {/* ══ PORTRAIT — parallax driven, upper portion ══ */}
-      <div style={{ position: 'absolute', left: '50%', top: '52%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
+      <div style={{ position: 'absolute', left: '50%', top: isMobile ? '49.5%' : '52%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
       <m.div style={{
         x: portraitPX, y: portraitPY,
         width: PORTRAIT_W, aspectRatio: '3/4',
@@ -1444,11 +1462,11 @@ export default function LabHero({ hideTopBar = false }) {
       {titleVisible && (
         <div style={{
           position: 'absolute',
-          bottom: 'clamp(88px,12vh,140px)',
+          bottom: isMobile ? 'clamp(150px,18svh,178px)' : 'clamp(88px,12vh,140px)',
           left: 0, right: 0,
           textAlign: 'center',
           zIndex: 10,
-          filter: 'drop-shadow(0 2px 24px rgba(8,8,8,0.9))',
+          filter: isMobile ? 'drop-shadow(0 2px 16px rgba(8,8,8,0.88))' : 'drop-shadow(0 2px 24px rgba(8,8,8,0.9))',
           pointerEvents: 'auto',
         }}>
           {/* nameplate + decorative separator */}
@@ -1457,8 +1475,8 @@ export default function LabHero({ hideTopBar = false }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.05 }}
             style={{
-              marginBottom: 'clamp(12px,1.8vh,22px)',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+              marginBottom: isMobile ? 6 : 'clamp(12px,1.8vh,22px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? 8 : 10,
             }}
           >
             {/* Thin rule with logo */}
@@ -1473,54 +1491,103 @@ export default function LabHero({ hideTopBar = false }) {
             {/* Nameplate */}
             <TitleWord delay={0} style={{
               fontFamily: "'Play', monospace",
-              fontSize: 'clamp(10px,0.9vw,13px)',
-              letterSpacing: '0.38em', textTransform: 'uppercase',
+              fontSize: isMobile ? '9px' : 'clamp(10px,0.9vw,13px)',
+              letterSpacing: isMobile ? '0.18em' : '0.38em', textTransform: 'uppercase',
               color: 'rgba(240,238,234,0.55)', fontWeight: 500,
+              maxWidth: isMobile ? '30ch' : undefined,
+              lineHeight: isMobile ? 1.35 : undefined,
             }}>{lh.nameplate}</TitleWord>
           </m.div>
 
           {/* title lines — lineHeight 0.78 compresses vertical footprint */}
           <div style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: 'clamp(2.6rem,5.6vw,6.2rem)',
-            lineHeight: 0.78, letterSpacing: '0.06em', textTransform: 'uppercase',
+            fontSize: isMobile ? 'clamp(2.06rem,9.8vw,2.72rem)' : 'clamp(2.6rem,5.6vw,6.2rem)',
+            lineHeight: isMobile ? 0.76 : 0.78,
+            letterSpacing: isMobile ? '0.018em' : '0.06em',
+            textTransform: 'uppercase',
+            padding: isMobile ? '0 18px' : undefined,
+            overflowWrap: 'normal',
           }}>
-            <div><TitleWord delay={0.09} scramble>{lh.titleLines[0]}</TitleWord></div>
-            <div><TitleWord delay={0.18} accent scramble periodic>{lh.titleLines[1]}</TitleWord></div>
-            <div><TitleWord delay={0.27} scramble>{lh.titleLines[2]}</TitleWord></div>
+            {titleLines.map((line, i) => (
+              <div key={line}>
+                <TitleWord
+                  delay={0.09 + i * 0.08}
+                  accent={isMobile ? i === 2 || i === 3 : i === 1}
+                  scramble
+                  periodic={isMobile ? i === 2 || i === 3 : i === 1}
+                >
+                  {line}
+                </TitleWord>
+              </div>
+            ))}
           </div>
 
           {/* roles */}
-          <TitleWord delay={0.42} style={{
-            display: 'block',
-            marginTop: 'clamp(14px,2vh,22px)',
-            fontFamily: "'Play', monospace",
-            fontSize: 'clamp(11px,1.05vw,14px)',
-            letterSpacing: '0.22em', textTransform: 'uppercase',
-            color: 'rgba(240,238,234,0.65)', fontWeight: 400,
-          }}>
-            {lh.roles[0]}
-            <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
-            {lh.roles[1]}
-            <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
-            {lh.roles[2]}
-          </TitleWord>
+          {isMobile ? (
+            <m.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: EASE_OUT, delay: 0.42 }}
+              style={{
+                marginTop: 8,
+                padding: '0 24px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '5px 9px',
+                fontFamily: "'Play', monospace",
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'rgba(240,238,234,0.65)',
+                lineHeight: 1.35,
+              }}
+            >
+              {lh.roles.map((role, i) => (
+                <span key={role} style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}>
+                  <span>{role}</span>
+                  {i < lh.roles.length - 1 && <span style={{ color: 'var(--color-accent)', opacity: 0.55 }}>/</span>}
+                </span>
+              ))}
+            </m.div>
+          ) : (
+            <TitleWord delay={0.42} style={{
+              display: 'block',
+              marginTop: 'clamp(14px,2vh,22px)',
+              fontFamily: "'Play', monospace",
+              fontSize: 'clamp(11px,1.05vw,14px)',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              color: 'rgba(240,238,234,0.65)', fontWeight: 400,
+            }}>
+              {lh.roles[0]}
+              <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
+              {lh.roles[1]}
+              <span style={{ color: 'var(--color-accent)', opacity: 0.5, margin: '0 clamp(8px,1.5vw,20px)' }}>/</span>
+              {lh.roles[2]}
+            </TitleWord>
+          )}
         </div>
       )}
 
       <HudPanel visible={isActive} delay={0.2} style={{
         position: 'absolute',
-        bottom: 'clamp(22px,4vh,50px)',
+        bottom: isMobile ? 'clamp(38px,6svh,54px)' : 'clamp(22px,4vh,50px)',
         left: 0, right: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24,
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: isMobile ? 10 : 24,
         zIndex: 10,
         pointerEvents: 'none',
       }}>
         <CyberBtn
           variant="accent-ghost"
-          size="md"
+          size={isMobile ? 'sm' : 'md'}
           href="#cases"
-          style={{ pointerEvents: 'auto' }}
+          style={{ pointerEvents: 'auto', maxWidth: isMobile ? 'min(82vw,300px)' : undefined }}
         >
           {lh.cta}
         </CyberBtn>
@@ -1547,9 +1614,10 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>
 
       {/* ── "move cursor to reveal" hint ── */}
-      <HudPanel visible={isActive} delay={0.4} style={{
+      <HudPanel visible={isActive && !isMobile} delay={0.4} style={{
         position: 'absolute',
-        left: '50%', top: 'calc(42% + clamp(170px,26vh,330px))',
+        left: '50%', top: isMobile ? 'auto' : 'calc(42% + clamp(170px,26vh,330px))',
+        bottom: isMobile ? 'clamp(78px,10svh,96px)' : undefined,
         transform: 'translateX(-50%)',
         zIndex: 10, textAlign: 'center', pointerEvents: 'none',
       }}>
@@ -1559,7 +1627,7 @@ export default function LabHero({ hideTopBar = false }) {
       </HudPanel>
 
       {/* ══ LEFT HUD ══ */}
-      <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none', minWidth: 140 }}>
+      {!isMobile && <div style={{ position: 'absolute', left: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none', minWidth: 140 }}>
         <m.div style={{ x: leftPX, y: leftPY }}>
           {lh.skills.map((label, i) => (
             <m.div
@@ -1620,10 +1688,10 @@ export default function LabHero({ hideTopBar = false }) {
             </m.div>
           ))}
         </m.div>
-      </div>
+      </div>}
 
       {/* ══ RIGHT HUD ══ */}
-      <div style={{ position: 'absolute', right: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
+      {!isMobile && <div style={{ position: 'absolute', right: 'clamp(24px,3vw,52px)', top: '50%', transform: 'translateY(-50%)', zIndex: 10, pointerEvents: 'none' }}>
       <m.div style={{ x: rightPX, y: rightPY }}>
       <m.div
         initial={{ opacity: 0, x: 16 }}
@@ -1691,10 +1759,10 @@ export default function LabHero({ hideTopBar = false }) {
         </m.div>
       </m.div>
       </m.div>
-      </div>
+      </div>}
 
       {/* ══ TOP-LEFT HUD ══ */}
-      <HudPanel visible={hudVisible} delay={0.1} style={{
+      {!isMobile && <HudPanel visible={hudVisible} delay={0.1} style={{
         position: 'absolute', top: 'clamp(60px,11vh,100px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
         <HudLabel dim><ScrambleLabel text={lh.interfaceMode} active={hudVisible} /></HudLabel>
@@ -1706,10 +1774,10 @@ export default function LabHero({ hideTopBar = false }) {
           <PulseDot />
           {phase >= P.ACTIVE ? lh.phaseActive : phase >= P.REVEAL ? lh.phaseScanning : lh.phaseBoot}
         </div>
-      </HudPanel>
+      </HudPanel>}
 
       {/* ══ TOP-RIGHT HUD ══ */}
-      <HudPanel visible={hudVisible} delay={0.15} style={{
+      {!isMobile && <HudPanel visible={hudVisible} delay={0.15} style={{
         position: 'absolute', top: 'clamp(60px,11vh,100px)', right: 'clamp(24px,3vw,52px)',
         textAlign: 'right', zIndex: 10, pointerEvents: 'none',
       }}>
@@ -1721,20 +1789,20 @@ export default function LabHero({ hideTopBar = false }) {
         }}>
           {lh.online} <PulseDot />
         </div>
-      </HudPanel>
+      </HudPanel>}
 
       {/* ══ BOTTOM-LEFT ══ */}
-      <HudPanel visible={hudVisible} delay={0.3} style={{
+      {!isMobile && <HudPanel visible={hudVisible} delay={0.3} style={{
         position: 'absolute', bottom: 'clamp(48px,7vh,80px)', left: 'clamp(24px,3vw,52px)', zIndex: 10, pointerEvents: 'none',
       }}>
         <HudLabel style={{ color: 'rgba(255,255,255,0.22)', fontSize: '8px', letterSpacing: '0.14em', marginBottom: 8 }}>
           4.7110° N · 74.0721° W
         </HudLabel>
         <BogotaClock active={hudVisible} />
-      </HudPanel>
+      </HudPanel>}
 
       {/* ══ BOTTOM-RIGHT ══ */}
-      <HudPanel visible={isActive} delay={0.4} style={{
+      {!isMobile && <HudPanel visible={isActive} delay={0.4} style={{
         position: 'absolute', bottom: 'clamp(16px,3vh,36px)', right: 'clamp(24px,3vw,52px)', zIndex: 10, textAlign: 'right', pointerEvents: 'none',
       }}>
         <div style={{
@@ -1745,7 +1813,7 @@ export default function LabHero({ hideTopBar = false }) {
           <span style={{ color: 'var(--color-accent)', fontSize: 11 }}>●</span>
           {lh.availableForWork}
         </div>
-      </HudPanel>
+      </HudPanel>}
     </section>
   )
 }

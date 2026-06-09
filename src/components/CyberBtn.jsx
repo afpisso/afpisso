@@ -120,6 +120,8 @@ export default function CyberBtn({
     overflow:        'hidden',
     display:         'inline-flex',
     alignItems:      'center',
+    justifyContent:  'center',
+    maxWidth:        '100%',
     minHeight,
     fontFamily:      MONO,
     fontSize:        12,
@@ -128,6 +130,7 @@ export default function CyberBtn({
     lineHeight:      1,
     textTransform:   'uppercase',
     textDecoration:  'none',
+    textAlign:       'center',
     cursor:          disabled ? 'default' : 'pointer',
     clipPath:        CLIP,
     background:      v.bg,
@@ -140,14 +143,14 @@ export default function CyberBtn({
 
   const inner = (
     <SweepFill active={hover} fillColor={v.sweepColor} activeTextColor={v.sweepTextColor}>
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding }}>
-        {children}
+      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding, minWidth: 0, maxWidth: '100%', lineHeight: 1.25 }}>
+        <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>{children}</span>
         {showArrow && (
           <m.span
             aria-hidden="true"
             animate={{ x: hover ? 3 : 0 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            style={{ display: 'inline-block' }}
+            style={{ display: 'inline-block', flexShrink: 0 }}
           >→</m.span>
         )}
       </span>

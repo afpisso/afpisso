@@ -115,6 +115,10 @@ h1, h2, h3 {
   text-wrap: balance;
 }
 
+p, li, dd, figcaption {
+  overflow-wrap: anywhere;
+}
+
 /* Tabular nums for data/stats (§6: number-tabular) */
 .tabular {
   font-variant-numeric: tabular-nums;
@@ -491,6 +495,28 @@ section[id] {
   .lab-footer-mobile-channel span:last-child {
     font-size: 9px;
     letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 680px) {
+  body {
+    font-size: 13px;
+  }
+
+  h1, h2, h3,
+  .display {
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .sys-label,
+  .micro-label {
+    line-height: 1.25;
+    letter-spacing: 0.1em;
+  }
+
+  a, button {
+    max-width: 100%;
   }
 }
 
