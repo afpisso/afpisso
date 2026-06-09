@@ -171,12 +171,27 @@ const pageVariants = {
   exit:    { opacity: 0,  y: -10, transition: { duration: 0.2, ease: EASE_IN } },
 };
 
+function getActiveMenuSection(location) {
+  const path = location.pathname;
+
+  if (path === '/' && location.hash === '#contact') return 'CONTACT';
+  if (path === '/') return 'HOME';
+  if (path === '/work' || path.startsWith('/case/') || path.startsWith('/case-studies/')) return 'WORK';
+  if (path === '/about' || path === '/resume') return 'ABOUT';
+  if (path === '/notes' || path.startsWith('/notes/')) return 'JOURNAL';
+  if (path === '/speaking') return 'SPEAKING';
+  if (path === '/classified') return 'WORK';
+
+  return 'HOME';
+}
+
 // ── AppRoutes ──────────────────────────────────────────────────────────────────
 function AppRoutes() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const lenisRef = useLenis();
   const flashRef = useRef(null);
+  const activeMenuSection = getActiveMenuSection(location);
 
   // On route change: close menu + scroll to top + red micro-flash
   useEffect(() => {
@@ -249,7 +264,7 @@ function AppRoutes() {
       </AnimatePresence>
 
       {/* MenuOverlay lives outside transition wrapper so it doesn't animate with pages */}
-      <MenuOverlay open={menuOpen} onClose={close} activeSection="WORK" />
+      <MenuOverlay open={menuOpen} onClose={close} activeSection={activeMenuSection} />
 
       {/* Decorative overlays — outside transitions, always-present */}
       <Suspense fallback={null}>

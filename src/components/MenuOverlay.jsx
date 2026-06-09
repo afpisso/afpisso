@@ -399,6 +399,7 @@ function useNarrow(bp = 600) {
 function Menu({ open, onClose, activeSection = 'WORK' }) {
   const { lang, setLang } = useLang();
   const navigate = useNavigate();
+  const lenisRef = useLenis();
   const narrow = useNarrow(600);
   const accent = '#ff2540';
   const fg     = '#f5f5f3';
