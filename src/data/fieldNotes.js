@@ -12,6 +12,7 @@ export const fieldNotes = [
       'Un sistema de UI para juegos es la estructura compartida detrás de cómo la interfaz se comporta, escala, responde, cambia de estado y se mantiene entendible durante toda la experiencia del jugador.',
     readTime: '8 min',
     type: 'Deep Dive',
+    cover: '/notes/fn001-cover.webp',
     relatedCases: ['courtyard-king', 'havoc-hotel-3'],
   },
   {
@@ -27,6 +28,7 @@ export const fieldNotes = [
       'Un HUD puede verse elegante, mínimo y pulido, y aun así dejar al jugador sin entender qué cambió, qué importa ahora o qué acción sigue.',
     readTime: '6 min',
     type: 'Analysis',
+    cover: '/notes/fn002-cover.webp',
     relatedCases: ['orcs-must-die-by-the-blade', 'courtyard-king'],
   },
   {
@@ -42,6 +44,7 @@ export const fieldNotes = [
       'La retroalimentación le dice al jugador que algo ocurrió, qué cambió y qué puede hacer después. Cuando es débil, el jugador empieza a llenar los vacíos por su cuenta.',
     readTime: '7 min',
     type: 'Framework',
+    cover: '/notes/fn003-cover.webp',
     relatedCases: ['orcs-must-die-by-the-blade', 'raptor-heist'],
   },
   {
@@ -57,6 +60,7 @@ export const fieldNotes = [
       'Muchos problemas de UI empiezan antes de abrir Figma. Empiezan en el lenguaje: HUD, menú, modal, overlay, tooltip, pista, notificación, inventario, loadout.',
     readTime: '5 min',
     type: 'Reference',
+    cover: '/notes/fn004-cover.webp',
     relatedCases: [],
   },
   {
@@ -72,6 +76,7 @@ export const fieldNotes = [
       'Las opciones de accesibilidad revelan qué asume el diseño base. Muestran qué pasa cuando cambian la visión, la audición, el control motor, la cognición, las condiciones de pantalla o el contexto del jugador.',
     readTime: '6 min',
     type: 'Checklist',
+    cover: '/notes/fn005-cover.webp',
     relatedCases: ['zombie-dragon-adventure'],
   },
   {
@@ -87,6 +92,7 @@ export const fieldNotes = [
       'Diseñar UI para VR no es poner una pantalla plana dentro de un headset. En VR, la interfaz es espacial, física y está ligada a la comodidad.',
     readTime: '9 min',
     type: 'Deep Dive',
+    cover: '/notes/fn006-cover.webp',
     relatedCases: ['orcs-must-die-by-the-blade'],
   },
 ];

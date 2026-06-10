@@ -8,7 +8,7 @@ import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import SectionTag from '../components/SectionTag';
-import { m } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 import { ZoomableImage } from '../components/ZoomModal';
 
 const BASE_URL = 'https://byandresfe.com';
@@ -191,6 +191,10 @@ export default function NotePage({ onMenuOpen }) {
   const idx      = fieldNotes.findIndex((n) => n.slug === slug);
   const nextNote = fieldNotes[(idx + 1) % fieldNotes.length];
 
+  // Cover parallax — only runs when there's a cover image
+  const { scrollY } = useScroll();
+  const coverY = useTransform(scrollY, [0, 500], [0, 60]);
+
   // ── Not found or no content yet ──
   if (!meta || blocks.length === 0) {
     return (
@@ -223,8 +227,35 @@ export default function NotePage({ onMenuOpen }) {
       <main>
 
         {/* ── Hero ─────────────────────────────────────────── */}
-        <section className="pt-40 pb-16" style={{ borderBottom: '1px solid var(--color-rule)' }}>
-          <div className="max-w-[860px] mx-auto px-6">
+        <section className="pt-40 pb-16 relative overflow-hidden" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+          {meta.cover && (
+            <m.div
+              style={{ y: coverY }}
+              aria-hidden="true"
+              className="absolute inset-0 pointer-events-none"
+            >
+              <img
+                src={meta.cover}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  objectPosition: 'center',
+                  opacity: 0.3,
+                  maskImage: 'linear-gradient(to right, transparent 18%, rgba(0,0,0,0.5) 50%, black 100%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 18%, rgba(0,0,0,0.5) 50%, black 100%)',
+                }}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to right, var(--color-bg) 26%, rgba(10,10,10,0.65) 55%, rgba(10,10,10,0.12) 100%)',
+                }}
+              />
+            </m.div>
+          )}
+          <div className="max-w-[860px] mx-auto px-6 relative z-10">
 
             {/* Breadcrumb */}
             <m.div

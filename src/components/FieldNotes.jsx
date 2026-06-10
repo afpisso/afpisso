@@ -109,6 +109,31 @@ export default function FieldNotes() {
                   onFocus={() => setHovered(featuredNote.id)}
                   onBlur={() => setHovered(null)}
                 >
+                  {/* Cover image — right-side bleed */}
+                  {featuredNote.cover && (
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        top: 0, right: 0, bottom: 0,
+                        width: '46%',
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      <img
+                        src={featuredNote.cover}
+                        alt=""
+                        style={{
+                          width: '100%', height: '100%',
+                          objectFit: 'cover', objectPosition: 'center',
+                          opacity: isHovered ? 0.28 : 0.16,
+                          transition: 'opacity 0.3s ease-out',
+                          maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 38%, black 100%)',
+                          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 38%, black 100%)',
+                        }}
+                      />
+                    </div>
+                  )}
                   <div
                     aria-hidden="true"
                     className="absolute right-4 top-2"

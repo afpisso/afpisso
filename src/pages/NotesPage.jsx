@@ -42,7 +42,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
         to={`/notes/${note.slug}`}
         style={{
           display:         'block',
-          padding:         '2rem 2rem 1.75rem',
+          padding:         0,
           position:        'relative',
           overflow:        'hidden',
           backgroundColor: hov ? 'rgba(255,37,64,0.022)' : 'var(--color-bg)',
@@ -56,6 +56,33 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
         onBlur={() => setHov(false)}
         aria-label={title}
       >
+        {/* Cover image strip */}
+        {note.cover && (
+          <div
+            aria-hidden="true"
+            style={{ height: '158px', overflow: 'hidden', position: 'relative' }}
+          >
+            <img
+              src={note.cover}
+              alt=""
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center',
+                transition: 'transform 420ms cubic-bezier(0.16,1,0.3,1)',
+                transform: hov ? 'scale(1.04)' : 'scale(1)',
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to bottom, rgba(10,10,10,0.08) 0%, rgba(10,10,10,0.6) 100%)',
+              }}
+            />
+          </div>
+        )}
+
+        <div style={{ padding: note.cover ? '1.5rem 2rem 1.75rem' : '2rem 2rem 1.75rem', position: 'relative' }}>
         {/* Watermark ID — large Bebas at 4% opacity */}
         <div
           aria-hidden="true"
@@ -167,6 +194,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
           >
             {readNoteLabel} ›
           </div>
+        </div>
         </div>
       </Link>
     </m.article>
@@ -295,9 +323,34 @@ export default function NotesPage({ onMenuOpen }) {
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.2 }}
+              style={{ position: 'relative', overflow: 'hidden' }}
             >
+              {/* Cover image — bleeds from the right */}
+              {featured.cover && (
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    top: 0, right: 0, bottom: 0,
+                    width: '46%',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <img
+                    src={featured.cover}
+                    alt=""
+                    style={{
+                      width: '100%', height: '100%',
+                      objectFit: 'cover', objectPosition: 'center',
+                      opacity: 0.2,
+                      maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 38%, black 100%)',
+                      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 38%, black 100%)',
+                    }}
+                  />
+                </div>
+              )}
               {/* Accent top rule + header labels */}
-              <div style={{ borderTop: '2px solid var(--color-accent)', paddingTop: '1.75rem' }}>
+              <div style={{ borderTop: '2px solid var(--color-accent)', paddingTop: '1.75rem', position: 'relative', zIndex: 1 }}>
                 <div
                   style={{
                     display:       'flex',
