@@ -33,7 +33,7 @@ const BASE      = 'https://byandresfe.com'
 const SITE_NAME = 'ByAndresFe'
 const BUILD_DATE = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
 
-const DEFAULT_TITLE = 'Andres Felipe Pisso | UX Lead & Game UX/UI Designer'
+const DEFAULT_TITLE = 'Game UX/UI Designer & UX Lead — Andres Felipe Pisso'
 const DEFAULT_DESC  =
   'Portfolio of Andres Felipe Pisso, a UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.'
 
@@ -205,6 +205,17 @@ function buildPageMeta() {
     schema: buildAboutSchema(),
   }
 
+  meta['/speaking'] = {
+    title: `Speaking on Game UX/UI Design — Andres Felipe Pisso`,
+    description:
+      'Andres Felipe Pisso speaks on Game UI Systems, design systems for games, reusable UI in Figma, component structure, and production-ready UI handoff. Available for talks, workshops, and panels.',
+    canonical: `${BASE}/speaking`,
+    ogType: 'website',
+    schema: [
+      breadcrumb({ name: 'Speaking', url: `${BASE}/speaking` }),
+    ],
+  }
+
   meta['/notes'] = {
     title: `Field Notes on Game UX/UI Design — Andres Felipe Pisso`,
     description:
@@ -235,6 +246,7 @@ function buildPageMeta() {
       description: desc,
       canonical: `${BASE}${url}`,
       ogType: 'article',
+      ogImage: `${BASE}/thumbnails/${c.slug}.webp`,
       schema: buildCaseSchema(c),
     }
   }
@@ -244,7 +256,7 @@ function buildPageMeta() {
 
 // ── HTML meta injection ─────────────────────────────────────────────────────
 function injectMeta(html, pageMeta) {
-  const { title, description, canonical, ogType, schema } = pageMeta
+  const { title, description, canonical, ogType, schema, ogImage } = pageMeta
 
   const t = escTitle(title)
   const d = escAttr(description)
@@ -268,45 +280,60 @@ function injectMeta(html, pageMeta) {
 
   // OG type
   html = html.replace(
-    /(<meta property="og:type" content=")[^"]*(")/,
+    /(<meta property="og:type"\s+content=")[^"]*(")/,
     `$1${type}$2`
   )
 
   // OG url
   html = html.replace(
-    /(<meta property="og:url" content=")[^"]*(")/,
+    /(<meta property="og:url"\s+content=")[^"]*(")/,
     `$1${c}$2`
   )
 
   // OG title
   html = html.replace(
-    /(<meta property="og:title" content=")[^"]*(")/,
+    /(<meta property="og:title"\s+content=")[^"]*(")/,
     `$1${escAttr(title)}$2`
   )
 
   // OG description
   html = html.replace(
-    /(<meta property="og:description" content=")[^"]*(")/,
+    /(<meta property="og:description"\s+content=")[^"]*(")/,
     `$1${d}$2`
   )
 
   // Twitter url
   html = html.replace(
-    /(<meta name="twitter:url" content=")[^"]*(")/,
+    /(<meta name="twitter:url"\s+content=")[^"]*(")/,
     `$1${c}$2`
   )
 
   // Twitter title
   html = html.replace(
-    /(<meta name="twitter:title" content=")[^"]*(")/,
+    /(<meta name="twitter:title"\s+content=")[^"]*(")/,
     `$1${escAttr(title)}$2`
   )
 
   // Twitter description
   html = html.replace(
-    /(<meta name="twitter:description" content=")[^"]*(")/,
+    /(<meta name="twitter:description"\s+content=")[^"]*(")/,
     `$1${d}$2`
   )
+
+  // OG image + Twitter image — page-specific override (e.g. case thumbnails)
+  if (ogImage) {
+    html = html.replace(
+      /(<meta property="og:image"\s+content=")[^"]*(")/,
+      `$1${escAttr(ogImage)}$2`
+    )
+    html = html.replace(
+      /(<meta name="twitter:image"\s+content=")[^"]*(")/,
+      `$1${escAttr(ogImage)}$2`
+    )
+    // Clear fixed dimensions — thumbnail ratios differ from og-image.png
+    html = html.replace(/(<meta property="og:image:width" content=")[^"]*(")/,  `$1$2`)
+    html = html.replace(/(<meta property="og:image:height" content=")[^"]*(")/,  `$1$2`)
+  }
 
   // Inject page-specific schema before </head>
   if (schema) {
@@ -328,6 +355,7 @@ function generateSitemap() {
     { loc: `${BASE}/work`,     priority: '0.9', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/about`,    priority: '0.8', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/resume`,   priority: '0.7', changefreq: 'monthly', lastmod: now },
+    { loc: `${BASE}/speaking`, priority: '0.6', changefreq: 'monthly', lastmod: now },
     { loc: `${BASE}/notes`,    priority: '0.8', changefreq: 'weekly',  lastmod: now },
     ...fieldNotes.map(n => ({
       loc: `${BASE}/notes/${n.slug}`,

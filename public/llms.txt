@@ -2,48 +2,106 @@
 
 > Portfolio site for Andres Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead
 > based in Bogotá, Colombia. Specialises in game interfaces, UI systems, player experience
-> design, and cross-functional UX leadership.
+> design, feedback clarity, and cross-functional UX leadership. 11+ years across games,
+> VR, UEFN / Fortnite Creative, LiveOps, and digital products.
 
 ## Contact
 
-- Email: Available at byandresfe.com/#contact
-- LinkedIn: linkedin.com/in/afpisso
+- Site: https://byandresfe.com
+- Email: Available at https://byandresfe.com/#contact
+- LinkedIn: https://linkedin.com/in/afpisso
 - Instagram: @byandresfe
 - X / Twitter: @byandresfe
+
+## Expertise
+
+Game UX/UI Design, UX Leadership, UI Systems, HUD Design, Player Experience Design,
+Feedback Systems, Player Decision-Making, LiveOps UX, UEFN / Fortnite Creative,
+VR Interface Design (Meta Quest), Accessibility in Games, Design Documentation,
+Design Systems, Figma, Unreal Engine, Cross-functional Collaboration
 
 ## Work (Case Files)
 
 Full case list at: https://byandresfe.com/work
 
-- CASE-001: Game UI Systems — UI component systems, HUD clarity, implementation rules (UX Lead)
-- CASE-002: LiveOps UX — Events, rewards, retention loops, store UX (UX Lead)
-- CASE-003: UEFN / Fortnite Creative — Onboarding, lobby UX, player flows (UX Lead / Game UX/UI Designer)
-- CASE-004: Zomvilles — Game systems, progression, UX flows (Lead Game Designer)
-- CASE-005: Kodety — Educational game design, interaction, product design (Game Designer / UX/UI) — Award winner
+### CASE-008 — Star Wars Roguelike One
+URL: https://byandresfe.com/case/star-wars-roguelike-one
+Role: UX/UI Designer
+Year: 2026
+Focus: Game UX/UI for a Star Wars roguelike experience.
 
-## Expertise
+### CASE-001 — Orcs Must Die: By the Blade
+URL: https://byandresfe.com/case/orcs-must-die-by-the-blade
+Role: UX Lead
+Studio: Robot Entertainment
+Platform: Meta Quest VR
+Year: 2025–2026
+Status: Shipped (NDA-safe)
+Focus: UI design system, reusable assets, VR interaction patterns, UX leadership, design documentation. Created a unified Figma design system covering components, states, tokens, and variables. Designed VR-specific UI including a diegetic guide book, contextual interaction language, and haptic-reinforced feedback. Led a team of 3 UX/UI designers.
 
-Game UX/UI, UX Leadership, UI Systems, Player Experience, Game Design, Accessibility,
-UEFN / Unreal Engine, Figma, LiveOps Design, Documentation, Cross-functional Collaboration
+### CASE-002 — D&D: Zombie Dragon Adventure (Fortnite)
+URL: https://byandresfe.com/case/zombie-dragon-adventure
+Role: UX Lead
+Platform: UEFN / Fortnite Creative
+Year: 2025
+Status: Active (shipped)
+Focus: UX/UI systems for a D&D roguelike adventure inside Fortnite. Designed the Adventure Menu (player progression hub), FTUX onboarding structure, store flows, camp upgrade system, and implementation-ready documentation. Led a team of 3 designers over a 4-month production window.
+
+### CASE-003 — The Walking Dead: Courtyard King
+URL: https://byandresfe.com/case/courtyard-king
+Role: UX/UI Designer
+Platform: UEFN / Fortnite Creative
+Year: 2025
+Status: NDA-safe
+Focus: Survival UX, tension-preserving HUD design, threat communication, resource legibility, and cooperative feedback systems for a Walking Dead Universe experience inside Fortnite.
+
+### CASE-004 — Raptor Heist
+URL: https://byandresfe.com/case/raptor-heist
+Role: UX/UI Designer
+Platform: UEFN / Fortnite Creative
+Year: 2025
+Focus: Roguelike UX clarity, player feedback, UI systems for a Havoc Hotel roguelike experience in UEFN.
+
+### CASE-005 — Havoc Hotel 3
+URL: https://byandresfe.com/case/havoc-hotel-3
+Platform: UEFN / Fortnite Creative
+Year: 2025
+Focus: Co-op UI systems, HUD design, UEFN experience design.
+
+### CASE-006 — Zomvilles
+URL: https://byandresfe.com/case/zomvilles
+Year: 2024
+Focus: Mobile roguelite game UX, progression systems, player experience flows.
+
+### CASE-007 — Kodety
+URL: https://byandresfe.com/case/kodety
+Focus: Educational web game design, interaction design, product design. Award-winning educational game for coding literacy.
 
 ## Field Notes
 
-Articles and references at: https://byandresfe.com/notes
+Articles and frameworks at: https://byandresfe.com/notes
 
-- Game UI Systems
-- Game UI Terminology
-- UX Heuristics for Games
-- Accessibility Checklist for Games
-- Complexity in Game UX/UI
-- Figma Plugins for Game UI
+- What is a Game UI System? — https://byandresfe.com/notes/what-is-a-game-ui-system
+- A Clean HUD is Not Always a Clear HUD — https://byandresfe.com/notes/clean-hud-vs-clear-hud
+- Why Feedback Reduces Guesswork — https://byandresfe.com/notes/feedback-reduces-guesswork
+- UI Terminology for Game Teams — https://byandresfe.com/notes/ui-terminology-for-game-teams
+- What Game Teams Can Learn from Accessibility Settings — https://byandresfe.com/notes/game-accessibility-checklist
+- VR Interface Clarity: What Changes in Spatial UI — https://byandresfe.com/notes/vr-ux-interface-clarity
 
-## Site structure
+## Site Structure
 
 - / — Home / Command Center
 - /work — Case Files (portfolio)
-- /notes — Field Notes (articles)
+- /notes — Field Notes (articles on game UX/UI)
 - /about — Operator Profile
-- /resume.pdf — Resume (PDF)
+- /speaking — Speaking engagements and topics
+- /resume — Resume (available on request)
+
+## Availability
+
+Open to freelance, remote contracts, consulting, and selected game UX/UI, product UX,
+or design systems opportunities. Reach out at https://byandresfe.com/#contact
+or connect on LinkedIn: https://linkedin.com/in/afpisso
 
 ## Usage
 

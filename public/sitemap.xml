@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NOTE: This file is a static fallback. The authoritative sitemap is generated
+  at build time by scripts/prerender.mjs and written to dist/sitemap.xml.
+  Keep this in sync manually when adding new routes or cases.
+  Last updated: 2026-06-10
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Core pages -->
   <url>
     <loc>https://byandresfe.com/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://byandresfe.com/work</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://byandresfe.com/about</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://byandresfe.com/resume</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://byandresfe.com/speaking</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://byandresfe.com/notes</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -64,44 +82,55 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- Resume -->
-  <url>
-    <loc>https://byandresfe.com/resume</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
 
-  <!-- Case studies -->
+  <!-- Case studies (correct slugs — matches cases.js) -->
+  <url>
+    <loc>https://byandresfe.com/case/star-wars-roguelike-one</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://byandresfe.com/case/orcs-must-die-by-the-blade</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://byandresfe.com/case/dungeons-and-dragons-fortnite</loc>
-    <lastmod>2026-05-22</lastmod>
+    <loc>https://byandresfe.com/case/zombie-dragon-adventure</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://byandresfe.com/case/the-walking-dead</loc>
-    <lastmod>2026-05-22</lastmod>
+    <loc>https://byandresfe.com/case/courtyard-king</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://byandresfe.com/case/raptor-heist</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://byandresfe.com/case/havoc-hotel</loc>
-    <lastmod>2026-05-22</lastmod>
+    <loc>https://byandresfe.com/case/havoc-hotel-3</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://byandresfe.com/case/zomvilles</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://byandresfe.com/case/kodety</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 
 </urlset>
