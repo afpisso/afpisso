@@ -162,13 +162,22 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
           style={{ background: 'linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.4) 42%, transparent 72%)' }}
         />
 
-        {/* Top accent line — center only, stops before chamfer cut */}
+        {/* Bevel HUD — top + left accent lines on center card; clip-path handles chamfer corners */}
         {isCenter && (
-          <div
-            aria-hidden="true"
-            className="absolute top-0 left-0 pointer-events-none"
-            style={{ right: 8, height: 2, backgroundColor: 'var(--color-accent)' }}
-          />
+          <>
+            <div aria-hidden="true" style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+              backgroundColor: hovered ? 'rgba(255,37,64,0.95)' : 'rgba(255,37,64,0.55)',
+              zIndex: 6, pointerEvents: 'none',
+              transition: 'background-color 0.22s ease',
+            }} />
+            <div aria-hidden="true" style={{
+              position: 'absolute', top: 0, left: 0, bottom: 0, width: 1,
+              backgroundColor: hovered ? 'rgba(255,37,64,0.65)' : 'rgba(255,37,64,0.28)',
+              zIndex: 6, pointerEvents: 'none',
+              transition: 'background-color 0.22s ease',
+            }} />
+          </>
         )}
 
         {/* Case ID — top left */}
@@ -220,27 +229,6 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
             </div>
           )}
         </div>
-
-        {/* Scan dash border — animated chamfer outline on center card */}
-        {isCenter && (
-          <svg
-            aria-hidden="true"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 6, overflow: 'visible' }}
-            viewBox={`0 0 ${CARD_W} ${CARD_H}`}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <m.polygon
-              points={railSvgPoints(CARD_W, CARD_H, CHAMFER_C)}
-              fill="none"
-              stroke={ACCENT_HEX}
-              strokeWidth="1"
-              strokeDasharray="5 5"
-              strokeOpacity={hovered ? 0.9 : 0.45}
-              animate={{ strokeDashoffset: [0, -10] }}
-              transition={{ duration: 0.7, ease: 'linear', repeat: Infinity }}
-            />
-          </svg>
-        )}
 
         {/* Center card hover reveal */}
         {isCenter && (
