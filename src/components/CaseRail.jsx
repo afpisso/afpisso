@@ -21,8 +21,8 @@ const EASE_OUT   = [0.16, 1, 0.3, 1];
 const EASE_IN    = [0.4,  0, 1,  1];
 
 const ACCENT_HEX    = '#ff2540';
-const CHAMFER_C     = 16; // center card — clearly visible
-const CHAMFER_S     = 6;  // side cards — subtle
+const CHAMFER_C     = 22; // center card — clearly visible
+const CHAMFER_S     = 8;  // side cards — subtle
 
 function railChamfer(n) {
   return `polygon(0 0, calc(100% - ${n}px) 0, 100% ${n}px, 100% 100%, ${n}px 100%, 0 calc(100% - ${n}px))`;
@@ -179,27 +179,6 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
               zIndex: 6, pointerEvents: 'none',
               transition: 'background-color 0.22s ease',
             }} />
-            {/* Corner brackets — 14px L-marks at each corner; chamfer clips tr + bl naturally */}
-            {[
-              { top: 0,    left: 0,    borderTop: true,    borderLeft: true  },
-              { top: 0,    right: 0,   borderTop: true,    borderRight: true },
-              { bottom: 0, left: 0,    borderBottom: true, borderLeft: true  },
-              { bottom: 0, right: 0,   borderBottom: true, borderRight: true },
-            ].map((c, i) => {
-              const color = hovered ? 'rgba(255,37,64,0.9)' : 'rgba(255,37,64,0.55)';
-              const b = '2px solid';
-              return (
-                <div key={i} aria-hidden="true" style={{
-                  position: 'absolute', width: 14, height: 14, zIndex: 7, pointerEvents: 'none',
-                  top: c.top, left: c.left, right: c.right, bottom: c.bottom,
-                  borderTop:    c.borderTop    ? `${b} ${color}` : 'none',
-                  borderLeft:   c.borderLeft   ? `${b} ${color}` : 'none',
-                  borderRight:  c.borderRight  ? `${b} ${color}` : 'none',
-                  borderBottom: c.borderBottom ? `${b} ${color}` : 'none',
-                  transition: 'border-color 0.22s ease',
-                }} />
-              );
-            })}
           </>
         )}
 
