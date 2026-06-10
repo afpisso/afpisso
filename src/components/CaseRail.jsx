@@ -162,21 +162,44 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
           style={{ background: 'linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.4) 42%, transparent 72%)' }}
         />
 
-        {/* Bevel HUD — top + left accent lines on center card; clip-path handles chamfer corners */}
+        {/* Bevel HUD — top + left accent lines, plus corner brackets at all 4 corners */}
         {isCenter && (
           <>
+            {/* Top edge */}
             <div aria-hidden="true" style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: 1,
               backgroundColor: hovered ? 'rgba(255,37,64,0.95)' : 'rgba(255,37,64,0.55)',
               zIndex: 6, pointerEvents: 'none',
               transition: 'background-color 0.22s ease',
             }} />
+            {/* Left edge */}
             <div aria-hidden="true" style={{
               position: 'absolute', top: 0, left: 0, bottom: 0, width: 1,
               backgroundColor: hovered ? 'rgba(255,37,64,0.65)' : 'rgba(255,37,64,0.28)',
               zIndex: 6, pointerEvents: 'none',
               transition: 'background-color 0.22s ease',
             }} />
+            {/* Corner brackets — 14px L-marks at each corner; chamfer clips tr + bl naturally */}
+            {[
+              { top: 0,    left: 0,    borderTop: true,    borderLeft: true  },
+              { top: 0,    right: 0,   borderTop: true,    borderRight: true },
+              { bottom: 0, left: 0,    borderBottom: true, borderLeft: true  },
+              { bottom: 0, right: 0,   borderBottom: true, borderRight: true },
+            ].map((c, i) => {
+              const color = hovered ? 'rgba(255,37,64,0.9)' : 'rgba(255,37,64,0.55)';
+              const b = '2px solid';
+              return (
+                <div key={i} aria-hidden="true" style={{
+                  position: 'absolute', width: 14, height: 14, zIndex: 7, pointerEvents: 'none',
+                  top: c.top, left: c.left, right: c.right, bottom: c.bottom,
+                  borderTop:    c.borderTop    ? `${b} ${color}` : 'none',
+                  borderLeft:   c.borderLeft   ? `${b} ${color}` : 'none',
+                  borderRight:  c.borderRight  ? `${b} ${color}` : 'none',
+                  borderBottom: c.borderBottom ? `${b} ${color}` : 'none',
+                  transition: 'border-color 0.22s ease',
+                }} />
+              );
+            })}
           </>
         )}
 
