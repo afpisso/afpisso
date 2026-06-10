@@ -885,7 +885,9 @@ section[id] {
   .blink { animation: none; opacity: 1; }
   .logo-name::before,
   .logo-name::after { display: none; }
-  * {
+  .grain-overlay::before,
+  [data-reveal],
+  .ticker-track {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

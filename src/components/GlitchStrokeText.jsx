@@ -17,40 +17,43 @@ import { useScramble } from '../hooks/useScramble';
  *            already provides an accessible name (e.g. <h2 aria-label="...">).
  *            Suppresses the per-span aria-label and adds aria-hidden instead,
  *            preventing screen readers from announcing each word twice.
+ *   effects  Enables hover scramble + chromatic split. Disable where text wraps.
  */
 
 const DURATION = 420; // ms — scramble + glitch burst length
 
-export default function GlitchStrokeText({ children, stroke: _stroke, style, className = '', silent = false }) {
+export default function GlitchStrokeText({ children, stroke: _stroke, style, className = '', silent = false, effects = true }) {
   const [trigger, setTrigger] = useState(0);
   const [glitching, setGlitching] = useState(false);
   const shouldReduce = useReducedMotion();
 
   const text = String(children ?? '');
+  const effectsEnabled = effects && !shouldReduce;
 
-  const displayed = useScramble(text, {
+  const scrambled = useScramble(text, {
     duration: DURATION,
     trigger,
-    enabled: !shouldReduce,
+    enabled: effectsEnabled,
   });
+  const displayed = effectsEnabled ? scrambled : text;
 
   // useEffect-based cleanup prevents setState-after-unmount if the
   // component unmounts while the glitch animation is still running.
   useEffect(() => {
-    if (!glitching) return;
+    if (!effectsEnabled || !glitching) return;
     const id = setTimeout(() => setGlitching(false), DURATION + 90);
     return () => clearTimeout(id);
-  }, [glitching]);
+  }, [effectsEnabled, glitching]);
 
   const handleEnter = () => {
-    if (shouldReduce) return;
+    if (!effectsEnabled) return;
     setTrigger((t) => t + 1);
     setGlitching(true);
   };
 
   return (
     <span
-      className={`logo-name${glitching ? ' glitching-title' : ''}${className ? ` ${className}` : ''}`}
+      className={`logo-name${effectsEnabled && glitching ? ' glitching-title' : ''}${className ? ` ${className}` : ''}`}
       data-text={text}
       {...(silent ? { 'aria-hidden': true } : { 'aria-label': text })}
       style={style}

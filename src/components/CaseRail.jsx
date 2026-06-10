@@ -228,8 +228,6 @@ export default function CaseRail({ currentSlug }) {
   const navigate     = useNavigate();
   const shouldReduce = useReducedMotion();
 
-  // All cases with content, ordered by CASE_ORDER (current case included).
-  // useMemo keeps the reference stable so downstream effects don't fire on every render.
   const items = useMemo(() =>
     cases
       .filter(c => c.content)
@@ -238,7 +236,7 @@ export default function CaseRail({ currentSlug }) {
         const bi = CASE_ORDER.indexOf(b.slug);
         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
       }),
-  []); // cases and CASE_ORDER are module-level constants — no deps needed
+  []);
   const count = items.length;
 
   const [active,     setActive]     = useState(() => {
@@ -247,6 +245,11 @@ export default function CaseRail({ currentSlug }) {
   });
   const [isHovering, setIsHovering] = useState(false);
   const lastWheelTime = useRef(0);
+
+  // Directional cursor zone tracking
+  const stageRef    = useRef(null);
+  const [cursorZone, setCursorZone] = useState(null); // 'prev' | 'next' | null
+  const [cursorPos,  setCursorPos]  = useState({ x: 0, y: 0 });
 
   // Re-center on the current case when navigating between case pages
   useEffect(() => {
@@ -259,6 +262,30 @@ export default function CaseRail({ currentSlug }) {
 
   const handlePrev = useCallback(() => setActive(p => p - 1), []);
   const handleNext = useCallback(() => setActive(p => p + 1), []);
+
+  const handleStageMouseMove = useCallback((e) => {
+    if (!stageRef.current) return;
+    const rect  = stageRef.current.getBoundingClientRect();
+    const x     = e.clientX - rect.left;
+    const y     = e.clientY - rect.top;
+    const third = rect.width / 3;
+    setCursorPos({ x, y });
+    if (x < third)              setCursorZone('prev');
+    else if (x > rect.width - third) setCursorZone('next');
+    else                        setCursorZone(null);
+  }, []);
+
+  const handleStageMouseLeave = useCallback(() => setCursorZone(null), []);
+
+  const handleStageClick = useCallback((e) => {
+    // Only fire zone navigation when click is in a directional zone
+    if (!stageRef.current) return;
+    const rect  = stageRef.current.getBoundingClientRect();
+    const x     = e.clientX - rect.left;
+    const third = rect.width / 3;
+    if (x < third)                   handlePrev();
+    else if (x > rect.width - third) handleNext();
+  }, [handlePrev, handleNext]);
 
   // Autoplay — pauses while hovering or under reduced-motion
   useEffect(() => {
@@ -385,19 +412,53 @@ export default function CaseRail({ currentSlug }) {
         </div>
 
         {/* ── Card Stage ── */}
-        {/*
-          perspective wrapper — overflow-hidden clips ±2 side cards.
-          The drag target is the inner div; perspective is on its wrapper.
-        */}
         <div
+          ref={stageRef}
           style={{
-            height:            CARD_H + 20,   // slight breathing room
+            height:            CARD_H + 20,
             perspective:       '1200px',
             perspectiveOrigin: '50% 50%',
             overflow:          'hidden',
             position:          'relative',
+            cursor:            cursorZone === 'prev' ? 'w-resize' : cursorZone === 'next' ? 'e-resize' : 'grab',
           }}
+          onMouseMove={handleStageMouseMove}
+          onMouseLeave={handleStageMouseLeave}
+          onClick={handleStageClick}
         >
+          {/* Floating directional cursor pill */}
+          {!shouldReduce && cursorZone && (
+            <m.div
+              key={cursorZone}
+              aria-hidden="true"
+              style={{
+                position:      'absolute',
+                left:          cursorPos.x,
+                top:           cursorPos.y,
+                transform:     'translate(-50%, -50%)',
+                zIndex:        20,
+                pointerEvents: 'none',
+                display:       'flex',
+                alignItems:    'center',
+                gap:           8,
+                padding:       '7px 14px',
+                backgroundColor: 'rgba(8,8,8,0.82)',
+                border:        '1px solid var(--color-accent-30)',
+                backdropFilter: 'blur(6px)',
+              }}
+              initial={{ opacity: 0, scale: 0.88 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.88 }}
+              transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)' }}>
+                {cursorZone === 'prev' ? '←' : '→'}
+              </span>
+              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '8px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>
+                {cursorZone === 'prev' ? 'prev' : 'next'}
+              </span>
+            </m.div>
+          )}
           {/* Draggable rail */}
           <m.div
             drag="x"
@@ -502,130 +563,65 @@ export default function CaseRail({ currentSlug }) {
             </AnimatePresence>
           </div>
 
-          {/* Controls row */}
-          <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Controls row — minimal ghost nav + subtle CTA */}
+          <div className="flex items-center gap-5 flex-shrink-0">
 
-            {/* Prev / counter / Next */}
-            <div
-              className="flex items-center"
-              style={{ border: '1px solid var(--color-rule)' }}
-            >
+            {/* Ghost ← counter → */}
+            <div className="flex items-center gap-3">
               <button
                 onClick={handlePrev}
                 aria-label="Previous case"
                 style={{
-                  display:       'flex',
-                  alignItems:    'center',
-                  justifyContent:'center',
-                  width:         40,
-                  height:        40,
-                  background:    'none',
-                  border:        'none',
-                  borderRight:   '1px solid var(--color-rule)',
-                  cursor:        'pointer',
-                  color:         'var(--color-fg-mute)',
-                  fontSize:      '16px',
-                  transition:    'color 0.2s, background 0.2s',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--color-fg-mute)', fontSize: '15px', lineHeight: 1,
+                  padding: '4px', transition: 'color 0.18s',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color       = 'var(--color-fg)';
-                  e.currentTarget.style.background  = 'rgba(255,37,64,0.06)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color       = 'var(--color-fg-mute)';
-                  e.currentTarget.style.background  = 'none';
-                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               >
                 ←
               </button>
-
-              <span
-                style={{
-                  fontFamily:    '"Play", sans-serif',
-                  fontSize:      '9px',
-                  letterSpacing: '0.1em',
-                  color:         'var(--color-fg-mute)',
-                  padding:       '0 14px',
-                  userSelect:    'none',
-                }}
-              >
-                {String(activeIndex + 1).padStart(2, '0')}&nbsp;/&nbsp;{String(count).padStart(2, '0')}
+              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '9px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', userSelect: 'none' }}>
+                {String(activeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
               </span>
-
               <button
                 onClick={handleNext}
                 aria-label="Next case"
                 style={{
-                  display:       'flex',
-                  alignItems:    'center',
-                  justifyContent:'center',
-                  width:         40,
-                  height:        40,
-                  background:    'none',
-                  border:        'none',
-                  borderLeft:    '1px solid var(--color-rule)',
-                  cursor:        'pointer',
-                  color:         'var(--color-fg-mute)',
-                  fontSize:      '16px',
-                  transition:    'color 0.2s, background 0.2s',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--color-fg-mute)', fontSize: '15px', lineHeight: 1,
+                  padding: '4px', transition: 'color 0.18s',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color       = 'var(--color-fg)';
-                  e.currentTarget.style.background  = 'rgba(255,37,64,0.06)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color       = 'var(--color-fg-mute)';
-                  e.currentTarget.style.background  = 'none';
-                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-mute)'}
               >
                 →
               </button>
             </div>
 
-            {/* Open case CTA */}
+            {/* Subtle text CTA */}
             <Link
               to={`/case/${activeItem.slug}`}
               style={{
-                display:        'inline-flex',
-                alignItems:     'center',
-                gap:            8,
-                padding:        '0 20px',
-                height:         40,
-                backgroundColor:'var(--color-accent)',
-                color:          '#fff',
-                fontFamily:     '"Play", sans-serif',
-                fontSize:       '9px',
-                letterSpacing:  '0.18em',
-                textTransform:  'uppercase',
-                textDecoration: 'none',
-                flexShrink:     0,
-                transition:     'opacity 0.2s',
+                fontFamily: '"Play", sans-serif', fontSize: '9px',
+                letterSpacing: '0.16em', textTransform: 'uppercase',
+                color: 'var(--color-accent)', textDecoration: 'none',
+                borderBottom: '1px solid var(--color-accent-30)',
+                paddingBottom: '2px', transition: 'border-color 0.18s',
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.82'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-accent-30)'}
             >
-              OPEN CASE
-              <span aria-hidden="true" style={{ fontSize: '13px' }}>→</span>
+              open case →
             </Link>
           </div>
         </div>
 
-        {/* Drag / keyboard hint — fades after first interaction */}
-        <div
-          className="mt-6 flex justify-center"
-          aria-hidden="true"
-        >
-          <span
-            style={{
-              fontFamily:    '"Play", sans-serif',
-              fontSize:      '8px',
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              color:         'var(--color-fg-mute)',
-              opacity:       0.45,
-            }}
-          >
-            DRAG · SCROLL · ←→
+        {/* Interaction hint — swipe on mobile, hover zones on desktop */}
+        <div className="mt-5 flex justify-center" aria-hidden="true">
+          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '8px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', opacity: 0.35 }}>
+            <span className="md:hidden">← swipe →</span>
+            <span className="hidden md:inline">hover · drag · ←→</span>
           </span>
         </div>
 

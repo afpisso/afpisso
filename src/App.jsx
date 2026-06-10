@@ -1,11 +1,12 @@
 import { Component, useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { MotionConfig, m, AnimatePresence, animate } from 'framer-motion';
+import { MotionConfig, animate } from 'framer-motion';
 import './index.css';
 import { LangProvider } from './contexts/LangContext';
 import { LenisProvider, useLenis } from './contexts/LenisContext';
 import { HuntProvider } from './contexts/HuntContext';
 import { SignalAudioProvider } from './contexts/SignalAudioContext';
+import { TransitionProvider } from './contexts/TransitionContext';
 import HuntHUD from './components/HuntHUD';
 import { usePageMeta } from './hooks/usePageMeta';
 import Nav from './components/Nav';
@@ -13,6 +14,7 @@ import HeroStatementPin from './components/HeroStatementPin';
 import CaseFiles from './components/CaseFiles';
 import Footer from './components/Footer';
 import MenuOverlay from './components/MenuOverlay';
+import PageTransitionOverlay from './components/PageTransitionOverlay';
 import StatsStrip from './components/StatsStrip';
 import HomeGeometryLayer from './components/HomeGeometryLayer';
 
@@ -161,15 +163,6 @@ function NotFoundPage({ onMenuOpen }) {
   );
 }
 
-// ── Page transition wrapper ────────────────────────────────────────────────────
-// Applied to the Routes block, keyed by pathname.
-// Exit is fast (200ms ease-in) so users don't wait.
-// Enter is smooth (400ms ease-out-quart).
-const pageVariants = {
-  initial: { opacity: 0,  y: 14  },
-  enter:   { opacity: 1,  y: 0   },
-  exit:    { opacity: 0,  y: -10, transition: { duration: 0.2, ease: EASE_IN } },
-};
 
 function getActiveMenuSection(location) {
   const path = location.pathname;
@@ -227,44 +220,29 @@ function AppRoutes() {
     <>
       <a href="#main-content" className="skip-to-content">Skip to content</a>
 
-      {/* ── Page transitions ── */}
-      {/*
-        AnimatePresence mode="wait": exit finishes before enter begins.
-        initial={false}: first render doesn't animate (no entry flash on load).
-        key={location.pathname}: tells AnimatePresence which child changed.
-      */}
-      <AnimatePresence mode="wait" initial={false}>
-        <m.div
-          key={location.pathname}
-          variants={pageVariants}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          transition={{ duration: 0.38, ease: EASE_OUT }}
-          style={{ minHeight: '100vh' }}
-        >
-          <Suspense fallback={<PageFallback />}>
-            <Routes location={location}>
-              <Route path="/"              element={<HomePage     onMenuOpen={open} />} />
-              <Route path="/work"          element={<WorkPage     onMenuOpen={open} />} />
-              <Route path="/about"         element={<AboutPage    onMenuOpen={open} />} />
-              <Route path="/resume"        element={<ResumePage   onMenuOpen={open} />} />
-              <Route path="/notes"         element={<NotesPage    onMenuOpen={open} />} />
-              <Route path="/notes/:slug"   element={<NotePage     onMenuOpen={open} />} />
-              <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
-              <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
-              <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
-              <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
-              {/* Legacy routes */}
-              <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
-              <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />
-            </Routes>
-          </Suspense>
-        </m.div>
-      </AnimatePresence>
+      <Suspense fallback={<PageFallback />}>
+        <Routes location={location}>
+          <Route path="/"              element={<HomePage     onMenuOpen={open} />} />
+          <Route path="/work"          element={<WorkPage     onMenuOpen={open} />} />
+          <Route path="/about"         element={<AboutPage    onMenuOpen={open} />} />
+          <Route path="/resume"        element={<ResumePage   onMenuOpen={open} />} />
+          <Route path="/notes"         element={<NotesPage    onMenuOpen={open} />} />
+          <Route path="/notes/:slug"   element={<NotePage     onMenuOpen={open} />} />
+          <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
+          <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
+          <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
+          <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
+          {/* Legacy routes */}
+          <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />
+          <Route path="*"              element={<NotFoundPage onMenuOpen={open} />} />
+        </Routes>
+      </Suspense>
 
-      {/* MenuOverlay lives outside transition wrapper so it doesn't animate with pages */}
+      {/* MenuOverlay lives outside Routes so it doesn't animate with pages */}
       <MenuOverlay open={menuOpen} onClose={close} activeSection={activeMenuSection} />
+
+      {/* Page transition overlay — red wipe for case entry, soft fade for prev/next */}
+      <PageTransitionOverlay />
 
       {/* Decorative overlays — outside transitions, always-present */}
       <Suspense fallback={null}>
@@ -314,7 +292,9 @@ export default function App() {
         <LenisProvider>
           <SignalAudioProvider>
             <HuntProvider>
-              <AppRoutes />
+              <TransitionProvider>
+                <AppRoutes />
+              </TransitionProvider>
             </HuntProvider>
           </SignalAudioProvider>
         </LenisProvider>

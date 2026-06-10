@@ -35,11 +35,15 @@ const EASE_OUT = [0.16, 1, 0.3, 1];
 const EASE_IN  = [0.4, 0, 1, 1];
 
 // Dark glass — purposeful: fixed overlay over scrolling content (blur-purpose ✓)
+// Note: using longhands to avoid React shorthand/longhand conflict with Framer Motion
 const GLASS = {
   background: 'rgba(8,8,8,0.92)',
   backdropFilter: 'blur(24px)',
   WebkitBackdropFilter: 'blur(24px)',
-  border: '1px solid rgba(255,255,255,0.08)',
+  borderTop:    '1px solid rgba(255,255,255,0.08)',
+  borderRight:  '1px solid rgba(255,255,255,0.08)',
+  borderBottom: '1px solid rgba(255,255,255,0.08)',
+  borderLeft:   '1px solid rgba(255,255,255,0.08)',
   boxShadow: '0 32px 64px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)',
 };
 
@@ -463,9 +467,11 @@ function SectionStamp({ sections, activeId, scrollTo }) {
                       gap: 4,
                       padding: '10px 14px',
                       background: isActive ? 'rgba(255,37,64,0.07)' : 'none',
-                      border: 'none',
-                      borderTop: i >= 2 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                      borderLeft: i % 2 !== 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      borderTop: i >= 2 ? '1px solid rgba(255,255,255,0.05)' : '0px solid transparent',
+                      borderLeft: i % 2 !== 0 ? '1px solid rgba(255,255,255,0.05)' : '0px solid transparent',
+                      borderRight: '0px solid transparent',
+                      borderBottom: '0px solid transparent',
+                      outline: 'none',
                       cursor: 'pointer',
                       textAlign: 'left',
                       minHeight: 52,
@@ -527,7 +533,6 @@ function SectionStamp({ sections, activeId, scrollTo }) {
           alignItems: 'center',
           gap: 0,
           padding: 0,
-          border: 'none',
           cursor: 'pointer',
           height: 36,
           minWidth: 0,

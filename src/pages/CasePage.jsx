@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { usePageTransition } from '../contexts/TransitionContext';
 import { cases } from '../data/cases';
 import { fieldNotes } from '../data/fieldNotes';
 import Nav from '../components/Nav';
@@ -50,8 +51,16 @@ function HeroScrollReveal({ caseData, t, lang }) {
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const imgSrc          = `/thumbnails/${caseData.slug}.webp`;
   const [imgFailed, setImgFailed] = useState(false);
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
 
   const [line1, line2] = _splitTitle(caseData.title.toUpperCase());
+  const titleDelay = (line1.length + (line2?.length ?? 0)) * 0.028;
 
   const charVariants = {
     hidden: { opacity: 0, filter: 'blur(10px)', y: 18 },
@@ -70,36 +79,39 @@ function HeroScrollReveal({ caseData, t, lang }) {
   ];
 
   return (
-    <section style={{ position: 'relative', height: '100svh', borderBottom: `1px solid ${RULE}` }}>
-      <div style={{ position: 'relative', height: '100%', overflow: 'hidden', display: 'grid', placeItems: 'center', backgroundColor: '#000' }}>
+    <section ref={sectionRef} style={{ position: 'relative', minHeight: '100svh', borderBottom: `1px solid ${RULE}` }}>
+      <div style={{ position: 'relative', minHeight: '100svh', overflow: 'hidden', backgroundColor: '#000' }}>
 
         {/* accent top line */}
         <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(to right, ${ACCENT} 0%, var(--color-accent-35) 55%, transparent 100%)`, zIndex: 5 }} />
 
-        {/* thumbnail background — full cover, immediate */}
+        {/* thumbnail background — parallax + cinematic exposure on mount */}
         {!imgFailed && (
-          <img
+          <m.img
             src={imgSrc}
             alt=""
             aria-hidden="true"
             onError={() => setImgFailed(true)}
             style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
+              position: 'absolute', top: '-14%', left: 0, right: 0,
+              width: '100%', height: '128%',
               objectFit: 'cover',
-              opacity: 0.55,
               zIndex: 1,
+              y: shouldReduce ? '0%' : bgY,
             }}
+            initial={shouldReduce ? { opacity: 0.65 } : { opacity: 0.1, scale: 1.06 }}
+            animate={{ opacity: 0.65, scale: 1 }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
           />
         )}
-        {/* dark gradient so title stays legible */}
+        {/* gradient — heavy at bottom where title sits, light at top */}
         <div aria-hidden="true" style={{
           position: 'absolute', inset: 0, zIndex: 2,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.6) 100%)',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.55) 38%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0.5) 100%)',
         }} />
 
-        {/* breadcrumb */}
-        <m.div className="flex items-center justify-center gap-3" style={{ position: 'absolute', top: 100, left: 0, right: 0, zIndex: 5, flexWrap: 'wrap', padding: '0 16px' }}
+        {/* breadcrumb — top left */}
+        <m.div className="flex items-center gap-3" style={{ position: 'absolute', top: 100, left: 'clamp(20px, 5vw, 48px)', zIndex: 5, flexWrap: 'wrap' }}
           initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <Link to="/work" style={{ fontFamily: MONO, fontSize: '11px', color: DIM, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none' }}
@@ -118,8 +130,8 @@ function HeroScrollReveal({ caseData, t, lang }) {
           ))}
         </div>
 
-        {/* title layer */}
-        <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 clamp(20px, 5vw, 48px)' }}>
+        {/* title — pinned to bottom-left, editorial film-poster layout */}
+        <div style={{ position: 'absolute', bottom: 'clamp(64px, 9vh, 88px)', left: 'clamp(20px, 5vw, 48px)', right: 'clamp(20px, 5vw, 48px)', zIndex: 3 }}>
           {/* Case ID badge — wipes in from left */}
           <m.div style={{ marginBottom: 20, overflow: 'hidden' }}
             initial={shouldReduce ? false : { clipPath: 'inset(0 100% 0 0)' }}
@@ -134,8 +146,8 @@ function HeroScrollReveal({ caseData, t, lang }) {
             }}>{caseData.id}</span>
           </m.div>
 
-          {/* Title — character-level stagger with blur */}
-          <h1 style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 13vw, 168px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase' }}>
+          {/* Title — character-level stagger with blur, left-aligned */}
+          <h1 style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 11vw, 148px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase', textAlign: 'left' }}>
             <m.span
               aria-label={line1}
               style={{ display: 'block' }}
@@ -180,18 +192,40 @@ function HeroScrollReveal({ caseData, t, lang }) {
             )}
           </h1>
 
-          {/* Tags — fade in after title completes */}
-          {caseData.tags?.length > 0 && (
-            <m.div
-              style={{ marginTop: 24, display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.32)', textTransform: 'uppercase' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: (line1.length + (line2?.length ?? 0)) * 0.028 + 0.25, ease: 'easeOut' }}
-            >
-              {caseData.tags.slice(0, 3).map((tag, i) => <span key={i}>{tag}</span>)}
-            </m.div>
-          )}
+          {/* Meta row — role · platform · year */}
+          <m.div
+            style={{ marginTop: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.38)', textTransform: 'uppercase' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: titleDelay + 0.3, ease: 'easeOut' }}
+          >
+            {caseData.role && <span>{caseData.role}</span>}
+            {caseData.platform?.length > 0 && (
+              <>
+                <span style={{ color: ACCENT, opacity: 0.4 }}>·</span>
+                <span>{caseData.platform.join(' / ')}</span>
+              </>
+            )}
+            {caseData.year && (
+              <>
+                <span style={{ color: ACCENT, opacity: 0.4 }}>·</span>
+                <span>{caseData.year}</span>
+              </>
+            )}
+          </m.div>
         </div>
+
+        {/* scroll cue — pulsing line at bottom-center */}
+        {!shouldReduce && (
+          <div style={{ position: 'absolute', bottom: 22, left: '50%', transform: 'translateX(-50%)', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, pointerEvents: 'none' }}>
+            <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>scroll</span>
+            <m.div
+              style={{ width: 1, height: 28, backgroundColor: ACCENT, transformOrigin: 'top' }}
+              animate={{ scaleY: [0, 1, 1, 0], opacity: [0, 0.7, 0.7, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', times: [0, 0.3, 0.7, 1], repeatDelay: 0.6 }}
+            />
+          </div>
+        )}
 
       </div>
     </section>
@@ -428,7 +462,7 @@ function PullQuote({ children }) {
       initial={shouldReduce ? { opacity: 1 } : { opacity: 0, x: -14 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
     >
       <p style={{
         fontFamily: BEBAS,
@@ -521,6 +555,17 @@ const GALLERY_CORNERS = [
   { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
 ];
 
+// Angular chamfer cut for HUD frames
+function galleryChamfer(n) {
+  return `polygon(0 0, calc(100% - ${n}px) 0, 100% ${n}px, 100% 100%, ${n}px 100%, 0 calc(100% - ${n}px))`;
+}
+
+// Scanline texture overlay — subtle 4px-pitch CRT texture
+const SCANLINES = {
+  position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+  backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px)',
+};
+
 // ScanSweep and ZoomModal imported from ../components/ZoomModal
 
 function GalleryPlaceholder({ index, caseId }) {
@@ -548,14 +593,23 @@ function GalleryHero({ src, caseId, title, onOpen }) {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const imgY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
 
-  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0, filter: 'brightness(0.72) blur(8px)' };
-  const revealAnimate    = { opacity: 1, filter: 'brightness(1) blur(0px)' };
-  const revealTransition = { duration: 0.55, ease: [0.16, 1, 0.3, 1] };
+  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0 };
+  const revealAnimate    = { opacity: 1 };
+  const revealTransition = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
   return (
     <m.div
       ref={ref}
-      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#060606', width: '100%', height: '100%', cursor: src && !failed ? 'zoom-in' : 'default' }}
+      style={{
+        position: 'relative', overflow: 'hidden',
+        backgroundColor: '#060606', width: '100%', height: '100%',
+        cursor: src && !failed ? 'zoom-in' : 'default',
+        clipPath: galleryChamfer(14),
+        boxShadow: hovered
+          ? 'inset 0 0 0 1px rgba(255,37,64,0.45)'
+          : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+        transition: 'box-shadow 0.22s ease',
+      }}
       initial={revealInitial}
       whileInView={revealAnimate}
       viewport={{ once: true, margin: '-40px' }}
@@ -565,10 +619,7 @@ function GalleryHero({ src, caseId, title, onOpen }) {
       onClick={() => src && !failed && onOpen?.()}
     >
       {!failed ? (
-        // Oversized container enables parallax without blank edges
-        <m.div
-          style={{ position: 'absolute', top: '-6%', left: '-6%', width: '112%', height: '112%', y: reduced ? 0 : imgY }}
-        >
+        <m.div style={{ position: 'absolute', top: '-6%', left: '-6%', width: '112%', height: '112%', y: reduced ? 0 : imgY }}>
           <m.img
             src={src}
             alt={`${title} — main screen`}
@@ -587,15 +638,44 @@ function GalleryHero({ src, caseId, title, onOpen }) {
         <GalleryPlaceholder index={0} caseId={caseId} />
       )}
 
-      {/* Counter badge */}
-      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
-        01
+      {/* Scanline texture */}
+      <div aria-hidden="true" style={SCANLINES} />
+
+      {/* REC indicator — top right */}
+      <div aria-hidden="true" style={{ position: 'absolute', top: 10, right: 14, zIndex: 6, display: 'flex', alignItems: 'center', gap: 5, pointerEvents: 'none' }}>
+        {!reduced && (
+          <m.div
+            style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: ACCENT, flexShrink: 0 }}
+            animate={{ opacity: [1, 0.15, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        )}
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>REC</span>
       </div>
 
-      {/* Corner marks on hover */}
-      <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
-        {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 24, height: 24, ...s }} />)}
-      </m.div>
+      {/* Screen label — top left */}
+      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+        SCR_01
+      </div>
+
+      {/* Bottom metadata bar */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 5,
+        padding: '18px 12px 9px',
+        background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+        pointerEvents: 'none',
+      }}>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase' }}>16:9</span>
+      </div>
+
+      {/* Corner brackets — always visible at low opacity, red on hover */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 7 }}>
+        {GALLERY_CORNERS.map((s, i) => (
+          <div key={i} style={{ position: 'absolute', width: 22, height: 22, ...s, opacity: hovered ? 1 : 0.22, transition: 'opacity 0.18s ease' }} />
+        ))}
+      </div>
 
       <ScanSweep active={hovered} scanKey={scanKey} />
     </m.div>
@@ -609,15 +689,24 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
   const [scanKey, setScanKey] = useState(0);
   const reduced = useReducedMotion();
 
-  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0, filter: 'brightness(0.78) blur(6px)', y: 10 };
-  const revealAnimate    = { opacity: 1, filter: 'brightness(1) blur(0px)', y: 0 };
-  const revealTransition = { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: tierDelay };
+  const revealInitial    = reduced ? { opacity: 1 } : { opacity: 0, y: 10 };
+  const revealAnimate    = { opacity: 1, y: 0 };
+  const revealTransition = { duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: tierDelay };
 
   const num = String(index + 1).padStart(2, '0');
 
   return (
     <m.div
-      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#060606', width: '100%', height: '100%', cursor: src && !failed ? 'zoom-in' : 'default' }}
+      style={{
+        position: 'relative', overflow: 'hidden',
+        backgroundColor: '#060606', width: '100%', height: '100%',
+        cursor: src && !failed ? 'zoom-in' : 'default',
+        clipPath: galleryChamfer(8),
+        boxShadow: hovered
+          ? 'inset 0 0 0 1px rgba(255,37,64,0.4)'
+          : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+        transition: 'box-shadow 0.22s ease',
+      }}
       initial={revealInitial}
       whileInView={revealAnimate}
       viewport={{ once: true, margin: '-30px' }}
@@ -644,13 +733,32 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
         <GalleryPlaceholder index={index} caseId={caseId} />
       )}
 
-      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
-        {num}
+      {/* Scanline texture */}
+      <div aria-hidden="true" style={SCANLINES} />
+
+      {/* Screen label — top left */}
+      <div style={{ position: 'absolute', top: 8, left: 10, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+        SCR_{num}
       </div>
 
-      <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
-        {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 20, height: 20, ...s }} />)}
-      </m.div>
+      {/* Bottom metadata bar */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 5,
+        padding: '14px 10px 7px',
+        background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+        pointerEvents: 'none',
+      }}>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>16:9</span>
+      </div>
+
+      {/* Corner brackets — always visible at low opacity, red on hover */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 7 }}>
+        {GALLERY_CORNERS.map((s, i) => (
+          <div key={i} style={{ position: 'absolute', width: 16, height: 16, ...s, opacity: hovered ? 1 : 0.2, transition: 'opacity 0.18s ease' }} />
+        ))}
+      </div>
 
       <ScanSweep active={hovered} scanKey={scanKey} />
     </m.div>
@@ -857,28 +965,29 @@ function OutcomeCallout({ stats }) {
 
       <div className="max-w-[1400px] mx-auto px-6 py-12">
         <div className="sys-label mb-8" style={{ color: ACCENT }}>{'//'} Outcome</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
           {stats.map((s, i) => (
             <m.div
               key={i}
               style={{
-                flex: '1 1 160px',
-                padding: '20px 24px',
-                borderRight: `1px solid ${RULE}`,
-                borderBottom: `1px solid ${RULE}`,
+                flex: '1 1 180px',
+                padding: '8px 0',
+                paddingRight: '40px',
+                borderLeft: i > 0 ? `1px solid ${RULE}` : 'none',
+                paddingLeft: i > 0 ? '40px' : '0',
               }}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
             >
               <div style={{
                 fontFamily: BEBAS,
-                fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
+                fontSize: 'clamp(2.8rem, 5vw, 4.5rem)',
                 color: ACCENT,
                 lineHeight: 1,
-                letterSpacing: '0.02em',
-                marginBottom: 6,
+                letterSpacing: '-0.01em',
+                marginBottom: 8,
               }}>
                 {s.value}
               </div>
@@ -896,14 +1005,18 @@ function DecisionBlock({ item, index }) {
   const cp = t.casePage.sections;
   return (
     <m.div
-      className="relative p-6 mb-4"
-      style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}
+      className="relative py-6 mb-4"
+      style={{
+        borderLeft: `2px solid ${index === 0 ? ACCENT : RULE}`,
+        borderTop: `1px solid ${RULE}`,
+        paddingLeft: '24px',
+        transition: 'border-left-color 0.2s',
+      }}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: index * 0.06 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: index * 0.06 }}
     >
-      <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ backgroundColor: index === 0 ? ACCENT : RULE }} aria-hidden="true" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <div className="sys-label mb-2" style={{ color: ACCENT }}>{cp.problem}</div>
@@ -941,6 +1054,7 @@ function QuickFacts({ facts }) {
 export default function CasePage({ onMenuOpen }) {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { navigateWithSlide } = usePageTransition();
   const { t, lang } = useLang();
 
   const caseData = cases.find((c) => c.slug === slug);
@@ -1088,44 +1202,7 @@ export default function CasePage({ onMenuOpen }) {
           </m.div>
         )}
 
-        {/* ── Work screenshot gallery ─────────────────────────────────────────
-             Shows gallery when images are defined; WIP notice otherwise.   */}
-        {caseData.gallery?.length > 0 ? (
-          <CaseGallery
-            gallery={caseData.gallery}
-            caseId={caseData.id}
-            title={caseData.title}
-          />
-        ) : (
-          <m.div
-            className="max-w-[1400px] mx-auto px-6 py-10"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          >
-            <div
-              style={{
-                border: `1px solid var(--color-rule)`,
-                borderLeft: `3px solid var(--color-accent)`,
-                backgroundColor: 'rgba(255,37,64,0.025)',
-                padding: '20px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-              }}
-            >
-              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: '18px', color: 'var(--color-accent)', flexShrink: 0 }}>{'⚠'}</span>
-              <div>
-                <div style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.2em', color: 'var(--color-accent)', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>
-                  // Work in progress
-                </div>
-                <p style={{ fontFamily: MONO, fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.7, margin: 0 }}>
-                  Screen captures for this case are not yet available for public sharing. Check back soon.
-                </p>
-              </div>
-            </div>
-          </m.div>
-        )}
+        {/* gallery moved — renders after outcomes section below */}
 
         {/* NDA notice if applicable */}
         {(caseData.visibility === 'nda-safe') && content?.quickFacts?.confidentiality && (
@@ -1211,23 +1288,27 @@ export default function CasePage({ onMenuOpen }) {
                   className="py-14 mb-2"
                   style={{
                     borderBottom: `1px solid ${RULE}`,
-                    backgroundColor: 'rgba(255,37,64,0.022)',
-                    // Bleed tint to the left edge of the article container
-                    marginLeft: '-1.5rem',
+                    borderLeft: `2px solid ${ACCENT}`,
                     paddingLeft: '1.5rem',
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabelPrimary>{t.casePage.sections.executiveSummary}</SectionLabelPrimary>
-                  {(lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline) && (
-                    <PullQuote>{lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}</PullQuote>
-                  )}
-                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>
-                    {content.summary}
-                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-14 items-start">
+                    <div>
+                      <SectionLabelPrimary>{t.casePage.sections.executiveSummary}</SectionLabelPrimary>
+                    </div>
+                    <div>
+                      {(lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline) && (
+                        <PullQuote>{lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}</PullQuote>
+                      )}
+                      <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>
+                        {content.summary}
+                      </p>
+                    </div>
+                  </div>
                 </m.section>
               )}
 
@@ -1239,8 +1320,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.context}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.context}</p>
@@ -1254,36 +1335,43 @@ export default function CasePage({ onMenuOpen }) {
                   className="py-14 mb-2"
                   style={{
                     borderBottom: `1px solid ${RULE}`,
-                    backgroundColor: 'rgba(255,37,64,0.022)',
-                    marginLeft: '-1.5rem',
+                    borderLeft: `2px solid ${ACCENT}`,
                     paddingLeft: '1.5rem',
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabelPrimary>{t.casePage.sections.challenge}</SectionLabelPrimary>
+                  <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-14 items-start">
+                    <div>
+                      <SectionLabelPrimary>{t.casePage.sections.challenge}</SectionLabelPrimary>
+                    </div>
+                    <div>
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.challenge}</p>
                   {content?.challengeRisks?.length > 0 && (
-                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-px" style={{ backgroundColor: RULE }}>
+                    <div className="mt-8">
                       {content.challengeRisks.map((r, i) => (
                         <m.div
                           key={i}
-                          style={{ backgroundColor: 'var(--color-bg)', padding: '20px 24px' }}
-                          initial={{ opacity: 0, y: 12 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                          className="grid py-5 border-t"
+                          style={{ gridTemplateColumns: '48px 1fr', gap: '24px', borderColor: RULE }}
+                          initial={{ opacity: 0, x: -12 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: '-60px' }}
+                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
                         >
-                          <div aria-hidden="true" style={{ fontFamily: BEBAS, fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: 'var(--color-accent-20)', lineHeight: 1, marginBottom: 12, letterSpacing: '0.02em' }}>
+                          <div style={{ fontFamily: MONO, fontSize: '10px', color: ACCENT, letterSpacing: '0.16em', fontWeight: 700, paddingTop: '2px' }}>
                             {String(i + 1).padStart(2, '0')}
                           </div>
-                          <p style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.75 }}>{r}</p>
+                          <p style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.8 }}>{r}</p>
                         </m.div>
                       ))}
+                      <div className="border-t" style={{ borderColor: RULE }} />
                     </div>
                   )}
+                    </div>
+                  </div>
                 </m.section>
               )}
 
@@ -1295,8 +1383,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.myRole}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.role}</p>
@@ -1321,8 +1409,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.constraints}</SectionLabel>
                   <ul className="space-y-3">
@@ -1344,8 +1432,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.playerExperienceLoop || 'Player Experience Loop'}</SectionLabel>
                   {content.playerLoop.intro && (
@@ -1355,27 +1443,45 @@ export default function CasePage({ onMenuOpen }) {
                   )}
                   {content.playerLoop.steps?.length > 0 && (
                     <div className="mb-10">
-                      {content.playerLoop.steps.map((step, i) => (
-                        <m.div
-                          key={i}
-                          className="flex gap-5 items-start py-4 border-t"
-                          style={{ borderColor: RULE }}
-                          initial={{ opacity: 0, x: -12 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true, margin: '-60px' }}
-                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
-                        >
-                          <span style={{ fontFamily: MONO, fontSize: '10px', color: ACCENT, letterSpacing: '0.16em', flexShrink: 0, paddingTop: '3px', minWidth: 28, fontWeight: 700 }}>
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                          <div>
-                            <h3 className="uppercase mb-1" style={{ fontFamily: BEBAS, fontSize: '1.25rem', color: FG, letterSpacing: '0.03em', lineHeight: 1 }}>
-                              {step.label}
-                            </h3>
-                            <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{step.desc}</p>
-                          </div>
-                        </m.div>
-                      ))}
+                      {content.playerLoop.steps.map((step, i) => {
+                        const isLast = i === content.playerLoop.steps.length - 1;
+                        return (
+                          <m.div
+                            key={i}
+                            style={{ display: 'flex', gap: 20, paddingTop: 16, paddingBottom: 16, borderTop: `1px solid ${RULE}` }}
+                            initial={{ opacity: 0, x: -12 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, margin: '-60px' }}
+                            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                          >
+                            {/* Number + vertical connector */}
+                            <div style={{ position: 'relative', flexShrink: 0, width: 28, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingTop: 3 }}>
+                              <span style={{ fontFamily: MONO, fontSize: '10px', color: ACCENT, letterSpacing: '0.16em', fontWeight: 700 }}>
+                                {String(i + 1).padStart(2, '0')}
+                              </span>
+                              {!isLast && (
+                                <div
+                                  aria-hidden="true"
+                                  style={{
+                                    position: 'absolute',
+                                    top: 20,
+                                    bottom: -17,
+                                    left: 0,
+                                    width: '1px',
+                                    backgroundColor: 'rgba(255,255,255,0.1)',
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="uppercase mb-1" style={{ fontFamily: BEBAS, fontSize: '1.25rem', color: FG, letterSpacing: '0.03em', lineHeight: 1 }}>
+                                {step.label}
+                              </h3>
+                              <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{step.desc}</p>
+                            </div>
+                          </m.div>
+                        );
+                      })}
                     </div>
                   )}
                   {content.playerLoop.asset && (
@@ -1405,8 +1511,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.uxApproach}</SectionLabel>
                   <div>
@@ -1452,8 +1558,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.keyDecisions}</SectionLabel>
                   <p className="mb-8" style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.85, maxWidth: '560px' }}>
@@ -1473,8 +1579,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.featuredSystems || 'Featured systems'}</SectionLabel>
                   <div className="space-y-16">
@@ -1532,8 +1638,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.beforeAfter || 'Before and after'}</SectionLabel>
                   {content.beforeAfter.context && (
@@ -1603,8 +1709,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.deliverables}</SectionLabel>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1631,12 +1737,21 @@ export default function CasePage({ onMenuOpen }) {
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabelPrimary>{t.casePage.sections.outcome}</SectionLabelPrimary>
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.outcome}</p>
                 </m.section>
+              )}
+
+              {/* ── Deliverables gallery — after outcomes, evidence of the work ── */}
+              {caseData.gallery?.length > 0 && (
+                <CaseGallery
+                  gallery={caseData.gallery}
+                  caseId={caseData.id}
+                  title={caseData.title}
+                />
               )}
 
               {/* Research, Playtests and Feedback */}
@@ -1647,8 +1762,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.playtests || 'Research, Playtests and Feedback'}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>{content.playtests}</p>
@@ -1663,8 +1778,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.whatILearned || 'What I learned'}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>{content.whatILearned}</p>
@@ -1679,8 +1794,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.nextSteps}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.nextSteps}</p>
@@ -1695,8 +1810,8 @@ export default function CasePage({ onMenuOpen }) {
                   style={{ borderBottom: `1px solid ${RULE}`, position: 'relative', overflow: 'hidden' }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div aria-hidden="true" style={{
                     position: 'absolute', top: 12, right: -8,
@@ -1723,8 +1838,8 @@ export default function CasePage({ onMenuOpen }) {
                 className="py-10"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               >
                 <p className="mb-6" style={{ fontFamily: MONO, fontSize: '15px', color: 'rgba(240,238,234,0.8)', lineHeight: 1.8 }}>
                   {t.casePage_cta.body}
@@ -1765,6 +1880,10 @@ export default function CasePage({ onMenuOpen }) {
                     }}
                     onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.025)'; }}
                     onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateWithSlide(`/case/${c.slug}`, dir);
+                    }}
                   >
                     {/* Direction label */}
                     <div

@@ -326,12 +326,16 @@ function useActiveSection(ids) {
       setActive((prev) => (prev === bestId ? prev : bestId));
     };
 
-    window.addEventListener('scroll', update, { passive: true });
+    let rafId;
+    const throttled = () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(update); };
+
+    window.addEventListener('scroll', throttled, { passive: true });
     update(); // Immediate check on mount
     // Retry after lazy sections have had time to load
     const t = setTimeout(update, 600);
     return () => {
-      window.removeEventListener('scroll', update);
+      window.removeEventListener('scroll', throttled);
+      cancelAnimationFrame(rafId);
       clearTimeout(t);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -402,7 +406,7 @@ export default function Hero() {
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const contentOpacity = useTransform(scrollYProgress, [0.35, 0.9], [1, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0.45, 0.95], [1, 0]);
 
   // Particles are visible in every section (transparent backgrounds) — never pause
   // based on scroll position. The canvas pauses automatically on document.hidden.
@@ -566,10 +570,10 @@ export default function Hero() {
                 className="mb-6 md:mb-10"
                 style={{
                   fontFamily: '"Play", sans-serif',
-                  fontSize: '13px',
+                  fontSize: '14px',
                   color: 'var(--color-fg-dim)',
-                  letterSpacing: '0.04em',
-                  maxWidth: '520px',
+                  letterSpacing: '0.02em',
+                  maxWidth: '560px',
                 }}
               >
                 {t.hero.proof}
@@ -645,9 +649,7 @@ export default function Hero() {
         style={{
           borderTop: '1px solid rgba(255,255,255,0.12)',
           borderBottom: '1px solid rgba(255,255,255,0.12)',
-          background: 'linear-gradient(100deg, rgba(14,18,22,0.72) 0%, rgba(10,10,10,0.46) 54%, rgba(255,37,64,0.10) 100%)',
-          backdropFilter: 'blur(22px) saturate(145%)',
-          WebkitBackdropFilter: 'blur(22px) saturate(145%)',
+          background: 'linear-gradient(100deg, rgba(12,15,18,0.97) 0%, rgba(10,10,10,0.96) 54%, rgba(18,8,10,0.97) 100%)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(255,255,255,0.04)',
         }}
       >

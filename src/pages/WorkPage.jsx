@@ -11,6 +11,7 @@ import { StatusDiamond } from '../components/CyberIcons';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import SignalTrigger from '../components/SignalTrigger';
+import { usePageTransition } from '../contexts/TransitionContext';
 import { m, AnimatePresence, useMotionValue, useSpring, useReducedMotion, useScroll, useTransform, useSpring as useSpringValue } from 'framer-motion';
 
 const BASE_URL = 'https://byandresfe.com';
@@ -173,6 +174,7 @@ function CursorPreview({ items, hovered }) {
 function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
   const vs = VISIBILITY_STYLE[caseData.visibility] || VISIBILITY_STYLE['legacy'];
   const statusLabel = t.caseStatuses?.[caseData.visibility] || caseData.status;
+  const { navigateWithWipe } = usePageTransition();
 
   return (
     <m.article
@@ -191,13 +193,32 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
         className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300 pointer-events-none"
         style={{ backgroundColor: isHovered ? 'var(--color-accent-45)' : 'var(--color-rule)' }}
       />
+      {/* Left accent bar */}
+      <div
+        aria-hidden="true"
+        className="absolute left-0 top-0 bottom-0 w-[2px] pointer-events-none"
+        style={{
+          backgroundColor: 'var(--color-accent)',
+          opacity: isHovered ? 1 : 0,
+          transform: isHovered ? 'scaleY(1)' : 'scaleY(0)',
+          transformOrigin: 'top',
+          transition: 'opacity 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      />
 
 
       <Link
         to={`/case/${caseData.slug}`}
         aria-label={`${caseData.title}`}
         style={{ textDecoration: 'none', display: 'block' }}
-        onClick={() => analytics.caseCardClick?.(caseData.slug, caseData.title)}
+        onClick={(e) => {
+          e.preventDefault();
+          analytics.caseCardClick?.(caseData.slug, caseData.title);
+          navigateWithWipe(`/case/${caseData.slug}`, {
+            caseId: `CASE-${String(caseData.id ?? (cases.findIndex(c => c.slug === caseData.slug) + 1)).padStart(3, '0')}`,
+            caseTitle: caseData.title,
+          });
+        }}
       >
         {/* Mobile thumbnail — desktop uses cursor-follow preview instead */}
         <div
@@ -339,8 +360,8 @@ function MobileWorkCard({ caseData, index, total }) {
   const dimRaw   = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1, 0.55]);
   const blurRaw  = useTransform(scrollYProgress, [0.65, 1], [0, 4]);
   const blurFilter = useTransform(blurRaw, v => `blur(${v}px)`);
-  const smoothScale = useSpringValue(scaleRaw, { stiffness: 240, damping: 26 });
-  const smoothDim   = useSpringValue(dimRaw,   { stiffness: 240, damping: 26 });
+  const smoothScale = useSpringValue(scaleRaw, { stiffness: 180, damping: 30 });
+  const smoothDim   = useSpringValue(dimRaw,   { stiffness: 180, damping: 30 });
 
   return (
     <div
@@ -789,7 +810,7 @@ export default function WorkPage({ onMenuOpen }) {
             >
               {t.caseFiles.label.split(' ').slice(0, -1).join(' ')}<br />
               <ScrambleText duration={480}>
-                {t.caseFiles.label.split(' ').slice(-1)}
+                {t.caseFiles.label.split(' ').slice(-1).join(' ')}
               </ScrambleText>
             </m.h1>
 
@@ -861,14 +882,13 @@ export default function WorkPage({ onMenuOpen }) {
                   key={f}
                   onClick={() => { setActive(f); setHovered(null); analytics.filterUse(f); }}
                   aria-pressed={active === f}
-                  className="relative transition-colors duration-200"
+                  className={`relative transition-colors duration-200 ${active === f ? 'text-[var(--color-fg)]' : 'text-[var(--color-fg-mute)] hover:text-[var(--color-fg-dim)]'}`}
                   style={{
                     fontFamily: '"Play", sans-serif',
                     fontSize: '10px',
                     fontWeight: 700,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: active === f ? 'var(--color-fg)' : 'var(--color-fg-mute)',
                     backgroundColor: 'transparent',
                     border: 'none',
                     paddingBottom: '3px',
@@ -877,8 +897,6 @@ export default function WorkPage({ onMenuOpen }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                   }}
-                  onMouseEnter={e => { if (active !== f) e.currentTarget.style.color = 'var(--color-fg-dim)'; }}
-                  onMouseLeave={e => { if (active !== f) e.currentTarget.style.color = 'var(--color-fg-mute)'; }}
                 >
                   {t.caseFiles.filterLabels?.[f] ?? f}
                   {active === f && (
