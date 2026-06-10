@@ -20,15 +20,16 @@ import { useLang } from '../contexts/LangContext';
 const EASE_OUT   = [0.16, 1, 0.3, 1];
 const EASE_IN    = [0.4,  0, 1,  1];
 
-const ACCENT = 'var(--color-accent)';
-const RAIL_CORNERS = [
-  { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
-  { top: 0,    right: 0,   borderTop:    `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
-  { bottom: 0, left: 0,    borderBottom: `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
-  { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
-];
+const ACCENT_HEX    = '#ff2540';
+const CHAMFER_C     = 16; // center card — clearly visible
+const CHAMFER_S     = 6;  // side cards — subtle
+
 function railChamfer(n) {
   return `polygon(0 0, calc(100% - ${n}px) 0, 100% ${n}px, 100% 100%, ${n}px 100%, 0 calc(100% - ${n}px))`;
+}
+// SVG polygon points for the chamfer shape at exact card dimensions
+function railSvgPoints(w, h, n) {
+  return `0,0 ${w - n},0 ${w},${n} ${w},${h} ${n},${h} 0,${h - n}`;
 }
 const BASE_SPRING = { type: 'spring', stiffness: 280, damping: 26, mass: 0.85 };
 const TAP_SPRING  = { type: 'spring', stiffness: 420, damping: 20, mass: 0.85 };
@@ -147,13 +148,8 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
         position: 'relative',
         width: '100%', height: '100%',
         overflow: 'hidden',
-        clipPath: railChamfer(isCenter ? 8 : 5),
-        boxShadow: isCenter
-          ? hovered
-            ? 'inset 0 0 0 1px rgba(255,37,64,0.55)'
-            : 'inset 0 0 0 1px rgba(255,37,64,0.22)'
-          : 'inset 0 0 0 1px rgba(255,255,255,0.05)',
-        transition: 'box-shadow 0.22s ease',
+        clipPath: railChamfer(isCenter ? CHAMFER_C : CHAMFER_S),
+        boxShadow: isCenter ? 'none' : 'inset 0 0 0 1px rgba(255,255,255,0.05)',
       }}>
 
         {/* Thumbnail */}
@@ -225,17 +221,25 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
           )}
         </div>
 
-        {/* Corner brackets — subtle at rest, full accent on hover (center only) */}
+        {/* Scan dash border — animated chamfer outline on center card */}
         {isCenter && (
-          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }}>
-            {RAIL_CORNERS.map((s, i) => (
-              <div key={i} style={{
-                position: 'absolute', width: 14, height: 14, ...s,
-                opacity: hovered ? 1 : 0.28,
-                transition: 'opacity 0.18s ease',
-              }} />
-            ))}
-          </div>
+          <svg
+            aria-hidden="true"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 6, overflow: 'visible' }}
+            viewBox={`0 0 ${CARD_W} ${CARD_H}`}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <m.polygon
+              points={railSvgPoints(CARD_W, CARD_H, CHAMFER_C)}
+              fill="none"
+              stroke={ACCENT_HEX}
+              strokeWidth="1"
+              strokeDasharray="5 5"
+              strokeOpacity={hovered ? 0.9 : 0.45}
+              animate={{ strokeDashoffset: [0, -10] }}
+              transition={{ duration: 0.7, ease: 'linear', repeat: Infinity }}
+            />
+          </svg>
         )}
 
         {/* Center card hover reveal */}
