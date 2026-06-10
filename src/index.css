@@ -613,8 +613,8 @@ section[id] {
 
   h1, h2, h3,
   .display {
-    overflow-wrap: anywhere;
-    text-wrap: balance;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .sys-label,
