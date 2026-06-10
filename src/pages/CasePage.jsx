@@ -73,7 +73,7 @@ function HeroScrollReveal({ caseData, t, lang }) {
     text.split(' ').flatMap((word, wi, arr) => [
       wi > 0 && (
         <m.span key={`s${wi}`} aria-hidden="true"
-          style={{ display: 'inline-block', whiteSpace: 'pre' }}
+          style={{ display: 'inline' }}
           variants={charVariants}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >{' '}</m.span>
