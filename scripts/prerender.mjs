@@ -119,47 +119,55 @@ function buildNotesIndexSchema() {
 }
 
 function buildNoteSchema(note) {
+  const posting = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${BASE}/notes/${note.slug}#article`,
+    headline: note.title,
+    description: note.summary,
+    url: `${BASE}/notes/${note.slug}`,
+    datePublished: note.date,
+    dateModified: note.date,
+    inLanguage: ['en', 'es'],
+    keywords: [note.category, 'Game UX', 'Game UI', 'UX Design'].join(', '),
+    author: PERSON_REF,
+    publisher: PERSON_REF,
+    isPartOf: { '@id': `${BASE}/notes#blog` },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/notes/${note.slug}` },
+  }
+  if (note.titleEs)   posting.alternativeHeadline = note.titleEs
+  if (note.summaryEs) posting.abstract = note.summaryEs
   return [
     breadcrumb(
       { name: 'Field Notes', url: `${BASE}/notes` },
       { name: note.title, url: `${BASE}/notes/${note.slug}` }
     ),
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      '@id': `${BASE}/notes/${note.slug}#article`,
-      headline: note.title,
-      description: note.summary,
-      url: `${BASE}/notes/${note.slug}`,
-      datePublished: note.date,
-      dateModified: note.date,
-      keywords: [note.category, 'Game UX', 'Game UI', 'UX Design'].join(', '),
-      author: PERSON_REF,
-      publisher: PERSON_REF,
-      isPartOf: { '@id': `${BASE}/notes#blog` },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/notes/${note.slug}` },
-    },
+    posting,
   ]
 }
 
 function buildCaseSchema(c) {
+  const work = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${BASE}/case/${c.slug}#work`,
+    name: c.title,
+    description: c.description,
+    url: `${BASE}/case/${c.slug}`,
+    inLanguage: ['en', 'es'],
+    creator: PERSON_REF,
+    keywords: (c.tags || []).join(', '),
+    genre: 'Game UX/UI Design',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/case/${c.slug}` },
+  }
+  if (c.headlineEs)    work.alternativeHeadline = c.headlineEs
+  if (c.descriptionEs) work.abstract = c.descriptionEs
   return [
     breadcrumb(
       { name: 'Case Studies', url: `${BASE}/work` },
       { name: c.title, url: `${BASE}/case/${c.slug}` }
     ),
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CreativeWork',
-      '@id': `${BASE}/case/${c.slug}#work`,
-      name: c.title,
-      description: c.description,
-      url: `${BASE}/case/${c.slug}`,
-      creator: PERSON_REF,
-      keywords: (c.tags || []).join(', '),
-      genre: 'Game UX/UI Design',
-      mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/case/${c.slug}` },
-    },
+    work,
   ]
 }
 
@@ -334,6 +342,14 @@ function injectMeta(html, pageMeta) {
     html = html.replace(/(<meta property="og:image:width" content=")[^"]*(")/,  `$1$2`)
     html = html.replace(/(<meta property="og:image:height" content=")[^"]*(")/,  `$1$2`)
   }
+
+  // Hreflang — EN and ES serve from the same URLs (client-side language switch)
+  const hreflangTags = [
+    `<link rel="alternate" hreflang="en" href="${escAttr(canonical)}" />`,
+    `<link rel="alternate" hreflang="es-CO" href="${escAttr(canonical)}" />`,
+    `<link rel="alternate" hreflang="x-default" href="${escAttr(canonical)}" />`,
+  ].join('\n    ')
+  html = html.replace('</head>', `    ${hreflangTags}\n  </head>`)
 
   // Inject page-specific schema before </head>
   if (schema) {
