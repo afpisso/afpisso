@@ -66,6 +66,29 @@ function HeroScrollReveal({ caseData, t, lang }) {
     hidden: { opacity: 0, filter: 'blur(10px)', y: 18 },
     visible: { opacity: 1, filter: 'blur(0px)', y: 0 },
   };
+
+  // Renders text as char-level m.spans grouped inside white-space:nowrap word wrappers
+  // so the browser can only break between words, never mid-word.
+  const renderTitleChars = (text) =>
+    text.split(' ').flatMap((word, wi, arr) => [
+      wi > 0 && (
+        <m.span key={`s${wi}`} aria-hidden="true"
+          style={{ display: 'inline-block', whiteSpace: 'pre' }}
+          variants={charVariants}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        >{' '}</m.span>
+      ),
+      <span key={`w${wi}`} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+        {[...word].map((ch, ci) => (
+          <m.span key={ci} aria-hidden="true"
+            style={{ display: 'inline-block' }}
+            variants={charVariants}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >{ch}</m.span>
+        ))}
+      </span>,
+    ].filter(Boolean));
+
   const lineVariants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.028, delayChildren: 0 } },
@@ -155,17 +178,7 @@ function HeroScrollReveal({ caseData, t, lang }) {
               initial={shouldReduce ? 'visible' : 'hidden'}
               animate="visible"
             >
-              {[...line1].map((ch, i) => (
-                <m.span
-                  key={i}
-                  aria-hidden="true"
-                  style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : undefined }}
-                  variants={charVariants}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {ch === ' ' ? ' ' : ch}
-                </m.span>
-              ))}
+              {renderTitleChars(line1)}
             </m.span>
 
             {line2 && (
@@ -177,17 +190,7 @@ function HeroScrollReveal({ caseData, t, lang }) {
                 animate="visible"
                 transition={{ delayChildren: line1.length * 0.028 + 0.05 }}
               >
-                {[...line2].map((ch, i) => (
-                  <m.span
-                    key={i}
-                    aria-hidden="true"
-                    style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : undefined }}
-                    variants={charVariants}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {ch === ' ' ? ' ' : ch}
-                  </m.span>
-                ))}
+                {renderTitleChars(line2)}
               </m.span>
             )}
           </h1>
