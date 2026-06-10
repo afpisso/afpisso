@@ -121,8 +121,11 @@ function CursorPreview({ items, hovered }) {
         position: 'relative',
         aspectRatio: '16/9',
         overflow: 'hidden',
+        clipPath: 'polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px))',
         boxShadow: '0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06)',
       }}>
+        <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, backgroundColor: 'rgba(255,37,64,0.7)', zIndex: 10, pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 1, backgroundColor: 'rgba(255,37,64,0.38)', zIndex: 10, pointerEvents: 'none' }} />
         <AnimatePresence mode="sync">
           {hovered && active && (
             <m.div
