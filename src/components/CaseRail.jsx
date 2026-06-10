@@ -19,6 +19,17 @@ import { useLang } from '../contexts/LangContext';
 // ── Constants ─────────────────────────────────────────────────────────────────
 const EASE_OUT   = [0.16, 1, 0.3, 1];
 const EASE_IN    = [0.4,  0, 1,  1];
+
+const ACCENT = 'var(--color-accent)';
+const RAIL_CORNERS = [
+  { top: 0,    left: 0,    borderTop:    `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+  { top: 0,    right: 0,   borderTop:    `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+  { bottom: 0, left: 0,    borderBottom: `1px solid ${ACCENT}`, borderLeft:   `1px solid ${ACCENT}` },
+  { bottom: 0, right: 0,   borderBottom: `1px solid ${ACCENT}`, borderRight:  `1px solid ${ACCENT}` },
+];
+function railChamfer(n) {
+  return `polygon(0 0, calc(100% - ${n}px) 0, 100% ${n}px, 100% 100%, ${n}px 100%, 0 calc(100% - ${n}px))`;
+}
 const BASE_SPRING = { type: 'spring', stiffness: 280, damping: 26, mass: 0.85 };
 const TAP_SPRING  = { type: 'spring', stiffness: 420, damping: 20, mass: 0.85 };
 
@@ -95,21 +106,18 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
 
   return (
     <m.div
-      // key provided by parent for AnimatePresence indexing
       className="absolute"
       style={{
         width:  CARD_W,
         height: CARD_H,
         transformStyle: 'preserve-3d',
         cursor: 'pointer',
-        overflow: 'hidden',
-        borderRadius: 2,
         textDecoration: 'none',
       }}
       initial={false}
       animate={{
-        x:      xPos,
-        z:      zPos,
+        x:       xPos,
+        z:       zPos,
         rotateY: rotY,
         scale,
         opacity,
@@ -134,74 +142,113 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
       onMouseLeave={() => { if (isCenter) setHovered(false); }}
       whileTap={{ scale: isCenter ? scale * 0.985 : scale * 0.97 }}
     >
-      {/* Thumbnail (keyed on slug so failed state resets on item change) */}
-      <RailThumb key={item.slug} slug={item.slug} id={item.id} isCenter={isCenter} />
+      {/* HUD frame — clip-path in card-local space so chamfer stays correct under rotateY */}
+      <div style={{
+        position: 'relative',
+        width: '100%', height: '100%',
+        overflow: 'hidden',
+        clipPath: railChamfer(isCenter ? 8 : 5),
+        boxShadow: isCenter
+          ? hovered
+            ? 'inset 0 0 0 1px rgba(255,37,64,0.55)'
+            : 'inset 0 0 0 1px rgba(255,37,64,0.22)'
+          : 'inset 0 0 0 1px rgba(255,255,255,0.05)',
+        transition: 'box-shadow 0.22s ease',
+      }}>
 
-      {/* Bottom gradient */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.35) 38%, transparent 68%)',
-        }}
-      />
+        {/* Thumbnail */}
+        <RailThumb key={item.slug} slug={item.slug} id={item.id} isCenter={isCenter} />
 
-      {/* Top: red accent line (center only) + case ID */}
-      {isCenter && (
+        {/* Bottom gradient */}
         <div
           aria-hidden="true"
-          className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
-          style={{ backgroundColor: 'var(--color-accent)' }}
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.4) 42%, transparent 72%)' }}
         />
-      )}
-      <div
-        className="absolute top-3 left-3 pointer-events-none flex items-center gap-1.5"
-        style={{
-          fontFamily: '"Play", sans-serif',
-          fontSize:   '8px',
-          letterSpacing: '0.16em',
-          textTransform: 'uppercase',
-          color: isCenter ? 'var(--color-accent)' : 'var(--color-accent-40)',
-        }}
-      >
-        {item.id}
-        {isCurrent && isCenter && (
-          <span style={{ fontSize: '7px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', borderLeft: '1px solid var(--color-rule)', paddingLeft: 6 }}>
-            CURRENT
-          </span>
+
+        {/* Top accent line — center only, stops before chamfer cut */}
+        {isCenter && (
+          <div
+            aria-hidden="true"
+            className="absolute top-0 left-0 pointer-events-none"
+            style={{ right: 8, height: 2, backgroundColor: 'var(--color-accent)' }}
+          />
         )}
-      </div>
 
-      {/* Bottom: title overlay */}
-      <div
-        className="absolute bottom-0 left-0 right-0 px-3 pb-3 pointer-events-none"
-      >
+        {/* Case ID — top left */}
         <div
+          className="absolute top-2.5 left-3 pointer-events-none flex items-center gap-1.5"
           style={{
-            fontFamily:    '"Bebas Neue", sans-serif',
-            fontSize:      'clamp(0.85rem, 2vw, 1.05rem)',
-            lineHeight:    1.05,
-            letterSpacing: '0.02em',
+            fontFamily:    '"Play", sans-serif',
+            fontSize:      '8px',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color:         isCenter ? 'rgba(240,238,234,0.92)' : 'rgba(240,238,234,0.55)',
+            color: isCenter ? 'var(--color-accent)' : 'var(--color-accent-40)',
           }}
         >
-          {item.title}
+          {item.id}
+          {isCurrent && isCenter && (
+            <span style={{ fontSize: '7px', letterSpacing: '0.12em', color: 'var(--color-fg-mute)', borderLeft: '1px solid var(--color-rule)', paddingLeft: 6 }}>
+              CURRENT
+            </span>
+          )}
         </div>
-      </div>
 
-      {/* Center card: hover reveal — "OPEN CASE →" */}
-      {isCenter && (
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{
-            background: hovered ? 'rgba(8,8,8,0.38)' : 'rgba(8,8,8,0)',
-            transition: 'background 0.22s ease',
-          }}
-        >
-          <span
+        {/* Bottom: title + platform row */}
+        <div className="absolute bottom-0 left-0 right-0 px-3 pb-2.5 pointer-events-none">
+          <div
             style={{
+              fontFamily:    '"Bebas Neue", sans-serif',
+              fontSize:      'clamp(0.85rem, 2vw, 1.05rem)',
+              lineHeight:    1.05,
+              letterSpacing: '0.02em',
+              textTransform: 'uppercase',
+              color:         isCenter ? 'rgba(240,238,234,0.92)' : 'rgba(240,238,234,0.55)',
+            }}
+          >
+            {item.title}
+          </div>
+          {isCenter && item.platform?.length > 0 && (
+            <div style={{ marginTop: 5, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+              {item.platform.slice(0, 2).map(p => (
+                <span key={p} style={{
+                  fontFamily: '"Play", sans-serif',
+                  fontSize: '7px', letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: 'var(--color-fg-mute)',
+                  borderLeft: '1px solid var(--color-accent-30)',
+                  paddingLeft: 5,
+                }}>
+                  {p}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Corner brackets — subtle at rest, full accent on hover (center only) */}
+        {isCenter && (
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }}>
+            {RAIL_CORNERS.map((s, i) => (
+              <div key={i} style={{
+                position: 'absolute', width: 14, height: 14, ...s,
+                opacity: hovered ? 1 : 0.28,
+                transition: 'opacity 0.18s ease',
+              }} />
+            ))}
+          </div>
+        )}
+
+        {/* Center card hover reveal */}
+        {isCenter && (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{
+              background: hovered ? 'rgba(8,8,8,0.32)' : 'rgba(8,8,8,0)',
+              transition: 'background 0.22s ease',
+            }}
+          >
+            <span style={{
               fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.2em',
@@ -212,12 +259,13 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
               opacity:       hovered ? 1 : 0,
               transform:     hovered ? 'translateY(0)' : 'translateY(4px)',
               transition:    'opacity 0.2s ease, transform 0.22s ease',
-            }}
-          >
-            OPEN CASE →
-          </span>
-        </div>
-      )}
+            }}>
+              OPEN CASE →
+            </span>
+          </div>
+        )}
+
+      </div>
     </m.div>
   );
 }
