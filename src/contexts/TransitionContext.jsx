@@ -54,8 +54,14 @@ export function TransitionProvider({ children }) {
   );
 }
 
+const NOOP = () => {};
+const SSR_FALLBACK = {
+  state: { active: false, meta: null, phase: 'idle' },
+  navigateWithWipe: NOOP,
+  navigateWithSlide: NOOP,
+};
+
 export function usePageTransition() {
   const ctx = useContext(TransitionContext);
-  if (!ctx) throw new Error('usePageTransition must be used inside TransitionProvider');
-  return ctx;
+  return ctx ?? SSR_FALLBACK;
 }
