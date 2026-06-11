@@ -244,6 +244,11 @@ section[id] {
   --color-rule:    rgba(255, 255, 255, 0.11);
   --color-fg-dim:  rgba(245, 245, 243, 0.62);
   --color-fg-mute: rgba(245, 245, 243, 0.60);
+  --color-fg-72:   color-mix(in srgb, var(--color-fg) 72%,  transparent);
+  --color-fg-55:   color-mix(in srgb, var(--color-fg) 55%,  transparent);
+  --color-fg-45:   color-mix(in srgb, var(--color-fg) 45%,  transparent);
+  --color-fg-28:   color-mix(in srgb, var(--color-fg) 28%,  transparent);
+  --color-fg-18:   color-mix(in srgb, var(--color-fg) 18%,  transparent);
 
   /* Menu easing curves */
   --ease-sweep: cubic-bezier(.76, 0, .2, 1);

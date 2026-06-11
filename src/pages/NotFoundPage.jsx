@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useScramble } from '../hooks/useScramble';
 import { m, useReducedMotion, AnimatePresence } from 'framer-motion';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import SectionTag from '../components/SectionTag';
@@ -23,23 +23,20 @@ const CLIP_FULL = `polygon(
   0 10px
 )`;
 
-// Stagger container
 const containerVariants = {
   hidden: {},
   show: {
-    transition: {
-      staggerChildren: 0.07,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
   },
 };
 
+// P2 fix: duration 0.55 → 0.38 (Emil timing-300ms-max)
 const itemVariants = {
   hidden: { opacity: 0, y: 18 },
-  show:   { opacity: 1, y: 0,  transition: { duration: 0.55, ease: EASE_OUT } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.38, ease: EASE_OUT } },
 };
 
-// ─── Auto-scrambling 404 ──────────────────────────────────────────────────────
+// ─── Auto-scrambling 404 heading ──────────────────────────────────────────────
 function Glitch404({ reducedMotion }) {
   const [trigger, setTrigger] = useState(0);
   const displayed = useScramble('404', {
@@ -48,7 +45,6 @@ function Glitch404({ reducedMotion }) {
     enabled: !reducedMotion,
   });
 
-  // Fire on mount, then every 3.5s
   useEffect(() => {
     if (reducedMotion) return;
     setTrigger(1);
@@ -56,11 +52,12 @@ function Glitch404({ reducedMotion }) {
     return () => clearInterval(id);
   }, [reducedMotion]);
 
+  // P1 fix: m.div → m.h1 for correct heading hierarchy
   return (
-    <m.div
-      initial={{ opacity: 0, y: 28, skewX: -3 }}
+    <m.h1
+      initial={reducedMotion ? false : { opacity: 0, y: 28, skewX: -3 }}
       animate={{ opacity: 1, y: 0, skewX: 0 }}
-      transition={{ duration: 0.55, ease: EASE_OUT }}
+      transition={{ duration: 0.38, ease: EASE_OUT }}
       aria-label="404"
       style={{
         fontFamily:    '"Bebas Neue", sans-serif',
@@ -69,28 +66,31 @@ function Glitch404({ reducedMotion }) {
         color:         'var(--color-accent)',
         letterSpacing: '-0.01em',
         userSelect:    'none',
+        margin:        0,
       }}
     >
       {displayed}
-    </m.div>
+    </m.h1>
   );
 }
 
 // ─── Blink cursor ─────────────────────────────────────────────────────────────
+// P1 fix: respects useReducedMotion
 function BlinkCursor() {
+  const reducedMotion = useReducedMotion();
   return (
     <m.span
       aria-hidden="true"
-      animate={{ opacity: [1, 1, 0, 0] }}
-      transition={{ duration: 1, repeat: Infinity, times: [0, 0.45, 0.55, 1] }}
+      animate={reducedMotion ? { opacity: 1 } : { opacity: [1, 1, 0, 0] }}
+      transition={reducedMotion ? {} : { duration: 1, repeat: Infinity, times: [0, 0.45, 0.55, 1] }}
       style={{
-        display:         'inline-block',
-        width:           '7px',
-        height:          '13px',
-        background:      'var(--color-accent)',
-        verticalAlign:   'middle',
-        marginLeft:      '3px',
-        marginBottom:    '1px',
+        display:       'inline-block',
+        width:         '7px',
+        height:        '13px',
+        background:    'var(--color-accent)',
+        verticalAlign: 'middle',
+        marginLeft:    '3px',
+        marginBottom:  '1px',
       }}
     />
   );
@@ -114,38 +114,37 @@ function LogLine({ prefix, text, delay, reducedMotion }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.28, ease: EASE_OUT }}
           style={{
-            display:     'flex',
-            gap:         '10px',
-            fontFamily:  '"Play", monospace',
-            fontSize:    '11px',
-            lineHeight:  1.7,
+            display:       'flex',
+            gap:           '10px',
+            fontFamily:    '"Play", monospace',
+            fontSize:      '11px',
+            lineHeight:    1.7,
             letterSpacing: '0.06em',
+            minWidth:      0,
           }}
         >
           <span style={{ color: 'var(--color-accent)', flexShrink: 0 }}>{prefix}</span>
-          <span style={{ color: 'rgba(240,238,234,0.55)' }}>{text}</span>
+          {/* P3 fix: use token; min-width:0 prevents overflow on long lines */}
+          <span style={{ color: 'var(--color-fg-55)', minWidth: 0, wordBreak: 'break-word' }}>{text}</span>
         </m.div>
       )}
     </AnimatePresence>
   );
 }
 
-// ─── CCTV timestamp (live clock in the overlay) ───────────────────────────────
+// ─── CCTV timestamp ───────────────────────────────────────────────────────────
 function CCTVTimestamp() {
-  const [ts, setTs] = useState('');
+  const [ts, setTs]       = useState('');
   const [blink, setBlink] = useState(true);
 
   useEffect(() => {
     const fmt = () => {
-      const d = new Date();
+      const d   = new Date();
       const pad = (n) => String(n).padStart(2, '0');
       return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}  ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     };
     setTs(fmt());
-    const id = setInterval(() => {
-      setTs(fmt());
-      setBlink(b => !b);
-    }, 1000);
+    const id = setInterval(() => { setTs(fmt()); setBlink(b => !b); }, 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -159,7 +158,7 @@ function CCTVTimestamp() {
         fontFamily:    '"Play", monospace',
         fontSize:      '9px',
         letterSpacing: '0.12em',
-        color:         'rgba(240,238,234,0.45)',
+        color:         'var(--color-fg-45)',
         zIndex:        5,
         lineHeight:    1.6,
         userSelect:    'none',
@@ -176,28 +175,37 @@ function CCTVTimestamp() {
 
 // ─── Video panel with VHS glitch ─────────────────────────────────────────────
 const GLITCH_DURATION_MS = 380;
-const VID_DURATION       = 5.04; // seconds
-const LOOP_MASK_AT       = VID_DURATION - 0.55; // start glitch before loop end
+const VID_DURATION       = 5.04;
+const LOOP_MASK_AT       = VID_DURATION - 0.55;
 
 function VideoPanel({ reducedMotion }) {
-  const vidRef        = useRef(null);
-  const glitchTimeout = useRef(null);
-  const intervalRef   = useRef(null);
+  const vidRef          = useRef(null);
+  const glitchTimeout   = useRef(null);
+  const intervalRef     = useRef(null);
+  const trackingTimeout = useRef(null); // P2 fix: cleanup for fireTracking
+  // P2 fix: ref to avoid stale closure in onTimeUpdate
+  const glitchingRef    = useRef(false);
 
-  const [glitching,    setGlitching]    = useState(false);
-  const [seed,         setSeed]         = useState(5);
-  const [trackingBar,  setTrackingBar]  = useState(false);
+  const [glitching,   setGlitching]   = useState(false);
+  const [seed,        setSeed]        = useState(5);
+  const [trackingBar, setTrackingBar] = useState(false);
 
   const fireGlitch = useCallback(() => {
     setSeed(Math.floor(Math.random() * 200));
     setGlitching(true);
+    glitchingRef.current = true;
     clearTimeout(glitchTimeout.current);
-    glitchTimeout.current = setTimeout(() => setGlitching(false), GLITCH_DURATION_MS);
+    glitchTimeout.current = setTimeout(() => {
+      setGlitching(false);
+      glitchingRef.current = false;
+    }, GLITCH_DURATION_MS);
   }, []);
 
   const fireTracking = useCallback(() => {
     setTrackingBar(true);
-    setTimeout(() => setTrackingBar(false), 600);
+    // P2 fix: use ref so it can be cleared on unmount
+    clearTimeout(trackingTimeout.current);
+    trackingTimeout.current = setTimeout(() => setTrackingBar(false), 600);
   }, []);
 
   useEffect(() => {
@@ -207,12 +215,12 @@ function VideoPanel({ reducedMotion }) {
       return;
     }
 
-    // Manual loop: mask restart with a glitch burst
     vid.loop = false;
     vid.play().catch(() => {});
 
+    // P2 fix: read glitchingRef.current instead of stale closure
     const onTimeUpdate = () => {
-      if (vid.currentTime >= LOOP_MASK_AT && !glitching) fireGlitch();
+      if (vid.currentTime >= LOOP_MASK_AT && !glitchingRef.current) fireGlitch();
     };
     const onEnded = () => {
       vid.currentTime = 0;
@@ -222,11 +230,9 @@ function VideoPanel({ reducedMotion }) {
     vid.addEventListener('timeupdate', onTimeUpdate);
     vid.addEventListener('ended',      onEnded);
 
-    // Periodic random glitches (2.5–5s apart)
     const scheduleNext = () => {
       const delay = 2500 + Math.random() * 2500;
       intervalRef.current = setTimeout(() => {
-        // 60% glitch, 40% tracking bar
         if (Math.random() < 0.6) fireGlitch(); else fireTracking();
         scheduleNext();
       }, delay);
@@ -238,10 +244,10 @@ function VideoPanel({ reducedMotion }) {
       vid.removeEventListener('ended',      onEnded);
       clearTimeout(glitchTimeout.current);
       clearTimeout(intervalRef.current);
+      clearTimeout(trackingTimeout.current); // P2 fix
     };
   }, [reducedMotion, fireGlitch, fireTracking]);
 
-  // Displacement scale: 0 at rest, spike on glitch
   const dispScale = glitching ? 14 : 0;
 
   return (
@@ -252,10 +258,9 @@ function VideoPanel({ reducedMotion }) {
         overflow:    'hidden',
         aspectRatio: '16 / 9',
         width:       '100%',
-        background:  '#0a0a0a',
+        background:  'var(--bg-2)', // P3 fix: was #0a0a0a
       }}
     >
-      {/* ── SVG filter definitions (invisible, 0×0) ── */}
       <svg
         aria-hidden="true"
         style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}
@@ -267,7 +272,6 @@ function VideoPanel({ reducedMotion }) {
             width="110%" height="110%"
             colorInterpolationFilters="sRGB"
           >
-            {/* Horizontal-biased turbulence */}
             <feTurbulence
               type="turbulence"
               baseFrequency="0.025 0.002"
@@ -275,7 +279,6 @@ function VideoPanel({ reducedMotion }) {
               seed={seed}
               result="noise"
             />
-            {/* Displacement for the full image */}
             <feDisplacementMap
               in="SourceGraphic"
               in2="noise"
@@ -284,7 +287,6 @@ function VideoPanel({ reducedMotion }) {
               yChannelSelector="G"
               result="displaced"
             />
-            {/* Red channel: shift right */}
             <feOffset in="displaced" dx="4"  dy="0" result="r-shift" />
             <feColorMatrix
               in="r-shift"
@@ -292,7 +294,6 @@ function VideoPanel({ reducedMotion }) {
               values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.85 0"
               result="r-only"
             />
-            {/* Cyan (G+B) channel: shift left */}
             <feOffset in="displaced" dx="-4" dy="0" result="cb-shift" />
             <feColorMatrix
               in="cb-shift"
@@ -300,15 +301,12 @@ function VideoPanel({ reducedMotion }) {
               values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.85 0"
               result="cb-only"
             />
-            {/* Composite: red ghost + cyan ghost over displaced */}
-            <feBlend in="r-only"    in2="displaced" mode="screen" result="rgb1" />
-            <feBlend in="cb-only"   in2="rgb1"      mode="screen" />
+            <feBlend in="r-only"  in2="displaced" mode="screen" result="rgb1" />
+            <feBlend in="cb-only" in2="rgb1"      mode="screen" />
           </filter>
         </defs>
       </svg>
 
-
-      {/* Video — filter applied via inline style */}
       <video
         ref={vidRef}
         poster="/404/404.webp"
@@ -321,8 +319,8 @@ function VideoPanel({ reducedMotion }) {
           height:    '100%',
           objectFit: 'cover',
           display:   'block',
+          // P2 fix: no transition on filter — glitch must be abrupt, not smoothed
           filter:    glitching ? 'url(#vhs-glitch)' : 'none',
-          transition: glitching ? 'none' : 'filter 0.06s linear',
         }}
       >
         <source src="/404/404.webm" type="video/webm" />
@@ -334,24 +332,22 @@ function VideoPanel({ reducedMotion }) {
         />
       </video>
 
-      {/* VHS tracking bar — sweeps top-to-bottom */}
       {trackingBar && (
         <div
           aria-hidden="true"
           style={{
-            position:   'absolute',
-            left:       0,
-            right:      0,
-            height:     '18px',
-            background: 'rgba(240,238,234,0.07)',
-            animation:  'tracking-sweep 0.55s linear forwards',
-            zIndex:     4,
+            position:      'absolute',
+            left:          0,
+            right:         0,
+            height:        '18px',
+            background:    'rgba(240,238,234,0.07)',
+            animation:     'tracking-sweep 0.55s linear forwards',
+            zIndex:        4,
             pointerEvents: 'none',
           }}
         />
       )}
 
-      {/* Scanlines */}
       <div
         aria-hidden="true"
         style={{
@@ -364,20 +360,19 @@ function VideoPanel({ reducedMotion }) {
         }}
       />
 
-      {/* Vignette */}
       <div
         aria-hidden="true"
         style={{
-          position:   'absolute',
-          inset:      0,
-          background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%)',
+          position:      'absolute',
+          inset:         0,
+          background:    'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%)',
           pointerEvents: 'none',
-          zIndex:     3,
+          zIndex:        3,
         }}
       />
 
-      {/* CCTV HUD */}
       <CCTVTimestamp />
+
       <div
         aria-hidden="true"
         style={{
@@ -388,7 +383,7 @@ function VideoPanel({ reducedMotion }) {
           fontSize:      '9px',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color:         'rgba(240,238,234,0.28)',
+          color:         'var(--color-fg-28)',
           zIndex:        5,
           userSelect:    'none',
         }}
@@ -429,21 +424,16 @@ export default function NotFoundPage({ onMenuOpen }) {
 
       <main
         id="main-content"
-        style={{
-          flex:       1,
-          display:    'flex',
-          alignItems: 'center',
-        }}
+        style={{ flex: 1, display: 'flex', alignItems: 'center' }}
       >
         <div
           style={{
-            width:     '100%',
-            maxWidth:  '1280px',
-            margin:    '0 auto',
-            padding:   'clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px)',
+            width:    '100%',
+            maxWidth: '1280px',
+            margin:   '0 auto',
+            padding:  'clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px)',
           }}
         >
-          {/* ── Grid: left text / right video ─────────────────────────────── */}
           <div
             style={{
               display:             'grid',
@@ -459,28 +449,27 @@ export default function NotFoundPage({ onMenuOpen }) {
               animate="show"
               style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}
             >
-              {/* Tag */}
               <m.div variants={itemVariants}>
                 <SectionTag label={nf.tag} page="000" />
               </m.div>
 
-              {/* Big 404 — auto-glitch */}
+              {/* P1 fix: renders as <h1> */}
               <Glitch404 reducedMotion={reducedMotion} />
 
-              {/* Subtitle */}
+              {/* Subtitle — plain p, not a heading */}
               <m.div variants={itemVariants}>
-                <span style={{
+                <p style={{
                   fontFamily:    '"Bebas Neue", sans-serif',
                   fontSize:      'clamp(22px, 3vw, 32px)',
                   letterSpacing: '0.04em',
-                  color:         'rgba(240,238,234,0.55)',
+                  color:         'var(--color-fg-55)',
                   lineHeight:    1,
+                  margin:        0,
                 }}>
                   {nf.subtitle}
-                </span>
+                </p>
               </m.div>
 
-              {/* Separator */}
               <m.div
                 variants={itemVariants}
                 style={{
@@ -490,7 +479,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                 }}
               />
 
-              {/* Incident copy */}
+              {/* P3 fix: use token --color-fg-72 */}
               <m.p
                 variants={itemVariants}
                 style={{
@@ -498,53 +487,51 @@ export default function NotFoundPage({ onMenuOpen }) {
                   fontSize:      '13px',
                   lineHeight:    1.65,
                   letterSpacing: '0.03em',
-                  color:         'rgba(240,238,234,0.72)',
+                  color:         'var(--color-fg-72)',
                   maxWidth:      '36ch',
+                  margin:        0,
                 }}
               >
                 {nf.bodyPrefix}{' '}
-                <span
-                  style={{
-                    color:      'var(--color-accent)',
-                    fontWeight: 700,
-                    wordBreak:  'break-all',
-                  }}
-                >
+                <span style={{ color: 'var(--color-accent)', fontWeight: 700, wordBreak: 'break-all' }}>
                   {requestedPath}
                 </span>{' '}
                 {nf.bodySuffix}
               </m.p>
 
-              {/* Log terminal */}
+              {/* P1 fix: borderLeft removed — replaced with tinted background */}
               <m.div
                 variants={itemVariants}
                 style={{
-                  borderLeft: '2px solid var(--color-accent-30)',
-                  paddingLeft: '16px',
-                  display:    'flex',
+                  background:    'color-mix(in srgb, var(--color-accent) 4%, transparent)',
+                  padding:       '12px 16px',
+                  display:       'flex',
                   flexDirection: 'column',
-                  gap:        '2px',
+                  gap:           '2px',
                 }}
               >
                 {nf.logs.map((text, i) => (
-                  <LogLine key={text} prefix=">" text={text} delay={LOG_DELAYS[i]} reducedMotion={reducedMotion} />
+                  <LogLine
+                    key={text}
+                    prefix=">"
+                    text={text}
+                    delay={LOG_DELAYS[i]}
+                    reducedMotion={reducedMotion}
+                  />
                 ))}
                 <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center' }}>
-                  <span
-                    style={{
-                      fontFamily:  '"Play", monospace',
-                      fontSize:    '11px',
-                      letterSpacing: '0.06em',
-                      color:       'var(--color-accent)',
-                    }}
-                  >
+                  <span style={{
+                    fontFamily:    '"Play", monospace',
+                    fontSize:      '11px',
+                    letterSpacing: '0.06em',
+                    color:         'var(--color-accent)',
+                  }}>
                     &gt;
                   </span>
                   <BlinkCursor />
                 </div>
               </m.div>
 
-              {/* CTA */}
               <m.div variants={itemVariants} style={{ paddingTop: '4px' }}>
                 <CyberBtn to="/" variant="solid" size="md" magnetic>
                   {nf.cta}
@@ -553,43 +540,40 @@ export default function NotFoundPage({ onMenuOpen }) {
             </m.div>
 
             {/* RIGHT — video (order: -1 on mobile so it appears above text) */}
+            {/* P2 fix: duration 0.7 → 0.45 */}
             <m.div
               className="not-found-video"
               initial={reducedMotion ? false : { opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: EASE_OUT }}
+              transition={{ duration: 0.45, delay: 0.2, ease: EASE_OUT }}
             >
               <VideoPanel reducedMotion={reducedMotion} />
 
-              {/* Caption below video */}
               <div
                 style={{
-                  marginTop:     '12px',
-                  display:       'flex',
-                  alignItems:    'center',
-                  gap:           '10px',
+                  marginTop:      '12px',
+                  display:        'flex',
+                  alignItems:     'center',
+                  gap:            '10px',
                   justifyContent: 'space-between',
                 }}
               >
-                <span
-                  style={{
-                    fontFamily:    '"Play", monospace',
-                    fontSize:      '10px',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color:         'rgba(240,238,234,0.28)',
-                  }}
-                >
+                {/* P3 fix: use tokens */}
+                <span style={{
+                  fontFamily:    '"Play", monospace',
+                  fontSize:      '10px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color:         'var(--color-fg-28)',
+                }}>
                   CCTV — SECTOR 404
                 </span>
-                <span
-                  style={{
-                    fontFamily:    '"Play", monospace',
-                    fontSize:      '10px',
-                    letterSpacing: '0.14em',
-                    color:         'rgba(240,238,234,0.18)',
-                  }}
-                >
+                <span style={{
+                  fontFamily:    '"Play", monospace',
+                  fontSize:      '10px',
+                  letterSpacing: '0.14em',
+                  color:         'var(--color-fg-18)',
+                }}>
                   REC ●
                 </span>
               </div>
