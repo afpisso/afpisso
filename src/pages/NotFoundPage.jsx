@@ -307,17 +307,6 @@ function VideoPanel({ reducedMotion }) {
         </defs>
       </svg>
 
-      {/* Red top-border accent */}
-      <div
-        aria-hidden="true"
-        style={{
-          position:   'absolute',
-          top:        0, left: 0, right: 0,
-          height:     '2px',
-          background: 'var(--color-accent)',
-          zIndex:     2,
-        }}
-      />
 
       {/* Video — filter applied via inline style */}
       <video
