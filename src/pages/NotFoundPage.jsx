@@ -97,11 +97,11 @@ function BlinkCursor() {
 
 // ─── Typewriter log lines ─────────────────────────────────────────────────────
 const LOG_LINES = [
-  { prefix: '>', text: 'ROUTING_ERR — FILE NOT FOUND',     delay: 0.35 },
-  { prefix: '>', text: 'SIGNAL_STATUS: DISCONNECTED',      delay: 0.60 },
-  { prefix: '>', text: 'INCIDENT: CABLE REMOVED FROM HOST', delay: 0.85 },
-  { prefix: '>', text: 'CULPRIT: UNIDENTIFIED DOG',         delay: 1.10 },
-  { prefix: '>', text: 'INVESTIGATION: ONGOING',            delay: 1.35 },
+  { prefix: '>', text: 'PAGE_STATUS: OFFLINE',                    delay: 0.35 },
+  { prefix: '>', text: 'CABLE_STATUS: IN DOG\'S MOUTH',           delay: 0.60 },
+  { prefix: '>', text: 'OPERATOR_STATUS: PANICKING',              delay: 0.85 },
+  { prefix: '>', text: 'SUSPECT_DESCRIPTION: BROWN, FAST, WEARING HOODIE', delay: 1.10 },
+  { prefix: '>', text: 'RECOVERY_PLAN: RUN FASTER',               delay: 1.35 },
 ];
 
 function LogLine({ prefix, text, delay, reducedMotion }) {
@@ -482,6 +482,19 @@ export default function NotFoundPage({ onMenuOpen }) {
               {/* Big 404 — auto-glitch */}
               <Glitch404 reducedMotion={reducedMotion} />
 
+              {/* Subtitle */}
+              <m.div variants={itemVariants}>
+                <span style={{
+                  fontFamily:    '"Bebas Neue", sans-serif',
+                  fontSize:      'clamp(22px, 3vw, 32px)',
+                  letterSpacing: '0.04em',
+                  color:         'rgba(240,238,234,0.55)',
+                  lineHeight:    1,
+                }}>
+                  Page disconnected.
+                </span>
+              </m.div>
+
               {/* Separator */}
               <m.div
                 variants={itemVariants}
@@ -514,7 +527,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                 >
                   {requestedPath}
                 </span>{' '}
-                does not exist. A dog was seen leaving the area with a cable.
+                is offline. We found the problem — a tiny brown suspect escaped with the power cable before this page could load.
               </m.p>
 
               {/* Log terminal */}
@@ -549,7 +562,7 @@ export default function NotFoundPage({ onMenuOpen }) {
               {/* CTA */}
               <m.div variants={itemVariants} style={{ paddingTop: '4px' }}>
                 <CyberBtn to="/" variant="solid" size="md" magnetic>
-                  Return to Home
+                  Restore Connection
                 </CyberBtn>
               </m.div>
             </m.div>
