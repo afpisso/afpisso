@@ -136,55 +136,210 @@ function LogLine({ prefix, text, delay, reducedMotion }) {
   );
 }
 
-// ─── Video panel ──────────────────────────────────────────────────────────────
-function VideoPanel({ reducedMotion }) {
-  const vidRef = useRef(null);
+// ─── CCTV timestamp (live clock in the overlay) ───────────────────────────────
+function CCTVTimestamp() {
+  const [ts, setTs] = useState('');
+  const [blink, setBlink] = useState(true);
 
   useEffect(() => {
-    if (vidRef.current && !reducedMotion) {
-      vidRef.current.play().catch(() => {});
+    const fmt = () => {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}  ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+    setTs(fmt());
+    const id = setInterval(() => {
+      setTs(fmt());
+      setBlink(b => !b);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position:      'absolute',
+        top:           10,
+        left:          12,
+        fontFamily:    '"Play", monospace',
+        fontSize:      '9px',
+        letterSpacing: '0.12em',
+        color:         'rgba(240,238,234,0.45)',
+        zIndex:        5,
+        lineHeight:    1.6,
+        userSelect:    'none',
+      }}
+    >
+      <div style={{ color: 'rgba(255,37,64,0.7)', marginBottom: 1 }}>
+        CAM-04 ● REC
+        <span style={{ opacity: blink ? 1 : 0, transition: 'opacity 0.1s' }}> ●</span>
+      </div>
+      <div>{ts}</div>
+    </div>
+  );
+}
+
+// ─── Video panel with VHS glitch ─────────────────────────────────────────────
+const GLITCH_DURATION_MS = 380;
+const VID_DURATION       = 5.04; // seconds
+const LOOP_MASK_AT       = VID_DURATION - 0.55; // start glitch before loop end
+
+function VideoPanel({ reducedMotion }) {
+  const vidRef        = useRef(null);
+  const glitchTimeout = useRef(null);
+  const intervalRef   = useRef(null);
+
+  const [glitching,    setGlitching]    = useState(false);
+  const [seed,         setSeed]         = useState(5);
+  const [trackingBar,  setTrackingBar]  = useState(false);
+
+  const fireGlitch = useCallback(() => {
+    setSeed(Math.floor(Math.random() * 200));
+    setGlitching(true);
+    clearTimeout(glitchTimeout.current);
+    glitchTimeout.current = setTimeout(() => setGlitching(false), GLITCH_DURATION_MS);
+  }, []);
+
+  const fireTracking = useCallback(() => {
+    setTrackingBar(true);
+    setTimeout(() => setTrackingBar(false), 600);
+  }, []);
+
+  useEffect(() => {
+    const vid = vidRef.current;
+    if (!vid || reducedMotion) {
+      vid?.play().catch(() => {});
+      return;
     }
-  }, [reducedMotion]);
+
+    // Manual loop: mask restart with a glitch burst
+    vid.loop = false;
+    vid.play().catch(() => {});
+
+    const onTimeUpdate = () => {
+      if (vid.currentTime >= LOOP_MASK_AT && !glitching) fireGlitch();
+    };
+    const onEnded = () => {
+      vid.currentTime = 0;
+      vid.play().catch(() => {});
+    };
+
+    vid.addEventListener('timeupdate', onTimeUpdate);
+    vid.addEventListener('ended',      onEnded);
+
+    // Periodic random glitches (2.5–5s apart)
+    const scheduleNext = () => {
+      const delay = 2500 + Math.random() * 2500;
+      intervalRef.current = setTimeout(() => {
+        // 60% glitch, 40% tracking bar
+        if (Math.random() < 0.6) fireGlitch(); else fireTracking();
+        scheduleNext();
+      }, delay);
+    };
+    scheduleNext();
+
+    return () => {
+      vid.removeEventListener('timeupdate', onTimeUpdate);
+      vid.removeEventListener('ended',      onEnded);
+      clearTimeout(glitchTimeout.current);
+      clearTimeout(intervalRef.current);
+    };
+  }, [reducedMotion, fireGlitch, fireTracking]);
+
+  // Displacement scale: 0 at rest, spike on glitch
+  const dispScale = glitching ? 14 : 0;
 
   return (
     <div
       style={{
-        position:   'relative',
-        clipPath:   CLIP_FULL,
-        overflow:   'hidden',
+        position:    'relative',
+        clipPath:    CLIP_FULL,
+        overflow:    'hidden',
         aspectRatio: '16 / 9',
-        width:      '100%',
-        background: '#0a0a0a',
+        width:       '100%',
+        background:  '#0a0a0a',
       }}
     >
+      {/* ── SVG filter definitions (invisible, 0×0) ── */}
+      <svg
+        aria-hidden="true"
+        style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}
+      >
+        <defs>
+          <filter
+            id="vhs-glitch"
+            x="-5%" y="-5%"
+            width="110%" height="110%"
+            colorInterpolationFilters="sRGB"
+          >
+            {/* Horizontal-biased turbulence */}
+            <feTurbulence
+              type="turbulence"
+              baseFrequency="0.025 0.002"
+              numOctaves="1"
+              seed={seed}
+              result="noise"
+            />
+            {/* Displacement for the full image */}
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale={dispScale}
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displaced"
+            />
+            {/* Red channel: shift right */}
+            <feOffset in="displaced" dx="4"  dy="0" result="r-shift" />
+            <feColorMatrix
+              in="r-shift"
+              type="matrix"
+              values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.85 0"
+              result="r-only"
+            />
+            {/* Cyan (G+B) channel: shift left */}
+            <feOffset in="displaced" dx="-4" dy="0" result="cb-shift" />
+            <feColorMatrix
+              in="cb-shift"
+              type="matrix"
+              values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.85 0"
+              result="cb-only"
+            />
+            {/* Composite: red ghost + cyan ghost over displaced */}
+            <feBlend in="r-only"    in2="displaced" mode="screen" result="rgb1" />
+            <feBlend in="cb-only"   in2="rgb1"      mode="screen" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Red top-border accent */}
       <div
         aria-hidden="true"
         style={{
           position:   'absolute',
-          top:        0,
-          left:       0,
-          right:      0,
+          top:        0, left: 0, right: 0,
           height:     '2px',
           background: 'var(--color-accent)',
           zIndex:     2,
         }}
       />
 
-      {/* Video */}
+      {/* Video — filter applied via inline style */}
       <video
         ref={vidRef}
         poster="/404/404.webp"
         muted
-        loop
         playsInline
         preload="auto"
         aria-label="Pixel art animation: a dog steals the cable"
         style={{
-          width:      '100%',
-          height:     '100%',
-          objectFit:  'cover',
-          display:    'block',
+          width:     '100%',
+          height:    '100%',
+          objectFit: 'cover',
+          display:   'block',
+          filter:    glitching ? 'url(#vhs-glitch)' : 'none',
+          transition: glitching ? 'none' : 'filter 0.06s linear',
         }}
       >
         <source src="/404/404.webm" type="video/webm" />
@@ -196,35 +351,66 @@ function VideoPanel({ reducedMotion }) {
         />
       </video>
 
-      {/* Scanline texture — fixed overlay, no GPU repaint on scroll */}
+      {/* VHS tracking bar — sweeps top-to-bottom */}
+      {trackingBar && (
+        <div
+          aria-hidden="true"
+          style={{
+            position:   'absolute',
+            left:       0,
+            right:      0,
+            height:     '18px',
+            background: 'rgba(240,238,234,0.07)',
+            animation:  'tracking-sweep 0.55s linear forwards',
+            zIndex:     4,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
+
+      {/* Scanlines */}
       <div
         aria-hidden="true"
         style={{
           position:        'absolute',
           inset:           0,
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.18) 1px, rgba(0,0,0,0.18) 2px)',
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.22) 1px, rgba(0,0,0,0.22) 2px)',
           backgroundSize:  '100% 2px',
           pointerEvents:   'none',
           zIndex:          3,
         }}
       />
 
-      {/* Corner label */}
+      {/* Vignette */}
       <div
         aria-hidden="true"
         style={{
-          position:    'absolute',
-          bottom:      12,
-          right:       14,
-          fontFamily:  '"Play", monospace',
-          fontSize:    '9px',
+          position:   'absolute',
+          inset:      0,
+          background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%)',
+          pointerEvents: 'none',
+          zIndex:     3,
+        }}
+      />
+
+      {/* CCTV HUD */}
+      <CCTVTimestamp />
+      <div
+        aria-hidden="true"
+        style={{
+          position:      'absolute',
+          bottom:        10,
+          right:         12,
+          fontFamily:    '"Play", monospace',
+          fontSize:      '9px',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color:       'rgba(240,238,234,0.30)',
-          zIndex:      4,
+          color:         'rgba(240,238,234,0.28)',
+          zIndex:        5,
+          userSelect:    'none',
         }}
       >
-        INCIDENT/FOOTAGE
+        SECTOR-404 / EVIDENCE
       </div>
     </div>
   );

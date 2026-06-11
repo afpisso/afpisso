@@ -138,6 +138,12 @@ section[id] {
   background-size: 64px 64px;
 }
 
+/* ─── VHS tracking bar sweep ─────────────────────────── */
+@keyframes tracking-sweep {
+  0%   { top: -20px; }
+  100% { top: 100%; }
+}
+
 /* ─── Scan line ──────────────────────────────────────── */
 @keyframes scanline {
   0%   { top: -2px; }
