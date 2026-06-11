@@ -138,6 +138,13 @@ section[id] {
   background-size: 64px 64px;
 }
 
+/* ─── 404 mobile: video panel floats to top ──────────── */
+@media (max-width: 767px) {
+  .not-found-video {
+    order: -1;
+  }
+}
+
 /* ─── VHS tracking bar sweep ─────────────────────────── */
 @keyframes tracking-sweep {
   0%   { top: -20px; }

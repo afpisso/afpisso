@@ -563,8 +563,9 @@ export default function NotFoundPage({ onMenuOpen }) {
               </m.div>
             </m.div>
 
-            {/* RIGHT — video */}
+            {/* RIGHT — video (order: -1 on mobile so it appears above text) */}
             <m.div
+              className="not-found-video"
               initial={reducedMotion ? false : { opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2, ease: EASE_OUT }}
