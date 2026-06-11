@@ -38,6 +38,7 @@ const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
 const LabHome         = lazy(() => import('./pages/LabHome')); // isolated prototype — /lab
+const NotFoundPage    = lazy(() => import('./pages/NotFoundPage'));
 
 // Easing
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -146,22 +147,6 @@ function HomePage({ onMenuOpen }) {
   );
 }
 
-// ── NotFoundPage ───────────────────────────────────────────────────────────────
-function NotFoundPage({ onMenuOpen }) {
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
-      <Nav onMenuOpen={onMenuOpen} />
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '6rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>404</div>
-          <p style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', marginBottom: 24 }}>Page not found.</p>
-          <a href="/" style={{ fontFamily: '"Play", sans-serif', fontSize: '11px', color: 'var(--color-accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>← Back to home</a>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
 
 
 function getActiveMenuSection(location) {
