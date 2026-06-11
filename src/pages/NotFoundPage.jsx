@@ -7,6 +7,7 @@ import Footer from '../components/Footer';
 import SectionTag from '../components/SectionTag';
 import CyberBtn from '../components/CyberBtn';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useLang } from '../contexts/LangContext';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -95,14 +96,7 @@ function BlinkCursor() {
   );
 }
 
-// ─── Typewriter log lines ─────────────────────────────────────────────────────
-const LOG_LINES = [
-  { prefix: '>', text: 'PAGE_STATUS: OFFLINE',                    delay: 0.35 },
-  { prefix: '>', text: 'CABLE_STATUS: IN DOG\'S MOUTH',           delay: 0.60 },
-  { prefix: '>', text: 'OPERATOR_STATUS: PANICKING',              delay: 0.85 },
-  { prefix: '>', text: 'SUSPECT_DESCRIPTION: BROWN, FAST, WEARING HOODIE', delay: 1.10 },
-  { prefix: '>', text: 'RECOVERY_PLAN: RUN FASTER',               delay: 1.35 },
-];
+const LOG_DELAYS = [0.35, 0.60, 0.85, 1.10, 1.35];
 
 function LogLine({ prefix, text, delay, reducedMotion }) {
   const [visible, setVisible] = useState(false);
@@ -421,10 +415,12 @@ export default function NotFoundPage({ onMenuOpen }) {
   const location      = useLocation();
   const reducedMotion = useReducedMotion();
   const requestedPath = location.pathname;
+  const { t }         = useLang();
+  const nf            = t.notFound;
 
   usePageMeta({
-    title:       'Page Not Found — AFPISSO',
-    description: 'The page you were looking for has gone missing. A dog may be involved.',
+    title:       nf.pageTitle,
+    description: nf.pageDesc,
     robots:      'noindex',
   });
 
@@ -476,7 +472,7 @@ export default function NotFoundPage({ onMenuOpen }) {
             >
               {/* Tag */}
               <m.div variants={itemVariants}>
-                <SectionTag label="Error 404" page="000" />
+                <SectionTag label={nf.tag} page="000" />
               </m.div>
 
               {/* Big 404 — auto-glitch */}
@@ -491,7 +487,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                   color:         'rgba(240,238,234,0.55)',
                   lineHeight:    1,
                 }}>
-                  Page disconnected.
+                  {nf.subtitle}
                 </span>
               </m.div>
 
@@ -517,7 +513,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                   maxWidth:      '36ch',
                 }}
               >
-                The page at{' '}
+                {nf.bodyPrefix}{' '}
                 <span
                   style={{
                     color:      'var(--color-accent)',
@@ -527,7 +523,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                 >
                   {requestedPath}
                 </span>{' '}
-                is offline. We found the problem — a tiny brown suspect escaped with the power cable before this page could load.
+                {nf.bodySuffix}
               </m.p>
 
               {/* Log terminal */}
@@ -541,8 +537,8 @@ export default function NotFoundPage({ onMenuOpen }) {
                   gap:        '2px',
                 }}
               >
-                {LOG_LINES.map((line) => (
-                  <LogLine key={line.text} {...line} reducedMotion={reducedMotion} />
+                {nf.logs.map((text, i) => (
+                  <LogLine key={text} prefix=">" text={text} delay={LOG_DELAYS[i]} reducedMotion={reducedMotion} />
                 ))}
                 <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center' }}>
                   <span
@@ -562,7 +558,7 @@ export default function NotFoundPage({ onMenuOpen }) {
               {/* CTA */}
               <m.div variants={itemVariants} style={{ paddingTop: '4px' }}>
                 <CyberBtn to="/" variant="solid" size="md" magnetic>
-                  Restore Connection
+                  {nf.cta}
                 </CyberBtn>
               </m.div>
             </m.div>
