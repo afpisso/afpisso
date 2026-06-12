@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { m, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 
 const STRINGS = {
@@ -23,111 +23,203 @@ const STRINGS = {
   },
 };
 
-// Subtle floating orb with eye-like signal indicators
+// Kowalski tooltip-delay rule:
+// first hover → 400ms delay; if re-hovered within 600ms → instant
+function useTooltipDelay() {
+  const [visible, setVisible] = useState(false);
+  const lastHideTime = useRef(null);
+  const showTimer = useRef(null);
+
+  const show = useCallback(() => {
+    const instant = lastHideTime.current && Date.now() - lastHideTime.current < 600;
+    if (instant) {
+      setVisible(true);
+    } else {
+      showTimer.current = setTimeout(() => setVisible(true), 400);
+    }
+  }, []);
+
+  const hide = useCallback(() => {
+    clearTimeout(showTimer.current);
+    lastHideTime.current = Date.now();
+    setVisible(false);
+  }, []);
+
+  return { visible, show, hide };
+}
+
 function OrbTrigger({ onClick }) {
   const [hovered, setHovered] = useState(false);
+  const tooltip = useTooltipDelay();
+  const { lang } = useLang();
+  const label = lang === 'es' ? 'Pregunta sobre AndresFe' : 'Ask about AndresFe';
+
+  // Orb size matching the reference proportions
+  const SIZE = 68;
+  // Eye proportions from reference: wide pill, white, centered upper half
+  const EYE_W = 7, EYE_H = 13, EYE_GAP = 10, EYE_R = 4;
 
   return (
-    <m.button
-      onClick={onClick}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      // Enter from scale(0.95) — never from 0 (Kowalski rule)
-      initial={{ opacity: 0, scale: 0.95, y: 16 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: 8 }}
-      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-      // Press feedback: scale(0.97) (Kowalski rule)
-      whileTap={{ scale: 0.97 }}
+    <m.div
       style={{
         position: 'fixed',
         bottom: 28,
         right: 28,
         zIndex: 9000,
-        width: 56,
-        height: 56,
-        borderRadius: '50%',
-        border: 'none',
-        cursor: 'pointer',
-        background: 'none',
-        padding: 0,
+        width: SIZE,
+        // extra height for ground shadow
+        height: SIZE + 16,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
-      aria-label="Open AI assistant"
+      // Enter from scale(0.95), never 0 — Kowalski rule
+      initial={{ opacity: 0, scale: 0.95, y: 16 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: 8 }}
+      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
     >
-      {/* Outer glow ring — pulses continuously */}
+      {/* Tooltip pill — left of orb, ease-out, Kowalski delay */}
+      <AnimatePresence>
+        {tooltip.visible && (
+          <m.span
+            initial={{ opacity: 0, x: 6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 4 }}
+            // ease-out for user-initiated interaction — Kowalski rule
+            transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+            style={{
+              position: 'absolute',
+              right: SIZE + 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none',
+              // Site aesthetic: Play font, red border, glass bg
+              fontFamily: '"Play", sans-serif',
+              fontSize: '10px',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--color-fg)',
+              backgroundColor: 'rgba(8,8,8,0.92)',
+              border: '1px solid rgba(255,37,64,0.4)',
+              padding: '6px 12px',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 0 16px rgba(255,37,64,0.1), 0 4px 12px rgba(0,0,0,0.5)',
+            }}
+          >
+            {/* Left accent line */}
+            <span style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0,
+              width: 2, backgroundColor: 'var(--color-accent)',
+            }} />
+            {label}
+          </m.span>
+        )}
+      </AnimatePresence>
+
+      {/* Pulse ring */}
       <m.span
         style={{
-          position: 'absolute', inset: -6, borderRadius: '50%',
-          border: '1px solid rgba(255,37,64,0.25)',
+          position: 'absolute',
+          top: 0, left: 0,
+          width: SIZE, height: SIZE,
+          borderRadius: '50%',
+          border: '1px solid rgba(255,37,64,0.2)',
           pointerEvents: 'none',
         }}
-        animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0, 0.5] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ scale: [1, 1.22, 1], opacity: [0.6, 0, 0.6] }}
+        transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Main orb body */}
-      <m.span
+      {/* Orb button */}
+      <m.button
+        onClick={onClick}
+        onHoverStart={() => { setHovered(true); tooltip.show(); }}
+        onHoverEnd={() => { setHovered(false); tooltip.hide(); }}
+        whileTap={{ scale: 0.97 }} // Kowalski press feedback
         style={{
-          position: 'absolute', inset: 0, borderRadius: '50%',
-          background: 'radial-gradient(circle at 38% 36%, rgba(255,37,64,0.22) 0%, rgba(8,8,8,0.96) 70%)',
-          border: '1px solid rgba(255,37,64,0.45)',
-          boxShadow: '0 0 20px rgba(255,37,64,0.2), inset 0 1px 0 rgba(255,255,255,0.07)',
-          backdropFilter: 'blur(12px)',
+          width: SIZE, height: SIZE,
+          borderRadius: '50%',
+          border: 'none',
+          cursor: 'pointer',
+          background: 'none',
+          padding: 0,
+          position: 'relative',
+          flexShrink: 0,
         }}
-        animate={hovered
-          ? { boxShadow: '0 0 32px rgba(255,37,64,0.4), inset 0 1px 0 rgba(255,255,255,0.07)' }
-          : { boxShadow: '0 0 20px rgba(255,37,64,0.2), inset 0 1px 0 rgba(255,255,255,0.07)' }
-        }
-        transition={{ duration: 0.2 }}
-      />
-
-      {/* Floating bob — continuous vertical drift */}
-      <m.span
-        style={{
-          position: 'absolute', inset: 0, display: 'flex',
-          alignItems: 'center', justifyContent: 'center',
-          flexDirection: 'column', gap: 5,
-        }}
-        animate={{ y: [0, -3, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        aria-label="Open AI assistant"
       >
-        {/* Two signal "eyes" */}
-        <span style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
-          {[0, 1].map(i => (
-            <m.span
-              key={i}
-              style={{
-                width: 5, height: 8, borderRadius: 3,
-                backgroundColor: 'var(--color-accent)',
-              }}
-              animate={hovered
-                ? { scaleY: [1, 0.3, 1], opacity: [1, 0.6, 1] }
-                : { opacity: [0.7, 1, 0.7] }
-              }
-              transition={{
-                duration: hovered ? 0.35 : 2,
-                repeat: Infinity,
-                delay: i * 0.1,
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
-        </span>
-      </m.span>
+        {/* Orb body — radial gradient with highlight at top-left */}
+        <m.span
+          style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            background: 'radial-gradient(circle at 35% 30%, rgba(255,80,100,0.55) 0%, rgba(180,10,30,0.85) 42%, rgba(8,8,8,0.97) 75%)',
+            border: '1px solid rgba(255,37,64,0.5)',
+            backdropFilter: 'blur(12px)',
+          }}
+          animate={{
+            boxShadow: hovered
+              ? '0 0 36px rgba(255,37,64,0.5), inset 0 1px 0 rgba(255,120,120,0.15)'
+              : '0 0 22px rgba(255,37,64,0.25), inset 0 1px 0 rgba(255,120,120,0.08)',
+          }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+        />
 
-      {/* Ground shadow — mirrors seniverse ref */}
+        {/* Float + eyes container */}
+        <m.span
+          style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            // Eyes sit slightly above center, matching reference
+            paddingBottom: 6,
+          }}
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <span style={{ display: 'flex', gap: EYE_GAP, alignItems: 'center' }}>
+            {[0, 1].map(i => (
+              <m.span
+                key={i}
+                style={{
+                  width: EYE_W, height: EYE_H,
+                  borderRadius: EYE_R,
+                  backgroundColor: 'rgba(255,255,255,0.92)',
+                  display: 'block',
+                }}
+                // Blink on hover, slow pulse at rest
+                animate={hovered
+                  ? { scaleY: [1, 0.15, 1], opacity: [1, 0.7, 1] }
+                  : { opacity: [0.8, 1, 0.8] }
+                }
+                transition={{
+                  duration: hovered ? 0.28 : 2.2,
+                  repeat: Infinity,
+                  delay: i * 0.08,
+                  ease: 'easeInOut',
+                }}
+              />
+            ))}
+          </span>
+        </m.span>
+      </m.button>
+
+      {/* Ground shadow — breathes with the float */}
       <m.span
         style={{
-          position: 'absolute', bottom: -10, left: '50%', x: '-50%',
-          width: 28, height: 5, borderRadius: '50%',
-          backgroundColor: 'rgba(255,37,64,0.18)',
-          filter: 'blur(4px)',
-          pointerEvents: 'none',
+          width: SIZE * 0.5,
+          height: 7,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(255,37,64,0.2)',
+          filter: 'blur(5px)',
+          marginTop: 2,
+          flexShrink: 0,
         }}
-        animate={{ scaleX: [1, 0.75, 1], opacity: [0.5, 0.2, 0.5] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ scaleX: [1, 0.65, 1], opacity: [0.45, 0.15, 0.45] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
       />
-    </m.button>
+    </m.div>
   );
 }
 
