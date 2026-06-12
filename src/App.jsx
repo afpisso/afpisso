@@ -27,7 +27,7 @@ const Contact    = lazy(() => import('./components/Contact'));
 const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
 const Cursor            = lazy(() => import('./components/Cursor'));
 const Grain             = lazy(() => import('./components/Grain'));
-const AIChatBot         = lazy(() => import('./components/AIChatBot'));
+// const AIChatBot         = lazy(() => import('./components/AIChatBot')); // disabled temporarily
 
 // Route-level code splitting — pages load only when visited
 const CasePage        = lazy(() => import('./pages/CasePage'));
@@ -240,10 +240,10 @@ function AppRoutes() {
       {/* Signal Hunt HUD — invisible until first signal found */}
       <HuntHUD />
 
-      {/* AI chatbot — HR/recruiting assistant */}
+      {/* AI chatbot — disabled temporarily
       <Suspense fallback={null}>
         <AIChatBot />
-      </Suspense>
+      </Suspense> */}
 
       {/* Brand micro-flash — imperatively animated on route change */}
       <div
