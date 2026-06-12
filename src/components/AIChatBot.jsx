@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { m, AnimatePresence, useMotionValue, useSpring, useAnimation } from 'framer-motion';
+import { m, AnimatePresence, useAnimation } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 
 const STRINGS = {
@@ -42,41 +42,21 @@ function useTooltipDelay() {
   return { visible, show, hide };
 }
 
-// Tooltip that follows the mouse cursor
-// Position is instant (no spring) — Kowalski: immediate feedback for tracking
-// Only entrance animation uses easing
+// Tooltip — pure fade, no position animation (Kowalski: only animate what adds value)
 function MouseTooltip({ visible, label }) {
-  const x = useMotionValue(-999);
-  const y = useMotionValue(-999);
-
-  useEffect(() => {
-    function onMove(e) {
-      // Direct set — no spring, no lag
-      x.set(e.clientX);
-      y.set(e.clientY);
-    }
-    window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
-  }, [x, y]);
-
   return (
     <AnimatePresence>
       {visible && (
         <m.span
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 2 }}
-          transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.12, ease: 'easeOut' }}
           style={{
-            position: 'fixed', top: 0, left: 0,
-            x, y,
-            // above and centered on cursor
-            translateX: '-50%',
-            translateY: 'calc(-100% - 14px)',
+            position: 'fixed', bottom: 74, right: 28,
             pointerEvents: 'none',
             zIndex: 9999,
             whiteSpace: 'nowrap',
-            // portfolio aesthetic
             fontFamily: '"Play", sans-serif',
             fontSize: '9px',
             fontWeight: 700,
@@ -89,7 +69,6 @@ function MouseTooltip({ visible, label }) {
             boxShadow: '0 0 12px rgba(255,37,64,0.12), 0 4px 10px rgba(0,0,0,0.5)',
           }}
         >
-          {/* Left accent bar */}
           <span style={{
             position: 'absolute', left: 0, top: 0, bottom: 0,
             width: 2, backgroundColor: 'var(--color-accent)',
