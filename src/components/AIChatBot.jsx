@@ -443,6 +443,15 @@ export default function AIChatBot() {
 
       <AnimatePresence>
         {open && (
+          <>
+          {/* Click-outside dismiss — transparent, no visual overlay */}
+          <m.div
+            key="backdrop"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => setOpen(false)}
+            style={{ position: 'fixed', inset: 0, zIndex: 8999, cursor: 'default' }}
+          />
           <m.div
             key="panel"
             initial={{ opacity: 0, y: 28, scale: 0.95 }}
@@ -469,7 +478,7 @@ export default function AIChatBot() {
               <div style={{
                 flex: 1,
                 clipPath: clipInner,
-                background: 'rgba(9,7,9,0.9)',
+                background: 'rgba(9,7,9,0.78)',
                 backdropFilter: 'blur(28px) saturate(140%)',
                 display: 'flex', flexDirection: 'column',
                 overflow: 'hidden',
@@ -622,6 +631,7 @@ export default function AIChatBot() {
               </div>
             </div>
           </m.div>
+          </>
         )}
       </AnimatePresence>
     </>
