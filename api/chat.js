@@ -144,6 +144,10 @@ export default async function handler(req, res) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
+  }
+
   try {
     const response = await client.messages.create({
       model: 'claude-haiku-4-5',
@@ -156,6 +160,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ text });
   } catch (err) {
     console.error('[chat-api]', err?.message ?? err);
-    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    return res.status(500).json({ error: err?.message ?? 'Something went wrong. Please try again.' });
   }
 }
