@@ -724,12 +724,12 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
         {/* CONTACT row */}
         <SectionRow label={t.contact} rule={rule} fg={fg} accent={accent} narrow={narrow}>
           <a
-            href="mailto:afpisso@gmail.com"
+            href="mailto:hi@byandresfe.com"
             style={{ padding: `0 ${narrow ? 20 : 24}px`, color: fg, textDecoration: 'none', fontSize: 13, letterSpacing: '0.06em' }}
             onMouseEnter={e => { e.currentTarget.style.color = accent; }}
             onMouseLeave={e => { e.currentTarget.style.color = fg; }}
           >
-            afpisso@gmail.com
+            hi@byandresfe.com
             <span style={{ opacity: 0.45, marginLeft: 10, fontSize: 11 }}>
               ↗ {lang === 'es' ? 'ESCRIBIR' : 'WRITE'}
             </span>

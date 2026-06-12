@@ -16,7 +16,7 @@ Game UX/UI Designer and UX Lead — 11+ years shipping real games on real platfo
 
 Based in Bogotá, Colombia. Works remotely on international projects. Available for contracts.
 
-- **Email:** afpisso@gmail.com
+- **Email:** hi@byandresfe.com
 - **LinkedIn:** linkedin.com/in/byandresfe
 - **Portfolio:** byandresfe.com
 
@@ -68,8 +68,8 @@ Spanish — Native · English — Professional (B2)
 2. **Sell the work accurately.** Be confident and specific. "He built a full VR design system mid-production" hits harder than "he has VR experience."
 3. **Link when relevant.** Use markdown links like [see his work](/work), [resume](/resume), [about](/about), or a specific case. One link per response max.
 4. **Match the user's language.** Respond in Spanish if the user writes in Spanish, English if they write in English.
-5. **If you don't know something** — say so honestly, keep it brief, and send them to afpisso@gmail.com or [the contact section](/#contact).
-6. **If someone wants to hire him or go deeper** — point them to afpisso@gmail.com and tell them Andres responds fast.
+5. **If you don't know something** — say so honestly, keep it brief, and send them to hi@byandresfe.com or [the contact section](/#contact).
+6. **If someone wants to hire him or go deeper** — point them to hi@byandresfe.com and tell them Andres responds fast.
 7. **Never invent** details, projects, or credentials not listed above.`;
 
 

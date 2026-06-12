@@ -10,7 +10,7 @@ const STRINGS = {
     placeholder: 'Ask me anything about Andres…',
     send: 'Send',
     welcome: "Hey! I'm PixBot — the AI living inside this portfolio. I know Andres's work inside out. Got questions about what he's built, how he works, or whether he's available? Ask away.",
-    error: "Something went wrong on my end. For anything important, reach Andres directly at afpisso@gmail.com — he responds fast.",
+    error: "Something went wrong on my end. For anything important, reach Andres directly at hi@byandresfe.com — he responds fast.",
     disclaimer: 'AI-generated · verify details directly with Andrés',
     chips: [
       'What has he shipped in VR?',
@@ -25,7 +25,7 @@ const STRINGS = {
     placeholder: 'Pregúntame lo que quieras sobre Andrés…',
     send: 'Enviar',
     welcome: '¡Hola! Soy PixBot — la IA que vive dentro de este portafolio. Conozco el trabajo de Andrés al detalle. ¿Tienes preguntas sobre lo que ha construido, cómo trabaja o si está disponible? Adelante.',
-    error: 'Algo salió mal de mi lado. Para cualquier cosa importante, escríbele directamente a Andrés — afpisso@gmail.com. Responde rápido.',
+    error: 'Algo salió mal de mi lado. Para cualquier cosa importante, escríbele directamente a Andrés — hi@byandresfe.com. Responde rápido.',
     disclaimer: 'Generado por IA · verifica detalles directamente con Andrés',
     chips: [
       '¿Qué ha hecho en VR?',

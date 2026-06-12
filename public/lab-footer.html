@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lab Footer Preview</title>
+    <link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("/fonts/bebas-neue-latin.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: #080808;
+        color: #f5f5f3;
+      }
+      body {
+        font-family: "Play", monospace;
+        overflow-x: hidden;
+      }
+
+      .footer-preview {
+        min-height: 100vh;
+        background:
+          radial-gradient(ellipse at 50% 2%, rgba(255, 37, 64, 0.18) 0%, rgba(85, 0, 6, 0.26) 28%, transparent 58%),
+          radial-gradient(ellipse at 0% 50%, rgba(255, 37, 64, 0.26) 0%, rgba(86, 0, 8, 0.2) 34%, transparent 62%),
+          radial-gradient(ellipse at 100% 50%, rgba(255, 37, 64, 0.24) 0%, rgba(86, 0, 8, 0.2) 34%, transparent 62%),
+          linear-gradient(180deg, #4a0207 0%, #210103 16%, #090707 42%, #090707 68%, #3c0207 100%);
+        padding: clamp(16px, 3vw, 52px) clamp(14px, 3.2vw, 54px) clamp(12px, 2vw, 26px);
+      }
+
+      .frame-shell {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1672 / 941;
+        min-height: 620px;
+        filter: drop-shadow(0 0 34px rgba(255, 37, 64, 0.18));
+      }
+
+      .frame-shell::before {
+        content: "";
+        position: absolute;
+        inset: -34px -26px;
+        z-index: 0;
+        background:
+          radial-gradient(ellipse at 50% 0%, rgba(255, 37, 64, 0.22), transparent 42%),
+          radial-gradient(ellipse at 50% 100%, rgba(255, 37, 64, 0.18), transparent 48%);
+        filter: blur(18px);
+        pointer-events: none;
+      }
+
+      .frame {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .frame::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 50% 5%, rgba(255, 255, 255, 0.05), transparent 13%),
+          repeating-linear-gradient(112deg, rgba(255, 37, 64, 0.045) 0 1px, transparent 1px 96px);
+        opacity: 0.72;
+        pointer-events: none;
+      }
+      .frame-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        filter: drop-shadow(0 0 9px rgba(255, 37, 64, 0.32));
+      }
+
+      .topbar {
+        position: absolute;
+        top: clamp(52px, 4.9vw, 82px);
+        left: clamp(58px, 5.4vw, 92px);
+        right: clamp(58px, 4.8vw, 78px);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .brand img {
+        width: clamp(48px, 5vw, 78px);
+        filter: drop-shadow(0 0 18px rgba(255, 37, 64, 0.25));
+      }
+      .brand-rule {
+        width: 1px;
+        height: 32px;
+        background: rgba(240, 238, 234, 0.22);
+      }
+      .brand-name {
+        font-size: clamp(10px, 1vw, 15px);
+        letter-spacing: 0.48em;
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .status {
+        border: 1px solid rgba(255, 37, 64, 0.65);
+        border-radius: 18px;
+        color: #ff2540;
+        padding: 13px 24px;
+        font-size: clamp(9px, 0.78vw, 12px);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+      .arrow {
+        width: 54px;
+        height: 54px;
+        border: 1px solid rgba(245, 245, 243, 0.28);
+        border-radius: 10px;
+        color: #f5f5f3;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 28px;
+        line-height: 1;
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.04);
+      }
+
+      .grid {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: clamp(170px, 22vw, 330px) minmax(0, 1fr) clamp(170px, 22vw, 330px);
+        align-items: center;
+        height: 100%;
+        min-height: 0;
+        padding-top: clamp(110px, 9vw, 150px);
+        padding-bottom: clamp(74px, 6.2vw, 100px);
+      }
+      .nav,
+      .connect {
+        padding-top: clamp(68px, 10vh, 120px);
+        padding-bottom: clamp(28px, 4vw, 56px);
+      }
+      .nav {
+        padding-left: clamp(54px, 6vw, 104px);
+        padding-right: clamp(18px, 2vw, 28px);
+      }
+      .connect {
+        padding-left: clamp(20px, 2vw, 36px);
+        padding-right: clamp(42px, 5.5vw, 84px);
+      }
+      .label {
+        color: #ff2540;
+        font-size: 9px;
+        letter-spacing: 0.28em;
+        margin-bottom: clamp(18px, 2.8vh, 30px);
+      }
+      a {
+        color: rgba(240, 238, 234, 0.86);
+        text-decoration: none;
+      }
+      .nav a,
+      .connect a {
+        display: block;
+        font-family: "Bebas Neue", Impact, sans-serif;
+        font-size: clamp(1.55rem, 2.05vw, 2.2rem);
+        letter-spacing: 0.06em;
+        line-height: 0.98;
+        margin-bottom: clamp(9px, 1.35vh, 13px);
+      }
+      .nav .contact {
+        color: #ff2540;
+      }
+
+      .center {
+        position: relative;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        text-align: center;
+      }
+      .signature {
+        position: absolute;
+        top: clamp(0px, 2.2vw, 26px);
+        left: 0;
+        right: 0;
+        z-index: 4;
+        color: #ff2540;
+        font-family: "Dancing Script", "Brush Script MT", cursive;
+        font-size: clamp(3.4rem, 6.6vw, 7.1rem);
+        line-height: 0.78;
+        transform: rotate(-6deg);
+        filter: drop-shadow(0 0 16px rgba(255, 37, 64, 0.32));
+      }
+      h1 {
+        position: absolute;
+        top: clamp(70px, 7.8vw, 118px);
+        left: 0;
+        right: 0;
+        z-index: 3;
+        margin: 0;
+        font-family: "Bebas Neue", Impact, sans-serif;
+        font-size: clamp(4rem, 7.45vw, 8.9rem);
+        line-height: 0.86;
+        letter-spacing: 0.018em;
+        text-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+      }
+      h1 span {
+        color: #ff2540;
+      }
+      .helmet {
+        position: absolute;
+        bottom: clamp(-28px, -2vw, -10px);
+        left: 50%;
+        z-index: 5;
+        width: clamp(360px, 43vw, 650px);
+        transform: translateX(-50%);
+      }
+
+      .rule {
+        width: min(150px, 100%);
+        height: 10px;
+        border-top: 1px solid rgba(255, 37, 64, 0.75);
+        border-right: 1px solid rgba(255, 37, 64, 0.22);
+        transform: skewX(24deg);
+        margin: clamp(16px, 2.5vh, 28px) 0;
+      }
+      .copy {
+        max-width: 30ch;
+        color: rgba(240, 238, 234, 0.5);
+        font-size: clamp(10px, 0.85vw, 12px);
+        line-height: 1.8;
+      }
+
+      .skills {
+        position: absolute;
+        left: clamp(56px, 4.6vw, 86px);
+        right: clamp(56px, 4.6vw, 86px);
+        bottom: clamp(42px, 4.4vw, 72px);
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: clamp(8px, 1.5vw, 20px);
+        flex-wrap: wrap;
+        padding: 0;
+        color: rgba(240, 238, 234, 0.62);
+        font-size: clamp(9px, 0.78vw, 11px);
+        letter-spacing: 0.2em;
+      }
+      .frame-outline {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .copyright {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding: 16px 32px 0;
+        color: rgba(240, 238, 234, 0.34);
+        font-size: 10px;
+        letter-spacing: 0.14em;
+      }
+
+      @media (max-width: 980px) {
+        .footer-preview { padding: 14px; }
+        .frame-shell {
+          aspect-ratio: auto;
+          min-height: 1080px;
+        }
+        .status { display: none; }
+        .grid {
+          display: block;
+          min-height: auto;
+          height: auto;
+          padding-top: 128px;
+          padding-bottom: 120px;
+        }
+        .center {
+          min-height: 560px;
+        }
+        .nav,
+        .connect {
+          padding: 28px 44px;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .frame-shell {
+          min-height: 980px;
+        }
+        .topbar {
+          justify-content: center;
+        }
+        .actions {
+          display: none;
+        }
+        .center {
+          min-height: 500px;
+        }
+        .signature {
+          top: 18px;
+          font-size: 4rem;
+        }
+        h1 {
+          top: 74px;
+          font-size: clamp(3.2rem, 15vw, 5rem);
+        }
+        .helmet {
+          width: min(112vw, 460px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="footer-preview">
+      <div class="frame-shell">
+        <div class="frame">
+          <svg class="frame-bg" aria-hidden="true" viewBox="0 0 1672 941" preserveAspectRatio="none">
+            <path
+              d="M742.366 13.4284L874.077 13.5099C893.238 13.5018 914.913 12.8668 933.895 14.1077C949.105 15.1021 957.146 38.66 973.58 38.8624C991.901 39.0881 1010.22 39.0445 1028.49 39.0443L1132.31 39.0292L1447.72 39.0203L1543.29 38.9595C1559.68 38.939 1576.65 38.1711 1592.91 39.9471C1603.41 40.7617 1613.51 50.1157 1617.35 59.6383C1621.06 68.8323 1619.86 84.4523 1619.86 94.738L1619.84 144.395L1619.8 306.989L1619.94 839.318C1619.97 852.123 1619.78 862.708 1609.75 872.575C1604.78 877.407 1598.43 880.573 1591.57 881.651C1584.93 882.638 1569.39 882.238 1562.21 882.214L1513.31 882.157L1335.22 882.14C1313.85 882.206 1316.21 882.72 1300.6 898.357C1296.96 902.005 1290.62 907.008 1285.36 907.261C1274.36 907.8 1262.2 907.571 1251.19 907.571L1178.39 907.555L921.828 907.579L565.743 907.538L448.603 907.571C428.641 907.579 408.43 907.702 388.465 907.424C369.89 907.171 365.16 882.402 346.616 882.271C324.266 882.116 301.827 882.157 279.487 882.157L151.717 882.108L108.042 882.271C99.2673 882.304 88.5177 883.038 80.455 881.602C53.9174 876.893 49.2346 855.836 50.9349 832.658C51.4039 826.268 50.9485 816.866 50.9584 810.475L51.0049 735.243L51.065 485.317L50.9854 208.32L51.115 119.631C51.1268 103.583 50.9369 87.3912 51.3965 71.3422C51.7053 60.5555 57.564 50.7054 66.3322 44.5069C76.5427 37.2885 88.0001 39.3337 99.7522 38.948C110.005 38.778 120.465 38.9473 130.77 38.9621L234.256 39.004L544.251 39.008L643.517 39.0387C660.673 39.0529 681.146 39.28 697.937 38.8528C715.47 38.4066 718.081 15.3567 742.366 13.4284Z"
+              fill="#080808"
+              stroke="rgba(255,37,64,0.72)"
+              stroke-width="2"
+              vector-effect="non-scaling-stroke"
+            />
+          </svg>
+          <div class="topbar">
+            <div class="brand">
+              <img src="/lab/logo.svg" alt="" />
+              <div class="brand-rule"></div>
+              <div class="brand-name">ANDRES<br />PISSO</div>
+            </div>
+            <div class="actions">
+              <div class="status">AVAILABLE FOR FREELANCE &nbsp; ●</div>
+              <a class="arrow" href="mailto:afp.fenrir@gmail.com" aria-label="Contact Andres Pisso">↗</a>
+            </div>
+          </div>
+
+          <div class="grid">
+            <nav class="nav" aria-label="Navigation">
+              <div class="label">NAVIGATION</div>
+              <a href="/">HOME</a>
+              <a href="/work">WORK</a>
+              <a href="/about">ABOUT</a>
+              <a href="/#approach">APPROACH</a>
+              <a href="/#experience">EXPERIENCE</a>
+              <a class="contact" href="/#contact">CONTACT →</a>
+            </nav>
+
+            <main class="center">
+              <div class="signature">AP.</div>
+              <h1>ALWAYS <span>DESIGNING</span><br />THE <span>FUTURE.</span></h1>
+              <img class="helmet" src="/lab/footer.png" alt="" />
+            </main>
+
+            <aside class="connect">
+              <div class="label">CONNECT</div>
+              <a href="https://linkedin.com/in/byandresfe">LINKEDIN</a>
+              <a href="https://instagram.com/byandresfe">INSTAGRAM</a>
+              <a href="mailto:afp.fenrir@gmail.com">EMAIL</a>
+              <a href="https://github.com/byandresfe">GITHUB</a>
+              <div class="rule"></div>
+              <p class="copy">
+                I design meaningful digital experiences, immersive games, and scalable products that solve real problems and drive impact.<br />
+                From concept to execution.<br />
+                Let's build something exceptional.
+              </p>
+            </aside>
+          </div>
+
+          <div class="skills">
+            <span>UX SYSTEMS</span>
+            <span>GAME UX</span>
+            <span>PRODUCT STRATEGY</span>
+            <span>INTERACTION</span>
+            <span>PROTOTYPING</span>
+            <span>RESEARCH</span>
+            <span>DOCUMENTATION</span>
+          </div>
+        </div>
+
+        <svg class="frame-outline" aria-hidden="true" viewBox="0 0 1672 941" preserveAspectRatio="none" fill="none">
+          <path
+            d="M742.366 13.4284L874.077 13.5099C893.238 13.5018 914.913 12.8668 933.895 14.1077C949.105 15.1021 957.146 38.66 973.58 38.8624C991.901 39.0881 1010.22 39.0445 1028.49 39.0443L1132.31 39.0292L1447.72 39.0203L1543.29 38.9595C1559.68 38.939 1576.65 38.1711 1592.91 39.9471C1603.41 40.7617 1613.51 50.1157 1617.35 59.6383C1621.06 68.8323 1619.86 84.4523 1619.86 94.738L1619.84 144.395L1619.8 306.989L1619.94 839.318C1619.97 852.123 1619.78 862.708 1609.75 872.575C1604.78 877.407 1598.43 880.573 1591.57 881.651C1584.93 882.638 1569.39 882.238 1562.21 882.214L1513.31 882.157L1335.22 882.14C1313.85 882.206 1316.21 882.72 1300.6 898.357C1296.96 902.005 1290.62 907.008 1285.36 907.261C1274.36 907.8 1262.2 907.571 1251.19 907.571L1178.39 907.555L921.828 907.579L565.743 907.538L448.603 907.571C428.641 907.579 408.43 907.702 388.465 907.424C369.89 907.171 365.16 882.402 346.616 882.271C324.266 882.116 301.827 882.157 279.487 882.157L151.717 882.108L108.042 882.271C99.2673 882.304 88.5177 883.038 80.455 881.602C53.9174 876.893 49.2346 855.836 50.9349 832.658C51.4039 826.268 50.9485 816.866 50.9584 810.475L51.0049 735.243L51.065 485.317L50.9854 208.32L51.115 119.631C51.1268 103.583 50.9369 87.3912 51.3965 71.3422C51.7053 60.5555 57.564 50.7054 66.3322 44.5069C76.5427 37.2885 88.0001 39.3337 99.7522 38.948C110.005 38.778 120.465 38.9473 130.77 38.9621L234.256 39.004L544.251 39.008L643.517 39.0387C660.673 39.0529 681.146 39.28 697.937 38.8528C715.47 38.4066 718.081 15.3567 742.366 13.4284Z"
+            stroke="rgba(255,37,64,0.72)"
+            stroke-width="2"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
+      <div class="copyright">
+        <span>© 2026 Andres Pisso. All rights reserved</span>
+        <span>PRIVACY POLICY &nbsp; | &nbsp; TERMS</span>
+      </div>
+    </section>
+  </body>
+</html>

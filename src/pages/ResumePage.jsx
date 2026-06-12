@@ -240,12 +240,12 @@ export default function ResumePage({ onMenuOpen }) {
             >
               <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.contact}</h2>
               <div className="flex flex-wrap gap-6" style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)' }}>
-                <a href="mailto:afpisso@gmail.com" style={{ color: 'var(--color-fg-dim)' }}
+                <a href="mailto:hi@byandresfe.com" style={{ color: 'var(--color-fg-dim)' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-dim)'}
                   onClick={() => analytics.emailClick('resume-page')}
                 >
-                  afpisso@gmail.com
+                  hi@byandresfe.com
                 </a>
                 <a href="https://linkedin.com/in/byandresfe" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-fg-dim)' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
