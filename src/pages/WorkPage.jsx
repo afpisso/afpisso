@@ -98,13 +98,19 @@ function CursorPreview({ items, hovered }) {
   const shouldReduce = useReducedMotion();
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
+  const movedOnce = useRef(false);
+  const [showable, setShowable] = useState(false);
 
   const springX = useSpring(mouseX, { stiffness: 160, damping: 22, mass: 0.6 });
   const springY = useSpring(mouseY, { stiffness: 160, damping: 22, mass: 0.6 });
 
   useEffect(() => {
     if (shouldReduce) return;
-    const onMove = (e) => { mouseX.set(e.clientX); mouseY.set(e.clientY); };
+    const onMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      if (!movedOnce.current) { movedOnce.current = true; setShowable(true); }
+    };
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => window.removeEventListener('mousemove', onMove);
   }, [mouseX, mouseY, shouldReduce]);
@@ -118,6 +124,9 @@ function CursorPreview({ items, hovered }) {
       aria-hidden="true"
       className="fixed pointer-events-none z-[90]"
       style={{ left: springX, top: springY, x: 28, y: -100, width: 400 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: (hovered && showable) ? 1 : 0 }}
+      transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       {/* Aspect-ratio shell — gives mode="sync" a stable container so both
           enter/exit frames coexist without pushing layout */}
@@ -708,8 +717,8 @@ export default function WorkPage({ onMenuOpen }) {
   usePageMeta({
     title: lang === 'es' ? 'Trabajo seleccionado' : 'Selected Work',
     description: lang === 'es'
-      ? 'Casos de estudio de Game UX/UI, UEFN, VR y sistemas de interfaz por Andres Felipe Pisso. Cada caso documenta el problema real de diseño, el rol y las decisiones que dieron forma al trabajo.'
-      : 'Selected UX/UI case studies by Andres Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
+      ? 'Casos de estudio de Game UX/UI, UEFN, VR y sistemas de interfaz por Andrés Felipe Pisso. Cada caso documenta el problema real de diseño, el rol y las decisiones que dieron forma al trabajo.'
+      : 'Selected UX/UI case studies by Andrés Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
   });
 
   useEffect(() => {
@@ -729,7 +738,7 @@ export default function WorkPage({ onMenuOpen }) {
         '@type': 'CollectionPage',
         '@id': BASE_URL + '/work#page',
         'name': 'Selected Work',
-        'description': 'Selected UX/UI case studies by Andres Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, and player decision-making.',
+        'description': 'Selected UX/UI case studies by Andrés Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, and player decision-making.',
         'url': BASE_URL + '/work',
         'author': { '@id': BASE_URL + '/#person' },
         'isPartOf': { '@id': BASE_URL + '/#website' },

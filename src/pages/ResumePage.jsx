@@ -54,8 +54,8 @@ export default function ResumePage({ onMenuOpen }) {
   usePageMeta({
     title: lang === 'es' ? 'CV' : 'Resume',
     description: lang === 'es'
-      ? 'CV de Andres Felipe Pisso — UX Lead y Diseñador Game UX/UI con 11+ años de experiencia.'
-      : 'Resume of Andres Felipe Pisso — UX Lead and Game UX/UI Designer with 11+ years of experience.',
+      ? 'CV de Andrés Felipe Pisso — UX Lead y Diseñador Game UX/UI con 11+ años de experiencia.'
+      : 'Resume of Andrés Felipe Pisso — UX Lead and Game UX/UI Designer with 11+ years of experience.',
   });
 
   // Track resume page view on mount

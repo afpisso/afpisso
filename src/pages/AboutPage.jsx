@@ -77,8 +77,8 @@ export default function AboutPage({ onMenuOpen }) {
   usePageMeta({
     title: lang === 'es' ? 'Sobre mí' : 'About',
     description: lang === 'es'
-      ? 'Sobre Andres Felipe Pisso — UX Lead y Diseñador Game UX/UI enfocado en claridad, retroalimentación y mejores decisiones.'
-      : 'About Andres Felipe Pisso — UX Lead and Game UX/UI Designer focused on clarity, feedback, and better decisions.',
+      ? 'Sobre Andrés Felipe Pisso — UX Lead y Diseñador Game UX/UI enfocado en claridad, retroalimentación y mejores decisiones.'
+      : 'About Andrés Felipe Pisso — UX Lead and Game UX/UI Designer focused on clarity, feedback, and better decisions.',
   });
 
   const mouseRef = useMousePos();
@@ -206,7 +206,7 @@ export default function AboutPage({ onMenuOpen }) {
                         lineHeight: 1.05,
                       }}
                     >
-                      <GlitchStrokeText>Andres Felipe Pisso</GlitchStrokeText>
+                      <GlitchStrokeText>Andrés Felipe Pisso</GlitchStrokeText>
                     </div>
                     <div className="mt-1.5 sys-label" style={{ color: 'var(--color-fg-dim)' }}>
                       {t.aboutPage.subheadline}
@@ -278,7 +278,7 @@ export default function AboutPage({ onMenuOpen }) {
                 <m.div className="absolute inset-[-7%] w-[114%] h-[114%]" style={{ y: photoY }}>
                   <img
                     src="/photo.webp"
-                    alt="Andres Felipe Pisso — Game UX/UI Designer"
+                    alt="Andrés Felipe Pisso — Game UX/UI Designer"
                     className="w-full h-full object-cover object-center"
                     width="400"
                     height="533"
@@ -629,7 +629,7 @@ export default function AboutPage({ onMenuOpen }) {
             activeIndex={0}
             onClose={() => setPhotoZoomOpen(false)}
             onNav={() => {}}
-            title="Andres Felipe Pisso — Game UX/UI Designer"
+            title="Andrés Felipe Pisso — Game UX/UI Designer"
           />
         )}
       </AnimatePresence>

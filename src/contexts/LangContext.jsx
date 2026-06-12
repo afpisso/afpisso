@@ -7,7 +7,7 @@ const translations = {
       statusSub: 'Freelance · Remote contracts',
       menu: 'MENU +',
       logoLabel: 'ByAndresFe — back to home',
-      logoSub: 'Game UX / UI',
+      logoSub: 'ByAndresFe',
       work: 'Work',
       about: 'About',
       resume: 'Resume',
@@ -29,7 +29,7 @@ const translations = {
     labHero: {
       navLinks: ['Work', 'About', 'Approach', 'Experience', 'Contact'],
       availability: 'Available for freelance',
-      nameplate: "I'm Andres Felipe Pisso",
+      nameplate: "I'm Andrés Felipe Pisso",
       titleLines: ['Designing Systems', 'That Turn Ideas', 'Into Experiences'],
       roles: ['UX/UI Designer', 'Game Designer', 'Product Designer'],
       cta: 'Explore My Work',
@@ -235,7 +235,7 @@ const translations = {
     footer: {
       tagline: 'Game UX/UI and product design focused on clarity, feedback, and better decisions.',
       links: ['Work', 'About', 'Resume', 'Notes', 'Contact'],
-      copy: '© 2026 Andres Felipe Pisso',
+      copy: '© 2026 Andrés Felipe Pisso',
       handle: '@byandresfe',
       navWork: 'Work',
       navConnect: 'Connect',
@@ -243,7 +243,7 @@ const translations = {
     },
     resume: {
       label: 'Resume',
-      headline: 'Andres Felipe Pisso',
+      headline: 'Andrés Felipe Pisso',
       subheadline: 'UX Lead · Game UX/UI Designer',
       download: 'Download PDF',
       sections: {
@@ -369,7 +369,7 @@ const translations = {
       statusSub: 'Freelance · Contratos remotos',
       menu: 'MENU +',
       logoLabel: 'ByAndresFe — volver al inicio',
-      logoSub: 'Game UX / UI',
+      logoSub: 'ByAndresFe',
       work: 'Trabajo',
       about: 'Sobre mí',
       resume: 'CV',
@@ -391,7 +391,7 @@ const translations = {
     labHero: {
       navLinks: ['Trabajo', 'Sobre mí', 'Enfoque', 'Experiencia', 'Contacto'],
       availability: 'Disponible para freelance',
-      nameplate: 'Soy Andres Felipe Pisso',
+      nameplate: 'Soy Andrés Felipe Pisso',
       titleLines: ['Diseñando Sistemas', 'Que Convierten Ideas', 'En Experiencias'],
       roles: ['Diseñador UX/UI', 'Diseñador de Juegos', 'Diseñador de Producto'],
       cta: 'Explorar mi trabajo',
@@ -597,7 +597,7 @@ const translations = {
     footer: {
       tagline: 'UX/UI para juegos y producto digital enfocado en claridad, retroalimentación y mejores decisiones.',
       links: ['Trabajo', 'Sobre mí', 'CV', 'Notas', 'Contacto'],
-      copy: '© 2026 Andres Felipe Pisso',
+      copy: '© 2026 Andrés Felipe Pisso',
       handle: '@byandresfe',
       navWork: 'Trabajo',
       navConnect: 'Conectar',
@@ -605,7 +605,7 @@ const translations = {
     },
     resume: {
       label: 'CV',
-      headline: 'Andres Felipe Pisso',
+      headline: 'Andrés Felipe Pisso',
       subheadline: 'UX Lead · Diseñador Game UX/UI',
       download: 'Descargar PDF',
       sections: {

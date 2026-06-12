@@ -173,6 +173,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
                   textWrap: isCompact ? 'balance' : undefined,
                   overflowWrap: isCompact ? 'normal' : undefined,
                   maxWidth: '100%',
+                overflow: 'hidden',
                 }}
               >
                 <GlitchStrokeText

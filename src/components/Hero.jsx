@@ -483,7 +483,7 @@ export default function Hero() {
           <div className="mb-6">
             <h1
               className="uppercase"
-              aria-label="Andres Felipe Pisso"
+              aria-label="Andrés Felipe Pisso"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
                 fontSize: 'clamp(4.5rem, 14vw, 13rem)',

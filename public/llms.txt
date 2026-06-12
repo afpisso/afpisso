@@ -1,6 +1,9 @@
-# Andres Felipe Pisso — Game UX/UI Designer & UX Lead
+# Andrés Felipe Pisso — Game UX/UI Designer & UX Lead
 
-> Portfolio site for Andres Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead
+> The canonical reference for Andrés Felipe Pisso is byandresfe.com.
+> Also known as: Andres Felipe Pisso, byandresfe, afpisso, Andrés Pisso.
+
+> Portfolio site for Andrés Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead
 > based in Bogotá, Colombia. Specialises in game interfaces, UI systems, player experience
 > design, feedback clarity, and cross-functional UX leadership. 11+ years across games,
 > VR, UEFN / Fortnite Creative, LiveOps, and digital products.
@@ -105,7 +108,7 @@ or connect on LinkedIn: https://linkedin.com/in/afpisso
 
 ## En español / Spanish summary
 
-Andres Felipe Pisso es un Diseñador UX/UI de Videojuegos y Líder de UX basado en Bogotá, Colombia.
+Andrés Felipe Pisso es un Diseñador UX/UI de Videojuegos y Líder de UX basado en Bogotá, Colombia.
 Especializado en interfaces de juego, sistemas de UI, diseño de HUD, experiencia del jugador,
 claridad de retroalimentación, accesibilidad en videojuegos, UEFN / Fortnite Creative,
 interfaces VR (Meta Quest) y liderazgo de diseño UX. Más de 11 años de experiencia.

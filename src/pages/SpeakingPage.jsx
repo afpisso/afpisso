@@ -221,8 +221,8 @@ export default function SpeakingPage({ onMenuOpen }) {
       ? 'Speaking · Colombia 5.0 Workshop'
       : 'Speaking · Colombia 5.0 Workshop',
     description: lang === 'es'
-      ? 'Taller en Colombia 5.0 sobre Game UI Systems: cómo construir sistemas de UI reutilizables y funcionales para videojuegos. Andres Felipe Pisso.'
-      : 'Workshop at Colombia 5.0 on Game UI Systems: how to build reusable, functional UI systems for video games. Andres Felipe Pisso.',
+      ? 'Taller en Colombia 5.0 sobre Game UI Systems: cómo construir sistemas de UI reutilizables y funcionales para videojuegos. Andrés Felipe Pisso.'
+      : 'Workshop at Colombia 5.0 on Game UI Systems: how to build reusable, functional UI systems for video games. Andrés Felipe Pisso.',
   });
 
   return (
@@ -406,7 +406,7 @@ export default function SpeakingPage({ onMenuOpen }) {
               >
                 <AssetSlot
                   src="/speaking/stage2.webp"
-                  alt="Andres Felipe Pisso presenting the Game UI Systems workshop at Colombia 5.0"
+                  alt="Andrés Felipe Pisso presenting the Game UI Systems workshop at Colombia 5.0"
                   aspectRatio="16/9"
                 />
               </m.div>

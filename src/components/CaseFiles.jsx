@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { cases, CASE_ORDER } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
@@ -89,6 +89,8 @@ function CursorPreview({ items, hovered }) {
   const shouldReduce = useReducedMotion();
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
+  const movedOnce = useRef(false);
+  const [showable, setShowable] = useState(false);
 
   // Spring config: snappy but with visible lag so it feels physical
   const springX = useSpring(mouseX, { stiffness: 160, damping: 22, mass: 0.6 });
@@ -99,6 +101,7 @@ function CursorPreview({ items, hovered }) {
     const onMove = (e) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      if (!movedOnce.current) { movedOnce.current = true; setShowable(true); }
     };
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => window.removeEventListener('mousemove', onMove);
@@ -113,7 +116,8 @@ function CursorPreview({ items, hovered }) {
       aria-hidden="true"
       className="fixed pointer-events-none z-[90]"
       style={{ left: springX, top: springY, x: 28, y: -100, width: 400 }}
-      animate={{ opacity: hovered ? 1 : 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: (hovered && showable) ? 1 : 0 }}
       transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       {/* Stable aspect-ratio shell — lets mode="sync" coexist without layout shift */}

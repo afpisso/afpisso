@@ -208,8 +208,8 @@ export default function NotesPage({ onMenuOpen }) {
   usePageMeta({
     title: 'Field Notes',
     description: lang === 'es'
-      ? 'Frameworks, análisis y notas de Andres Felipe Pisso sobre UX/UI para juegos, sistemas de interfaz, HUD, accesibilidad, UEFN, VR y diseño de producto digital.'
-      : 'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
+      ? 'Frameworks, análisis y notas de Andrés Felipe Pisso sobre UX/UI para juegos, sistemas de interfaz, HUD, accesibilidad, UEFN, VR y diseño de producto digital.'
+      : 'Field notes, frameworks and breakdowns by Andrés Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
   });
 
   useEffect(() => {
@@ -229,7 +229,7 @@ export default function NotesPage({ onMenuOpen }) {
         '@type':       'Blog',
         '@id':         BASE_URL + '/notes#blog',
         'name':        'Field Notes',
-        'description': 'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
+        'description': 'Field notes, frameworks and breakdowns by Andrés Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
         'url':         BASE_URL + '/notes',
         'author':      { '@id': BASE_URL + '/#person' },
         'isPartOf':    { '@id': BASE_URL + '/#website' },

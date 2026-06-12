@@ -259,7 +259,7 @@ export default function Nav({ onMenuOpen }) {
                       style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '14px', letterSpacing: '0.22em', color: 'var(--color-fg)', lineHeight: 1, display: 'block' }}
                       duration={400}
                     >
-                      ByAndresFe
+                      Andrés Felipe Pisso
                     </ScrambleText>
                     <div className="sys-label" style={{ marginTop: '2px' }}>{t.nav.logoSub}</div>
                   </div>

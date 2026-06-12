@@ -140,7 +140,7 @@ export default function About() {
               >
                 <img
                   src="/photo.webp"
-                  alt="Andres Felipe Pisso — Game UX/UI Designer"
+                  alt="Andrés Felipe Pisso — Game UX/UI Designer"
                   className="w-full h-full object-cover object-center"
                   width="520"
                   height="520"
