@@ -2,29 +2,41 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { m, AnimatePresence, useAnimation, useMotionValue } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 
+// ─── i18n ─────────────────────────────────────────────────────────────────────
 const STRINGS = {
   en: {
-    title: 'Ask about Andres',
-    subtitle: 'AI assistant · HR & recruiters',
-    placeholder: 'e.g. What is his experience with VR?',
+    title: 'Ask about Andrés',
+    subtitle: 'AI · HR & recruiters',
+    placeholder: 'e.g. What is his VR experience?',
     send: 'Send',
-    welcome: "Hi! I'm an AI assistant that can answer questions about Andrés Felipe Pisso for HR and recruiting purposes. Ask me about his experience, skills, availability, or projects.",
+    welcome: "Hi — I can answer questions about Andrés Felipe Pisso for HR and recruiting. Ask about his experience, skills, availability, or projects.",
     error: 'Something went wrong. Please try again.',
-    disclaimer: 'AI-generated · verify details with Andres directly',
+    disclaimer: 'AI-generated · verify details directly with Andrés',
+    chips: [
+      'What is his VR experience?',
+      'Is he available for work?',
+      'Show me his projects',
+    ],
+    tooltipLabel: 'Ask about AndresFe',
   },
   es: {
     title: 'Pregunta sobre Andrés',
-    subtitle: 'Asistente IA · HR y reclutadores',
+    subtitle: 'IA · HR y reclutadores',
     placeholder: 'Ej: ¿Cuál es su experiencia en VR?',
     send: 'Enviar',
-    welcome: '¡Hola! Soy un asistente IA que puede responder preguntas sobre Andrés Felipe Pisso para procesos de HR y reclutamiento. Pregúntame sobre su experiencia, habilidades, disponibilidad o proyectos.',
-    error: 'Algo salió mal. Por favor intenta de nuevo.',
-    disclaimer: 'Generado por IA · verifica los detalles directamente con Andrés',
+    welcome: 'Hola — puedo responder preguntas sobre Andrés Felipe Pisso para procesos de HR y reclutamiento. Pregunta sobre su experiencia, habilidades, disponibilidad o proyectos.',
+    error: 'Algo salió mal. Intenta de nuevo.',
+    disclaimer: 'Generado por IA · verifica detalles directamente con Andrés',
+    chips: [
+      '¿Experiencia en VR?',
+      '¿Está disponible?',
+      'Ver proyectos',
+    ],
+    tooltipLabel: 'Pregunta sobre AndresFe',
   },
 };
 
-// Kowalski tooltip-delay rule:
-// first hover → 400ms delay; re-hover within 600ms → instant
+// ─── Kowalski tooltip delay: 400ms first hover, instant if re-hovered < 600ms ─
 function useTooltipDelay() {
   const [visible, setVisible] = useState(false);
   const lastHideTime = useRef(null);
@@ -42,47 +54,29 @@ function useTooltipDelay() {
   return { visible, show, hide };
 }
 
-// Tooltip sobre el cursor — posición instantánea (useMotionValue sin spring),
-// solo opacity animada. Kowalski: nunca animes lo que debe ser inmediato.
+// ─── Tooltip: instant position (no spring), only opacity animates ──────────────
 function MouseTooltip({ visible, label }) {
   const x = useMotionValue(-999);
   const y = useMotionValue(-999);
-
   useEffect(() => {
-    function onMove(e) {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    }
+    function onMove(e) { x.set(e.clientX); y.set(e.clientY); }
     window.addEventListener('mousemove', onMove);
     return () => window.removeEventListener('mousemove', onMove);
   }, [x, y]);
-
   return (
     <AnimatePresence>
       {visible && (
         <m.span
-          // solo opacity se anima — posición es siempre instantánea
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.12, ease: 'easeOut' }}
           style={{
-            position: 'fixed', top: 0, left: 0,
-            x, y,
-            translateX: '-50%',
-            translateY: 'calc(-100% - 12px)',
-            pointerEvents: 'none',
-            zIndex: 9999,
-            whiteSpace: 'nowrap',
-            fontFamily: '"Play", sans-serif',
-            fontSize: '9px',
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'var(--color-fg)',
-            backgroundColor: 'rgba(8,8,8,0.95)',
-            border: '1px solid rgba(255,37,64,0.45)',
-            padding: '5px 10px',
+            position: 'fixed', top: 0, left: 0, x, y,
+            translateX: '-50%', translateY: 'calc(-100% - 12px)',
+            pointerEvents: 'none', zIndex: 9999, whiteSpace: 'nowrap',
+            fontFamily: '"Play", sans-serif', fontSize: '9px', fontWeight: 700,
+            letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--color-fg)', backgroundColor: 'rgba(8,8,8,0.95)',
+            border: '1px solid rgba(255,37,64,0.45)', padding: '5px 10px',
             boxShadow: '0 0 12px rgba(255,37,64,0.12), 0 4px 10px rgba(0,0,0,0.5)',
           }}
         >
@@ -97,26 +91,25 @@ function MouseTooltip({ visible, label }) {
   );
 }
 
+// ─── Pixel-art orb trigger ─────────────────────────────────────────────────────
 function OrbTrigger({ onClick }) {
   const [hovered, setHovered] = useState(false);
   const tooltip = useTooltipDelay();
   const { lang } = useLang();
-  const label = lang === 'es' ? 'Pregunta sobre AndresFe' : 'Ask about AndresFe';
-
-  // useAnimation so we can explicitly reset eyes on hover-end
+  const label = (STRINGS[lang] ?? STRINGS.en).tooltipLabel;
   const eyeControls = [useAnimation(), useAnimation()];
+  const SIZE = 34;
+  const EYE_W = 4, EYE_H = 6, EYE_GAP = 5;
 
   useEffect(() => {
     eyeControls.forEach((ctrl, i) => {
       ctrl.stop();
       if (hovered) {
-        // blink loop while hovered
         ctrl.start({
           scaleY: [1, 0.1, 1],
           transition: { duration: 0.22, repeat: Infinity, repeatDelay: 1.1, delay: i * 0.06, ease: 'easeInOut' },
         });
       } else {
-        // reset to full height, then idle pulse
         ctrl.set({ scaleY: 1, opacity: 1 });
         ctrl.start({
           opacity: [1, 0.65, 1],
@@ -127,15 +120,9 @@ function OrbTrigger({ onClick }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hovered]);
 
-  // Pixel art orb — 34px (50% of 68)
-  const SIZE = 34;
-  // Eyes: square pixel blocks, no radius
-  const EYE_W = 4, EYE_H = 6, EYE_GAP = 5;
-
   return (
     <>
       <MouseTooltip visible={tooltip.visible} label={label} />
-
       <m.div
         style={{
           position: 'fixed', bottom: 28, right: 28, zIndex: 9000,
@@ -147,7 +134,6 @@ function OrbTrigger({ onClick }) {
         exit={{ opacity: 0, scale: 0.95, y: 8 }}
         transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
       >
-        {/* Pixel pulse ring — square */}
         <m.span
           style={{
             position: 'absolute', top: -3, left: -3,
@@ -158,29 +144,23 @@ function OrbTrigger({ onClick }) {
           animate={{ scale: [1, 1.28, 1], opacity: [0.5, 0, 0.5] }}
           transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
         />
-
-        {/* Orb button — pixel art: square, sharp, flat */}
         <m.button
           onClick={onClick}
           onHoverStart={() => { setHovered(true); tooltip.show(); }}
           onHoverEnd={() => { setHovered(false); tooltip.hide(); }}
           whileTap={{ scale: 0.94 }}
           style={{
-            width: SIZE, height: SIZE,
-            borderRadius: 2, // pixel-art: near-square
-            border: 'none', cursor: 'pointer',
-            background: 'none', padding: 0,
+            width: SIZE, height: SIZE, borderRadius: 2,
+            border: 'none', cursor: 'pointer', background: 'none', padding: 0,
             position: 'relative', flexShrink: 0,
           }}
           aria-label="Open AI assistant"
         >
-          {/* Flat pixel body — no blur, no gradient, block colors */}
           <m.span
             style={{
               position: 'absolute', inset: 0, borderRadius: 2,
               backgroundColor: '#0e0608',
               border: `2px solid ${hovered ? '#ff2540' : 'rgba(255,37,64,0.6)'}`,
-              // Scanline overlay — pixel art CRT feel
               backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 3px)',
             }}
             animate={{
@@ -190,42 +170,28 @@ function OrbTrigger({ onClick }) {
             }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
           />
-
-          {/* Float + eyes */}
           <m.span
             style={{
               position: 'absolute', inset: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              paddingBottom: 3,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', paddingBottom: 3,
             }}
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
           >
             <span style={{ display: 'flex', gap: EYE_GAP, alignItems: 'center' }}>
               {[0, 1].map(i => (
-                <m.span
-                  key={i}
-                  animate={eyeControls[i]}
-                  style={{
-                    width: EYE_W, height: EYE_H,
-                    borderRadius: 0, // pixel art: sharp
-                    backgroundColor: '#ffffff',
-                    display: 'block',
-                    imageRendering: 'pixelated',
-                  }}
-                />
+                <m.span key={i} animate={eyeControls[i]} style={{
+                  width: EYE_W, height: EYE_H, borderRadius: 0,
+                  backgroundColor: '#ffffff', display: 'block', imageRendering: 'pixelated',
+                }} />
               ))}
             </span>
           </m.span>
         </m.button>
-
-        {/* Ground shadow */}
         <m.span
           style={{
-            width: SIZE * 0.55, height: 4,
-            borderRadius: '50%',
-            backgroundColor: 'rgba(255,37,64,0.18)',
-            filter: 'blur(3px)',
+            width: SIZE * 0.55, height: 4, borderRadius: '50%',
+            backgroundColor: 'rgba(255,37,64,0.18)', filter: 'blur(3px)',
             marginTop: 2, flexShrink: 0,
           }}
           animate={{ scaleX: [1, 0.6, 1], opacity: [0.4, 0.1, 0.4] }}
@@ -236,16 +202,13 @@ function OrbTrigger({ onClick }) {
   );
 }
 
+// ─── Typing indicator ──────────────────────────────────────────────────────────
 function TypingDots() {
   return (
     <span style={{ display: 'inline-flex', gap: 4, alignItems: 'center', padding: '3px 0' }}>
       {[0, 1, 2].map(i => (
-        <m.span
-          key={i}
-          style={{
-            width: 4, height: 4, borderRadius: '50%',
-            backgroundColor: 'var(--color-accent)', display: 'inline-block',
-          }}
+        <m.span key={i}
+          style={{ width: 4, height: 4, borderRadius: '50%', backgroundColor: 'var(--color-accent)', display: 'inline-block' }}
           animate={{ y: [0, -4, 0], opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
         />
@@ -254,38 +217,148 @@ function TypingDots() {
   );
 }
 
-function Message({ msg, index, isLast, loading }) {
+// ─── Markdown link parser → React elements ─────────────────────────────────────
+function renderContent(text) {
+  const result = [];
+  let last = 0;
+  const linkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let match;
+  while ((match = linkRe.exec(text)) !== null) {
+    if (match.index > last) {
+      result.push(...splitLines(text.slice(last, match.index), `t${last}`));
+    }
+    const href = match[2];
+    const isInternal = href.startsWith('/');
+    result.push(
+      <a
+        key={`a${match.index}`}
+        href={href}
+        {...(isInternal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+        style={{
+          color: 'var(--color-accent)',
+          textDecoration: 'underline',
+          textDecorationColor: 'rgba(255,37,64,0.4)',
+          textUnderlineOffset: '3px',
+        }}
+      >
+        {match[1]}
+      </a>
+    );
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) result.push(...splitLines(text.slice(last), `t${last}`));
+  return result;
+}
+
+function splitLines(text, keyPrefix) {
+  return text.split('\n').flatMap((line, i, arr) =>
+    i < arr.length - 1 ? [line, <br key={`${keyPrefix}-br${i}`} />] : [line]
+  );
+}
+
+// ─── Word-reveal for new AI messages ──────────────────────────────────────────
+function AnimatedText({ text, active }) {
+  const [count, setCount] = useState(active ? 0 : Infinity);
+  const words = text.split(' ');
+
+  useEffect(() => {
+    if (!active) { setCount(Infinity); return; }
+    setCount(0);
+    let i = 0;
+    const speed = text.length > 300 ? 18 : 26;
+    const id = setInterval(() => {
+      i++;
+      setCount(i);
+      if (i >= words.length) clearInterval(id);
+    }, speed);
+    return () => clearInterval(id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text, active]);
+
+  const shown = count >= words.length ? text : words.slice(0, count).join(' ');
+  return <>{renderContent(shown)}</>;
+}
+
+// ─── Message bubble ────────────────────────────────────────────────────────────
+function Message({ msg, isLast, loading, animate: shouldAnimate }) {
   const isUser = msg.role === 'user';
   return (
     <m.div
       style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start' }}
-      // Stagger children (Kowalski rule) — animate only transform+opacity
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1], delay: 0.03 * Math.min(index, 4) }}
+      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
     >
       <div style={{
-        maxWidth: '85%',
-        padding: '9px 13px',
+        maxWidth: '88%',
+        padding: isUser ? '8px 12px' : '10px 14px',
         fontFamily: '"Play", sans-serif',
-        fontSize: '12.5px',
-        lineHeight: 1.7,
+        fontSize: '12px',
+        lineHeight: 1.75,
         letterSpacing: '0.02em',
         ...(isUser ? {
-          backgroundColor: 'rgba(255,37,64,0.12)',
-          border: '1px solid rgba(255,37,64,0.25)',
-          color: 'var(--color-fg)',
+          background: 'rgba(255,37,64,0.1)',
+          border: '1px solid rgba(255,37,64,0.22)',
+          color: 'rgba(240,238,234,0.9)',
+          clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
         } : {
-          backgroundColor: 'rgba(255,255,255,0.04)',
+          background: 'rgba(255,255,255,0.03)',
           border: '1px solid rgba(255,255,255,0.07)',
-          color: 'rgba(240,238,234,0.85)',
+          borderLeft: '2px solid rgba(255,37,64,0.35)',
+          color: 'rgba(240,238,234,0.82)',
         }),
       }}>
-        {msg.content || (loading && isLast ? <TypingDots /> : null)}
+        {loading && isLast && !msg.content
+          ? <TypingDots />
+          : <AnimatedText text={msg.content} active={shouldAnimate && !isUser && isLast} />
+        }
       </div>
     </m.div>
   );
 }
+
+// ─── Quick-reply chips ─────────────────────────────────────────────────────────
+function Chips({ chips, onSend }) {
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }}
+      transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
+      style={{ display: 'flex', flexWrap: 'wrap', gap: 6, padding: '0 16px 12px' }}
+    >
+      {chips.map((chip) => (
+        <m.button
+          key={chip}
+          onClick={() => onSend(chip)}
+          whileHover={{ scale: 1.02, borderColor: 'rgba(255,37,64,0.55)' }}
+          whileTap={{ scale: 0.97 }}
+          style={{
+            background: 'rgba(255,37,64,0.06)',
+            border: '1px solid rgba(255,37,64,0.22)',
+            color: 'rgba(240,238,234,0.65)',
+            fontFamily: '"Play", sans-serif',
+            fontSize: '10px',
+            letterSpacing: '0.08em',
+            padding: '5px 10px',
+            cursor: 'pointer',
+            transition: 'color 0.15s',
+            clipPath: 'polygon(5px 0%,100% 0%,100% calc(100% - 5px),calc(100% - 5px) 100%,0% 100%,0% 5px)',
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = 'rgba(240,238,234,0.9)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(240,238,234,0.65)'}
+        >
+          {chip}
+        </m.button>
+      ))}
+    </m.div>
+  );
+}
+
+// ─── Panel ─────────────────────────────────────────────────────────────────────
+const CORNER = 14;
+const clipOuter = `polygon(${CORNER}px 0%,100% 0%,100% calc(100% - ${CORNER}px),calc(100% - ${CORNER}px) 100%,0% 100%,0% ${CORNER}px)`;
+const clipInner = `polygon(${CORNER - 1}px 0%,100% 0%,100% calc(100% - ${CORNER - 1}px),calc(100% - ${CORNER - 1}px) 100%,0% 100%,0% ${CORNER - 1}px)`;
 
 export default function AIChatBot() {
   const { lang } = useLang();
@@ -295,8 +368,10 @@ export default function AIChatBot() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([{ role: 'assistant', content: s.welcome }]);
   const [loading, setLoading] = useState(false);
+  const [revealKey, setRevealKey] = useState(0); // increments on each new AI reply
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -315,14 +390,17 @@ export default function AIChatBot() {
     });
   }, [lang]);
 
-  async function send() {
-    const text = input.trim();
-    if (!text || loading) return;
+  async function send(text) {
+    const trimmed = (text ?? input).trim();
+    if (!trimmed || loading) return;
 
-    const userMsg = { role: 'user', content: text };
+    const userMsg = { role: 'user', content: trimmed };
     const nextMessages = [...messages, userMsg];
     setMessages([...nextMessages, { role: 'assistant', content: '' }]);
     setInput('');
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
     setLoading(true);
 
     try {
@@ -331,15 +409,14 @@ export default function AIChatBot() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: nextMessages }),
       });
-
       const data = await res.json();
       if (!res.ok || data.error) throw new Error(data.error || s.error);
-
       setMessages(prev => {
         const updated = [...prev];
         updated[updated.length - 1] = { role: 'assistant', content: data.text };
         return updated;
       });
+      setRevealKey(k => k + 1);
     } catch {
       setMessages(prev => {
         const updated = [...prev];
@@ -352,13 +429,11 @@ export default function AIChatBot() {
   }
 
   function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   }
 
   const canSend = input.trim().length > 0 && !loading;
+  const showChips = messages.length <= 1 && !loading;
 
   return (
     <>
@@ -370,195 +445,181 @@ export default function AIChatBot() {
         {open && (
           <m.div
             key="panel"
-            // Spring physics for natural panel entrance (Kowalski drawer rule)
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            initial={{ opacity: 0, y: 28, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
-            transition={{
-              type: 'spring',
-              stiffness: 420,
-              damping: 36,
-              mass: 0.8,
-            }}
+            transition={{ type: 'spring', stiffness: 420, damping: 36, mass: 0.8 }}
             style={{
-              position: 'fixed',
-              bottom: 24,
-              right: 24,
-              zIndex: 9000,
-              width: 'min(420px, calc(100vw - 32px))',
-              height: 'min(560px, calc(100dvh - 80px))',
-              display: 'flex',
-              flexDirection: 'column',
-              backgroundColor: 'rgba(8,8,8,0.97)',
-              border: '1px solid rgba(255,37,64,0.3)',
-              backdropFilter: 'blur(20px)',
-              boxShadow: '0 0 40px rgba(255,37,64,0.08), 0 24px 64px rgba(0,0,0,0.7)',
+              position: 'fixed', bottom: 24, right: 24, zIndex: 9000,
+              width: 'min(400px, calc(100vw - 32px))',
+              height: 'min(540px, calc(100dvh - 80px))',
+              filter: 'drop-shadow(0 28px 48px rgba(0,0,0,0.65)) drop-shadow(0 0 32px rgba(255,37,64,0.06))',
               transformOrigin: 'bottom right',
             }}
           >
-            {/* Accent top line */}
-            <m.div
-              style={{ height: 2, backgroundColor: 'var(--color-accent)', flexShrink: 0 }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1], delay: 0.1 }}
-              // clip-path reveal (Kowalski rule)
-              style={{ height: 2, backgroundColor: 'var(--color-accent)', flexShrink: 0, transformOrigin: 'left' }}
-            />
-
-            {/* Header */}
+            {/* Cut-corner border layer */}
             <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '12px 16px',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
-              flexShrink: 0,
-              gap: 10,
+              width: '100%', height: '100%',
+              clipPath: clipOuter,
+              background: 'rgba(255,37,64,0.28)',
+              padding: 1,
+              display: 'flex', flexDirection: 'column',
             }}>
-              {/* Mini orb in header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{
-                  width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
-                  background: 'radial-gradient(circle at 35% 35%, rgba(255,37,64,0.3) 0%, rgba(8,8,8,0.9) 70%)',
-                  border: '1px solid rgba(255,37,64,0.4)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <span style={{ display: 'flex', gap: 3 }}>
-                    {[0, 1].map(i => (
-                      <m.span key={i} style={{
-                        width: 2.5, height: 4, borderRadius: 2,
-                        backgroundColor: 'var(--color-accent)',
-                      }}
-                        animate={{ opacity: [0.6, 1, 0.6] }}
-                        transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.15 }}
-                      />
-                    ))}
-                  </span>
-                </span>
-                <div>
-                  <div style={{
-                    fontFamily: '"Play", sans-serif', fontSize: '11px',
-                    fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
-                    color: 'var(--color-fg)',
-                  }}>
-                    {s.title}
-                  </div>
-                  <div style={{
-                    fontFamily: '"Play", sans-serif', fontSize: '9px',
-                    letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: 'var(--color-accent)', marginTop: 1, opacity: 0.7,
-                  }}>
-                    {s.subtitle}
-                  </div>
-                </div>
-              </div>
+              {/* Glass inner */}
+              <div style={{
+                flex: 1,
+                clipPath: clipInner,
+                background: 'rgba(9,7,9,0.9)',
+                backdropFilter: 'blur(28px) saturate(140%)',
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden',
+              }}>
 
-              <m.button
-                onClick={() => setOpen(false)}
-                whileHover={{ opacity: 1 }}
-                whileTap={{ scale: 0.93 }}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'rgba(240,238,234,0.35)', padding: 4, lineHeight: 1,
-                  fontSize: 18, fontFamily: 'monospace', opacity: 0.35,
-                  transition: 'opacity 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.opacity = 1}
-                onMouseLeave={e => e.currentTarget.style.opacity = 0.35}
-                aria-label="Close"
-              >
-                ×
-              </m.button>
-            </div>
-
-            {/* Messages */}
-            <div style={{
-              flex: 1, overflowY: 'auto', padding: '16px',
-              display: 'flex', flexDirection: 'column', gap: 10,
-              scrollbarWidth: 'thin',
-              scrollbarColor: 'rgba(255,37,64,0.15) transparent',
-            }}>
-              {messages.map((msg, i) => (
-                <Message
-                  key={i}
-                  msg={msg}
-                  index={i}
-                  isLast={i === messages.length - 1}
-                  loading={loading}
+                {/* Accent top bar — reveal left to right */}
+                <m.div
+                  initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.38, ease: [0.32, 0.72, 0, 1], delay: 0.08 }}
+                  style={{ height: 2, backgroundColor: 'var(--color-accent)', flexShrink: 0, transformOrigin: 'left' }}
                 />
-              ))}
-              <div ref={bottomRef} />
-            </div>
 
-            {/* Disclaimer */}
-            <div style={{
-              padding: '5px 16px',
-              fontFamily: '"Play", sans-serif',
-              fontSize: '9px',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: 'rgba(240,238,234,0.18)',
-              borderTop: '1px solid rgba(255,255,255,0.04)',
-              flexShrink: 0,
-            }}>
-              {s.disclaimer}
-            </div>
+                {/* Header */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '11px 16px',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  flexShrink: 0, gap: 10,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    {/* Status dot */}
+                    <m.span
+                      style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--color-accent)', flexShrink: 0 }}
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <div>
+                      <div style={{
+                        fontFamily: '"Play", sans-serif', fontSize: '10px',
+                        fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
+                        color: 'var(--color-fg)',
+                      }}>
+                        {s.title}
+                      </div>
+                      <div style={{
+                        fontFamily: '"Play", sans-serif', fontSize: '8.5px',
+                        letterSpacing: '0.1em', textTransform: 'uppercase',
+                        color: 'rgba(255,37,64,0.55)', marginTop: 1,
+                      }}>
+                        {s.subtitle}
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Input row */}
-            <div style={{
-              padding: '10px 14px',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
-              display: 'flex', gap: 8, flexShrink: 0,
-            }}>
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                placeholder={s.placeholder}
-                rows={1}
-                style={{
-                  flex: 1, resize: 'none', overflow: 'hidden',
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.09)',
-                  color: 'var(--color-fg)',
-                  fontFamily: '"Play", sans-serif',
-                  fontSize: '12px',
-                  padding: '8px 10px',
-                  outline: 'none',
-                  lineHeight: 1.5,
-                  transition: 'border-color 0.15s',
-                }}
-                onFocus={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.4)'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'}
-                onInput={e => {
-                  e.target.style.height = 'auto';
-                  e.target.style.height = Math.min(e.target.scrollHeight, 96) + 'px';
-                }}
-                disabled={loading}
-              />
-              <m.button
-                onClick={send}
-                disabled={!canSend}
-                // Press scale feedback (Kowalski rule) — only when enabled
-                whileTap={canSend ? { scale: 0.97 } : {}}
-                style={{
-                  padding: '8px 14px',
-                  backgroundColor: canSend ? 'var(--color-accent)' : 'rgba(255,37,64,0.1)',
-                  border: '1px solid rgba(255,37,64,0.4)',
-                  color: canSend ? '#fff' : 'rgba(255,37,64,0.3)',
-                  fontFamily: '"Play", sans-serif',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  cursor: canSend ? 'pointer' : 'not-allowed',
-                  transition: 'background-color 0.15s, color 0.15s',
-                  alignSelf: 'flex-end',
+                  <m.button
+                    onClick={() => setOpen(false)}
+                    whileTap={{ scale: 0.9 }}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      color: 'rgba(240,238,234,0.3)', padding: 4, lineHeight: 1,
+                      fontSize: 18, fontFamily: 'monospace', transition: 'color 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'rgba(240,238,234,0.8)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(240,238,234,0.3)'}
+                    aria-label="Close"
+                  >
+                    ×
+                  </m.button>
+                </div>
+
+                {/* Messages */}
+                <div style={{
+                  flex: 1, overflowY: 'auto', padding: '14px 16px',
+                  display: 'flex', flexDirection: 'column', gap: 8,
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'rgba(255,37,64,0.12) transparent',
+                }}>
+                  {messages.map((msg, i) => (
+                    <Message
+                      key={i}
+                      msg={msg}
+                      isLast={i === messages.length - 1}
+                      loading={loading}
+                      // only animate the last assistant msg when it's freshly received
+                      animate={i === messages.length - 1 && msg.role === 'assistant' && revealKey > 0}
+                    />
+                  ))}
+                  <div ref={bottomRef} />
+                </div>
+
+                {/* Suggested chips — visible only on fresh state */}
+                <AnimatePresence>
+                  {showChips && (
+                    <Chips key="chips" chips={s.chips} onSend={(chip) => send(chip)} />
+                  )}
+                </AnimatePresence>
+
+                {/* Disclaimer */}
+                <div style={{
+                  padding: '4px 16px 5px',
+                  fontFamily: '"Play", sans-serif', fontSize: '8.5px',
+                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  color: 'rgba(240,238,234,0.15)',
+                  borderTop: '1px solid rgba(255,255,255,0.04)',
                   flexShrink: 0,
-                }}
-              >
-                {s.send}
-              </m.button>
+                }}>
+                  {s.disclaimer}
+                </div>
+
+                {/* Input row */}
+                <div style={{
+                  padding: '10px 14px 12px',
+                  borderTop: '1px solid rgba(255,255,255,0.05)',
+                  display: 'flex', gap: 8, flexShrink: 0, alignItems: 'flex-end',
+                }}>
+                  <textarea
+                    ref={(el) => { inputRef.current = el; textareaRef.current = el; }}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={handleKey}
+                    placeholder={s.placeholder}
+                    rows={1}
+                    style={{
+                      flex: 1, resize: 'none', overflow: 'hidden',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: 'var(--color-fg)',
+                      fontFamily: '"Play", sans-serif', fontSize: '12px',
+                      padding: '8px 10px', outline: 'none', lineHeight: 1.5,
+                      transition: 'border-color 0.15s',
+                    }}
+                    onFocus={e => e.currentTarget.style.borderColor = 'rgba(255,37,64,0.4)'}
+                    onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                    onInput={e => {
+                      e.target.style.height = 'auto';
+                      e.target.style.height = Math.min(e.target.scrollHeight, 88) + 'px';
+                    }}
+                    disabled={loading}
+                  />
+                  <m.button
+                    onClick={() => send()}
+                    disabled={!canSend}
+                    whileTap={canSend ? { scale: 0.96 } : {}}
+                    style={{
+                      padding: '8px 14px', flexShrink: 0,
+                      background: canSend ? 'var(--color-accent)' : 'rgba(255,37,64,0.08)',
+                      border: '1px solid rgba(255,37,64,0.35)',
+                      color: canSend ? '#fff' : 'rgba(255,37,64,0.28)',
+                      fontFamily: '"Play", sans-serif', fontSize: '10px',
+                      fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+                      cursor: canSend ? 'pointer' : 'not-allowed',
+                      transition: 'background 0.15s, color 0.15s',
+                      clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)',
+                    }}
+                  >
+                    {s.send}
+                  </m.button>
+                </div>
+
+              </div>
             </div>
           </m.div>
         )}
