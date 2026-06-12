@@ -42,22 +42,22 @@ function useTooltipDelay() {
   return { visible, show, hide };
 }
 
-// Tooltip that follows the mouse cursor — spring for natural feel
+// Tooltip that follows the mouse cursor
+// Position is instant (no spring) — Kowalski: immediate feedback for tracking
+// Only entrance animation uses easing
 function MouseTooltip({ visible, label }) {
-  const cursorX = useMotionValue(-999);
-  const cursorY = useMotionValue(-999);
-  const springCfg = { stiffness: 600, damping: 40, mass: 0.4 };
-  const x = useSpring(cursorX, springCfg);
-  const y = useSpring(cursorY, springCfg);
+  const x = useMotionValue(-999);
+  const y = useMotionValue(-999);
 
   useEffect(() => {
     function onMove(e) {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      // Direct set — no spring, no lag
+      x.set(e.clientX);
+      y.set(e.clientY);
     }
     window.addEventListener('mousemove', onMove);
     return () => window.removeEventListener('mousemove', onMove);
-  }, [cursorX, cursorY]);
+  }, [x, y]);
 
   return (
     <AnimatePresence>
