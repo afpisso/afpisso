@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic();
 
 const SYSTEM_PROMPT = `You are an AI assistant embedded in the portfolio of Andrés Felipe Pisso (byandresfe.com). Your role is to help HR professionals, recruiters, and hiring managers quickly learn about Andres and answer their questions accurately.
 
