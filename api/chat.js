@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-const client = new Anthropic();
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY2 });
 
 const SYSTEM_PROMPT = `You are an AI assistant embedded in the portfolio of Andrés Felipe Pisso (byandresfe.com). Your role is to help HR professionals, recruiters, and hiring managers quickly learn about Andres and answer their questions accurately.
 
@@ -144,8 +144,8 @@ export default async function handler(req, res) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
+  if (!process.env.ANTHROPIC_API_KEY2) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY2 not configured' });
   }
 
   try {
