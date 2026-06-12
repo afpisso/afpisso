@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { m, AnimatePresence, useAnimation, useMotionValue } from 'framer-motion';
+import { m, AnimatePresence, useAnimation, useMotionValue, useSpring } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 
 // ─── i18n ─────────────────────────────────────────────────────────────────────
@@ -101,6 +101,37 @@ function OrbTrigger({ onClick }) {
   const SIZE = 34;
   const EYE_W = 4, EYE_H = 6, EYE_GAP = 5;
 
+  // Eye-tracking — spring so they ease toward cursor naturally
+  const orbRef = useRef(null);
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const eyeX = useSpring(rawX, { stiffness: 260, damping: 22, mass: 0.6 });
+  const eyeY = useSpring(rawY, { stiffness: 260, damping: 22, mass: 0.6 });
+
+  useEffect(() => {
+    function onMove(e) {
+      if (!orbRef.current) return;
+      const rect = orbRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1) return;
+      const RADIUS = 160;
+      if (dist < RADIUS) {
+        const t = 1 - dist / RADIUS; // stronger when closer
+        rawX.set((dx / dist) * 2.5 * t);
+        rawY.set((dy / dist) * 1.5 * t);
+      } else {
+        rawX.set(0);
+        rawY.set(0);
+      }
+    }
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, [rawX, rawY]);
+
   useEffect(() => {
     eyeControls.forEach((ctrl, i) => {
       ctrl.stop();
@@ -145,6 +176,7 @@ function OrbTrigger({ onClick }) {
           transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
         />
         <m.button
+          ref={orbRef}
           onClick={onClick}
           onHoverStart={() => { setHovered(true); tooltip.show(); }}
           onHoverEnd={() => { setHovered(false); tooltip.hide(); }}
@@ -178,14 +210,14 @@ function OrbTrigger({ onClick }) {
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <span style={{ display: 'flex', gap: EYE_GAP, alignItems: 'center' }}>
+            <m.span style={{ display: 'flex', gap: EYE_GAP, alignItems: 'center', x: eyeX, y: eyeY }}>
               {[0, 1].map(i => (
                 <m.span key={i} animate={eyeControls[i]} style={{
                   width: EYE_W, height: EYE_H, borderRadius: 0,
                   backgroundColor: '#ffffff', display: 'block', imageRendering: 'pixelated',
                 }} />
               ))}
-            </span>
+            </m.span>
           </m.span>
         </m.button>
         <m.span
