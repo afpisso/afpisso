@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { m, AnimatePresence, useAnimation } from 'framer-motion';
+import { m, AnimatePresence, useAnimation, useMotionValue } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
 
 const STRINGS = {
@@ -42,18 +42,35 @@ function useTooltipDelay() {
   return { visible, show, hide };
 }
 
-// Tooltip — pure fade, no position animation (Kowalski: only animate what adds value)
+// Tooltip sobre el cursor — posición instantánea (useMotionValue sin spring),
+// solo opacity animada. Kowalski: nunca animes lo que debe ser inmediato.
 function MouseTooltip({ visible, label }) {
+  const x = useMotionValue(-999);
+  const y = useMotionValue(-999);
+
+  useEffect(() => {
+    function onMove(e) {
+      x.set(e.clientX);
+      y.set(e.clientY);
+    }
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, [x, y]);
+
   return (
     <AnimatePresence>
       {visible && (
         <m.span
+          // solo opacity se anima — posición es siempre instantánea
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.12, ease: 'easeOut' }}
           style={{
-            position: 'fixed', bottom: 74, right: 28,
+            position: 'fixed', top: 0, left: 0,
+            x, y,
+            translateX: '-50%',
+            translateY: 'calc(-100% - 12px)',
             pointerEvents: 'none',
             zIndex: 9999,
             whiteSpace: 'nowrap',
