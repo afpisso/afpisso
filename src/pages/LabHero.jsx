@@ -54,6 +54,127 @@ const EASE_OUT_EXP = [0.19, 1, 0.22, 1]   // expo-style, Emil's preferred enter 
 // ── Boot phases ────────────────────────────────────────────────────────────────
 const P = { BOOT: 0, SCAN: 1, REVEAL: 2, TITLE: 3, ACTIVE: 4 }
 
+// ── Terminal boot lines ────────────────────────────────────────────────────────
+const BOOT_LINES = [
+  'BYANDRESFE.SYS v2.6 — ONLINE',
+  'LOADING: game ux/ui systems...',
+  'SIGNAL: READY.',
+]
+
+function BootSequence({ onComplete }) {
+  const [lines, setLines] = useState([])
+  const [done, setDone]   = useState(false)
+
+  const skip = () => {
+    setDone(true)
+    sessionStorage.setItem('booted', '1')
+    setTimeout(onComplete, 300)
+  }
+
+  useEffect(() => {
+    let i = 0
+    const interval = setInterval(() => {
+      setLines(prev => [...prev, BOOT_LINES[i]])
+      i++
+      if (i >= BOOT_LINES.length) {
+        clearInterval(interval)
+        setTimeout(() => {
+          setDone(true)
+          sessionStorage.setItem('booted', '1')
+          setTimeout(onComplete, 400)
+        }, 150)
+      }
+    }, 150)
+    return () => clearInterval(interval)
+  }, [onComplete])
+
+  return (
+    <m.div
+      role="status"
+      aria-label="System initializing"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backgroundColor: 'var(--color-bg)',
+        pointerEvents: done ? 'none' : 'auto',
+      }}
+      animate={{ opacity: done ? 0 : 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div style={{ width: '100%', maxWidth: 360, padding: '0 32px' }}>
+        {/* Logo mark */}
+        <div style={{
+          width: 56, height: 56, margin: '0 auto 24px',
+          border: '1px solid rgba(255,255,255,0.12)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <img
+            src="/logo-mark.png"
+            alt=""
+            aria-hidden="true"
+            width="56"
+            height="56"
+            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 8 }}
+            onError={e => {
+              e.currentTarget.style.display = 'none'
+              e.currentTarget.nextElementSibling.style.display = 'flex'
+            }}
+          />
+          <div aria-hidden="true" style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd"
+                d="M15 1 L30 29 L24 29 L21 22.5 H9 L6 29 L0 29 L15 1 Z M15 8 L20 22 H10 Z"
+                fill="white"
+              />
+              <rect x="8.5" y="20" width="13" height="3" fill="#ff2540" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Terminal lines */}
+        <div aria-live="polite" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {lines.map((line, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span aria-hidden="true" style={{ color: 'var(--color-accent)', fontSize: 10, fontFamily: "'Play', sans-serif" }}>{'>'}</span>
+              <span style={{
+                color: i === lines.length - 1 ? 'var(--color-fg)' : 'rgba(240,238,234,0.45)',
+                fontSize: 12, fontFamily: "'Play', sans-serif", letterSpacing: '0.08em',
+              }}>
+                {line}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Skip button */}
+        {!done && (
+          <m.button
+            onClick={skip}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            style={{
+              marginTop: 28, display: 'block', marginLeft: 'auto',
+              fontFamily: "'Play', sans-serif", fontSize: 10,
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'rgba(240,238,234,0.4)',
+              background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.1)',
+              padding: '6px 14px', cursor: 'pointer',
+              transition: 'color 0.2s, border-color 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(240,238,234,0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)' }}
+            aria-label="Skip intro animation"
+          >
+            Skip →
+          </m.button>
+        )}
+      </div>
+    </m.div>
+  )
+}
+
 // ── Scramble chars ────────────────────────────────────────────────────────────
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&'
 
@@ -1320,6 +1441,10 @@ function HeroTopBar({ visible }) {
 
 export default function LabHero({ hideTopBar = false }) {
   const [phase, setPhase] = useState(P.BOOT)
+  const reduced = useReducedMotion()
+  const [booted, setBooted] = useState(
+    () => (typeof window !== 'undefined' && sessionStorage.getItem('booted') === '1')
+  )
   const [viewport, setViewport] = useState(
     () => {
       const width = typeof window !== 'undefined' ? window.innerWidth : 1440
@@ -1329,7 +1454,6 @@ export default function LabHero({ hideTopBar = false }) {
   const isMobile = viewport.mobile
   const isTablet = viewport.tablet
   const isCompact = isMobile || isTablet
-  const reduced = useReducedMotion()
   const { t } = useLang()
   const lh = t.labHero
 
@@ -1829,6 +1953,11 @@ export default function LabHero({ hideTopBar = false }) {
           {lh.availableForWork}
         </div>
       </HudPanel>}
+
+      {/* ── Boot sequence overlay — shown once per session ── */}
+      {!booted && !reduced && (
+        <BootSequence onComplete={() => setBooted(true)} />
+      )}
     </section>
   )
 }
