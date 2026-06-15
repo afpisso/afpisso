@@ -3,12 +3,12 @@
  * Edit this array to reorder cases without touching the data below.
  */
 export const CASE_ORDER = [
-  'star-wars-roguelike-one',
-  'orcs-must-die-by-the-blade',
-  'zombie-dragon-adventure',
+  'orcs-must-die-by-the-blade',   // Strongest: VR UX, UI Systems, Lead role, shipped studio game
+  'zombie-dragon-adventure',       // UEFN complex systems, D&D IP, FTUX, documentation
+  'star-wars-roguelike-one',       // Licensed IP, roguelike, live UEFN, combat UX
+  'courtyard-king',                // TWD IP, survival UX, NDA-safe
+  'zomvilles',                     // Broadest scope: systems thinking, documentation
   'raptor-heist',
-  'courtyard-king',
-  'zomvilles',
   // legacy — lower priority, shown last
   'havoc-hotel-3',
   'kodety',
@@ -192,6 +192,28 @@ export const cases = [
         'The design system helped the team speed up UI asset creation, centralize documentation and reduce delivery friction across areas. Reusable assets and clear naming helped different disciplines understand requirements without extra back-and-forth. The VR-specific decisions, including the contextual interaction language and diegetic guide book, improved the player experience by keeping the interface cleaner and more connected to the world. The leadership work helped organize priorities, coordinate across disciplines and support the team through production until the game shipped.',
       whatILearned:
         'VR made something concrete that I already believed: clarity depends on context. A decision that works on a flat screen can become uncomfortable or misleading inside a headset. The interface is not just something the player sees. It becomes part of how they move through space and react to the world. That changed how I weighted feedback, legibility, and the split between UI and haptic reinforcement. The project also made clear how much a system foundation matters early in production. The pressure is always to ship individual features first. The cost shows up three months later.',
+      projectSnapshot: {
+        role: 'UX Lead',
+        context: 'Mid-to-late production on a shipped VR game',
+        platform: 'Meta Quest (VR)',
+        team: 'UX/UI team of 3',
+        tools: 'Figma · Unreal Engine · Jira · Confluence · Adobe Suite',
+        mainChallenge: 'No shared UI design system existed. Each new feature required starting from scratch, creating inconsistency and slowing implementation.',
+        keyDeliverables: 'UI design system, reusable assets, interaction flows, feature documentation, accessibility review, UXR artifacts, QA support',
+        status: 'Shipped',
+        constraints: 'Meta Quest performance budget · small team · mid-to-late production entry · NDA restrictions on specific visual assets',
+      },
+      impact: {
+        productionClarity: 'Built a reusable UI system with shared naming, components, states and documentation so every new feature had a reference point instead of starting from scratch.',
+        playerClarity: 'Applied VR-specific readability, comfort and accessibility considerations — including contextual interaction language, haptic reinforcement and a diegetic guide book — to reduce confusion without increasing HUD weight.',
+        systemValue: 'Defined reusable UI patterns and component logic that could be applied across gameplay, progression, world interactions and multiplayer flows.',
+        documentationValue: 'Documented features, interaction logic, visual states, and implementation notes in Confluence so design intent was available to engineering, QA and production without additional back-and-forth.',
+        implementationValue: 'Supported Unreal implementation review, QA passes and weekly playtests to connect design decisions with what players actually experienced inside the headset.',
+        validation: 'External UXR process with Meta · internal playtest feedback · QA review cycles · RICE-based prioritization to focus on highest-impact clarity improvements first.',
+      },
+      myOwnership: 'I owned the UX/UI direction, system structure, player flows, interface logic, documentation strategy and design-system decisions for this project. I led a team of two designers, coordinated with game design, art, engineering, QA and production, and was responsible for translating gameplay needs into reusable UI components, interaction patterns and implementation-ready specifications. My role included not just creating assets, but making sure the team had a shared foundation to design, implement and review from.',
+      researchValidation: 'This work was informed by player clarity goals, platform-specific VR comfort requirements, UXR sessions conducted with Meta, internal playtest feedback and production feasibility. In VR, interface decisions affect comfort, attention and immersion differently than on a flat screen — so every design choice was evaluated against both player clarity and physical experience. UXR findings directly shaped iteration priorities: inventory behavior, FTUX communication, smooth turning and control comfort were all improved based on what players reported in sessions, not from assumptions.',
+      implementationHandoff: 'The handoff focused on reducing ambiguity for implementation inside Unreal Engine. Each flow, component and screen state was documented with naming conventions, layout behavior, interaction logic, visual states, VR-specific notes and production constraints. Assets were structured in Figma with correct dimensions and clear layer organization so engineering and art could move from design intent to implementation with fewer interpretation gaps. I supported this process through direct implementation review and QA passes rather than treating it as a hand-off-and-forget step.',
     },
     whatThisShows:
       'I do not approach UX/UI as isolated screens. I look for the system behind the interface: the rules, assets, states, and documented decisions that give a team something to build from. In this project, the real value was a foundation that let design, implementation, and QA move faster with less back-and-forth. A shared reference point changes how a team works. That is the kind of product work I care about.',
@@ -560,6 +582,28 @@ export const cases = [
         'The project included playtests and internal feedback sessions. Those sessions helped identify navigation issues, critical experience bugs and moments where some features created more friction than value. Some features were removed or reduced because they added complexity without enough player value. The UX review also detected issues around system complexity, economy balance, accessibility and clarity for the target audience. Not every issue could be fully addressed within the production window, but those findings became important learnings for future projects.',
       whatILearned:
         'Production constraints are part of the design problem. A good UX direction has to work inside real conditions: platform limits, IP requirements, implementation dependencies, performance, and time. Treating those as someone else\'s problem is how you end up with screens that look right but cannot ship. This project also reinforced how much complexity costs. Some features look interesting on paper and create more confusion than value for the actual player. Good product work means deciding what to cut, not just what to add.',
+      projectSnapshot: {
+        role: 'UX Lead',
+        context: 'Active UEFN production inside the Fortnite ecosystem',
+        platform: 'Fortnite / UEFN',
+        team: 'UX/UI team of 3',
+        tools: 'Figma · UEFN · Jira · Confluence · Adobe Suite',
+        mainChallenge: 'Complex roguelike system with no shared UX architecture. Players needed to understand class selection, stores, upgrades, D20 events, missions and progression — all without slowing down the Fortnite rhythm.',
+        keyDeliverables: 'FTUX flow, Adventure Book screen system, store flows, UI assets, WBP references, naming conventions, export guidelines, accessibility and heuristic documentation',
+        status: 'Shipped (active)',
+        constraints: 'UEFN platform limits on UI responsiveness, fonts and widget behavior · short production window · high scope · recognizable IP visual requirements',
+      },
+      impact: {
+        productionClarity: 'Structured the FTUX and Adventure Book experience around player goals, progression and clarity. Translated complex game systems into readable, documented player-facing interfaces.',
+        playerClarity: 'Helped players navigate a roguelike loop with class selection, D20 events, stores, upgrades, missions and boss progression through staged onboarding and a centralized Adventure Book.',
+        systemValue: 'Created reusable UI assets, naming conventions and documentation templates that could support future projects in the same UEFN ecosystem.',
+        documentationValue: 'Documented UI flows, WBP references, naming rules, export behavior and implementation notes — creating handoff material designed to reduce interpretation gaps between UX, UI and implementation.',
+        implementationValue: 'Designed with UEFN constraints embedded from day one: screen sizing rules, performance-safe asset optimization, font limitations and widget behavior were design inputs, not late surprises.',
+        validation: 'Internal playtests · stakeholder feedback · QA review · UX and heuristic review for accessibility and clarity issues. Some features were reduced or removed based on playtest findings.',
+      },
+      myOwnership: 'I owned the UX process, player flows, information architecture, documentation strategy and design-system decisions for this experience. I led a team of three designers, defined the structure for the FTUX, Adventure Book, stores and upgrade systems, and was responsible for producing implementation-ready deliverables. My role included defining what needed to be designed, how it needed to be documented, and how the work should be handed off — not just executing individual screens.',
+      researchValidation: 'This work was informed by player clarity goals, UEFN platform constraints, IP visual requirements and internal playtest findings. Playtests and feedback sessions helped identify where players struggled to understand the loop, where systems created unnecessary friction and where some features added complexity without enough value. The UX review process included heuristic evaluation, accessibility checks and readability analysis. Not every finding could be addressed within the production window, but they shaped iteration priorities and informed future decisions.',
+      implementationHandoff: 'The handoff was built into the process from the start, not treated as a final step. Each screen, flow and asset was produced with WBP references, naming conventions, export guidelines and asset optimization rules. Because UEFN has specific technical constraints around responsiveness, fonts and widget behavior, the design system was built to account for those limits rather than assuming they could be handled later. Documentation in Confluence preserved design intent across areas and created reusable references for future projects.',
     },
     whatThisShows:
       'I do not see UX/UI as isolated screens. I look at how the player understands the product, how the team builds it, and where friction appears between design intent and implementation. In this project, the UX value was in the structure behind the visuals: flows, documentation, reusable assets, naming conventions, and decisions that helped production stay coherent under pressure. That is the work I care about.',
@@ -832,6 +876,31 @@ export const cases = [
         'Work contributed to the project\'s UX framework. Specific outcome metrics are not available for public sharing due to NDA.',
       nextSteps:
         'Survival UX benefits from playtest data focused on moments of player confusion versus intended tension. I would want to distinguish between "confused and frustrated" and "tense and engaged" in session observations, then use that to calibrate exactly how much information the interface needs to surface.',
+      projectSnapshot: {
+        role: 'UX/UI Designer',
+        context: 'UEFN experience inside Fortnite — Walking Dead IP',
+        platform: 'UEFN / Fortnite',
+        team: 'Cross-functional: design, art, engineering',
+        tools: 'Figma · UEFN',
+        mainChallenge: 'Communicating survival stakes under IP tone constraints and UEFN technical limits simultaneously',
+        keyDeliverables: 'HUD logic documentation, threat feedback system, resource state visual language, cooperative action UI framework, implementation notes',
+        status: 'In production / NDA-safe',
+        constraints: 'UEFN UI layer restrictions, Fortnite native HUD zones, Walking Dead IP tone requirements, NDA restrictions on mechanic details',
+      },
+      impact: {
+        productionClarity: 'Delivered complete HUD logic documentation, safe zone rules and feedback system specifications within the production timeline, giving engineering a clear implementation reference',
+        playerClarity: 'Replaced explicit numeric health and resource displays with atmospheric indicators calibrated to Walking Dead tone — communicating survival state without pulling players out of the tension',
+        systemValue: 'Established IP-consistent interface principles: every UI element had to earn its screen presence. That filter reduced visual noise while preserving the emotional contract of the franchise',
+        documentationValue: 'Delivered HUD logic docs, threat specs, resource state visual language and cooperative UI framework — each with implementation context for engineering and notes on UEFN-specific constraints',
+        implementationValue: 'Aligned design decisions to what UEFN technically permitted before committing to specs, avoiding revision cycles caused by platform limitations discovered late',
+        validation: 'NDA-limited. Outcome metrics are not available for public sharing. The evidence here is the design problem, the constraint navigation, and the type of decisions made under a three-way tension between IP tone, platform limits, and player clarity.',
+      },
+      myOwnership:
+        'I owned the HUD logic and feedback system design end-to-end. This included defining threat communication rules, resource state visual language, cooperative action clarity, and the documentation that translated those decisions into engineering-ready specifications. I was the primary interface designer navigating the triple constraint of Walking Dead IP tone, Fortnite native HUD zones, and UEFN technical limitations. Design decisions were not made in isolation — I collaborated with art and engineering at each step to confirm what could be built before committing to a direction.',
+      researchValidation:
+        'Research for this project was primarily competitive and constraint-driven. I analyzed how survival games communicate threat and resource state without explicit numeric displays, reviewed the Walking Dead franchise visual and tone conventions, and assessed what UEFN technically allowed within its UI layer. I worked closely with art and engineering to validate which design directions could be executed within the platform constraints before finalizing specifications. The research goal was not aesthetic — it was understanding which interface signals work under stress, in the dark, with limited screen real estate, and without breaking the IP mood.',
+      implementationHandoff:
+        'Handoff consisted of HUD logic documentation with explicit safe zone rules, threat feedback system specifications, resource state visual definitions, and cooperative action UI notes. Each deliverable included implementation context: what the design intended, what alternatives existed if a UEFN constraint blocked the primary approach, and what behavior to validate during QA. Engineering notes were written to work within the platform limitations — not to describe an ideal that could not be built.',
     },
     whatThisShows:
       'This project shows how I work under NDA constraints and inside a platform with hard limits. Survival UX is a specific problem: you need to communicate urgency without tipping into anxiety, and you have to do it while respecting both the IP tone and what UEFN actually allows. Those constraints do not cancel each other out. They shape the solution. That kind of three-way tension between tone, technical limits, and player clarity shows up in a lot of interfaces.',
@@ -1408,6 +1477,31 @@ export const cases = [
         'The project reached prototype stage and created a strong foundation for a mobile roguelite product. The work helped the team define the game loop, progression systems, UX flows, combat structure, documentation and product direction.\n\nEven though the launch was paused before live data could be collected, the project produced a playable product foundation and a large documentation system that aligned the team around the game vision. The main outcome was product clarity: a complex idea became a structured prototype with systems, flows and documentation that could support continued iteration.',
       whatILearned:
         'This project reinforced that a prototype needs strong structure before it needs more features. When a product has many possible systems, the risk is not lack of ideas. The risk is unclear priority. A strong loop, clear progression and useful documentation can help a team decide what belongs, what needs more work and what should wait.\n\nIt also reinforced that Game Design and UX are deeply connected. A mechanic only works when the player can understand it, act on it and feel why it matters. On mobile, that connection has to be built in from the start.',
+      projectSnapshot: {
+        role: 'Lead Game Designer',
+        context: 'Mobile hybrid-casual roguelite prototype — Pixiemeta',
+        platform: 'Mobile (Unity)',
+        team: '9 people — design, art, development, stakeholders',
+        tools: 'Figma · Jira · Wiki/GDD · Unity · Excel · Machinations · Adobe Suite',
+        mainChallenge: 'Turning a complex multi-system roguelite into a structured, buildable, and player-readable mobile product for a team of nine',
+        keyDeliverables: '30+ UX flows, 100+ wireframes, 117+ wiki subsites, 650+ documents, 60+ stakeholder presentations, 600+ slides',
+        status: 'Prototype stage — launch paused before live data',
+        duration: '1 year',
+      },
+      impact: {
+        productionClarity: '117+ Wiki/GDD subsites and 650+ documents kept a 9-person team aligned across systems, mechanics, flows, narrative, and stakeholder decisions throughout the prototype phase — reducing the back-and-forth cost of a multi-system build',
+        playerClarity: '30+ UX flows and 100+ wireframes translated abstract systems into concrete player-facing interactions, making character selection, upgrade decisions, combat logic, and progression readable before screens were finalized',
+        systemValue: 'Defined the full product structure: core loop, skill system, progression, combat balance, inventory, economy, and narrative systems. That structure gave the team a shared vocabulary and a priority filter — if a feature did not serve the loop, it waited',
+        documentationValue: '60+ stakeholder presentations and 600+ slides turned a complex multi-system prototype into a communicable product vision, enabling faster alignment and clearer iteration decisions at each production stage',
+        implementationValue: 'Internal playtests and a deliberate design-to-dev flow identified friction in the core loop and card choice system early — allowing structural corrections before scope expanded further',
+        validation: 'No live performance data: launch was paused before public release. Evidence is structural — the prototype reached a playable, team-aligned state with all primary systems defined, documented, and playtested internally.',
+      },
+      myOwnership:
+        'I was the Lead Game Designer for the full prototype. My ownership covered the core loop definition, system architecture, individual screen design, GDD/Wiki documentation structure, and the stakeholder presentation cycle. I ran the UX flow work and the wireframe system. This was not a supporting design role — I was the primary design voice for how the product worked, how it communicated with players, and how it was understood by the team. Every major system decision, documentation structure, and product direction discussion ran through my design work.',
+      researchValidation:
+        'Research drew heavily from the genre leaders: Survivor.io and Vampire Survivors were the primary references for core loop structure, upgrade pacing, and player feedback rhythm. I studied how competing titles handled the tension between mechanical depth and mobile session length, random upgrade readability, and progression clarity for hybrid-casual audiences. Internal playtests ran throughout the prototype phase and fed directly into structural adjustments to the core loop, upgrade card UX, and progression screen hierarchy. Playtest findings shaped the wireframe priorities and informed which system complexity was player-readable versus designer-only logic.',
+      implementationHandoff:
+        'The documentation system was the handoff. The Wiki/GDD with 117+ subsites and 650+ documents served as a persistent design record for design, development, art, and stakeholders. Individual feature documents included design intent, system rules, edge cases, UX flows, and implementation notes. The 30+ user flows and 100+ wireframes provided the visual and structural specification for every major player-facing interaction. Stakeholder presentations — 60+ decks, 600+ slides — kept the product direction legible at every phase of the prototype. The goal was not volume. The goal was that any team member could open a document and understand what was being built, why, and how.',
     },
     whatThisShows:
       'I do not approach game design as isolated mechanics. I look at the full product structure: the loop, the player decisions, the progression, the screens, the documentation, and the way the team understands what is being built. In this project, the value was in creating a foundation that made the prototype easier to understand, build, and discuss. That is the kind of design work I care about.',
@@ -1811,6 +1905,28 @@ export const cases = [
         'Star Wars Roguelike One shipped inside Fortnite in 2026. The project is currently live. Specific engagement metrics are not yet available for public sharing.',
       nextSteps:
         'I would track the drop-off rate at the post-run screen and compare it to run-again rate across first-session and returning players. That delta tells you whether the re-entry hook is working or whether players are extracting a single session of value and leaving. I would also look at moments where players die without appearing to understand why — those are the places where the combat feedback system still has work to do.',
+      projectSnapshot: {
+        role: 'Game UX/UI Designer',
+        context: 'Live UEFN experience inside Fortnite, licensed IP',
+        platform: 'Fortnite / UEFN',
+        team: 'Cross-functional: design, art, engineering',
+        tools: 'Figma · UEFN · Jira · Confluence',
+        mainChallenge: 'Build roguelike readability inside a live UEFN experience while maintaining Star Wars IP tone across all interface decisions.',
+        keyDeliverables: 'Run state UI system, IP feedback language guide, combat feedback specs, post-run flow, UEFN implementation notes',
+        status: 'Shipped (live)',
+        constraints: 'Star Wars IP requirements · UEFN UI limits · Fortnite native HUD · Fortnite-native player expectations',
+      },
+      impact: {
+        productionClarity: 'Designed player-facing UX around fast combat readability and roguelike decision-making within UEFN technical constraints.',
+        playerClarity: 'Helped players understand run state, combat feedback and progression without breaking Star Wars immersion — using IP-grounded visual language instead of generic game UI.',
+        systemValue: 'Defined interface patterns grounded in franchise precedent that could support consistent communication across different run states, feedback moments and progression beats.',
+        documentationValue: 'Documented IP feedback language, component states and UEFN implementation notes to support alignment between design intent and what engineering could deliver on platform.',
+        implementationValue: 'Combat feedback and post-run flow were designed to work within UEFN device system constraints — timing, position and intensity calibrated to what the platform could support reliably.',
+        validation: 'Public engagement metrics are not available to share. This case emphasizes UX structure, production constraints, IP alignment and player clarity decisions across a live shipped experience.',
+      },
+      myOwnership: 'I owned the UX/UI systems for run orientation, combat feedback, progression communication and the post-run flow. I worked within UEFN constraints and collaborated with design and art on implementation feasibility and IP alignment. My responsibility was making the roguelike loop legible and the Star Wars tone consistent — not as separate goals, but as a single design problem.',
+      researchValidation: 'This work was informed by player clarity goals, IP fidelity requirements and UEFN platform constraints. The interface decisions were validated through design review and IP alignment checks. The post-run flow redesign was driven by observed behavior patterns: players were dropping off at the results screen, indicating the re-entry hook was not working as designed. Addressing that required rethinking what the screen led with, not just how it looked.',
+      implementationHandoff: 'Handoff included run state UI documentation, IP feedback language specifications, combat feedback timing notes and UEFN screen zone maps. Because UEFN has real constraints on what custom UI can do reliably, implementation notes were built into the design specs rather than separated as an afterthought. Each decision was cross-checked against what the platform could actually support.',
     },
     whatThisShows:
       'This project shows how I work at the intersection of IP fidelity and game UX clarity. The constraint is real: the interface has to communicate game state clearly while speaking the visual language of one of the most recognizable franchises in entertainment. That balance — useful and on-brand at the same time — is the same challenge in any licensed product or tightly governed design system. The answer is finding where what the IP demands and what the player needs overlap.',

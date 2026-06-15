@@ -1146,7 +1146,9 @@ export default function CasePage({ onMenuOpen }) {
     );
   }
 
-  const content = (lang === 'es' && caseData.contentEs) ? caseData.contentEs : caseData.content;
+  const content = (lang === 'es' && caseData.contentEs)
+    ? { ...caseData.content, ...caseData.contentEs }
+    : caseData.content;
   const whatThisShows = (lang === 'es' && caseData.whatThisShowsEs) ? caseData.whatThisShowsEs : caseData.whatThisShows;
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const cp = t.casePage.sections;
@@ -1168,6 +1170,10 @@ export default function CasePage({ onMenuOpen }) {
     content?.beforeAfter                     && { id: 'cs-before-after', label: cp.beforeAfter || 'Before and after' },
     content?.deliverables?.length > 0        && { id: 'cs-deliverables', label: cp.deliverables },
     content?.outcome                         && { id: 'cs-outcome',      label: cp.outcome },
+    content?.impact                          && { id: 'cs-impact',       label: 'Impact / Evidence' },
+    content?.myOwnership                     && { id: 'cs-ownership',    label: 'My Ownership' },
+    content?.implementationHandoff           && { id: 'cs-handoff',      label: 'Implementation & Handoff' },
+    content?.researchValidation              && { id: 'cs-research',     label: 'Research & Validation' },
     content?.playtests                       && { id: 'cs-playtests',    label: cp.playtests || 'Research & Playtests' },
     content?.whatILearned                    && { id: 'cs-learned',      label: cp.whatILearned || 'What I learned' },
     content?.nextSteps                       && { id: 'cs-next',         label: cp.nextSteps },
@@ -1745,6 +1751,119 @@ export default function CasePage({ onMenuOpen }) {
                 >
                   <SectionLabelPrimary>{t.casePage.sections.outcome}</SectionLabelPrimary>
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.outcome}</p>
+                </m.section>
+              )}
+
+              {/* Project Snapshot — quick-scan table for recruiters */}
+              {content?.projectSnapshot && (
+                <m.section
+                  id="cs-snapshot"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>Project Snapshot</SectionLabel>
+                  <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
+                    {Object.entries(content.projectSnapshot).map(([key, val]) => (
+                      <div key={key} style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
+                        <dt style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700 }}>
+                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                        </dt>
+                        <dd style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55 }}>{val}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </m.section>
+              )}
+
+              {/* Impact / Evidence — proxy metrics section */}
+              {content?.impact && (
+                <m.section
+                  id="cs-impact"
+                  className="py-12 mb-2"
+                  style={{
+                    borderBottom: `1px solid ${RULE}`,
+                    backgroundColor: 'rgba(255,37,64,0.015)',
+                    marginLeft: '-1.5rem',
+                    paddingLeft: '1.5rem',
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabelPrimary>Impact / Evidence</SectionLabelPrimary>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem 2rem' }}>
+                    {Object.entries(content.impact).map(([key, val]) => {
+                      const labels = {
+                        productionClarity: 'Production clarity',
+                        playerClarity: 'Player clarity',
+                        systemValue: 'System value',
+                        documentationValue: 'Documentation value',
+                        implementationValue: 'Implementation value',
+                        validation: 'Validation',
+                      };
+                      return (
+                        <div key={key} style={{ paddingTop: '1rem', borderTop: `1px solid ${RULE}` }}>
+                          <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 8, fontWeight: 700 }}>
+                            {labels[key] || key}
+                          </div>
+                          <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.75 }}>{val}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </m.section>
+              )}
+
+              {/* My Ownership */}
+              {content?.myOwnership && (
+                <m.section
+                  id="cs-ownership"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>My Ownership</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.myOwnership}</p>
+                </m.section>
+              )}
+
+              {/* Implementation & Handoff */}
+              {content?.implementationHandoff && (
+                <m.section
+                  id="cs-handoff"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>Implementation & Handoff</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.implementationHandoff}</p>
+                </m.section>
+              )}
+
+              {/* Research & Validation */}
+              {content?.researchValidation && (
+                <m.section
+                  id="cs-research"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>Research & Validation</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.researchValidation}</p>
                 </m.section>
               )}
 

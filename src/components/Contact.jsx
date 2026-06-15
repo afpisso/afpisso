@@ -138,6 +138,33 @@ export default function Contact() {
               {t.contact.linkedinCta} ↗
             </CyberBtn>
 
+            {/* Resume download */}
+            <m.a
+              href="/Andres_Pisso_CV_UXUI_Designer_Games_EN.pdf"
+              download
+              aria-label={t.about?.resumeBtn || 'Download Resume — Senior Game UX/UI / UX Lead'}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                fontFamily: MONO, fontSize: 10, fontWeight: 700,
+                letterSpacing: '0.16em', textTransform: 'uppercase',
+                color: 'var(--color-fg-mute)',
+                border: '1px solid var(--color-rule)',
+                padding: '10px 18px', textDecoration: 'none',
+                clipPath: 'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px))',
+                transition: 'color 150ms ease-out, border-color 150ms ease-out',
+                marginBottom: 16,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-accent-35)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.22 }}
+            >
+              {t.about?.resumeBtn || 'Download Resume — Senior Game UX/UI / UX Lead'}
+              <span aria-hidden style={{ opacity: 0.45 }}>↓</span>
+            </m.a>
+
             <CyberBtn
               href={`mailto:${ct.email}`}
               aria-label={ct.cta}

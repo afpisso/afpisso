@@ -6,16 +6,18 @@ import ClientLogos from './ClientLogos';
 function CountUp({ target, suffix = '' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '0px' });
-  const [count, setCount] = useState(0);
   const shouldReduce = useReducedMotion();
   const numeric = parseInt(target, 10);
   const trailMatch = String(target).match(/[^0-9]+$/);
   const trail = trailMatch ? trailMatch[0] : suffix;
+  // Start at the real value so SSG/no-JS HTML is correct (avoids "0+" in prerendered output)
+  const [count, setCount] = useState(isNaN(numeric) ? 0 : numeric);
 
   useEffect(() => {
     if (!inView || isNaN(numeric)) return;
     if (shouldReduce) { setCount(numeric); return; }
     const delay = setTimeout(() => {
+      setCount(0); // reset — parent opacity:0 hides the brief flash
       const duration = 900;
       const startTime = performance.now();
       const tick = (now) => {

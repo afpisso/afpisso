@@ -576,6 +576,98 @@ export default function AboutPage({ onMenuOpen }) {
           </div>
         </section>
 
+        {/* ── Hiring Snapshot ── */}
+        {about.hiringSnapshot && (
+          <section style={{ borderBottom: '1px solid var(--color-rule)', position: 'relative' }}>
+            <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
+            <div className="hidden lg:block absolute inset-0 pointer-events-none" style={{
+              background: 'linear-gradient(to right, var(--color-bg) 0%, var(--color-bg) 70%, rgba(8,8,8,0.92) 82%, rgba(8,8,8,0.55) 92%, transparent 100%)',
+            }} />
+            <m.div
+              className="relative z-10 max-w-[1400px] mx-auto px-6 py-16"
+              {...inView(0, shouldReduce)}
+            >
+              <div className="mb-8">
+                <SectionHeading label={about.hiringSnapshotLabel || 'Hiring Snapshot'} page="005f" />
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] gap-10 lg:gap-20">
+                {/* Left — snapshot copy */}
+                <div>
+                  <p style={{
+                    fontFamily: '"Play", sans-serif',
+                    fontSize: 'clamp(14px, 1.5vw, 16px)',
+                    color: 'var(--color-fg)',
+                    lineHeight: 1.85,
+                    maxWidth: '62ch',
+                    marginBottom: '1.5rem',
+                  }}>
+                    {about.hiringSnapshot}
+                  </p>
+                  <p style={{
+                    fontFamily: '"Play", sans-serif',
+                    fontSize: 'clamp(13px, 1.3vw, 14px)',
+                    color: 'var(--color-fg-dim)',
+                    lineHeight: 1.75,
+                    maxWidth: '58ch',
+                    borderLeft: '2px solid var(--color-accent-35)',
+                    paddingLeft: '1rem',
+                  }}>
+                    {about.hiringSnapshotRoles}
+                  </p>
+                </div>
+                {/* Right — recruiter strengths */}
+                {about.recruiterSummaryStrengths && (
+                  <div>
+                    <div style={{
+                      fontFamily: '"Play", sans-serif',
+                      fontSize: '9px',
+                      letterSpacing: '0.18em',
+                      color: 'var(--color-accent)',
+                      textTransform: 'uppercase',
+                      fontWeight: 700,
+                      marginBottom: '1rem',
+                    }}>
+                      {about.recruiterSummaryStrengthsLabel || 'Core strengths'}
+                    </div>
+                    <ul>
+                      {about.recruiterSummaryStrengths.map((s, i) => (
+                        <li key={i} style={{
+                          fontFamily: '"Play", sans-serif',
+                          fontSize: 13,
+                          color: 'var(--color-fg-dim)',
+                          padding: '7px 0',
+                          borderBottom: '1px solid var(--color-rule)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 10,
+                        }}>
+                          <span aria-hidden style={{ color: 'var(--color-accent)', fontSize: 10, opacity: 0.5, flexShrink: 0 }}>→</span>
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                    {about.seniorValue && (
+                      <div style={{
+                        marginTop: '1.5rem',
+                        padding: '1rem',
+                        border: '1px solid var(--color-accent-20, rgba(255,37,64,0.20))',
+                        backgroundColor: 'rgba(255,37,64,0.04)',
+                      }}>
+                        <div style={{ fontFamily: '"Play", sans-serif', fontSize: '9px', letterSpacing: '0.18em', color: 'var(--color-accent)', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>
+                          {about.seniorValueLabel || 'Why this matters for senior roles'}
+                        </div>
+                        <p style={{ fontFamily: '"Play", sans-serif', fontSize: 13, color: 'var(--color-fg-dim)', lineHeight: 1.75 }}>
+                          {about.seniorValue}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </m.div>
+          </section>
+        )}
+
         {/* ── About CTA ── */}
         <section style={{ borderBottom: '1px solid var(--color-rule)', position: 'relative' }}>
           <div className="lg:hidden absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-bg)' }} />
@@ -592,7 +684,18 @@ export default function AboutPage({ onMenuOpen }) {
                 {about.aboutCtaAccent}
               </p>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
+              <a
+                href="/Andres_Pisso_CV_UXUI_Designer_Games_EN.pdf"
+                download
+                aria-label={about.resumeBtn || 'Download Resume'}
+                style={{ fontFamily: '"Play", sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', padding: '12px 20px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid var(--color-rule)', clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', transition: 'color 150ms ease-out, border-color 150ms ease-out' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-fg)'; e.currentTarget.style.borderColor = 'var(--color-accent-35)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-fg-mute)'; e.currentTarget.style.borderColor = 'var(--color-rule)'; }}
+              >
+                {about.resumeBtn || 'Download Resume'}
+                <span aria-hidden style={{ opacity: 0.5 }}>↓</span>
+              </a>
               <a
                 href={`https://${t.contact.linkedin}`}
                 target="_blank"
