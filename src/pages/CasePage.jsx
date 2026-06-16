@@ -1334,16 +1334,17 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>Project Snapshot</SectionLabel>
-                  <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
+                  {/* dl>div>dt/dd is valid HTML5 but legacy SEO parsers flag it — using div grid wrapper instead */}
+                  <div role="list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
                     {Object.entries(content.projectSnapshot).map(([key, val]) => (
-                      <div key={key} style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
-                        <dt style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700 }}>
+                      <div key={key} role="listitem" style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
+                        <p style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700, margin: '0 0 4px' }}>
                           {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                        </dt>
-                        <dd style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55 }}>{val}</dd>
+                        </p>
+                        <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55, margin: 0 }}>{val}</p>
                       </div>
                     ))}
-                  </dl>
+                  </div>
                 </m.section>
               )}
 
