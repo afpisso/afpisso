@@ -219,10 +219,10 @@ export const cases = [
     whatThisShows:
       'The most valuable thing I built on this project was not a screen — it was a shared reference point. A design system that let the team design, implement, and review from the same foundation. When that exists, decisions get faster, rework goes down, and disciplines can work in parallel without constant check-ins.\n\nI care about building the layer under the visuals: the rules, assets, states, and documented decisions that give a team something to build from. That is the work that makes everything else easier.',
     whatThisShowsEs:
-      'Lo más valioso que construí en este proyecto no fue una pantalla — fue un punto de referencia compartido. Un sistema de diseño que le permitió al equipo diseñar, implementar y revisar desde la misma base. Cuando eso existe, las decisiones se aceleran, el retrabajo baja y las disciplinas pueden avanzar en paralelo sin chequeos constantes.\n\nMe interesa construir la capa que está debajo de los visuales: las reglas, los assets, los estados y las decisiones documentadas que le dan al equipo algo desde lo cual construir. Ese es el trabajo que hace que todo lo demás sea más fácil.',
+      'Lo más valioso que construí en este proyecto no fue una pantalla. Fue un punto de referencia compartido. Un sistema de diseño que le permitió al equipo diseñar, implementar y revisar desde la misma base. Cuando eso existe, las decisiones se aceleran, el retrabajo baja y las disciplinas pueden avanzar en paralelo sin chequeos constantes.\n\nMe interesa construir la capa que está debajo de los visuales: las reglas, los assets, los estados y las decisiones documentadas que le dan al equipo algo desde lo cual construir. Ese es el trabajo que hace que todo lo demás sea más fácil.',
     contentEs: {
       summary:
-        'Entré a Orcs Must Die: By the Blade en Teravision Games durante una etapa media-avanzada de producción. Había mucho trabajo de interfaz por delante — sistemas de gameplay, inventario, interacciones con el mundo, multijugador, accesibilidad — y ningún sistema de diseño desde el cual trabajar. Cada pantalla nueva significaba empezar desde cero.\n\nMi trabajo era cambiar eso. Construí el sistema de diseño UI, creé assets reutilizables, documenté las features clave y lideré un equipo de dos diseñadores hasta el final de la producción. Lo lanzamos.',
+        'Entré a Orcs Must Die: By the Blade en Teravision Games durante una etapa media-avanzada de producción. Había mucho trabajo de interfaz por delante: sistemas de gameplay, inventario, interacciones con el mundo, multijugador, accesibilidad. Y ningún sistema de diseño desde el cual trabajar. Cada pantalla nueva significaba empezar desde cero.\n\nMi trabajo era cambiar eso. Construí el sistema de diseño UI, creé assets reutilizables, documenté las features clave y lideré un equipo de dos diseñadores hasta el final de la producción. Lo lanzamos.',
       quickFacts: {
         role: 'UX Lead',
         studio: 'Teravision Games',
@@ -637,7 +637,7 @@ export const cases = [
       'El trabajo UX que más importó en este proyecto no era visible en las pantallas finales. Era la arquitectura de información que hizo navegable el Adventure Book, la estructura de FTUX que secuenció el onboarding por acción y no por explicación, y la documentación que mantuvo la implementación avanzando sin retrabajo constante.\n\nFlujos de jugador que contemplan cómo la gente realmente entra a una experiencia. Assets que aguantan distintos estados de UI. Documentación desde la que ingeniería pueda trabajar. Eso es lo que me importa construir.',
     contentEs: {
       summary:
-        'D&D Zombie Dragon Adventure es una experiencia roguelike activa dentro de Fortnite. Selección de clase, lobby compartido, tiendas, eventos D20, misiones, mejoras y un Dracolich al final. En papel suena a mucho. Para un jugador nuevo, fácilmente puede sentirse como demasiado.\n\nLideré un equipo de tres durante cuatro meses de producción. Definimos el FTUX, construimos el sistema de pantallas del Adventure Book, documentamos los flujos de tiendas y entregamos materiales listos para implementación dentro de las restricciones técnicas reales de UEFN — incluyendo las que no eran obvias hasta que las encontramos.',
+        'D&D Zombie Dragon Adventure es una experiencia roguelike activa dentro de Fortnite. Selección de clase, lobby compartido, tiendas, eventos D20, misiones, mejoras y un Dracolich al final. En papel suena a mucho. Para un jugador nuevo, fácilmente puede sentirse como demasiado.\n\nLideré un equipo de tres durante cuatro meses de producción. Definimos el FTUX, construimos el sistema de pantallas del Adventure Book, documentamos los flujos de tiendas y entregamos materiales listos para implementación dentro de las restricciones técnicas reales de UEFN, incluyendo las que no eran obvias hasta que las encontramos.',
       quickFacts: {
         role: 'UX Lead',
         studio: 'Teravision Games',
@@ -958,10 +958,10 @@ export const cases = [
     whatThisShows:
       'Survival UX is about calibration. Communicate too much and you break tension. Communicate too little and players feel cheated. The right amount is the amount that keeps players making informed decisions while still feeling like every choice carries weight.\n\nThis project also shows how I work when constraints do not have obvious solutions — IP tone, UEFN technical limits, and Fortnite\'s native HUD all pulling in different directions at once. Those constraints did not cancel each other out. They shaped the solution.',
     whatThisShowsEs:
-      'El UX de supervivencia es calibración. Comunicar demasiado rompe la tensión. Comunicar muy poco hace que los jugadores se sientan estafados. La cantidad correcta es la que mantiene al jugador tomando decisiones informadas mientras cada elección sigue sintiéndose importante.\n\nEste proyecto también muestra cómo trabajo cuando las restricciones no tienen soluciones obvias — tono del IP, límites técnicos de UEFN y zonas de HUD nativa de Fortnite jalando en diferentes direcciones al mismo tiempo. Esas restricciones no se cancelaron entre sí. Le dieron forma a la solución.',
+      'El UX de supervivencia es calibración. Comunicar demasiado rompe la tensión. Comunicar muy poco hace que los jugadores se sientan estafados. La cantidad correcta es la que mantiene al jugador tomando decisiones informadas mientras cada elección sigue sintiéndose importante.\n\nEste proyecto también muestra cómo trabajo cuando las restricciones no tienen soluciones obvias: tono del IP, límites técnicos de UEFN y zonas de HUD nativa de Fortnite jalando en diferentes direcciones al mismo tiempo. Esas restricciones no se cancelaron entre sí. Le dieron forma a la solución.',
     contentEs: {
       summary:
-        'The Walking Dead: Courtyard King pone a los jugadores dentro de una experiencia de supervivencia donde la tensión es el punto — no el tipo que viene de mecánicas difíciles, sino el que viene de no saber si lograrás sobrevivir el siguiente momento.\n\nMi trabajo fue la capa de interfaz: cómo los jugadores leen las amenazas, entienden sus recursos y se mantienen al tanto de sus compañeros — todo sin que el juego se detenga a explicarse, y sin romper la atmósfera del IP. Algunos detalles son NDA. El razonamiento de diseño está aquí.',
+        'The Walking Dead: Courtyard King pone a los jugadores dentro de una experiencia de supervivencia donde la tensión es el punto, no el tipo que viene de mecánicas difíciles, sino el que viene de no saber si lograrás sobrevivir el siguiente momento.\n\nMi trabajo fue la capa de interfaz: cómo los jugadores leen las amenazas, entienden sus recursos y se mantienen al tanto de sus compañeros, todo sin que el juego se detenga a explicarse, y sin romper la atmósfera del IP. Algunos detalles son NDA. El razonamiento de diseño está aquí.',
       quickFacts: {
         role: 'UX/UI Designer',
         studio: 'Teravision Games',
@@ -1027,7 +1027,7 @@ export const cases = [
         'El UX de supervivencia se beneficia de datos de prueba de usuario enfocados en momentos de confusión versus tensión intencional. Querría distinguir entre "confundido y frustrado" y "tenso y comprometido" en observaciones de sesión, luego usar eso para calibrar exactamente cuánta información necesita mostrar la interfaz.',
       projectSnapshot: {
         role: 'UX/UI Designer',
-        context: 'Experiencia UEFN dentro de Fortnite — IP The Walking Dead',
+        context: 'Experiencia UEFN dentro de Fortnite, IP The Walking Dead',
         platform: 'UEFN / Fortnite',
         team: 'UX/UI Designer',
         tools: 'Figma · UEFN · Jira · Confluence',
@@ -1312,7 +1312,7 @@ export const cases = [
     whatThisShows:
       'Co-op UI is a shared-state problem before it is a visual one. Each player needs individual clarity and group awareness, and neither layer should require active monitoring — it should just be there, readable without looking for it.\n\nDesigning that across multiple franchise releases adds a continuity dimension: the solution has to hold up not just in one game, but as a system that players can rely on each time they come back. That is a different kind of design constraint than a single-product problem, and it is one I found genuinely interesting to work through.',
     whatThisShowsEs:
-      'La UI cooperativa es un problema de estado compartido antes de ser un problema visual. Cada jugador necesita claridad individual y consciencia del grupo — y ninguna capa debería requerir atención activa. Tiene que estar ahí, legible sin buscarlo.\n\nDiseñar eso en múltiples lanzamientos de una franquicia agrega una dimensión de continuidad: la solución tiene que sostenerse no solo en un juego, sino como un sistema en el que los jugadores puedan confiar cada vez que vuelven. Eso es un tipo de restricción de diseño diferente al de un producto único, y uno que encontré genuinamente interesante de resolver.',
+      'La UI cooperativa es un problema de estado compartido antes de ser un problema visual. Cada jugador necesita claridad individual y consciencia del grupo, y ninguna capa debería requerir atención activa. Tiene que estar ahí, legible sin buscarlo.\n\nDiseñar eso en múltiples lanzamientos de una franquicia agrega una dimensión de continuidad: la solución tiene que sostenerse no solo en un juego, sino como un sistema en el que los jugadores puedan confiar cada vez que vuelven. Eso es un tipo de restricción de diseño diferente al de un producto único, y uno que encontré genuinamente interesante de resolver.',
     contentEs: {
       summary:
         'Havoc Hotel 3 es parte de una franquicia roguelike cooperativo construida en UEFN. Mi trabajo se centró en sistemas de interfaz para economía visible, claridad de recompensas, legibilidad de combate y rejugabilidad a través de la franquicia.',
@@ -1727,13 +1727,13 @@ export const cases = [
         'Este proyecto reforzó que un prototipo necesita estructura fuerte antes que más features. Cuando un producto tiene muchos sistemas posibles, el riesgo no es la falta de ideas. El riesgo es una prioridad poco clara. Un loop fuerte, una progresión clara y documentación útil pueden ayudar al equipo a decidir qué pertenece al producto, qué necesita más trabajo y qué debería esperar.\n\nTambién reforzó que Game Design y UX están profundamente conectados. Una mecánica solo funciona cuando el jugador puede entenderla, actuar sobre ella y sentir por qué importa. En mobile, esa conexión tiene que construirse desde el inicio.',
       projectSnapshot: {
         role: 'Lead Game Designer',
-        context: 'Prototipo roguelite híbrido casual mobile — Piximeta',
+        context: 'Prototipo roguelite híbrido casual mobile, Piximeta',
         platform: 'Mobile (Unity)',
-        team: '9 personas — diseño, arte, desarrollo, stakeholders',
+        team: '9 personas: diseño, arte, desarrollo, stakeholders',
         tools: 'Figma · Jira · Wiki/GDD · Unity · Excel · Machinations · Adobe Suite',
         mainChallenge: 'Convertir un roguelite de múltiples sistemas en un producto mobile estructurado, construible y legible para el jugador, con un equipo de nueve personas',
         keyDeliverables: 'Más de 30 flujos UX, más de 100 wireframes, más de 117 subsitios en la Wiki, más de 650 documentos, más de 60 presentaciones para stakeholders, más de 600 diapositivas',
-        status: 'Prototipo — lanzamiento pausado antes de recoger data en vivo',
+        status: 'Prototipo, lanzamiento pausado antes de recoger data en vivo',
         duration: '1 año',
       },
       impact: {
@@ -2035,7 +2035,7 @@ export const cases = [
     whatThisShows:
       'IP fidelity and UX clarity are not competing constraints — they are the same problem approached from two directions. When they are treated as one, the solution gets better at both.\n\nA player inside Star Wars who sees a generic health bar is reminded they are playing a Fortnite mini-game. A player who sees interface language that feels native to the universe stays in the experience. Making those seams invisible — that is the UX work. The same challenge shows up in any licensed product or tightly governed design system: the answer is always in the overlap between what the brand demands and what the user needs.',
     whatThisShowsEs:
-      'Este proyecto muestra cómo trabajo en la intersección de la fidelidad al IP y la claridad de game UX. La restricción es real: la interfaz tiene que comunicar el estado del juego claramente mientras habla el lenguaje visual de una de las franquicias más reconocibles del entretenimiento. Ese equilibrio — útil y fiel a la marca al mismo tiempo — es el mismo desafío en cualquier producto licenciado o sistema de diseño con gobernanza estricta. La respuesta está en encontrar donde lo que el IP exige y lo que el jugador necesita se superponen.',
+      'Este proyecto muestra cómo trabajo en la intersección de la fidelidad al IP y la claridad de game UX. La restricción es real: la interfaz tiene que comunicar el estado del juego claramente mientras habla el lenguaje visual de una de las franquicias más reconocibles del entretenimiento. Ese equilibrio, útil y fiel a la marca al mismo tiempo, es el mismo desafío en cualquier producto licenciado o sistema de diseño con gobernanza estricta. La respuesta está en encontrar donde lo que el IP exige y lo que el jugador necesita se superponen.',
     contentEs: {
       summary:
         'Star Wars: Roguelike One es una experiencia de Star Wars construida en UEFN dentro de Fortnite. Mi trabajo se centró en sistemas UX/UI para la estructura de partidas, retroalimentación fiel al IP y orientación del jugador a través de loops repetibles. El desafío fue mantener la claridad roguelike intacta mientras se respetaba el lenguaje visual y emocional del universo Star Wars.',
