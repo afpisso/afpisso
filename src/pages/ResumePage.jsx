@@ -89,7 +89,7 @@ export default function ResumePage({ onMenuOpen }) {
                 </p>
               </div>
               <a
-                href="/resume.pdf"
+                href="/Andres_Pisso_CV_UXUI_Designer_Games_EN.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"

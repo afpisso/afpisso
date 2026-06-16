@@ -1159,6 +1159,8 @@ export default function CasePage({ onMenuOpen }) {
   // reconnecting on every render (which caused active-section tracking to fail).
   const tocSections = useMemo(() => [
     content?.summary                         && { id: 'cs-summary',      label: cp.executiveSummary },
+    content?.projectSnapshot                 && { id: 'cs-snapshot',     label: 'Project Snapshot' },
+    content?.myOwnership                     && { id: 'cs-ownership',    label: 'My Ownership' },
     content?.context                         && { id: 'cs-context',      label: cp.context },
     content?.challenge                       && { id: 'cs-challenge',    label: cp.challenge },
     content?.role                            && { id: 'cs-role',         label: cp.myRole },
@@ -1171,7 +1173,6 @@ export default function CasePage({ onMenuOpen }) {
     content?.deliverables?.length > 0        && { id: 'cs-deliverables', label: cp.deliverables },
     content?.outcome                         && { id: 'cs-outcome',      label: cp.outcome },
     content?.impact                          && { id: 'cs-impact',       label: 'Impact / Evidence' },
-    content?.myOwnership                     && { id: 'cs-ownership',    label: 'My Ownership' },
     content?.implementationHandoff           && { id: 'cs-handoff',      label: 'Implementation & Handoff' },
     content?.researchValidation              && { id: 'cs-research',     label: 'Research & Validation' },
     content?.playtests                       && { id: 'cs-playtests',    label: cp.playtests || 'Research & Playtests' },
@@ -1318,6 +1319,47 @@ export default function CasePage({ onMenuOpen }) {
                       </p>
                     </div>
                   </div>
+                </m.section>
+              )}
+
+              {/* Project Snapshot — quick-scan table for recruiters */}
+              {content?.projectSnapshot && (
+                <m.section
+                  id="cs-snapshot"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>Project Snapshot</SectionLabel>
+                  <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
+                    {Object.entries(content.projectSnapshot).map(([key, val]) => (
+                      <div key={key} style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
+                        <dt style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700 }}>
+                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                        </dt>
+                        <dd style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55 }}>{val}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </m.section>
+              )}
+
+              {/* My Ownership */}
+              {content?.myOwnership && (
+                <m.section
+                  id="cs-ownership"
+                  className="py-10 mb-2"
+                  style={{ borderBottom: `1px solid ${RULE}` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SectionLabel>My Ownership</SectionLabel>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.myOwnership}</p>
                 </m.section>
               )}
 
@@ -1754,31 +1796,6 @@ export default function CasePage({ onMenuOpen }) {
                 </m.section>
               )}
 
-              {/* Project Snapshot — quick-scan table for recruiters */}
-              {content?.projectSnapshot && (
-                <m.section
-                  id="cs-snapshot"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <SectionLabel>Project Snapshot</SectionLabel>
-                  <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
-                    {Object.entries(content.projectSnapshot).map(([key, val]) => (
-                      <div key={key} style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
-                        <dt style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700 }}>
-                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                        </dt>
-                        <dd style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55 }}>{val}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </m.section>
-              )}
-
               {/* Impact / Evidence — proxy metrics section */}
               {content?.impact && (
                 <m.section
@@ -1816,22 +1833,6 @@ export default function CasePage({ onMenuOpen }) {
                       );
                     })}
                   </div>
-                </m.section>
-              )}
-
-              {/* My Ownership */}
-              {content?.myOwnership && (
-                <m.section
-                  id="cs-ownership"
-                  className="py-10 mb-2"
-                  style={{ borderBottom: `1px solid ${RULE}` }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <SectionLabel>My Ownership</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.myOwnership}</p>
                 </m.section>
               )}
 
