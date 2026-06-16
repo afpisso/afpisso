@@ -25,6 +25,10 @@ export function LenisProvider({ children }) {
   const lenisRef = useRef(null);
 
   useEffect(() => {
+    // Skip Lenis on touch devices — native scroll is faster and doesn't conflict
+    const isTouch = window.matchMedia('(hover: none)').matches || navigator.maxTouchPoints > 0;
+    if (isTouch) return;
+
     const lenis = new Lenis({
       // lerp: linear interpolation per frame (0 = instant, 1 = never moves).
       // 0.1 = moves 10% of remaining distance each frame → snappy but smooth.

@@ -866,11 +866,12 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
       }}
     >
       {/* Backdrop blur + dim (blurs the site content behind this overlay) */}
+      {/* backdrop-filter skipped on touch: compositing cost per frame is too high on mobile */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        backdropFilter: bgVisible ? 'blur(10px) brightness(0.5) saturate(0.7)' : 'none',
-        background: bgVisible ? 'rgba(0,0,0,0.45)' : 'transparent',
-        transition: 'backdrop-filter 0.35s ease-out, background 0.25s ease-out',
+        backdropFilter: bgVisible && !window.matchMedia('(hover: none)').matches ? 'blur(10px) brightness(0.5) saturate(0.7)' : 'none',
+        background: bgVisible ? 'rgba(0,0,0,0.72)' : 'transparent',
+        transition: 'background 0.25s ease-out',
         pointerEvents: 'none',
       }} />
 

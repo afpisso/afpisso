@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLang } from '../contexts/LangContext';
 import { CardCorners, StatusDiamond } from './CyberIcons';
 import { analytics } from '../utils/analytics';
@@ -32,6 +32,18 @@ export default function CaseCard({ caseData, index }) {
 
   const vstyle = visibilityStyle[caseData.visibility] || visibilityStyle['legacy'];
   const statusLabel = t.caseStatuses[caseData.visibility] || caseData.status;
+
+  // Pause video when card scrolls out of view (mobile: no mouseLeave fires)
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (!entry.isIntersecting) { vid.pause(); vid.currentTime = 0; } },
+      { threshold: 0.1 }
+    );
+    io.observe(vid);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <m.article
