@@ -1598,6 +1598,10 @@ export default function LabHero({ hideTopBar = false }) {
       </div>
 
       {/* ══ BIG TITLE + nameplate + roles — single anchored block ══ */}
+      {/* sr-only H1 — semantic landmark for crawlers; visual title is the Bebas div below */}
+      <h1 style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+        Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead
+      </h1>
       {titleVisible && (
         <div style={{
           position: 'absolute',

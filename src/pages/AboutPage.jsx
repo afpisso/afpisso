@@ -197,17 +197,19 @@ export default function AboutPage({ onMenuOpen }) {
                     style={{ width: 2, height: 44, backgroundColor: 'var(--color-accent)', flexShrink: 0, marginTop: 2 }}
                   />
                   <div>
-                    <div
+                    <h1
                       style={{
                         fontFamily: '"Bebas Neue", sans-serif',
                         fontSize: 'clamp(1.4rem, 2.6vw, 2.5rem)',
                         color: 'var(--color-fg)',
                         letterSpacing: '0.02em',
                         lineHeight: 1.05,
+                        margin: 0,
+                        fontWeight: 400,
                       }}
                     >
                       <GlitchStrokeText>Andrés Felipe Pisso</GlitchStrokeText>
-                    </div>
+                    </h1>
                     <div className="mt-1.5 sys-label" style={{ color: 'var(--color-fg-dim)' }}>
                       {t.aboutPage.subheadline}
                     </div>
