@@ -1036,12 +1036,14 @@ function DecisionBlock({ item, index }) {
 }
 
 function QuickFacts({ facts }) {
+  const { t } = useLang();
+  const fl = t.casePage.fieldLabels;
   const entries = Object.entries(facts).filter(([k]) => k !== 'confidentiality');
   return (
     <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {entries.map(([key, val]) => (
         <div key={key} className="p-4" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(245,245,243,0.01)' }}>
-          <dt className="sys-label mb-1 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</dt>
+          <dt className="sys-label mb-1 capitalize">{fl[key] || key.replace(/([A-Z])/g, ' $1').trim()}</dt>
           <dd style={{ fontFamily: MONO, fontSize: '12px', color: FG, letterSpacing: '0.02em' }}>
             {Array.isArray(val) ? val.join(', ') : val}
           </dd>
@@ -1150,6 +1152,7 @@ export default function CasePage({ onMenuOpen }) {
   const whatThisShows = (lang === 'es' && caseData.whatThisShowsEs) ? caseData.whatThisShowsEs : caseData.whatThisShows;
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const cp = t.casePage.sections;
+  const fl = t.casePage.fieldLabels;
 
   // Build TOC dynamically — only sections present in this case's content.
   // Memoized so the array reference is stable across renders; prevents the
@@ -1157,8 +1160,8 @@ export default function CasePage({ onMenuOpen }) {
   // reconnecting on every render (which caused active-section tracking to fail).
   const tocSections = useMemo(() => [
     content?.summary                         && { id: 'cs-summary',      label: cp.executiveSummary },
-    content?.projectSnapshot                 && { id: 'cs-snapshot',     label: 'Project Snapshot' },
-    content?.myOwnership                     && { id: 'cs-ownership',    label: 'My Ownership' },
+    content?.projectSnapshot                 && { id: 'cs-snapshot',     label: cp.projectSnapshot },
+    content?.myOwnership                     && { id: 'cs-ownership',    label: cp.myOwnership },
     content?.context                         && { id: 'cs-context',      label: cp.context },
     content?.challenge                       && { id: 'cs-challenge',    label: cp.challenge },
     content?.role                            && { id: 'cs-role',         label: cp.myRole },
@@ -1170,9 +1173,9 @@ export default function CasePage({ onMenuOpen }) {
     content?.beforeAfter                     && { id: 'cs-before-after', label: cp.beforeAfter || 'Before and after' },
     content?.deliverables?.length > 0        && { id: 'cs-deliverables', label: cp.deliverables },
     content?.outcome                         && { id: 'cs-outcome',      label: cp.outcome },
-    content?.impact                          && { id: 'cs-impact',       label: 'Impact / Evidence' },
-    content?.implementationHandoff           && { id: 'cs-handoff',      label: 'Implementation & Handoff' },
-    content?.researchValidation              && { id: 'cs-research',     label: 'Research & Validation' },
+    content?.impact                          && { id: 'cs-impact',       label: cp.impact },
+    content?.implementationHandoff           && { id: 'cs-handoff',      label: cp.implementationHandoff },
+    content?.researchValidation              && { id: 'cs-research',     label: cp.researchValidation },
     content?.playtests                       && { id: 'cs-playtests',    label: cp.playtests || 'Research & Playtests' },
     content?.whatILearned                    && { id: 'cs-learned',      label: cp.whatILearned || 'What I learned' },
     content?.nextSteps                       && { id: 'cs-next',         label: cp.nextSteps },
@@ -1264,7 +1267,7 @@ export default function CasePage({ onMenuOpen }) {
                       className="sys-label"
                       style={{ flexShrink: 0 }}
                     >
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                      {fl[key] || key.replace(/([A-Z])/g, ' $1').trim()}
                     </dt>
                     <dd
                       style={{
@@ -1329,13 +1332,13 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Project Snapshot</SectionLabel>
+                  <SectionLabel>{cp.projectSnapshot}</SectionLabel>
                   {/* dl>div>dt/dd is valid HTML5 but legacy SEO parsers flag it — using div grid wrapper instead */}
                   <div role="list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0' }}>
                     {Object.entries(content.projectSnapshot).map(([key, val]) => (
                       <div key={key} role="listitem" style={{ padding: '10px 0', borderBottom: `1px solid ${RULE}`, paddingRight: '1rem' }}>
                         <p style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.18em', color: ACCENT, textTransform: 'uppercase', marginBottom: 4, fontWeight: 700, margin: '0 0 4px' }}>
-                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                          {fl[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
                         </p>
                         <p style={{ fontFamily: MONO, fontSize: '13px', color: DIM, lineHeight: 1.55, margin: 0 }}>{val}</p>
                       </div>
@@ -1355,7 +1358,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>My Ownership</SectionLabel>
+                  <SectionLabel>{cp.myOwnership}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.myOwnership}</p>
                 </m.section>
               )}
@@ -1802,7 +1805,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabelPrimary>Impact / Evidence</SectionLabelPrimary>
+                  <SectionLabelPrimary>{cp.impact}</SectionLabelPrimary>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem 2rem' }}>
                     {Object.entries(content.impact).map(([key, val]) => {
                       const labels = {
@@ -1837,7 +1840,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Implementation & Handoff</SectionLabel>
+                  <SectionLabel>{cp.implementationHandoff}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.implementationHandoff}</p>
                 </m.section>
               )}
@@ -1853,7 +1856,7 @@ export default function CasePage({ onMenuOpen }) {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <SectionLabel>Research & Validation</SectionLabel>
+                  <SectionLabel>{cp.researchValidation}</SectionLabel>
                   <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '64ch' }}>{content.researchValidation}</p>
                 </m.section>
               )}
