@@ -259,7 +259,8 @@ export default function CaseTOC({ sections }) {
                             color: isActive ? FG : MUTE,
                             fontWeight: isActive ? 700 : 400,
                             transition: 'color 0.15s cubic-bezier(0.16,1,0.3,1)',
-                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                            whiteSpace: 'normal', lineHeight: 1.3,
+                            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                           }}
                           onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = DIM; }}
                           onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = MUTE; }}

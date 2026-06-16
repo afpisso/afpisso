@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { cases, CASE_ORDER } from '../data/cases';
@@ -94,8 +94,82 @@ function ThumbnailOrPlaceholder({ c, priority = false }) {
 }
 
 // ── Floating cursor preview — follows mouse with spring lag ───────────────────
+// ── Image trail — ghost thumbnails left behind when moving between projects ────
+function ImageTrail({ items, hovered }) {
+  const shouldReduce = useReducedMotion();
+  const isPointerDevice = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+    []
+  );
+  const [trail, setTrail] = useState([]);
+  const prevHovered = useRef(null);
+  const lastPos = useRef({ x: 0, y: 0 });
+  const idRef = useRef(0);
+
+  useEffect(() => {
+    if (!isPointerDevice || shouldReduce) return;
+    const onMove = (e) => { lastPos.current = { x: e.clientX, y: e.clientY }; };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
+  }, [isPointerDevice, shouldReduce]);
+
+  useEffect(() => {
+    if (!isPointerDevice || shouldReduce) return;
+    if (prevHovered.current && prevHovered.current !== hovered) {
+      const leaving = items.find(c => c.slug === prevHovered.current);
+      if (leaving) {
+        const id = ++idRef.current;
+        setTrail(prev => [...prev.slice(-5), { id, slug: leaving.slug, ...lastPos.current }]);
+      }
+    }
+    prevHovered.current = hovered;
+  }, [hovered, items, isPointerDevice, shouldReduce]);
+
+  if (!isPointerDevice || shouldReduce) return null;
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[85]" aria-hidden="true">
+      <AnimatePresence>
+        {trail.map(item => (
+          <m.div
+            key={item.id}
+            className="absolute"
+            style={{ left: item.x, top: item.y }}
+            initial={{ opacity: 0.48, scale: 1,    x: -72, y: -40 }}
+            animate={{ opacity: 0,    scale: 0.82,  x: -72, y: -40 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.78, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div style={{
+              width: 144,
+              aspectRatio: '16/9',
+              overflow: 'hidden',
+              clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))',
+              boxShadow: '0 8px 28px rgba(0,0,0,0.55)',
+            }}>
+              <img
+                src={`/thumbnails/${item.slug}.webp`}
+                alt=""
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
+          </m.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ── Cursor preview — follows mouse, shows currently-hovered project ───────────
 function CursorPreview({ items, hovered }) {
   const shouldReduce = useReducedMotion();
+  // Skip entirely on touch/coarse-pointer devices — mousemove never fires there,
+  // so this would render invisible spring nodes wastefully.
+  const isPointerDevice = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+    []
+  );
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
   const movedOnce = useRef(false);
@@ -115,7 +189,7 @@ function CursorPreview({ items, hovered }) {
     return () => window.removeEventListener('mousemove', onMove);
   }, [mouseX, mouseY, shouldReduce]);
 
-  if (shouldReduce) return null;
+  if (shouldReduce || !isPointerDevice) return null;
 
   const active = items.find(c => c.slug === hovered);
 
@@ -143,30 +217,24 @@ function CursorPreview({ items, hovered }) {
           {hovered && active && (
             <m.div
               key={hovered}
-              initial={{
-                clipPath: 'inset(0% 100% 0% 0%)',
-                filter: 'saturate(0) brightness(2)',
-              }}
-              animate={{
-                clipPath: 'inset(0% 0% 0% 0%)',
-                filter: 'saturate(1) brightness(1)',
-              }}
+              initial={{ clipPath: 'inset(0% 100% 0% 0%)', opacity: 0 }}
+              animate={{ clipPath: 'inset(0% 0% 0% 0%)',   opacity: 1 }}
               exit={{
                 clipPath: 'inset(0% 0% 0% 100%)',
-                filter: 'saturate(0) brightness(2)',
+                opacity: 0,
                 transition: {
                   clipPath: { duration: 0.1, ease: [0.4, 0, 1, 1] },
-                  filter:   { duration: 0.05, ease: 'linear' },
+                  opacity:  { duration: 0.08, ease: 'linear' },
                 },
               }}
               transition={{
                 clipPath: { duration: 0.18, ease: [0.32, 0.72, 0, 1] },
-                filter:   { duration: 0.2, ease: EASE_OUT },
+                opacity:  { duration: 0.12, ease: EASE_OUT },
               }}
               style={{
                 position: 'absolute',
                 inset: 0,
-                willChange: 'clip-path, filter',
+                willChange: 'clip-path, opacity',
               }}
             >
               <ThumbnailOrPlaceholder c={active} />
@@ -205,23 +273,8 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
         className="absolute top-0 left-0 right-0 h-[1px] transition-colors duration-300 pointer-events-none"
         style={{ backgroundColor: isHovered ? 'var(--color-accent-45)' : 'var(--color-rule)' }}
       />
-      {/* Left accent bar */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 top-0 bottom-0 w-[2px] pointer-events-none"
-        style={{
-          backgroundColor: 'var(--color-accent)',
-          opacity: isHovered ? 1 : 0,
-          transform: isHovered ? 'scaleY(1)' : 'scaleY(0)',
-          transformOrigin: 'top',
-          transition: 'opacity 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1)',
-        }}
-      />
-
-
       <Link
         to={`/case/${caseData.slug}`}
-        aria-label={`${caseData.title}`}
         style={{ textDecoration: 'none', display: 'block' }}
         onClick={(e) => {
           e.preventDefault();
@@ -392,12 +445,9 @@ function MobileWorkCard({ caseData, index, total }) {
           filter: blurFilter,
           transformOrigin: 'top center',
         }}
-        initial={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
-        animate={{ clipPath: 'inset(0 0 0% 0)', opacity: 1 }}
-        transition={{
-          clipPath: { duration: 0.52, ease: [0.32, 0.72, 0, 1], delay: index * 0.05 },
-          opacity:  { duration: 0.05, ease: 'linear', delay: index * 0.05 },
-        }}
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.42, ease: [0.32, 0.72, 0, 1], delay: index * 0.05 }}
       >
         <Link
           to={`/case/${caseData.slug}`}
@@ -707,7 +757,12 @@ function IconGrid() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function WorkPage({ onMenuOpen }) {
-  const [active, setActive] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeFromUrl = searchParams.get('filter') || 'All';
+  const active = filters.includes(activeFromUrl) ? activeFromUrl : 'All';
+  const setActive = (val) => {
+    setSearchParams(val === 'All' ? {} : { filter: val }, { replace: true });
+  };
   const [hovered, setHovered] = useState(null);
   const [view, setView] = useState(() => {
     try { return localStorage.getItem('work-view') || 'list'; } catch { return 'list'; }
@@ -769,7 +824,8 @@ export default function WorkPage({ onMenuOpen }) {
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
-      {/* Cursor preview rendered outside main to avoid overflow clipping */}
+      {/* Hover previews — outside main to avoid overflow clipping */}
+      <ImageTrail items={visible} hovered={hovered} />
       <CursorPreview items={visible} hovered={hovered} />
 
       <div className="scan-line" aria-hidden="true" />
@@ -779,6 +835,7 @@ export default function WorkPage({ onMenuOpen }) {
 
         {/* ── Page header ─────────────────────────────────────────────────────── */}
         <section
+          aria-labelledby="work-page-heading"
           className="pt-40 pb-20 relative overflow-hidden"
           style={{ borderBottom: '1px solid var(--color-rule)' }}
         >
@@ -808,6 +865,7 @@ export default function WorkPage({ onMenuOpen }) {
             </m.div>
 
             <m.h1
+              id="work-page-heading"
               className="uppercase mb-6"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
@@ -863,15 +921,17 @@ export default function WorkPage({ onMenuOpen }) {
         </section>
 
         {/* ── Filter bar + case list ──────────────────────────────────────────── */}
-        <section className="py-12">
+        <section className="py-12" aria-label={t.caseFiles.casesRegionLabel ?? 'Case studies'}>
           <div className="max-w-[1400px] mx-auto px-6">
 
             {/* Filter bar — animated active underline via layoutId */}
+            {/* A2: nav landmark so screen readers can jump to filters */}
+            <nav aria-label={t.caseFiles.filterNav ?? 'Filter projects'}>
             <m.div
               className="flex sm:flex-wrap items-baseline gap-x-4 sm:gap-x-6 gap-y-2 mb-10 overflow-x-auto sm:overflow-visible"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               role="group"
-              aria-label="Filter projects"
+              aria-label={t.caseFiles.filterNav ?? 'Filter projects'}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, ease: EASE_OUT, delay: 0.15 }}
@@ -922,7 +982,13 @@ export default function WorkPage({ onMenuOpen }) {
                 </button>
               ))}
 
-              <span className="sys-label" style={{ color: 'var(--color-fg-mute)' }}>
+              {/* A5: aria-live announces count change to screen readers when filter changes */}
+              <span
+                aria-live="polite"
+                aria-atomic="true"
+                className="sys-label"
+                style={{ color: 'var(--color-fg-mute)' }}
+              >
                 — {visible.length} {visible.length !== 1 ? t.caseFiles.projects : t.caseFiles.project}
               </span>
 
@@ -943,7 +1009,7 @@ export default function WorkPage({ onMenuOpen }) {
                     }}
                     style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      width: 32, height: 32,
+                      width: 44, height: 44,
                       background: 'transparent', border: 'none', cursor: 'pointer',
                       color: view === id ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                       transition: 'color 0.18s',
@@ -956,6 +1022,7 @@ export default function WorkPage({ onMenuOpen }) {
                 ))}
               </div>
             </m.div>
+            </nav>
 
             {/* ── List view ──────────────────────────────────────────────────── */}
             {view === 'list' && (
@@ -1004,7 +1071,7 @@ export default function WorkPage({ onMenuOpen }) {
               <AnimatePresence mode="popLayout">
                 <m.div
                   layout
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10"
                 >
                   {visible.map((c, i) => (
                     <WorkGridCard key={c.id} caseData={c} index={i} />

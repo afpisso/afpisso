@@ -781,7 +781,7 @@ function PulseDot() {
 function HudLabel({ children, dim, accent, style: s }) {
   return (
     <div style={{
-      fontFamily: "'Play', monospace",
+      fontFamily: "'Play', sans-serif",
       fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
       color: accent ? 'var(--color-accent)' : dim ? 'rgba(240,238,234,0.28)' : 'rgba(240,238,234,0.5)',
       lineHeight: 1.6, ...s,
@@ -915,7 +915,7 @@ function ArcGauge({ value, active, delay, metric }) {
         />
         {/* inner metric */}
         <text x={CX} y={CY + 1} textAnchor="middle" dominantBaseline="middle"
-          style={{ fontFamily: "'Play', monospace", fontSize: '7.5px',
+          style={{ fontFamily: "'Play', sans-serif", fontSize: '7.5px',
             fill: 'rgba(255,37,64,0.8)', letterSpacing: '0.06em', fontWeight: 600 }}
         >
           {metric}
@@ -1170,7 +1170,7 @@ function BogotaClock({ active }) {
       {/* Time readout */}
       <div>
         <div style={{
-          fontFamily: "'Play', monospace",
+          fontFamily: "'Play', sans-serif",
           fontSize: '16px', letterSpacing: '0.08em',
           color: 'var(--color-fg)', lineHeight: 1, fontWeight: 700,
           fontVariantNumeric: 'tabular-nums',
@@ -1188,7 +1188,7 @@ function BogotaClock({ active }) {
           </m.span>
         </div>
         <div style={{
-          fontFamily: "'Play', monospace",
+          fontFamily: "'Play', sans-serif",
           fontSize: '8px', letterSpacing: '0.26em',
           color: 'rgba(255,37,64,0.5)', marginTop: 3,
           textTransform: 'uppercase',
@@ -1633,7 +1633,7 @@ export default function LabHero({ hideTopBar = false }) {
             </div>
             {/* Nameplate */}
             <TitleWord delay={0} style={{
-              fontFamily: "'Play', monospace",
+              fontFamily: "'Play', sans-serif",
               fontSize: isMobile ? '9px' : isTablet ? '10px' : 'clamp(10px,0.9vw,13px)',
               letterSpacing: isCompact ? '0.18em' : '0.38em', textTransform: 'uppercase',
               color: 'rgba(240,238,234,0.55)', fontWeight: 500,
@@ -1680,7 +1680,7 @@ export default function LabHero({ hideTopBar = false }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '5px 9px',
-                fontFamily: "'Play', monospace",
+                fontFamily: "'Play', sans-serif",
                 fontSize: '10px',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
@@ -1699,7 +1699,7 @@ export default function LabHero({ hideTopBar = false }) {
             <TitleWord delay={0.42} style={{
               display: 'block',
               marginTop: 'clamp(14px,2vh,22px)',
-              fontFamily: "'Play', monospace",
+              fontFamily: "'Play', sans-serif",
               fontSize: 'clamp(11px,1.05vw,14px)',
               letterSpacing: '0.22em', textTransform: 'uppercase',
               color: 'rgba(240,238,234,0.65)', fontWeight: 400,
@@ -1804,7 +1804,7 @@ export default function LabHero({ hideTopBar = false }) {
 
                   {/* Label */}
                   <div style={{
-                    fontFamily: "'Play', monospace",
+                    fontFamily: "'Play', sans-serif",
                     fontSize: 'clamp(9px,0.8vw,11px)', letterSpacing: '0.18em',
                     textTransform: 'uppercase', color: 'rgba(240,238,234,0.75)',
                     lineHeight: 1.2,
@@ -1819,7 +1819,7 @@ export default function LabHero({ hideTopBar = false }) {
                     transition={{ duration: 0.4, delay: 1.0 + i * 0.12 }}
                     style={{
                       marginTop: 3,
-                      fontFamily: "'Play', monospace", fontSize: '8px',
+                      fontFamily: "'Play', sans-serif", fontSize: '8px',
                       letterSpacing: '0.22em', color: 'rgba(255,37,64,0.5)',
                       textTransform: 'uppercase',
                     }}
@@ -1844,8 +1844,8 @@ export default function LabHero({ hideTopBar = false }) {
       >
         {/* Copy — enter with blur bridge */}
         <m.div
-          initial={{ filter: 'blur(6px)', opacity: 0 }}
-          animate={hudVisible ? { filter: 'blur(0px)', opacity: 1 } : {}}
+          initial={{ opacity: 0, y: 10 }}
+          animate={hudVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.28 }}
           style={{ marginBottom: 20 }}
         >
@@ -1911,7 +1911,7 @@ export default function LabHero({ hideTopBar = false }) {
         <HudLabel dim><ScrambleLabel text={lh.interfaceMode} active={hudVisible} /></HudLabel>
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6, marginTop: 3,
-          fontFamily: "'Play', monospace", fontSize: '11px',
+          fontFamily: "'Play', sans-serif", fontSize: '11px',
           letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)',
         }}>
           <PulseDot />
@@ -1927,7 +1927,7 @@ export default function LabHero({ hideTopBar = false }) {
         <HudLabel dim>{lh.statusLabel}</HudLabel>
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 3,
-          fontFamily: "'Play', monospace", fontSize: '11px',
+          fontFamily: "'Play', sans-serif", fontSize: '11px',
           letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-accent)',
         }}>
           {lh.online} <PulseDot />
@@ -1950,7 +1950,7 @@ export default function LabHero({ hideTopBar = false }) {
       }}>
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6,
-          fontFamily: "'Play', monospace", fontSize: '9px',
+          fontFamily: "'Play', sans-serif", fontSize: '9px',
           letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.35)',
         }}>
           <span style={{ color: 'var(--color-accent)', fontSize: 11 }}>●</span>

@@ -9,9 +9,9 @@ const DEFAULT_DESCRIPTION =
  * Sets document.title, meta tags, og/twitter, canonical, and optional
  * Article JSON-LD schema for the current route.
  *
- * @param {{ title?: string, description?: string, article?: { datePublished?: string, dateModified?: string } }} options
+ * @param {{ title?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
  */
-export function usePageMeta({ title, description, article } = {}) {
+export function usePageMeta({ title, description, themeColor, article } = {}) {
   useEffect(() => {
     const fullTitle = title
       ? `${title} — ${SITE_NAME}`
@@ -48,6 +48,10 @@ export function usePageMeta({ title, description, article } = {}) {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', url);
 
+    // Theme color — per-page override, restored on unmount
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta && themeColor) themeMeta.setAttribute('content', themeColor);
+
     // Article JSON-LD schema (Field Notes)
     const schemaId = 'ld-json-article';
     let existing = document.getElementById(schemaId);
@@ -83,5 +87,9 @@ export function usePageMeta({ title, description, article } = {}) {
     } else if (existing) {
       existing.remove();
     }
-  }, [title, description, article]);
+    return () => {
+      // Restore default theme-color when leaving a page that overrode it
+      if (themeMeta && themeColor) themeMeta.setAttribute('content', '#080808');
+    };
+  }, [title, description, themeColor, article]);
 }

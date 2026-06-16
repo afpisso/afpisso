@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
@@ -56,7 +56,7 @@ function PillDivider() {
   return (
     <div aria-hidden="true" style={{
       width: 1, height: 16, flexShrink: 0,
-      backgroundColor: 'rgba(255,255,255,0.08)',
+      backgroundColor: 'rgba(245,245,243,0.08)',
     }} />
   );
 }
@@ -65,7 +65,7 @@ function LanguageLabel({ lang, target }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
       <span style={{ color: 'var(--color-fg)' }}>{lang.toUpperCase()}</span>
-      <span aria-hidden="true" style={{ color: 'rgba(255,255,255,0.18)' }}>/</span>
+      <span aria-hidden="true" style={{ color: 'rgba(245,245,243,0.18)' }}>/</span>
       <span>{target}</span>
     </span>
   );
@@ -96,11 +96,11 @@ function SignalAudioToggle({ compact = false }) {
         padding: 0,
         border: compact
           ? 'none'
-          : `1px solid ${active ? 'rgba(255,37,64,0.42)' : hover ? 'rgba(255,255,255,0.22)' : 'transparent'}`,
+          : `1px solid ${active ? 'rgba(255,37,64,0.42)' : hover ? 'rgba(245,245,243,0.22)' : 'transparent'}`,
         background: active
           ? 'rgba(255,37,64,0.075)'
           : hover
-            ? 'rgba(255,255,255,0.035)'
+            ? 'rgba(245,245,243,0.035)'
             : 'transparent',
         color: active ? 'var(--color-accent)' : hover ? 'var(--color-fg)' : 'var(--color-fg-mute)',
         cursor: 'pointer',
@@ -210,7 +210,7 @@ export default function Nav({ onMenuOpen }) {
     <>
       {/* Skip-to-content — keyboard a11y */}
       <a
-        href="#home"
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[300] focus:px-4 focus:py-2 focus:text-[11px] focus:uppercase focus:tracking-widest"
         style={{ fontFamily: '"Play", sans-serif', backgroundColor: 'var(--color-accent)', color: '#0a0a0a' }}
       >
@@ -226,7 +226,7 @@ export default function Nav({ onMenuOpen }) {
       */}
       <div
         className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
-        style={{ overflow: 'visible' }}
+        style={{ overflow: 'visible', paddingTop: 'env(safe-area-inset-top, 0px)' }}
       >
         <AnimatePresence mode="wait">
           {!scrolled ? (
@@ -326,8 +326,8 @@ export default function Nav({ onMenuOpen }) {
                       fontSize: 10,
                       letterSpacing: '0.16em',
                       textTransform: 'uppercase',
-                      border: '1px solid rgba(255,255,255,0.18)',
-                      background: 'rgba(255,255,255,0.015)',
+                      border: '1px solid rgba(245,245,243,0.18)',
+                      background: 'rgba(245,245,243,0.015)',
                       color: 'var(--color-fg)',
                       padding: '8px 18px',
                       cursor: 'pointer',
@@ -343,8 +343,8 @@ export default function Nav({ onMenuOpen }) {
                       e.currentTarget.style.backgroundColor = 'var(--color-accent-08)';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.015)';
+                      e.currentTarget.style.borderColor = 'rgba(245,245,243,0.18)';
+                      e.currentTarget.style.backgroundColor = 'rgba(245,245,243,0.015)';
                     }}
                   >
                     <span aria-hidden="true" style={{ width: 5, height: 5, backgroundColor: 'var(--color-accent)', display: 'inline-block' }} />
@@ -357,14 +357,14 @@ export default function Nav({ onMenuOpen }) {
                     aria-label="Open navigation menu"
                     style={{
                       fontFamily: '"Play", sans-serif', fontSize: 11, letterSpacing: '0.14em',
-                      border: '1px solid rgba(255,255,255,0.2)', background: 'transparent',
+                      border: '1px solid rgba(245,245,243,0.2)', background: 'transparent',
                       color: 'var(--color-fg)', padding: '8px 16px', cursor: 'pointer',
                       clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
                       transition: 'border-color 0.2s, color 0.2s',
                       minHeight: 44, display: 'flex', alignItems: 'center',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(245,245,243,0.2)'; e.currentTarget.style.color = 'var(--color-fg)'; }}
                   >
                     <ScrambleText duration={260}>{t.nav.menu}</ScrambleText>
                   </button>
@@ -382,11 +382,11 @@ export default function Nav({ onMenuOpen }) {
               key="pill"
               className="pointer-events-none"
               style={{ position: 'relative', marginTop: 10 }}
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92, filter: 'blur(5px)' }}
-              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
               exit={shouldReduceMotion
                 ? { opacity: 0, transition: { duration: 0.1 } }
-                : { opacity: 0, scale: 0.95, y: -8, filter: 'blur(4px)', transition: { duration: 0.13, ease: [0.4, 0, 1, 1] } }}
+                : { opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.13, ease: [0.4, 0, 1, 1] } }}
               transition={shouldReduceMotion
                 ? { duration: 0.15 }
                 : { duration: 0.26, ease: EASE_OUT }}
@@ -468,7 +468,7 @@ export default function Nav({ onMenuOpen }) {
                     backdropFilter: 'blur(80px) saturate(120%) brightness(0.65)',
                     WebkitBackdropFilter: 'blur(80px) saturate(120%) brightness(0.65)',
                     border: 'none',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(245,245,243,0.07), inset 0 -1px 0 rgba(0,0,0,0.2)',
                     overflow: 'hidden',
                   }}
                 >
@@ -596,3 +596,4 @@ export default function Nav({ onMenuOpen }) {
     </>
   );
 }
+

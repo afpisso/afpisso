@@ -2,7 +2,7 @@ import { Component, useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig, animate } from 'framer-motion';
 import './index.css';
-import { LangProvider } from './contexts/LangContext';
+import { LangProvider, useLang } from './contexts/LangContext';
 import { LenisProvider, useLenis } from './contexts/LenisContext';
 import { HuntProvider } from './contexts/HuntContext';
 import { SignalAudioProvider } from './contexts/SignalAudioContext';
@@ -15,7 +15,6 @@ import CaseFiles from './components/CaseFiles';
 import Footer from './components/Footer';
 import MenuOverlay from './components/MenuOverlay';
 import PageTransitionOverlay from './components/PageTransitionOverlay';
-import StatsStrip from './components/StatsStrip';
 import HomeGeometryLayer from './components/HomeGeometryLayer';
 
 // Below-fold homepage sections — deferred until after hero paint
@@ -78,7 +77,7 @@ class LabErrorBoundary extends Component {
         background: '#080808',
         color: '#f5f5f3',
         padding: '96px 24px',
-        fontFamily: '"Play", monospace',
+        fontFamily: '"Play", sans-serif',
       }}>
         <div style={{
           maxWidth: 820,
@@ -110,7 +109,7 @@ function LabRoute({ onMenuOpen }) {
           color: 'var(--color-accent)',
           display: 'grid',
           placeItems: 'center',
-          fontFamily: '"Play", monospace',
+          fontFamily: '"Play", sans-serif',
           fontSize: 11,
           letterSpacing: '0.24em',
           textTransform: 'uppercase',
@@ -164,6 +163,15 @@ function getActiveMenuSection(location) {
   return 'HOME';
 }
 
+// A1: sync <html lang> with language context so screen readers announce the correct language
+function LangSync() {
+  const { lang } = useLang();
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+  return null;
+}
+
 // ── AppRoutes ──────────────────────────────────────────────────────────────────
 function AppRoutes() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -172,7 +180,7 @@ function AppRoutes() {
   const flashRef = useRef(null);
   const activeMenuSection = getActiveMenuSection(location);
 
-  // On route change: close menu + scroll to top + red micro-flash
+  // On route change: close menu + scroll to top + red micro-flash + focus main
   useEffect(() => {
     setMenuOpen(false);
     // Use Lenis instant scroll when available, fallback to native
@@ -190,6 +198,12 @@ function AppRoutes() {
         { duration: 0.28, ease: [0.16, 1, 0.3, 1], times: [0, 0.28, 1] },
       );
     }
+    // Move focus to main content so keyboard/screen-reader users land at the new page
+    const main = document.getElementById('main-content');
+    if (main) {
+      main.setAttribute('tabindex', '-1');
+      main.focus({ preventScroll: true });
+    }
   }, [location.pathname, lenisRef]);
 
   useEffect(() => {
@@ -204,6 +218,7 @@ function AppRoutes() {
 
   return (
     <>
+      <LangSync />
       <a href="#main-content" className="skip-to-content">Skip to content</a>
 
       <Suspense fallback={<PageFallback />}>

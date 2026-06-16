@@ -4,7 +4,6 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { fieldNotes } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
-import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
 import SignalTrigger from '../components/SignalTrigger';
@@ -45,7 +44,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
           padding:         0,
           position:        'relative',
           overflow:        'hidden',
-          backgroundColor: hov ? 'rgba(255,37,64,0.022)' : 'var(--color-bg)',
+          backgroundColor: hov ? 'rgba(255,37,64,0.05)' : 'var(--color-bg)',
           borderTop:       `2px solid ${hov ? 'var(--color-accent)' : 'transparent'}`,
           transition:      'background-color 180ms ease-out, border-color 200ms ease-out',
           textDecoration:  'none',
@@ -106,7 +105,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
         {/* Type + category label */}
         <div
           style={{
-            fontFamily:    '"JetBrains Mono", monospace',
+            fontFamily:    '"Play", sans-serif',
             fontSize:      '10px',
             letterSpacing: '0.13em',
             textTransform: 'uppercase',
@@ -143,7 +142,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
         {/* Summary */}
         <p
           style={{
-            fontFamily:          '"JetBrains Mono", monospace',
+            fontFamily:          '"Play", sans-serif',
             fontSize:            '11px',
             lineHeight:          1.82,
             color:                hov ? 'var(--color-fg-dim)' : 'var(--color-fg-mute)',
@@ -170,7 +169,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
         >
           <div
             style={{
-              fontFamily:    '"JetBrains Mono", monospace',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -183,7 +182,7 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
           </div>
           <div
             style={{
-              fontFamily:    '"JetBrains Mono", monospace',
+              fontFamily:    '"Play", sans-serif',
               fontSize:      '9px',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -264,7 +263,7 @@ export default function NotesPage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
-      <main>
+      <main id="main-content">
 
         {/* ── Page hero ──────────────────────────────────────────────────── */}
         <section
@@ -278,7 +277,7 @@ export default function NotesPage({ onMenuOpen }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, ease: EASE_OUT }}
             >
-              <SectionTag label={t.fieldNotes.label} page="004" />
+              <SectionTag label={t.fieldNotes.label} page="003" />
             </m.div>
             <m.h1
               className="uppercase"
@@ -294,14 +293,14 @@ export default function NotesPage({ onMenuOpen }) {
               transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.05 }}
             >
               {t.fieldNotes.headline.split(' ').slice(0, -1).join(' ')}<br />
-              <GlitchStrokeText stroke="1.5px rgba(245,245,243,0.5)">
+              <span style={{ WebkitTextStroke: '1.5px rgba(245,245,243,0.5)', color: 'transparent' }}>
                 {t.fieldNotes.headline.split(' ').slice(-1)}
-              </GlitchStrokeText>
+              </span>
             </m.h1>
             <m.p
               className="mt-6"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Play", sans-serif',
                 fontSize:   '12px',
                 color:      'var(--color-fg-dim)',
                 lineHeight: 1.85,
@@ -362,7 +361,7 @@ export default function NotesPage({ onMenuOpen }) {
                 >
                   <span
                     style={{
-                      fontFamily:    '"JetBrains Mono", monospace',
+                      fontFamily:    '"Play", sans-serif',
                       fontSize:      '10px',
                       letterSpacing: '0.16em',
                       textTransform: 'uppercase',
@@ -373,7 +372,7 @@ export default function NotesPage({ onMenuOpen }) {
                   </span>
                   <span
                     style={{
-                      fontFamily:    '"JetBrains Mono", monospace',
+                      fontFamily:    '"Play", sans-serif',
                       fontSize:      '10px',
                       letterSpacing: '0.12em',
                       textTransform: 'uppercase',
@@ -387,7 +386,7 @@ export default function NotesPage({ onMenuOpen }) {
                       display:       'flex',
                       alignItems:    'center',
                       gap:           '0.35rem',
-                      fontFamily:    '"JetBrains Mono", monospace',
+                      fontFamily:    '"Play", sans-serif',
                       fontSize:      '10px',
                       letterSpacing: '0.12em',
                       textTransform: 'uppercase',
@@ -403,7 +402,7 @@ export default function NotesPage({ onMenuOpen }) {
                 <h2
                   style={{
                     fontFamily:   '"Bebas Neue", sans-serif',
-                    fontSize:     'clamp(2.8rem, 8vw, 7.5rem)',
+                    fontSize:     'clamp(2.8rem, 8vw, 6.5rem)',
                     lineHeight:   0.92,
                     letterSpacing:'0.015em',
                     color:        'var(--color-fg)',
@@ -419,7 +418,7 @@ export default function NotesPage({ onMenuOpen }) {
                 >
                   <p
                     style={{
-                      fontFamily: '"JetBrains Mono", monospace',
+                      fontFamily: '"Play", sans-serif',
                       fontSize:   '12px',
                       lineHeight: 1.9,
                       color:      'var(--color-fg-dim)',
@@ -433,7 +432,7 @@ export default function NotesPage({ onMenuOpen }) {
                   >
                     <div
                       style={{
-                        fontFamily:    '"JetBrains Mono", monospace',
+                        fontFamily:    '"Play", sans-serif',
                         fontSize:      '10px',
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -103,7 +103,7 @@ function Callout({ text }) {
         lineHeight: 1.85,
         color: 'rgba(245,245,243,0.85)',
         margin: 0,
-        fontStyle: 'italic',
+        opacity: 0.9,
       }}>
         {text}
       </p>
@@ -146,6 +146,7 @@ export default function NotePage({ onMenuOpen }) {
   const { slug }    = useParams();
   const { t, lang } = useLang();
   const np = t.notePage;
+  const [emailSent, setEmailSent] = useState(false);
 
   const meta    = fieldNotes.find((n) => n.slug === slug);
   const article = noteArticles?.[slug];
@@ -224,7 +225,7 @@ export default function NotePage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
-      <main>
+      <main id="main-content">
 
         {/* ── Hero ─────────────────────────────────────────── */}
         <section className="pt-40 pb-16 relative overflow-hidden" style={{ borderBottom: '1px solid var(--color-rule)' }}>
@@ -394,7 +395,7 @@ export default function NotePage({ onMenuOpen }) {
                           <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
                             {nextNote.id}
                           </span>
-                          <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '17px', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>
+                          <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(22px, 1.8vw, 28px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>
                             {lang === 'es' && nextNote.titleEs ? nextNote.titleEs : nextNote.title}
                           </p>
                         </div>
@@ -427,52 +428,59 @@ export default function NotePage({ onMenuOpen }) {
               <p style={{ fontFamily: '"Play", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)', marginBottom: '20px', lineHeight: 1.7 }}>
                 {np.subscribeBody}
               </p>
-              <form
-                onSubmit={e => { e.preventDefault(); const v = e.target.email.value; if (v) { window.open(`mailto:andresfe@byandresfe.com?subject=Subscribe%20Field%20Notes&body=${encodeURIComponent(v)}`, '_blank'); } }}
-                style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}
-              >
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder={np.subscribePlaceholder}
-                  style={{
-                    flex: '1 1 200px',
-                    fontFamily: '"Play", sans-serif',
-                    fontSize: '12px',
-                    padding: '10px 14px',
-                    backgroundColor: 'rgba(255,255,255,0.04)',
-                    border: '1px solid var(--color-rule)',
-                    color: 'var(--color-fg)',
-                    outline: 'none',
-                    letterSpacing: '0.04em',
-                    minHeight: '40px',
-                  }}
-                  onFocus={e => e.target.style.borderColor = 'var(--color-accent-40)'}
-                  onBlur={e => e.target.style.borderColor = 'var(--color-rule)'}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    fontFamily: '"Play", sans-serif',
-                    fontSize: '10px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    padding: '10px 20px',
-                    backgroundColor: 'var(--color-accent)',
-                    color: '#0a0a0a',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontWeight: 700,
-                    clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+              {emailSent ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0' }}>
+                  <span style={{ color: 'var(--color-accent)', fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>// TRANSMITTED</span>
+                  <span style={{ fontFamily: '"Play", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)' }}>Te responderemos pronto.</span>
+                </div>
+              ) : (
+                <form
+                  onSubmit={e => { e.preventDefault(); const v = e.target.email.value; if (v) { window.open(`mailto:andresfe@byandresfe.com?subject=Subscribe%20Field%20Notes&body=${encodeURIComponent(v)}`, '_blank'); setEmailSent(true); } }}
+                  style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}
                 >
-                  {np.subscribeCta}
-                </button>
-              </form>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder={np.subscribePlaceholder}
+                    style={{
+                      flex: '1 1 200px',
+                      fontFamily: '"Play", sans-serif',
+                      fontSize: '12px',
+                      padding: '10px 14px',
+                      backgroundColor: 'rgba(255,255,255,0.04)',
+                      border: '1px solid var(--color-rule)',
+                      color: 'var(--color-fg)',
+                      outline: 'none',
+                      letterSpacing: '0.04em',
+                      minHeight: '40px',
+                    }}
+                    onFocus={e => e.target.style.borderColor = 'var(--color-accent-40)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--color-rule)'}
+                  />
+                  <button
+                    type="submit"
+                    style={{
+                      fontFamily: '"Play", sans-serif',
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      padding: '10px 20px',
+                      backgroundColor: 'var(--color-accent)',
+                      color: '#0a0a0a',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontWeight: 700,
+                      clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc1f34'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                  >
+                    {np.subscribeCta}
+                  </button>
+                </form>
+              )}
             </m.div>
           </div>
         </section>

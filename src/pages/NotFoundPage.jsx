@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+﻿import { useEffect, useRef, useState, useCallback } from 'react';
 import { useScramble } from '../hooks/useScramble';
 import { m, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
@@ -116,7 +116,7 @@ function LogLine({ prefix, text, delay, reducedMotion }) {
           style={{
             display:       'flex',
             gap:           '10px',
-            fontFamily:    '"Play", monospace',
+            fontFamily:    '"Play", sans-serif',
             fontSize:      '11px',
             lineHeight:    1.7,
             letterSpacing: '0.06em',
@@ -155,7 +155,7 @@ function CCTVTimestamp() {
         position:      'absolute',
         top:           10,
         left:          12,
-        fontFamily:    '"Play", monospace',
+        fontFamily:    '"Play", sans-serif',
         fontSize:      '9px',
         letterSpacing: '0.12em',
         color:         'var(--color-fg-45)',
@@ -379,7 +379,7 @@ function VideoPanel({ reducedMotion }) {
           position:      'absolute',
           bottom:        10,
           right:         12,
-          fontFamily:    '"Play", monospace',
+          fontFamily:    '"Play", sans-serif',
           fontSize:      '9px',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
@@ -483,7 +483,7 @@ export default function NotFoundPage({ onMenuOpen }) {
               <m.p
                 variants={itemVariants}
                 style={{
-                  fontFamily:    '"Play", monospace',
+                  fontFamily:    '"Play", sans-serif',
                   fontSize:      '13px',
                   lineHeight:    1.65,
                   letterSpacing: '0.03em',
@@ -521,7 +521,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                 ))}
                 <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center' }}>
                   <span style={{
-                    fontFamily:    '"Play", monospace',
+                    fontFamily:    '"Play", sans-serif',
                     fontSize:      '11px',
                     letterSpacing: '0.06em',
                     color:         'var(--color-accent)',
@@ -560,7 +560,7 @@ export default function NotFoundPage({ onMenuOpen }) {
               >
                 {/* P3 fix: use tokens */}
                 <span style={{
-                  fontFamily:    '"Play", monospace',
+                  fontFamily:    '"Play", sans-serif',
                   fontSize:      '10px',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
@@ -569,7 +569,7 @@ export default function NotFoundPage({ onMenuOpen }) {
                   CCTV — SECTOR 404
                 </span>
                 <span style={{
-                  fontFamily:    '"Play", monospace',
+                  fontFamily:    '"Play", sans-serif',
                   fontSize:      '10px',
                   letterSpacing: '0.14em',
                   color:         'var(--color-fg-18)',

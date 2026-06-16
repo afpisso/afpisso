@@ -18,7 +18,7 @@
  *   - Touch targets ≥ 44px (minHeight on buttons)
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLenis } from '../contexts/LenisContext';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
@@ -107,6 +107,7 @@ function useScrollTo() {
 // ═══════════════════════════════════════════════════════════════════════════════
 function GhostRail({ sections, activeId, scrollTo }) {
   const [panelOpen, setPanelOpen] = useState(false);
+  const closeTimer = useRef(null);
   const shouldReduce = useReducedMotion();
 
   const activeIndex = Math.max(0, sections.findIndex(s => s.id === activeId));
@@ -125,8 +126,8 @@ function GhostRail({ sections, activeId, scrollTo }) {
         alignItems: 'center',
         gap: 0,
       }}
-      onMouseEnter={() => setPanelOpen(true)}
-      onMouseLeave={() => setPanelOpen(false)}
+      onMouseEnter={() => { clearTimeout(closeTimer.current); setPanelOpen(true); }}
+      onMouseLeave={() => { closeTimer.current = setTimeout(() => setPanelOpen(false), 80); }}
     >
       {/* ── Dot rail (always visible) ── */}
       <div
@@ -221,9 +222,9 @@ function GhostRail({ sections, activeId, scrollTo }) {
         {panelOpen && (
           <m.div
             key="ghost-panel"
-            initial={{ opacity: 0, x: 16, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, x: 10, filter: 'blur(3px)', transition: { duration: 0.15, ease: EASE_IN } }}
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10, transition: { duration: 0.15, ease: EASE_IN } }}
             transition={{ duration: 0.22, ease: EASE_OUT }}
             style={{
               ...GLASS,
@@ -383,9 +384,9 @@ function SectionStamp({ sections, activeId, scrollTo }) {
           <m.nav
             key="stamp-grid"
             aria-label="Case sections — expanded grid"
-            initial={{ opacity: 0, y: 12, scale: 0.96, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: 6, scale: 0.97, filter: 'blur(3px)', transition: { duration: 0.15, ease: EASE_IN } }}
+            initial={{ opacity: 0, y: 12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.97, transition: { duration: 0.15, ease: EASE_IN } }}
             transition={{ duration: 0.22, ease: EASE_OUT }}
             style={{
               ...GLASS,
@@ -429,7 +430,11 @@ function SectionStamp({ sections, activeId, scrollTo }) {
                   fontFamily: MONO,
                   fontSize: '10px',
                   color: MUTE,
-                  padding: '2px 4px',
+                  minWidth: 36,
+                  minHeight: 36,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   lineHeight: 1,
                 }}
               >

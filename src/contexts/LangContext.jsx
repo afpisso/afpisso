@@ -110,7 +110,9 @@ const translations = {
       project: 'project',
       projects: 'projects',
       noProjects: 'No projects match this filter.',
-      filterLabels: { All: 'All', Games: 'Games', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Legacy' },
+      filterLabels: { All: 'All', Games: 'Games', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Archive' },
+      filterNav: 'Filter projects',
+      casesRegionLabel: 'Case studies',
     },
     systemsLab: {
       label: 'Systems Lab',
@@ -497,7 +499,9 @@ const translations = {
       project: 'proyecto',
       projects: 'proyectos',
       noProjects: 'Ningún proyecto coincide con este filtro.',
-      filterLabels: { All: 'Todos', Games: 'Juegos', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Legacy' },
+      filterLabels: { All: 'Todos', Games: 'Juegos', UEFN: 'UEFN', VR: 'VR', 'NDA-Safe': 'NDA-Safe', Legacy: 'Archivo' },
+      filterNav: 'Filtrar proyectos',
+      casesRegionLabel: 'Casos de estudio',
     },
     systemsLab: {
       label: 'Systems Lab',

@@ -108,7 +108,7 @@ export default function ClassifiedPage({ onMenuOpen }) {
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
 
-      <main>
+      <main id="main-content">
         {/* ── Header ── */}
         <m.div
           className="max-w-[900px] mx-auto px-6 pt-32 pb-16"

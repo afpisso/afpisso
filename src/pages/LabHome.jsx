@@ -22,6 +22,7 @@ import {
 } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import HeroStatementPin from '../components/HeroStatementPin'
+import AppleTVScroll from '../components/AppleTVScroll'
 import { cases, CASE_ORDER } from '../data/cases'
 import { useSignalAudio } from '../contexts/SignalAudioContext'
 
@@ -139,7 +140,7 @@ function SideNav({ active, cases: list, onHover, visible }) {
               animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : 8 }}
               transition={{ duration: 0.12, ease: EASE_OUT }} // fast, intentional
               style={{
-                fontFamily: "'Play', monospace",
+                fontFamily: "'Play', sans-serif",
                 fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
                 color: isActive ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                 fontWeight: isActive ? 500 : 400,
@@ -237,7 +238,7 @@ function CaseShowcase() {
         }}>
           {/* counter */}
           <div style={{
-            fontFamily: "'Play', monospace",
+            fontFamily: "'Play', sans-serif",
             fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
             color: 'var(--color-fg-mute)', marginBottom: 24,
             display: 'flex', alignItems: 'center', gap: 8,
@@ -257,9 +258,9 @@ function CaseShowcase() {
           <AnimatePresence mode="wait">
             <m.div
               key={c.slug}
-              initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-              animate={{ opacity: 1, y: 0,  filter: 'blur(0px)' }}
-              exit={{    opacity: 0, y: -16, filter: 'blur(6px)',
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{    opacity: 0, y: -16,
                 transition: { duration: 0.22, ease: EASE_IN } }}
               transition={{ duration: 0.5, ease: EASE_OUT }}
             >
@@ -273,7 +274,7 @@ function CaseShowcase() {
               </h2>
 
               <p style={{
-                fontFamily: "'Play', monospace",
+                fontFamily: "'Play', sans-serif",
                 fontSize: 'clamp(11px, 1vw, 13px)', lineHeight: 1.75,
                 color: 'var(--color-fg-dim)', maxWidth: '40ch', marginBottom: 28,
               }}>
@@ -284,7 +285,7 @@ function CaseShowcase() {
                 to={`/case/${c.slug}`}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,
-                  fontFamily: "'Play', monospace",
+                  fontFamily: "'Play', sans-serif",
                   fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase',
                   color: 'var(--color-fg-dim)',
                   textDecoration: 'none',
@@ -307,7 +308,7 @@ function CaseShowcase() {
             transition={{ duration: 0.4 }}
             style={{
               marginTop: 'auto', paddingTop: 32,
-              fontFamily: "'Play', monospace",
+              fontFamily: "'Play', sans-serif",
               fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
               color: 'var(--color-fg-mute)',
               display: 'flex', alignItems: 'center', gap: 8,
@@ -587,7 +588,7 @@ function FooterConnectItem({ label, handle, href }) {
           }}>{label}</span>
           <span style={{
             position: 'relative', zIndex: 1,
-            fontFamily: "'Play', monospace",
+            fontFamily: "'Play', sans-serif",
             fontSize: 'clamp(10px, 0.88vw, 13px)',
             fontWeight: 700,
             letterSpacing: '0.12em',
@@ -889,7 +890,7 @@ function CtaCloser() {
               }}
             >
               <m.div variants={navItem} style={{
-                fontFamily: "'Play', monospace", fontSize: '9px', letterSpacing: '0.28em',
+                fontFamily: "'Play', sans-serif", fontSize: '9px', letterSpacing: '0.28em',
                 textTransform: 'uppercase', color: 'var(--color-accent)',
                 marginBottom: 'clamp(16px, 2.4vh, 26px)', opacity: 0.75,
               }}>NAVIGATION</m.div>
@@ -971,7 +972,7 @@ function CtaCloser() {
               }}
             >
               <m.div variants={connectItem} style={{
-                fontFamily: "'Play', monospace", fontSize: '9px', letterSpacing: '0.28em',
+                fontFamily: "'Play', sans-serif", fontSize: '9px', letterSpacing: '0.28em',
                 textTransform: 'uppercase', color: 'var(--color-accent)',
                 marginBottom: 'clamp(20px, 3vh, 32px)', opacity: 0.8, alignSelf: 'flex-end',
               }}>CONNECT</m.div>
@@ -1016,7 +1017,7 @@ function CtaCloser() {
                       : <span style={{ width: 1, height: 10, background: 'rgba(255,37,64,0.25)', display: 'inline-block', flexShrink: 0 }} />
                   )}
                   <span style={{
-                    fontFamily: "'Play', monospace",
+                    fontFamily: "'Play', sans-serif",
                     fontSize: 'clamp(8px, 0.62vw, 10px)', letterSpacing: '0.14em',
                     textTransform: 'uppercase', color: 'rgba(240,238,234,0.55)', whiteSpace: 'nowrap',
                   }}>{skill}</span>
@@ -1054,14 +1055,14 @@ function CtaCloser() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8,
         }}
       >
-        <span style={{ fontFamily: "'Play', monospace", fontSize: '10px', letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
+        <span style={{ fontFamily: "'Play', sans-serif", fontSize: '10px', letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
           © {year} Andres Pisso. All rights reserved
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           {['PRIVACY POLICY', 'TERMS'].map((item, i) => (
             <span key={item} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               {i > 0 && <span style={{ color: 'rgba(255,37,64,0.25)', fontSize: 12 }}>|</span>}
-              <span style={{ fontFamily: "'Play', monospace", fontSize: '10px', letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)', cursor: 'pointer', transition: 'color 0.15s' }}
+              <span style={{ fontFamily: "'Play', sans-serif", fontSize: '10px', letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)', cursor: 'pointer', transition: 'color 0.15s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'rgba(240,238,234,0.7)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,238,234,0.3)')}
               >{item}</span>
@@ -1089,6 +1090,7 @@ export default function LabHome() {
   return (
     <div style={{ background: 'var(--color-bg)', position: 'relative', zIndex: 1 }}>
       <HeroStatementPin />
+      <AppleTVScroll />
       <CaseShowcase />
       <CtaCloser />
     </div>

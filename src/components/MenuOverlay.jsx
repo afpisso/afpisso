@@ -75,7 +75,7 @@ const MENU_ITEMS = [
   { en: 'HOME',    es: 'INICIO',   page: '000', href: '/',        sub_en: 'Back to home base',               sub_es: 'Volver al inicio'               },
   { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019–2026',   sub_es: 'Proyectos selectos, 2019–2026'  },
   { en: 'ABOUT',   es: 'SOBRE MÍ', page: '002', href: '/about',   sub_en: 'Biography & process',             sub_es: 'Biografía y proceso'            },
-  { en: 'JOURNAL', es: 'DIARIO',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
+  { en: 'FIELD NOTES', es: 'NOTAS',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
   { en: 'SPEAKING', es: 'SPEAKING', page: '004', href: '/speaking',  sub_en: 'Colombia 5.0 · Game UI Systems workshop',    sub_es: 'Colombia 5.0 · Taller Game UI Systems' },
   { en: 'CONTACT',  es: 'CONTACTO',  page: '005', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
 ];
@@ -401,10 +401,11 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
   const navigate = useNavigate();
   const lenisRef = useLenis();
   const narrow = useNarrow(600);
-  const accent = '#ff2540';
-  const fg     = '#f5f5f3';
-  const bg     = '#0a0a0a';
-  const rule   = 'rgba(255,255,255,0.11)';
+  const accent    = 'var(--color-accent)';
+  const accentHex = '#ff2540';
+  const fg        = 'var(--color-fg)';
+  const bg        = 'var(--color-bg)';
+  const rule      = 'var(--color-rule)';
 
   const activeIdxFromProp = Math.max(0, MENU_ITEMS.findIndex(it => it.en === activeSection));
   const [activeIdx, setActiveIdx] = useState(activeIdxFromProp);
@@ -685,7 +686,7 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
                     transition: 'border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                 >
-                  <SocialIcon type={s.icon} color={accent} />
+                  <SocialIcon type={s.icon} color={accentHex} />
                 </span>
                 <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
                   <span style={{ color: fg, fontSize: 12, fontWeight: 700, letterSpacing: '0.13em' }}>{s.label}</span>
@@ -802,7 +803,8 @@ function Menu({ open, onClose, activeSection = 'WORK' }) {
 export default function MenuOverlay({ open, onClose, activeSection }) {
   const { lang } = useLang();
   const lenisRef = useLenis();
-  const accent = '#ff2540';
+  const accent = 'var(--color-accent)';
+  const isTouch = useRef(typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches);
   const [stage, setStage] = useState(0);
 
   // Stage machine
@@ -869,7 +871,7 @@ export default function MenuOverlay({ open, onClose, activeSection }) {
       {/* backdrop-filter skipped on touch: compositing cost per frame is too high on mobile */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        backdropFilter: bgVisible && !window.matchMedia('(hover: none)').matches ? 'blur(10px) brightness(0.5) saturate(0.7)' : 'none',
+        backdropFilter: bgVisible && !isTouch.current ? 'blur(10px) brightness(0.5) saturate(0.7)' : 'none',
         background: bgVisible ? 'rgba(0,0,0,0.72)' : 'transparent',
         transition: 'background 0.25s ease-out',
         pointerEvents: 'none',

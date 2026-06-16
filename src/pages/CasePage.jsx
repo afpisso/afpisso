@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+﻿import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { usePageTransition } from '../contexts/TransitionContext';
 import { cases } from '../data/cases';
@@ -7,6 +7,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import CaseRail from '../components/CaseRail';
 import CaseTOC from '../components/CaseTOC';
+import CaseScrollPath from '../components/CaseScrollPath';
 import CaseNavRail from '../components/CaseNavRail';
 import { useLang } from '../contexts/LangContext';
 import { useLenis } from '../contexts/LenisContext';
@@ -63,8 +64,8 @@ function HeroScrollReveal({ caseData, t, lang }) {
   const titleDelay = (line1.length + (line2?.length ?? 0)) * 0.028;
 
   const charVariants = {
-    hidden: { opacity: 0, filter: 'blur(10px)', y: 18 },
-    visible: { opacity: 1, filter: 'blur(0px)', y: 0 },
+    hidden: { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0 },
   };
 
   // Renders text as char-level m.spans grouped inside white-space:nowrap word wrappers
@@ -221,7 +222,7 @@ function HeroScrollReveal({ caseData, t, lang }) {
         {/* scroll cue — pulsing line at bottom-center */}
         {!shouldReduce && (
           <div style={{ position: 'absolute', bottom: 22, left: '50%', transform: 'translateX(-50%)', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, pointerEvents: 'none' }}>
-            <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>scroll</span>
+            <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.22em', color: 'rgba(245,245,243,0.2)', textTransform: 'uppercase' }}>scroll</span>
             <m.div
               style={{ width: 1, height: 28, backgroundColor: ACCENT, transformOrigin: 'top' }}
               animate={{ scaleY: [0, 1, 1, 0], opacity: [0, 0.7, 0.7, 0] }}
@@ -401,7 +402,7 @@ function TrailerPlayer({ src, poster, title, label }) {
               </m.div>
               <span style={{
                 fontFamily: MONO, fontSize: '9px', letterSpacing: '0.22em',
-                textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)',
+                textTransform: 'uppercase', color: 'rgba(245,245,243,0.45)',
               }}>
                 Watch trailer
               </span>
@@ -498,7 +499,7 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt, fit = 'c
         style={{
           aspectRatio: aspect,
           border: `1px solid ${hovered ? 'rgba(255,37,64,0.35)' : RULE}`,
-          backgroundColor: 'rgba(255,255,255,0.02)',
+          backgroundColor: 'rgba(245,245,243,0.02)',
           position: 'relative', overflow: 'hidden',
           cursor: 'zoom-in',
           transition: 'border-color 0.2s ease',
@@ -521,7 +522,7 @@ function ImagePlaceholder({ label = 'Image', aspect = '16/9', src, alt, fit = 'c
         </m.div>
 
         {/* Zoom hint */}
-        <m.div aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', pointerEvents: 'none' }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+        <m.div aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 12, zIndex: 5, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,245,243,0.5)', pointerEvents: 'none' }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
           [ zoom ]
         </m.div>
 
@@ -610,7 +611,7 @@ function GalleryHero({ src, caseId, title, onOpen }) {
         clipPath: galleryChamfer(14),
         boxShadow: hovered
           ? 'inset 0 0 0 1px rgba(255,37,64,0.45)'
-          : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+          : 'inset 0 0 0 1px rgba(245,245,243,0.07)',
         transition: 'box-shadow 0.22s ease',
       }}
       initial={revealInitial}
@@ -657,7 +658,7 @@ function GalleryHero({ src, caseId, title, onOpen }) {
       </div>
 
       {/* Screen label — top left */}
-      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', top: 10, left: 12, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(245,245,243,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
         SCR_01
       </div>
 
@@ -666,11 +667,9 @@ function GalleryHero({ src, caseId, title, onOpen }) {
         position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 5,
         padding: '18px 12px 9px',
         background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
         pointerEvents: 'none',
       }}>
-        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
-        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase' }}>16:9</span>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(245,245,243,0.3)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
       </div>
 
       {/* Corner brackets — always visible at low opacity, red on hover */}
@@ -707,7 +706,7 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
         clipPath: galleryChamfer(8),
         boxShadow: hovered
           ? 'inset 0 0 0 1px rgba(255,37,64,0.4)'
-          : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+          : 'inset 0 0 0 1px rgba(245,245,243,0.07)',
         transition: 'box-shadow 0.22s ease',
       }}
       initial={revealInitial}
@@ -740,7 +739,7 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
       <div aria-hidden="true" style={SCANLINES} />
 
       {/* Screen label — top left */}
-      <div style={{ position: 'absolute', top: 8, left: 10, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', top: 8, left: 10, zIndex: 6, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(245,245,243,0.38)', textTransform: 'uppercase', pointerEvents: 'none' }}>
         SCR_{num}
       </div>
 
@@ -749,11 +748,9 @@ function GalleryTile({ src, index, caseId, title, tierDelay = 0, onOpen }) {
         position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 5,
         padding: '14px 10px 7px',
         background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
         pointerEvents: 'none',
       }}>
-        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
-        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase' }}>16:9</span>
+        <span style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.14em', color: 'rgba(245,245,243,0.25)', textTransform: 'uppercase' }}>{caseId?.toUpperCase()}</span>
       </div>
 
       {/* Corner brackets — always visible at low opacity, red on hover */}
@@ -794,7 +791,7 @@ function FlowDiagramBlock({ src, alt, caption }) {
             // Player flow
           </span>
         </div>
-        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase' }}>
+        <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(245,245,243,0.28)', textTransform: 'uppercase' }}>
           click to expand
         </span>
       </div>
@@ -826,7 +823,7 @@ function FlowDiagramBlock({ src, alt, caption }) {
         {/* Zoom icon hint */}
         <m.div
           aria-hidden="true"
-          style={{ position: 'absolute', bottom: 12, right: 14, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', zIndex: 5, pointerEvents: 'none' }}
+          style={{ position: 'absolute', bottom: 12, right: 14, fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,245,243,0.5)', zIndex: 5, pointerEvents: 'none' }}
           animate={{ opacity: hovered ? 1 : 0 }}
           transition={{ duration: 0.18 }}
         >
@@ -1043,7 +1040,7 @@ function QuickFacts({ facts }) {
   return (
     <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {entries.map(([key, val]) => (
-        <div key={key} className="p-4" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
+        <div key={key} className="p-4" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(245,245,243,0.01)' }}>
           <dt className="sys-label mb-1 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</dt>
           <dd style={{ fontFamily: MONO, fontSize: '12px', color: FG, letterSpacing: '0.02em' }}>
             {Array.isArray(val) ? val.join(', ') : val}
@@ -1070,6 +1067,7 @@ export default function CasePage({ onMenuOpen }) {
     description: caseData
       ? (lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : caseData.description)
       : undefined,
+    themeColor: '#ff2540',
   });
 
   // Inject BreadcrumbList + CreativeWork schema for this case
@@ -1192,8 +1190,10 @@ export default function CasePage({ onMenuOpen }) {
       <Nav onMenuOpen={onMenuOpen} />
       {/* Ghost Rail (tablet) + Section Stamp (mobile) — hidden on xl+ where CaseTOC takes over */}
       <CaseNavRail sections={tocSections} />
+      {/* Ambient scroll progress path — desktop only, left edge */}
+      <CaseScrollPath sections={tocSections} />
 
-      <main>
+      <main id="main-content">
         <HeroScrollReveal caseData={caseData} t={t} lang={lang} />
 
         {/* Game trailer — only when trailerSrc is defined */}
@@ -1296,11 +1296,7 @@ export default function CasePage({ onMenuOpen }) {
                 <m.section
                   id="cs-summary"
                   className="py-14 mb-2"
-                  style={{
-                    borderBottom: `1px solid ${RULE}`,
-                    borderLeft: `2px solid ${ACCENT}`,
-                    paddingLeft: '1.5rem',
-                  }}
+                  style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
@@ -1310,7 +1306,7 @@ export default function CasePage({ onMenuOpen }) {
                     <div>
                       <SectionLabelPrimary>{t.casePage.sections.executiveSummary}</SectionLabelPrimary>
                     </div>
-                    <div>
+                    <div style={{ borderLeft: `2px solid ${ACCENT}`, paddingLeft: '1.5rem' }}>
                       {(lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline) && (
                         <PullQuote>{lang === 'es' && caseData.headlineEs ? caseData.headlineEs : caseData.headline}</PullQuote>
                       )}
@@ -1385,11 +1381,7 @@ export default function CasePage({ onMenuOpen }) {
                 <m.section
                   id="cs-challenge"
                   className="py-14 mb-2"
-                  style={{
-                    borderBottom: `1px solid ${RULE}`,
-                    borderLeft: `2px solid ${ACCENT}`,
-                    paddingLeft: '1.5rem',
-                  }}
+                  style={{ borderBottom: `1px solid ${RULE}` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
@@ -1399,7 +1391,7 @@ export default function CasePage({ onMenuOpen }) {
                     <div>
                       <SectionLabelPrimary>{t.casePage.sections.challenge}</SectionLabelPrimary>
                     </div>
-                    <div>
+                    <div style={{ borderLeft: `2px solid ${ACCENT}`, paddingLeft: '1.5rem' }}>
                   <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.challenge}</p>
                   {content?.challengeRisks?.length > 0 && (
                     <div className="mt-8">
@@ -1520,7 +1512,7 @@ export default function CasePage({ onMenuOpen }) {
                                     bottom: -17,
                                     left: 0,
                                     width: '1px',
-                                    backgroundColor: 'rgba(255,255,255,0.1)',
+                                    backgroundColor: 'rgba(245,245,243,0.1)',
                                   }}
                                 />
                               )}
@@ -1768,7 +1760,7 @@ export default function CasePage({ onMenuOpen }) {
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {content.deliverables.map((d, i) => (
                       <li key={i} className="flex gap-3 items-start py-2 border-b" style={{ borderColor: RULE }}>
-                        <span aria-hidden="true" style={{ color: ACCENT, flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>✓</span>
+                        <span aria-hidden="true" style={{ color: ACCENT, flexShrink: 0, fontFamily: MONO, fontSize: '12px', marginTop: '2px' }}>—</span>
                         <span style={{ fontFamily: MONO, fontSize: '12px', color: DIM, lineHeight: 1.6 }}>{d}</span>
                       </li>
                     ))}
@@ -1782,10 +1774,9 @@ export default function CasePage({ onMenuOpen }) {
                   id="cs-outcome"
                   className="py-14 mb-2"
                   style={{
+                    borderTop: `2px solid ${ACCENT}`,
                     borderBottom: `1px solid ${RULE}`,
-                    backgroundColor: 'rgba(255,37,64,0.022)',
-                    marginLeft: '-1.5rem',
-                    paddingLeft: '1.5rem',
+                    backgroundColor: 'rgba(255,37,64,0.025)',
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1805,8 +1796,6 @@ export default function CasePage({ onMenuOpen }) {
                   style={{
                     borderBottom: `1px solid ${RULE}`,
                     backgroundColor: 'rgba(255,37,64,0.015)',
-                    marginLeft: '-1.5rem',
-                    paddingLeft: '1.5rem',
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -2049,7 +2038,7 @@ export default function CasePage({ onMenuOpen }) {
                     <div
                       style={{
                         fontFamily: BEBAS,
-                        fontSize: 'clamp(1rem, 1.4vw, 1.2rem)',
+                        fontSize: 'clamp(18px, 1.4vw, 22px)',
                         letterSpacing: '0.02em',
                         lineHeight: 1.1,
                         color: 'rgba(240,238,234,0.75)',
@@ -2073,7 +2062,7 @@ export default function CasePage({ onMenuOpen }) {
                   .filter(Boolean);
                 if (!related.length) return null;
                 return (
-                  <div className="mt-4 p-4" style={{ border: `1px solid ${RULE}`, backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                  <div className="mt-4" style={{ background: 'rgba(10,10,10,0.92)', border: '1px solid rgba(245,245,243,0.07)', boxShadow: '0 16px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(245,245,243,0.04)', clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))', padding: '1rem' }}>
                     <div className="sys-label mb-3" style={{ color: ACCENT }}>Related Field Notes</div>
                     <ul className="space-y-3">
                       {related.map(note => (
@@ -2102,6 +2091,37 @@ export default function CasePage({ onMenuOpen }) {
         </article>
       </main>
 
+      {/* Contact CTA — highest-intent users finishing a case have a direct path */}
+      <section className="max-w-[1400px] mx-auto px-6 py-20">
+        <div
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 py-10 px-10"
+          style={{ border: '1px solid var(--color-rule)' }}
+        >
+          <div>
+            <div className="sys-label mb-2" style={{ color: 'var(--color-accent)' }}>
+              {t.contact?.label ?? 'Signal Contact'}
+            </div>
+            <p style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', maxWidth: '52ch', lineHeight: 1.75 }}>
+              {t.casePage_cta?.body}
+            </p>
+          </div>
+          <a
+            href="mailto:hi@byandresfe.com"
+            className="flex-shrink-0 flex items-center gap-2 px-6 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"
+            style={{
+              fontFamily: '"Play", sans-serif',
+              border: '1px solid var(--color-accent)',
+              color: 'var(--color-accent)',
+              clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-bg)'; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--color-accent)'; }}
+          >
+            {t.contact?.cta ?? 'Send a signal'} →
+          </a>
+        </div>
+      </section>
+
       {/* Full-width case carousel — lives outside main so it bleeds edge-to-edge */}
       <CaseRail currentSlug={caseData.slug} />
 
@@ -2110,3 +2130,4 @@ export default function CasePage({ onMenuOpen }) {
     </div>
   );
 }
+

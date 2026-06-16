@@ -65,7 +65,7 @@ export default function ResumePage({ onMenuOpen }) {
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
       <div className="scan-line" aria-hidden="true" />
       <Nav onMenuOpen={onMenuOpen} />
-      <main>
+      <main id="main-content">
         <section className="pt-40 pb-28">
           <div className="max-w-[900px] mx-auto px-6">
             {/* Header */}

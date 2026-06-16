@@ -1,7 +1,7 @@
 import { usePageTransition } from '../contexts/TransitionContext';
 
 const ACCENT = '#ff2540';
-const MONO   = '"Play", monospace';
+const MONO   = '"Play", sans-serif';
 const BEBAS  = '"Bebas Neue", sans-serif';
 
 // ── Clip-path per phase ───────────────────────────────────────────────────────

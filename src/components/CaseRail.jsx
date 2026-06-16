@@ -130,7 +130,7 @@ function RailCard({ item, offset, onClickOffset, shouldReduce, navigate, isCurre
         rotateY: BASE_SPRING,
         scale:   TAP_SPRING,
         opacity: { duration: 0.32, ease: EASE_OUT },
-        filter:  { duration: 0.32, ease: EASE_OUT },
+        filter:  shouldReduce ? { duration: 0 } : { duration: 0.32, ease: EASE_OUT },
       }}
       onClick={() => {
         if (isCenter) {
@@ -549,9 +549,9 @@ export default function CaseRail({ currentSlug }) {
             <AnimatePresence mode="wait">
               <m.div
                 key={activeItem.slug}
-                initial={{ opacity: 0, y: 8,  filter: 'blur(5px)' }}
-                animate={{ opacity: 1, y: 0,  filter: 'blur(0px)' }}
-                exit={  { opacity: 0, y: -6,  filter: 'blur(5px)' }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={  { opacity: 0, y: -6 }}
                 transition={{ duration: 0.24, ease: EASE_OUT }}
               >
                 {/* Role · Year */}

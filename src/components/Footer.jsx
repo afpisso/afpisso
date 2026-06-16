@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { m, useInView, useReducedMotion } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
@@ -406,7 +406,7 @@ function FooterConnectItem({ label, handle, href }) {
         style={{
           position: 'relative',
           zIndex: 1,
-          fontFamily: '"Play", monospace',
+          fontFamily: '"Play", sans-serif',
           fontSize: 'clamp(10px, 0.88vw, 13px)',
           fontWeight: 700,
           letterSpacing: '0.12em',
@@ -643,7 +643,7 @@ export default function Footer() {
             >
               <div
                 style={{
-                  fontFamily: '"Play", monospace',
+                  fontFamily: '"Play", sans-serif',
                   fontSize: 9,
                   letterSpacing: '0.28em',
                   textTransform: 'uppercase',
@@ -719,7 +719,7 @@ export default function Footer() {
             >
               <div
                 style={{
-                  fontFamily: '"Play", monospace',
+                  fontFamily: '"Play", sans-serif',
                   fontSize: 9,
                   letterSpacing: '0.28em',
                   textTransform: 'uppercase',
@@ -762,7 +762,7 @@ export default function Footer() {
                   {i > 0 && (i === 1 ? <PlusMarker /> : <span style={{ width: 1, height: 10, background: 'rgba(255,37,64,0.25)', display: 'inline-block', flexShrink: 0 }} />)}
                   <span
                     style={{
-                      fontFamily: '"Play", monospace',
+                      fontFamily: '"Play", sans-serif',
                       fontSize: 'clamp(8px, 0.62vw, 10px)',
                       letterSpacing: '0.14em',
                       textTransform: 'uppercase',
@@ -805,10 +805,10 @@ export default function Footer() {
           gap: 8,
         }}
       >
-        <span style={{ fontFamily: '"Play", monospace', fontSize: 10, letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
+        <span style={{ fontFamily: '"Play", sans-serif', fontSize: 10, letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
           © {year} Andres Pisso. {isEs ? 'Todos los derechos reservados' : 'All rights reserved'}
         </span>
-        <span style={{ fontFamily: '"Play", monospace', fontSize: 10, letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
+        <span style={{ fontFamily: '"Play", sans-serif', fontSize: 10, letterSpacing: '0.14em', color: 'rgba(240,238,234,0.3)' }}>
           byandresfe.com / Game UX / UI
         </span>
       </div>

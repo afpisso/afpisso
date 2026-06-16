@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { useLang } from '../contexts/LangContext';
 import SweepFill from './SweepFill';
 import { analytics } from '../utils/analytics';
@@ -8,18 +8,56 @@ const MONO  = '"Play", sans-serif';
 const BEBAS = '"Bebas Neue", sans-serif';
 const EASE  = [0.32, 0.72, 0, 1];
 
+const FOCUSABLE_SELECTORS = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function ContactOverlay({ open, onClose }) {
   const { t, lang } = useLang();
   const ct = t.contact;
   const co = t.contactOverlay;
-  const [emailHover, setEmailHover] = useState(false); // kept for SweepFill active state
+  const [emailHover, setEmailHover] = useState(false);
+  const panelRef = useRef(null);
+  const triggerRef = useRef(null);
 
+  // A4: Escape closes overlay
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
+
+  // A4: Focus first element when panel opens; restore trigger focus on close
+  useEffect(() => {
+    if (open) {
+      triggerRef.current = document.activeElement;
+      const timer = setTimeout(() => {
+        const focusable = panelRef.current?.querySelectorAll(FOCUSABLE_SELECTORS);
+        focusable?.[0]?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    } else {
+      triggerRef.current?.focus();
+    }
+  }, [open]);
+
+  // A4: Tab/Shift+Tab cycles within panel
+  useEffect(() => {
+    if (!open) return;
+    const onTab = (e) => {
+      if (e.key !== 'Tab') return;
+      const focusable = Array.from(panelRef.current?.querySelectorAll(FOCUSABLE_SELECTORS) ?? []);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener('keydown', onTab);
+    return () => window.removeEventListener('keydown', onTab);
+  }, [open]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -70,6 +108,7 @@ export default function ContactOverlay({ open, onClose }) {
           {/* Panel */}
           <m.aside
             key="co-panel"
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label="Contact panel"
@@ -81,7 +120,7 @@ export default function ContactOverlay({ open, onClose }) {
               position: 'absolute', top: 0, right: 0, bottom: 0,
               width: 'min(460px, 100vw)',
               background: '#0a0a0a',
-              borderLeft: '1px solid rgba(255,255,255,0.11)',
+              borderLeft: '1px solid rgba(245,245,243,0.11)',
               display: 'flex', flexDirection: 'column',
               fontFamily: MONO,
               overflowY: 'auto',
@@ -89,12 +128,12 @@ export default function ContactOverlay({ open, onClose }) {
           >
             {/* Corner brackets */}
             <span aria-hidden="true" style={{ position: 'absolute', top: 10, left: 10, width: 18, height: 18, borderTop: '2px solid #ff2540', borderLeft: '2px solid #ff2540', pointerEvents: 'none' }} />
-            <span aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 10, width: 18, height: 18, borderBottom: '1px solid rgba(255,255,255,0.18)', borderRight: '1px solid rgba(255,255,255,0.18)', pointerEvents: 'none' }} />
+            <span aria-hidden="true" style={{ position: 'absolute', bottom: 10, right: 10, width: 18, height: 18, borderBottom: '1px solid rgba(245,245,243,0.18)', borderRight: '1px solid rgba(245,245,243,0.18)', pointerEvents: 'none' }} />
 
             {/* Header */}
             <div style={{
               padding: '20px 28px',
-              borderBottom: '1px solid rgba(255,255,255,0.11)',
+              borderBottom: '1px solid rgba(245,245,243,0.11)',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               flexShrink: 0,
             }}>
@@ -114,14 +153,14 @@ export default function ContactOverlay({ open, onClose }) {
                 aria-label="Close"
                 style={{
                   width: 38, height: 38, flexShrink: 0,
-                  border: '1.5px solid rgba(255,255,255,0.18)',
+                  border: '1.5px solid rgba(245,245,243,0.18)',
                   background: 'transparent', color: 'rgba(245,245,243,0.7)',
                   cursor: 'pointer', display: 'grid', placeItems: 'center',
                   clipPath: 'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px))',
                   transition: 'border-color 0.2s, color 0.2s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#ff2540'; e.currentTarget.style.color = '#ff2540'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = 'rgba(245,245,243,0.7)'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(245,245,243,0.18)'; e.currentTarget.style.color = 'rgba(245,245,243,0.7)'; }}
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
                   <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.5" />
@@ -130,7 +169,7 @@ export default function ContactOverlay({ open, onClose }) {
             </div>
 
             {/* Primary CTA: email */}
-            <div style={{ padding: '28px 28px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
+            <div style={{ padding: '28px 28px 20px', borderBottom: '1px solid rgba(245,245,243,0.08)', flexShrink: 0 }}>
               <div style={{ fontSize: 10, letterSpacing: '0.14em', color: 'rgba(245,245,243,0.4)', textTransform: 'uppercase', marginBottom: 12 }}>
                 {co.primaryChannel}
               </div>
@@ -174,7 +213,7 @@ export default function ContactOverlay({ open, onClose }) {
             {/* Footer */}
             <div style={{
               padding: '14px 28px',
-              borderTop: '1px solid rgba(255,255,255,0.08)',
+              borderTop: '1px solid rgba(245,245,243,0.08)',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               flexShrink: 0,
             }}>
@@ -205,7 +244,7 @@ function ChannelRow({ channel }) {
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '16px 28px',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        borderBottom: '1px solid rgba(245,245,243,0.07)',
         color: hover ? '#ff2540' : '#f5f5f3',
         textDecoration: 'none',
         fontFamily: '"Play", sans-serif',
@@ -222,10 +261,10 @@ function ChannelRow({ channel }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
         <span style={{
           fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
-          border: '1px solid rgba(255,255,255,0.12)', padding: '3px 8px',
+          border: '1px solid rgba(245,245,243,0.12)', padding: '3px 8px',
           color: hover ? '#ff2540' : 'rgba(245,245,243,0.45)',
           transition: 'color 0.18s, border-color 0.18s',
-          borderColor: hover ? 'var(--color-accent-35)' : 'rgba(255,255,255,0.12)',
+          borderColor: hover ? 'var(--color-accent-35)' : 'rgba(245,245,243,0.12)',
           flexShrink: 0,
         }}>
           {channel.tag}
@@ -243,3 +282,4 @@ function ChannelRow({ channel }) {
     </a>
   );
 }
+

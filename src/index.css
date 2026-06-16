@@ -5,7 +5,7 @@
   font-family: 'Bebas Neue';
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
@@ -86,8 +86,8 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  font-family: 'Play', monospace;
-  font-size: 14px;
+  font-family: 'Play', sans-serif;
+  font-size: 0.875rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -185,7 +185,7 @@ section[id] {
 
 /* ─── System label ───────────────────────────────────── */
 .sys-label {
-  font-family: 'Play', monospace;
+  font-family: 'Play', sans-serif;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -195,7 +195,7 @@ section[id] {
 
 /* Micro labels at 10px bold — floor raised from 9px for legibility */
 .micro-label {
-  font-family: 'Play', monospace;
+  font-family: 'Play', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -204,7 +204,7 @@ section[id] {
 
 /* ─── Mono body text ─────────────────────────────────── */
 .mono-body {
-  font-family: 'Play', monospace;
+  font-family: 'Play', sans-serif;
   font-size: 13px;
   letter-spacing: 0.02em;
   line-height: 1.75;
@@ -490,7 +490,7 @@ section[id] {
   }
 
   .lab-footer-mobile-kicker {
-    font-family: 'Play', monospace;
+    font-family: 'Play', sans-serif;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.24em;
@@ -577,7 +577,7 @@ section[id] {
   }
 
   .lab-footer-mobile-channel span:last-child {
-    font-family: 'Play', monospace;
+    font-family: 'Play', sans-serif;
     font-size: 10px;
     font-weight: 700;
     line-height: 1.1;
@@ -797,7 +797,7 @@ section[id] {
 }
 
 .logo-name.glitching::after {
-  color: #00e5ff;
+  color: rgba(245, 245, 243, 0.32);
   opacity: 0.55;
   animation: glitch-b 0.22s steps(3) infinite;
   animation-delay: 0.06s;
@@ -811,7 +811,7 @@ section[id] {
 }
 
 .logo-name.glitching-title::after {
-  color: #00e5ff;
+  color: rgba(245, 245, 243, 0.32);
   opacity: 0.5;
   animation: glitch-title-b 0.24s steps(4) infinite;
   animation-delay: 0.05s;
@@ -887,7 +887,7 @@ section[id] {
   white-space: normal;
   background-color: var(--color-accent);
   color: #0a0a0a;
-  font-family: 'Play', monospace;
+  font-family: 'Play', sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;

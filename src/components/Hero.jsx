@@ -64,71 +64,47 @@ function CountUp({ target, suffix = '' }) {
 }
 
 function StatReadout({ stat, index }) {
-  const isPlatform = Number.isNaN(parseInt(stat.value, 10));
-  const platformLines = isPlatform
-    ? String(stat.value)
-      .split(' · ')
-      .reduce((lines, part, partIndex) => {
-        const lineIndex = Math.floor(partIndex / 2);
-        lines[lineIndex] = [...(lines[lineIndex] || []), part];
-        return lines;
-      }, [])
-    : [];
-
   return (
     <m.div
-      key={stat.label}
-      className="relative min-h-[132px] md:min-h-[150px] flex flex-col items-center justify-center text-center"
-      initial={{ opacity: 0, y: 10 }}
+      className="relative flex flex-col justify-center py-5 md:py-6"
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
     >
       {index > 0 && (
         <div
-          className="hidden md:block absolute left-0 top-6 bottom-6 w-px"
-          style={{ backgroundColor: 'rgba(255,255,255,0.07)' }}
+          className="hidden md:block absolute left-0 top-4 bottom-4 w-px"
+          style={{ backgroundColor: 'var(--color-rule)' }}
           aria-hidden="true"
         />
       )}
+      {/* Label row */}
       <div
-        className="tabular mb-3"
-        style={{
-          fontFamily: '"Bebas Neue", sans-serif',
-          fontSize: isPlatform ? 'clamp(2.1rem, 3.7vw, 4.2rem)' : 'clamp(3.5rem, 6.4vw, 6.5rem)',
-          color: 'var(--color-fg)',
-          letterSpacing: isPlatform ? '0.02em' : '0.01em',
-          lineHeight: isPlatform ? 0.92 : 0.82,
-          textShadow: '0 0 28px rgba(245,245,243,0.12)',
-        }}
-      >
-        {isPlatform ? (
-          <span>
-            {platformLines.map((line) => (
-              <span key={line.join('-')} style={{ display: 'block', whiteSpace: 'nowrap' }}>
-                {line.map((part, partIndex) => (
-                  <span key={part}>
-                    {part}
-                    {partIndex < line.length - 1 && <span style={{ color: 'var(--color-accent)' }}> · </span>}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </span>
-        ) : (
-          <CountUp target={stat.value} suffix="" />
-        )}
-      </div>
-      <div
-        className="sys-label"
-        style={{
-          color: 'var(--color-fg-dim)',
-          letterSpacing: '0.18em',
-          maxWidth: '18ch',
-          lineHeight: 1.35,
-        }}
+        className="sys-label mb-2"
+        style={{ color: 'var(--color-fg-mute)', letterSpacing: '0.18em' }}
       >
         {stat.label}
+      </div>
+      {/* Value + guide line */}
+      <div className="flex items-baseline gap-2">
+        <div
+          className="flex-1 h-px self-center"
+          style={{ backgroundColor: 'var(--color-rule)', opacity: 0.5 }}
+          aria-hidden="true"
+        />
+        <div
+          className="tabular"
+          style={{
+            fontFamily: '"Bebas Neue", sans-serif',
+            fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
+            color: 'var(--color-accent)',
+            letterSpacing: '0.04em',
+            lineHeight: 1,
+          }}
+        >
+          <CountUp target={stat.value} suffix="" />
+        </div>
       </div>
     </m.div>
   );
@@ -599,36 +575,49 @@ export default function Hero() {
               </div>
             </m.div>
 
-            {/* Focus tags */}
-            <div>
-              <m.div
+            {/* Focus tags — single animation group, stagger via CSS */}
+            <m.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 1.05 }}
+            >
+              <div
                 className="sys-label mb-5"
                 id="focus-label"
-                initial={{ opacity: 0 }}
-                animate={booted ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.5, delay: 1.1 }}
+                style={{ color: 'var(--color-fg-mute)' }}
               >
                 {t.hero.focusAreasLabel}
-              </m.div>
-              <ul className="flex flex-wrap gap-2" aria-labelledby="focus-label">
+              </div>
+              <ul className="flex flex-col gap-1.5" aria-labelledby="focus-label">
                 {t.hero.tags.map((tag, i) => (
-                  <m.li
+                  <li
                     key={tag}
-                    className="px-3 py-1.5 text-[10px] tracking-widest uppercase"
-                    style={{
-                      fontFamily: '"Play", sans-serif',
-                      border: '1px solid var(--color-rule)',
-                      color: 'var(--color-fg-mute)',
-                    }}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 1.1 + i * 0.04 }}
+                    className="flex items-center gap-3"
+                    style={{ animationDelay: `${i * 30}ms` }}
                   >
-                    {tag}
-                  </m.li>
+                    <span style={{
+                      fontFamily: '"Play", sans-serif',
+                      fontSize: '9px',
+                      color: 'var(--color-accent)',
+                      letterSpacing: '0.12em',
+                      minWidth: '1.6em',
+                      opacity: 0.7,
+                    }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span style={{
+                      fontFamily: '"Play", sans-serif',
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--color-fg-mute)',
+                    }}>
+                      {tag}
+                    </span>
+                  </li>
                 ))}
               </ul>
-            </div>
+            </m.div>
           </div>
 
         </m.div>
@@ -663,7 +652,7 @@ export default function Hero() {
           }}
         />
         <m.div
-          className="relative z-10 w-full px-6 md:px-10 lg:px-14 py-4 md:py-5 grid grid-cols-2 md:grid-cols-4 gap-y-2 md:gap-y-0"
+          className="relative z-10 w-full px-6 md:px-10 lg:px-14 grid grid-cols-2 md:grid-cols-4 gap-x-6 md:gap-x-10 gap-y-0"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

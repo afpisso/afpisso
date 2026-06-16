@@ -5,12 +5,15 @@
 import { useRef, useEffect } from 'react'
 import { m, useTransform, useMotionValue } from 'framer-motion'
 import LabHero from '../pages/LabHero'
+import { useLenis } from '../contexts/LenisContext'
 
 // Section scroll progress, measured manually from the element's rect.
 // framer's useScroll mis-measures against the whole document under Lenis;
 // this reads the real section position each scroll frame instead.
+// Uses Lenis event bus when available; falls back to native scroll on touch devices.
 function useSectionProgress(ref) {
   const progress = useMotionValue(0)
+  const lenisRef = useLenis()
   useEffect(() => {
     const el = ref.current
     if (!el) return
@@ -21,13 +24,23 @@ function useSectionProgress(ref) {
       progress.set(p)
     }
     update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => {
-      window.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
+    const lenis = lenisRef?.current
+    if (lenis) {
+      lenis.on('scroll', update)
+      window.addEventListener('resize', update)
+      return () => {
+        lenis.off('scroll', update)
+        window.removeEventListener('resize', update)
+      }
+    } else {
+      window.addEventListener('scroll', update, { passive: true })
+      window.addEventListener('resize', update)
+      return () => {
+        window.removeEventListener('scroll', update)
+        window.removeEventListener('resize', update)
+      }
     }
-  }, [ref, progress])
+  }, [ref, progress, lenisRef])
   return progress
 }
 
@@ -235,7 +248,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
                 ANDRES FELIPE PISSO
               </div>
               <div style={{
-                fontFamily: "'Play', monospace", fontSize: 'clamp(7px,0.8vw,9px)',
+                fontFamily: "'Play', sans-serif", fontSize: 'clamp(7px,0.8vw,9px)',
                 letterSpacing: '0.24em', textTransform: 'uppercase',
                 color: 'rgba(255,255,255,0.55)', marginTop: 3,
               }}>
@@ -255,7 +268,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
           <m.div style={{
             position: 'absolute', top: 'clamp(28px,5vh,56px)', left: 0, right: 0,
             textAlign: 'center', opacity: labelOpacity, zIndex: 6,
-            fontFamily: "'Play', monospace", fontSize: '10px',
+            fontFamily: "'Play', sans-serif", fontSize: '10px',
             letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.5)',
           }}>
             Selected Work
@@ -267,7 +280,7 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
           }}>
             <div style={{ width: 36, height: 1, background: 'var(--color-accent)', opacity: 0.5 }} />
             <span style={{
-              fontFamily: "'Play', monospace", fontSize: '9px',
+              fontFamily: "'Play', sans-serif", fontSize: '9px',
               letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(240,238,234,0.35)',
             }}>Scroll ↓</span>
             <div style={{ width: 36, height: 1, background: 'var(--color-accent)', opacity: 0.5 }} />

@@ -2,7 +2,7 @@
 <html lang="en" style="color-scheme: dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#080808" />
 
     <!-- Primary meta -->
@@ -40,6 +40,12 @@
     <link rel="icon"             href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon"   href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Skip link style — applied before JS/CSS bundle loads so the link works during SSG first paint -->
+    <style>
+      .skip-link-pre{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}
+      .skip-link-pre:focus{position:fixed;top:0;left:0;z-index:9999;padding:12px 20px;background:#d42b22;color:#fff;font-family:monospace;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;width:auto;height:auto;overflow:visible}
+    </style>
 
     <!-- Fonts — self-hosted Bebas Neue + Google Fonts Play -->
     <link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -178,13 +184,6 @@
     </script>
   </head>
   <body>
-    <!-- Skip to content — accessible keyboard shortcut -->
-    <a
-      href="#home"
-      style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"
-      onfocus="this.style.cssText='position:fixed;top:0;left:0;z-index:9999;padding:12px 20px;background:#d42b22;color:white;font-family:monospace;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;width:auto;height:auto;overflow:visible'"
-      onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'"
-    >Skip to content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
