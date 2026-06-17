@@ -478,8 +478,8 @@ export default function Hero() {
                     display: 'block',
                     paddingLeft: line.indent,
                   }}
-                  initial={{ y: '110%', opacity: 0 }}
-                  animate={booted ? { y: 0, opacity: 1 } : { y: '110%', opacity: 0 }}
+                  initial={{ y: 10, opacity: 1 }}
+                  animate={{ opacity: 1, y: booted ? 0 : 10 }}
                   transition={{
                     duration: 0.72,
                     ease: [0.16, 1, 0.3, 1],
