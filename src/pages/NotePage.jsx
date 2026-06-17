@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { fieldNotes } from '../data/fieldNotes';
+import { fieldNotes, getNoteCategory, getNoteSummary, getNoteTitle, getNoteType } from '../data/fieldNotes';
 import { noteArticles } from '../data/noteArticles';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
@@ -152,9 +152,8 @@ export default function NotePage({ onMenuOpen }) {
   const article = noteArticles?.[slug];
   const blocks  = article?.[lang] ?? article?.en ?? [];
 
-  const title = meta
-    ? (lang === 'es' && meta.titleEs ? meta.titleEs : meta.title)
-    : 'Field Note';
+  const title = meta ? getNoteTitle(meta, lang) : 'Field Note';
+  const dateLocale = lang === 'es' ? 'es-CO' : 'en-US';
 
   usePageMeta({
     title,
@@ -204,7 +203,7 @@ export default function NotePage({ onMenuOpen }) {
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: '4rem', color: 'var(--color-accent-15)', lineHeight: 1 }}>
-              {meta ? 'COMING SOON' : '404'}
+              {meta ? (lang === 'es' ? 'PRÓXIMAMENTE' : 'COMING SOON') : '404'}
             </div>
             <p style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', margin: '16px 0 24px' }}>
               {meta ? np.comingSoon : np.notFound}
@@ -291,11 +290,11 @@ export default function NotePage({ onMenuOpen }) {
                 letterSpacing: '0.16em', textTransform: 'uppercase', padding: '4px 10px',
                 ...typeStyle,
               }}>
-                {meta.type}
+                {getNoteType(meta, lang)}
               </span>
               <span className="sys-label">{meta.readTime}</span>
               <span className="sys-label">·</span>
-              <span className="sys-label">{meta.category}</span>
+              <span className="sys-label">{getNoteCategory(meta, lang)}</span>
               {meta.date && (
                 <>
                   <span className="sys-label">·</span>
@@ -303,7 +302,7 @@ export default function NotePage({ onMenuOpen }) {
                     dateTime={meta.date}
                     className="sys-label"
                   >
-                    {new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    {new Date(meta.date + 'T00:00:00').toLocaleDateString(dateLocale, { month: 'short', year: 'numeric' })}
                   </time>
                 </>
               )}
@@ -332,7 +331,7 @@ export default function NotePage({ onMenuOpen }) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
             >
-              {lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary}
+              {getNoteSummary(meta, lang)}
             </m.p>
           </div>
         </section>
@@ -369,10 +368,10 @@ export default function NotePage({ onMenuOpen }) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {[
                         { label: np.metaId,       value: meta.id },
-                        { label: np.metaType,     value: meta.type },
+                        { label: np.metaType,     value: getNoteType(meta, lang) },
                         { label: np.metaReadTime, value: meta.readTime },
-                        { label: np.metaCategory, value: meta.category },
-                        ...(meta.date ? [{ label: 'Published', value: new Date(meta.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
+                        { label: np.metaCategory, value: getNoteCategory(meta, lang) },
+                        ...(meta.date ? [{ label: np.metaPublished, value: new Date(meta.date + 'T00:00:00').toLocaleDateString(dateLocale, { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
                       ].map(({ label, value }) => (
                         <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                           <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-fg-mute)' }}>{label}</span>
@@ -396,7 +395,7 @@ export default function NotePage({ onMenuOpen }) {
                             {nextNote.id}
                           </span>
                           <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(22px, 1.8vw, 28px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>
-                            {lang === 'es' && nextNote.titleEs ? nextNote.titleEs : nextNote.title}
+                            {getNoteTitle(nextNote, lang)}
                           </p>
                         </div>
                       </Link>
@@ -431,7 +430,7 @@ export default function NotePage({ onMenuOpen }) {
               {emailSent ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0' }}>
                   <span style={{ color: 'var(--color-accent)', fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>// TRANSMITTED</span>
-                  <span style={{ fontFamily: '"Play", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)' }}>Te responderemos pronto.</span>
+                  <span style={{ fontFamily: '"Play", sans-serif', fontSize: '12px', color: 'var(--color-fg-dim)' }}>{np.subscribeSuccess}</span>
                 </div>
               ) : (
                 <form
@@ -495,7 +494,7 @@ export default function NotePage({ onMenuOpen }) {
             <section style={{ borderTop: '1px solid var(--color-rule)' }} className="py-12">
               <div className="max-w-[1100px] mx-auto px-6">
                 <div className="mb-6">
-                  <SectionTag label="Related Case Studies" />
+                  <SectionTag label={np.relatedCaseStudies} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: 'var(--color-rule)' }}>
                   {related.map(c => (
@@ -512,10 +511,10 @@ export default function NotePage({ onMenuOpen }) {
                         {c.title}
                       </div>
                       <div style={{ fontFamily: '"Play", sans-serif', fontSize: '11px', color: 'var(--color-fg-dim)', lineHeight: 1.6 }}>
-                        {c.focus}
+                        {lang === 'es' && c.focusEs ? c.focusEs : c.focus}
                       </div>
                       <div className="flex items-center gap-1.5 mt-3" style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', color: 'var(--color-accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                        <span>Open case</span>
+                        <span>{np.openCase}</span>
                         <span aria-hidden>→</span>
                       </div>
                     </Link>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { fieldNotes } from '../data/fieldNotes';
+import { fieldNotes, getNoteCategory, getNoteSummary, getNoteTitle, getNoteType } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -26,8 +26,8 @@ const BASE_URL = 'https://byandresfe.com';
 function NoteCard({ note, index, lang, readNoteLabel }) {
   const [hov, setHov] = useState(false);
   const glyph = TYPE_GLYPHS[note.type] || '◇';
-  const title   = lang === 'es' && note.titleEs   ? note.titleEs   : note.title;
-  const summary = lang === 'es' && note.summaryEs ? note.summaryEs : note.summary;
+  const title = getNoteTitle(note, lang);
+  const summary = getNoteSummary(note, lang);
 
   return (
     <m.article
@@ -118,9 +118,9 @@ function NoteCard({ note, index, lang, readNoteLabel }) {
           }}
         >
           <span aria-hidden="true">{glyph}</span>
-          {note.type}
+          {getNoteType(note, lang)}
           <span style={{ opacity: 0.35 }}>·</span>
-          {note.category}
+          {getNoteCategory(note, lang)}
         </div>
 
         {/* Title */}
@@ -235,9 +235,9 @@ export default function NotesPage({ onMenuOpen }) {
         'blogPost':    fieldNotes.map(n => ({
           '@type':         'BlogPosting',
           'url':           `${BASE_URL}/notes/${n.slug}`,
-          'headline':      n.title,
-          'description':   n.summary,
-          'keywords':      n.category,
+          'headline':      getNoteTitle(n, lang),
+          'description':   getNoteSummary(n, lang),
+          'keywords':      getNoteCategory(n, lang),
           'datePublished': n.date,
           'author':        { '@id': BASE_URL + '/#person' },
         })),
@@ -251,12 +251,12 @@ export default function NotesPage({ onMenuOpen }) {
     }
     el.textContent = JSON.stringify(schema);
     return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
-  }, []);
+  }, [lang]);
 
   const featured   = fieldNotes[0];
   const rest       = fieldNotes.slice(1);
-  const ftTitle   = lang === 'es' && featured.titleEs   ? featured.titleEs   : featured.title;
-  const ftSummary = lang === 'es' && featured.summaryEs ? featured.summaryEs : featured.summary;
+  const ftTitle = getNoteTitle(featured, lang);
+  const ftSummary = getNoteSummary(featured, lang);
   const ftGlyph   = TYPE_GLYPHS[featured.type] || '◇';
 
   return (
@@ -368,7 +368,7 @@ export default function NotesPage({ onMenuOpen }) {
                       color:          'var(--color-accent)',
                     }}
                   >
-                    // featured
+                    {lang === 'es' ? '// destacada' : '// featured'}
                   </span>
                   <span
                     style={{
@@ -394,7 +394,7 @@ export default function NotesPage({ onMenuOpen }) {
                     }}
                   >
                     <span aria-hidden="true">{ftGlyph}</span>
-                    {featured.type}
+                    {getNoteType(featured, lang)}
                   </span>
                 </div>
 
@@ -439,7 +439,7 @@ export default function NotesPage({ onMenuOpen }) {
                         color:          'var(--color-fg-mute)',
                       }}
                     >
-                      {featured.category}
+                      {getNoteCategory(featured, lang)}
                       <span style={{ margin: '0 0.5rem', opacity: 0.4 }}>·</span>
                       {featured.readTime}
                       <span style={{ margin: '0 0.5rem', opacity: 0.4 }}>·</span>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fieldNotes } from '../data/fieldNotes';
+import { fieldNotes, getNoteCategory, getNoteSummary, getNoteTitle, getNoteType } from '../data/fieldNotes';
 import { useLang } from '../contexts/LangContext';
 import { useHunt } from '../contexts/HuntContext';
 import SignalTrigger from './SignalTrigger';
@@ -27,9 +27,6 @@ export default function FieldNotes() {
     .slice(0, 5);
   const featuredNote = latestNotes[0];
   const supportingNotes = latestNotes.slice(1);
-
-  const getTitle = (note) => (lang === 'es' && note.titleEs ? note.titleEs : note.title);
-  const getSummary = (note) => (lang === 'es' && note.summaryEs ? note.summaryEs : note.summary);
 
   return (
     <section
@@ -84,7 +81,7 @@ export default function FieldNotes() {
 
             return (
               <m.article
-                aria-label={getTitle(featuredNote)}
+                aria-label={getNoteTitle(featuredNote, lang)}
                 className="group relative mb-3"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +102,7 @@ export default function FieldNotes() {
                       : 'linear-gradient(100deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008) 52%, transparent 100%)',
                     transition: 'background 0.22s, border-color 0.22s',
                   }}
-                  aria-label={getTitle(featuredNote)}
+                  aria-label={getNoteTitle(featuredNote, lang)}
                   onFocus={() => setHovered(featuredNote.id)}
                   onBlur={() => setHovered(null)}
                 >
@@ -168,7 +165,7 @@ export default function FieldNotes() {
                             color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                           }}
                         >
-                          {featuredNote.type}
+                          {getNoteType(featuredNote, lang)}
                         </span>
                         <span className="sys-label">{featuredNote.date.slice(0, 7)}</span>
                       </div>
@@ -183,7 +180,7 @@ export default function FieldNotes() {
                           maxWidth: '760px',
                         }}
                       >
-                        {getTitle(featuredNote)}
+                        {getNoteTitle(featuredNote, lang)}
                       </h3>
                       <p
                         className="mt-4 line-clamp-2"
@@ -195,13 +192,13 @@ export default function FieldNotes() {
                           maxWidth: '620px',
                         }}
                       >
-                        {getSummary(featuredNote)}
+                        {getNoteSummary(featuredNote, lang)}
                       </p>
                     </div>
 
                     <div className="md:text-right md:border-l md:pl-6" style={{ borderColor: 'var(--color-rule)' }}>
                       <div className="sys-label">{featuredNote.readTime}</div>
-                      <div className="sys-label mt-1" style={{ color: 'var(--color-fg-mute)' }}>{featuredNote.category}</div>
+                      <div className="sys-label mt-1" style={{ color: 'var(--color-fg-mute)' }}>{getNoteCategory(featuredNote, lang)}</div>
                       <div
                         className="mt-5 inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase"
                         style={{ fontFamily: '"Play", sans-serif', color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)' }}
@@ -225,7 +222,7 @@ export default function FieldNotes() {
             return (
               <m.article
                 key={note.id}
-                aria-label={getTitle(note)}
+                aria-label={getNoteTitle(note, lang)}
                 className="group relative"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -252,7 +249,7 @@ export default function FieldNotes() {
                     textDecoration: 'none',
                     backgroundColor: isHovered ? 'rgba(255,37,64,0.025)' : 'transparent',
                   }}
-                  aria-label={getTitle(note)}
+                  aria-label={getNoteTitle(note, lang)}
                   onFocus={() => setHovered(note.id)}
                   onBlur={() => setHovered(null)}
                 >
@@ -283,9 +280,9 @@ export default function FieldNotes() {
                           color: isHovered ? 'var(--color-accent)' : 'var(--color-fg-mute)',
                         }}
                       >
-                        {note.type}
+                        {getNoteType(note, lang)}
                       </span>
-                      <span className="sys-label">{note.category}</span>
+                      <span className="sys-label">{getNoteCategory(note, lang)}</span>
                     </div>
                       <h3
                         className="uppercase mb-3 transition-colors duration-200"
@@ -297,7 +294,7 @@ export default function FieldNotes() {
                           color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.8)',
                         }}
                       >
-                        {getTitle(note)}
+                        {getNoteTitle(note, lang)}
                       </h3>
                     <p
                       className="text-[12px] leading-relaxed line-clamp-3"
@@ -307,7 +304,7 @@ export default function FieldNotes() {
                         transition: 'color 0.2s',
                       }}
                     >
-                      {getSummary(note)}
+                      {getNoteSummary(note, lang)}
                     </p>
                   </div>
 
