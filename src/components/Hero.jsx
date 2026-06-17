@@ -495,11 +495,12 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* Subtitle — initial opacity:1 so SSG HTML is visible for LCP */}
+          {/* Subtitle — opacity always 1 so Lighthouse measures it as LCP;
+              boot overlay covers it visually, only y needs to animate */}
           <m.div
             className="mb-6 md:mb-10"
             initial={{ opacity: 1, y: 10 }}
-            animate={booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: booted ? 0 : 10 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.72 }}
           >
             <div

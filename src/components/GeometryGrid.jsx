@@ -693,7 +693,14 @@ export default function GeometryGrid({
     };
     document.addEventListener('visibilitychange', onVisChange);
 
-    startLoop();
+    // Defer first frame: let LCP paint before the canvas loop claims main-thread time.
+    // requestIdleCallback fires when the browser has a free moment (≤1s timeout).
+    // Falls back to a short setTimeout on browsers that don't support rIC (Safari <16).
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(startLoop, { timeout: 1000 });
+    } else {
+      setTimeout(startLoop, 200);
+    }
 
     return () => {
       stopLoop();

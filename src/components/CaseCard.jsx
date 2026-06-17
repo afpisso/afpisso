@@ -101,12 +101,15 @@ export default function CaseCard({ caseData, index }) {
             <img
               src={caseData.thumbnail}
               alt={caseData.thumbnailAlt || caseData.title}
+              width="800"
+              height="450"
               className="w-full h-full object-cover"
               style={{
                 transform: hovered && !caseData.trailerSrc ? 'scale(1.04)' : 'scale(1)',
                 transition: shouldReduce ? 'none' : 'transform 600ms cubic-bezier(0.16,1,0.3,1)',
               }}
-              loading="lazy"
+              loading={index < 3 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : undefined}
               decoding="async"
             />
           ) : (

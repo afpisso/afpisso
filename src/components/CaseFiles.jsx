@@ -34,6 +34,8 @@ function ThumbnailOrPlaceholder({ case: c }) {
         src={src}
         alt=""
         aria-hidden="true"
+        width="800"
+        height="450"
         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         loading="eager"
         decoding="async"
