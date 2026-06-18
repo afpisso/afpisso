@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { cases, CASE_ORDER } from '../data/cases';
+import { casesMeta, CASE_ORDER } from '../data/caseMeta';
 import { useLang } from '../contexts/LangContext';
 import { useHunt } from '../contexts/HuntContext';
 import SignalTrigger from './SignalTrigger';
@@ -342,7 +342,7 @@ export default function CaseFiles() {
   useHunt(); // needed to keep context subscription alive in this subtree
   const [hovered, setHovered] = useState(null);
 
-  const featured = [...cases].filter(c => c.featured).sort((a, b) => {
+  const featured = [...casesMeta].filter(c => c.featured).sort((a, b) => {
     const ai = CASE_ORDER.indexOf(a.slug);
     const bi = CASE_ORDER.indexOf(b.slug);
     return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
