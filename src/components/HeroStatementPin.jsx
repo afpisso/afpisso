@@ -2,10 +2,12 @@
  * HeroStatementPin — scroll-driven hero → portrait card transition.
  * Used on both the main page (/) and /lab.
  */
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, lazy, Suspense } from 'react'
 import { m, useTransform, useMotionValue } from 'framer-motion'
-import LabHero from '../pages/LabHero'
 import { useLenis } from '../contexts/LenisContext'
+
+// ponytail: lazy-split LabHero (1967 lines) out of the main bundle — saves ~40KB parse on mobile
+const LabHero = lazy(() => import('../pages/LabHero'))
 
 // Section scroll progress, measured manually from the element's rect.
 // framer's useScroll mis-measures against the whole document under Lenis;
@@ -179,8 +181,11 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
           overflow: 'hidden', background: 'var(--color-bg)',
         }}>
 
-          <m.div style={{ position: 'absolute', inset: 0, opacity: heroOpacity, zIndex: 1 }}>
-            <LabHero hideTopBar={hideLabHeroTopBar} />
+          {/* initial={false} prevents Framer from overwriting SSR opacity on hydration — keeps LCP element visible */}
+          <m.div initial={false} style={{ position: 'absolute', inset: 0, opacity: heroOpacity, zIndex: 1 }}>
+            <Suspense fallback={null}>
+              <LabHero hideTopBar={hideLabHeroTopBar} />
+            </Suspense>
           </m.div>
 
           <m.div style={{
@@ -218,17 +223,29 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
               opacity: borderOp,
             }} />
 
-            <m.img src="/lab/helmet.webp" alt="Andres Pisso"
+            <m.img src="/lab/helmet.webp"
+              srcSet="/lab/helmet-sm.webp 662w, /lab/helmet.webp 1260w"
+              sizes="(max-width: 640px) 42vw, 630px"
+              alt="Andres Pisso"
+              width="630" height="840"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center top', display: 'block',
                 opacity: helmetOp }}
             />
-            <m.img src="/lab/face-helmet.webp" alt="" aria-hidden
+            <m.img src="/lab/face-helmet.webp"
+              srcSet="/lab/face-helmet-sm.webp 662w, /lab/face-helmet.webp 1260w"
+              sizes="(max-width: 640px) 42vw, 630px"
+              alt="" aria-hidden
+              width="630" height="840"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
                 opacity: faceHelmOp, mixBlendMode: 'screen' }}
             />
-            <m.img src="/lab/face.webp" alt="" aria-hidden
+            <m.img src="/lab/face.webp"
+              srcSet="/lab/face-sm.webp 662w, /lab/face.webp 1260w"
+              sizes="(max-width: 640px) 42vw, 630px"
+              alt="" aria-hidden
+              width="630" height="840"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
                 opacity: faceOp, mixBlendMode: 'screen' }}

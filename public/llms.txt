@@ -1,123 +1,33 @@
 # Andrés Felipe Pisso — Game UX/UI Designer & UX Lead
 
-> The canonical reference for Andrés Felipe Pisso is byandresfe.com.
-> Also known as: Andres Felipe Pisso, byandresfe, afpisso, Andrés Pisso.
+> Portfolio of Andrés Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead based in Bogotá, Colombia. 11+ years shipping games across VR (Meta Quest), UEFN/Fortnite Creative, mobile, and web. Specialises in game interfaces, UI systems, HUD design, player experience, feedback clarity, and cross-functional UX leadership. Available for remote freelance and contract work.
 
-> Portfolio site for Andrés Felipe Pisso (@byandresfe), a Game UX/UI Designer and UX Lead
-> based in Bogotá, Colombia. Specialises in game interfaces, UI systems, player experience
-> design, feedback clarity, and cross-functional UX leadership. 11+ years across games,
-> VR, UEFN / Fortnite Creative, LiveOps, and digital products.
+## Work
 
-## Contact
-
-- Site: https://byandresfe.com
-- Email: Available at https://byandresfe.com/#contact
-- LinkedIn: https://linkedin.com/in/afpisso
-- Instagram: @byandresfe
-- X / Twitter: @byandresfe
-
-## Expertise
-
-Game UX/UI Design, UX Leadership, UI Systems, HUD Design, Player Experience Design,
-Feedback Systems, Player Decision-Making, LiveOps UX, UEFN / Fortnite Creative,
-VR Interface Design (Meta Quest), Accessibility in Games, Design Documentation,
-Design Systems, Figma, Unreal Engine, Cross-functional Collaboration
-
-## Work (Case Files)
-
-Full case list at: https://byandresfe.com/work
-
-### CASE-008 — Star Wars Roguelike One
-URL: https://byandresfe.com/case/star-wars-roguelike-one
-Role: UX/UI Designer
-Year: 2026
-Focus: Game UX/UI for a Star Wars roguelike experience.
-
-### CASE-001 — Orcs Must Die: By the Blade
-URL: https://byandresfe.com/case/orcs-must-die-by-the-blade
-Role: UX Lead
-Studio: Robot Entertainment
-Platform: Meta Quest VR
-Year: 2025–2026
-Status: Shipped (NDA-safe)
-Focus: UI design system, reusable assets, VR interaction patterns, UX leadership, design documentation. Created a unified Figma design system covering components, states, tokens, and variables. Designed VR-specific UI including a diegetic guide book, contextual interaction language, and haptic-reinforced feedback. Led a team of 3 UX/UI designers.
-
-### CASE-002 — D&D: Zombie Dragon Adventure (Fortnite)
-URL: https://byandresfe.com/case/zombie-dragon-adventure
-Role: UX Lead
-Platform: UEFN / Fortnite Creative
-Year: 2025
-Status: Active (shipped)
-Focus: UX/UI systems for a D&D roguelike adventure inside Fortnite. Designed the Adventure Menu (player progression hub), FTUX onboarding structure, store flows, camp upgrade system, and implementation-ready documentation. Led a team of 3 designers over a 4-month production window.
-
-### CASE-003 — The Walking Dead: Courtyard King
-URL: https://byandresfe.com/case/courtyard-king
-Role: UX/UI Designer
-Platform: UEFN / Fortnite Creative
-Year: 2025
-Status: NDA-safe
-Focus: Survival UX, tension-preserving HUD design, threat communication, resource legibility, and cooperative feedback systems for a Walking Dead Universe experience inside Fortnite.
-
-### CASE-004 — Raptor Heist
-URL: https://byandresfe.com/case/raptor-heist
-Role: UX/UI Designer
-Platform: UEFN / Fortnite Creative
-Year: 2025
-Focus: Roguelike UX clarity, player feedback, UI systems for a Havoc Hotel roguelike experience in UEFN.
-
-### CASE-005 — Havoc Hotel 3
-URL: https://byandresfe.com/case/havoc-hotel-3
-Platform: UEFN / Fortnite Creative
-Year: 2025
-Focus: Co-op UI systems, HUD design, UEFN experience design.
-
-### CASE-006 — Zomvilles
-URL: https://byandresfe.com/case/zomvilles
-Year: 2024
-Focus: Mobile roguelite game UX, progression systems, player experience flows.
-
-### CASE-007 — Kodety
-URL: https://byandresfe.com/case/kodety
-Focus: Educational web game design, interaction design, product design. Award-winning educational game for coding literacy.
+- [Orcs Must Die: By the Blade](https://byandresfe.com/case/orcs-must-die-by-the-blade): UX Lead at Robot Entertainment. Full VR UI design system, diegetic guide book, VR interaction patterns, Figma component library. Meta Quest. 2025–2026.
+- [D&D: Zombie Dragon Adventure](https://byandresfe.com/case/zombie-dragon-adventure): UX Lead. UX/UI systems for a D&D roguelike inside Fortnite (UEFN). Adventure menu, FTUX, store flows, camp upgrades. 2025.
+- [The Walking Dead: Courtyard King](https://byandresfe.com/case/courtyard-king): UX/UI Designer. Survival HUD, tension-preserving UI, threat communication, cooperative feedback. UEFN. 2025.
+- [Raptor Heist](https://byandresfe.com/case/raptor-heist): UX/UI Designer. Roguelike UX clarity, player feedback systems, UEFN. 2025.
+- [Havoc Hotel 3](https://byandresfe.com/case/havoc-hotel-3): Co-op UI systems, HUD design, UEFN experience design. 2025.
+- [Zomvilles](https://byandresfe.com/case/zomvilles): Mobile roguelite UX, progression systems, player experience flows. 2024.
+- [Star Wars Roguelike One](https://byandresfe.com/case/star-wars-roguelike-one): Game UX/UI for a Star Wars roguelike experience. 2026.
+- [Kodety](https://byandresfe.com/case/kodety): Award-winning educational coding game. Colombia Crea Digital winner. 2015–2016.
 
 ## Field Notes
 
-Articles and frameworks at: https://byandresfe.com/notes
+- [What is a Game UI System?](https://byandresfe.com/notes/what-is-a-game-ui-system): Framework for understanding UI systems in games.
+- [A Clean HUD is Not Always a Clear HUD](https://byandresfe.com/notes/clean-hud-vs-clear-hud): On the difference between visual minimalism and functional clarity.
+- [Why Feedback Reduces Guesswork](https://byandresfe.com/notes/feedback-reduces-guesswork): How feedback systems reduce player friction.
+- [UI Terminology for Game Teams](https://byandresfe.com/notes/ui-terminology-for-game-teams): Shared language for cross-functional game teams.
+- [What Game Teams Can Learn from Accessibility Settings](https://byandresfe.com/notes/game-accessibility-checklist): Accessibility as a design quality signal.
+- [VR Interface Clarity: What Changes in Spatial UI](https://byandresfe.com/notes/vr-ux-interface-clarity): Practical differences when designing for VR.
 
-- What is a Game UI System? — https://byandresfe.com/notes/what-is-a-game-ui-system
-- A Clean HUD is Not Always a Clear HUD — https://byandresfe.com/notes/clean-hud-vs-clear-hud
-- Why Feedback Reduces Guesswork — https://byandresfe.com/notes/feedback-reduces-guesswork
-- UI Terminology for Game Teams — https://byandresfe.com/notes/ui-terminology-for-game-teams
-- What Game Teams Can Learn from Accessibility Settings — https://byandresfe.com/notes/game-accessibility-checklist
-- VR Interface Clarity: What Changes in Spatial UI — https://byandresfe.com/notes/vr-ux-interface-clarity
+## Contact
 
-## Site Structure
-
-- / — Home / Command Center
-- /work — Case Files (portfolio)
-- /notes — Field Notes (articles on game UX/UI)
-- /about — Operator Profile
-- /speaking — Speaking engagements and topics
-- /resume — Resume (available on request)
-
-## Availability
-
-Open to freelance, remote contracts, consulting, and selected game UX/UI, product UX,
-or design systems opportunities. Reach out at https://byandresfe.com/#contact
-or connect on LinkedIn: https://linkedin.com/in/afpisso
-
-## En español / Spanish summary
-
-Andrés Felipe Pisso es un Diseñador UX/UI de Videojuegos y Líder de UX basado en Bogotá, Colombia.
-Especializado en interfaces de juego, sistemas de UI, diseño de HUD, experiencia del jugador,
-claridad de retroalimentación, accesibilidad en videojuegos, UEFN / Fortnite Creative,
-interfaces VR (Meta Quest) y liderazgo de diseño UX. Más de 11 años de experiencia.
-
-Disponible para proyectos freelance, contratos remotos, consultoría y oportunidades seleccionadas
-en diseño UX/UI de videojuegos, producto digital y sistemas de diseño.
-Contacto: https://byandresfe.com/#contact — LinkedIn: https://linkedin.com/in/afpisso
+- [Portfolio](https://byandresfe.com): Full case studies and approach.
+- [Contact](https://byandresfe.com/#contact): Preferred first contact.
+- [LinkedIn](https://linkedin.com/in/afpisso): Professional profile.
 
 ## Usage
 
-This site is a personal portfolio. Content may not be used for AI training.
-Searching and AI-assisted summarisation for informational purposes is permitted.
+This site is a personal portfolio. Content may not be used for AI training without permission. AI-assisted search and summarisation for informational purposes is permitted.

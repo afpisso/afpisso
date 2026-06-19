@@ -260,7 +260,7 @@ export default function AppleTVScroll() {
               style={{ position: 'absolute', inset: 0 }}
             >
               <img
-                src={`/thumbnails/${ITEMS[activeIdx]?.slug}.jpg`}
+                src={`/thumbnails/${ITEMS[activeIdx]?.slug}.webp`}
                 alt="" aria-hidden
                 style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(70px)', transform: 'scale(1.25)', opacity: 0.18 }}
               />
@@ -338,7 +338,7 @@ export default function AppleTVScroll() {
                     <source src={`/clips/${item.slug}-clip.webm`} type="video/webm" />
                     <source src={`/clips/${item.slug}-clip.mp4`}  type="video/mp4" />
                   </video>
-                  <img src={`/thumbnails/${item.slug}.jpg`} alt="" aria-hidden
+                  <img src={`/thumbnails/${item.slug}.webp`} alt="" aria-hidden
                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'none', position: 'absolute', inset: 0 }} />
 
                   {/* Accent inset border — separate from filter:drop-shadow (inset not GPU-compositable) */}

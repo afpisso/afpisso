@@ -61,6 +61,10 @@
     <link rel="preload" href="/lab/helmet.webp" as="image" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- GA4 secondary origins loaded by GTM — dns-prefetch shaves ~100ms off their first request -->
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    <link rel="dns-prefetch" href="//region1.google-analytics.com" />
+    <link rel="dns-prefetch" href="//stats.g.doubleclick.net" />
     <!-- Load Play non-blocking: media=print swaps to all once loaded; noscript fallback for no-JS crawlers -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" /></noscript>

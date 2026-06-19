@@ -394,7 +394,7 @@ export default function CaseRail({ currentSlug }) {
               className="absolute inset-0"
             >
               <img
-                src={`/thumbnails/${activeItem.slug}.jpg`}
+                src={`/thumbnails/${activeItem.slug}.webp`}
                 alt=""
                 className="w-full h-full object-cover"
                 style={{ filter: 'blur(70px)', transform: 'scale(1.25)', opacity: 0.22 }}

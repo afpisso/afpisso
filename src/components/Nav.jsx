@@ -25,7 +25,7 @@ function LogoMark({ size = 40 }) {
       }}
     >
       <img
-        src="/logo-mark.png"
+        src="/logo-mark.svg"
         alt=""
         aria-hidden="true"
         style={{ width: '100%', height: '100%', objectFit: 'contain', padding: size > 34 ? 2 : 1 }}

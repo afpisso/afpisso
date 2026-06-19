@@ -109,7 +109,7 @@ function BootSequence({ onComplete }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <img
-            src="/logo-mark.png"
+            src="/logo-mark.svg"
             alt=""
             aria-hidden="true"
             width="56"
@@ -1625,7 +1625,7 @@ export default function LabHero({ hideTopBar = false }) {
             {/* Thin rule with logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 'clamp(28px,4vw,56px)', height: 1, background: 'rgba(255,37,64,0.35)' }} />
-              <img src="/logo-mark.png" alt="" aria-hidden
+              <img src="/logo-mark.svg" alt="" aria-hidden
                 style={{ width: 18, height: 18, objectFit: 'contain', opacity: 0.45 }}
                 onError={e => { e.currentTarget.style.display = 'none' }}
               />
@@ -1656,9 +1656,9 @@ export default function LabHero({ hideTopBar = false }) {
               <div key={line}>
                 <TitleWord
                   delay={0.09 + i * 0.08}
-                  accent={isMobile ? i === 2 || i === 3 : i === 1}
+                  accent={i === 1}
                   scramble
-                  periodic={isMobile ? i === 2 || i === 3 : i === 1}
+                  periodic={i === 1}
                 >
                   {line}
                 </TitleWord>

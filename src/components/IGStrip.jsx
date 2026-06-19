@@ -8,12 +8,12 @@ const SPEED   = 0.75; // px per frame ~45px/s at 60fps
 const IG_PROFILE = 'https://www.instagram.com/byandresfe/';
 
 const POSTS = [
-  { webm: '/ig/01.webm', video: '/ig/01.mp4', poster: '/ig/01.webp', category: 'Breakdown Heurístico', title: 'Consistencia y\nestándares',                  href: 'https://www.instagram.com/p/DX9SxLxgMlL/?img_index=1' },
-  { webm: '/ig/02.webm', video: '/ig/02.mp4', poster: '/ig/02.webp', category: 'Accesibilidad',        title: 'Decisiones de accesibilidad\npara Game UX/UI', href: 'https://www.instagram.com/p/DYmldS1gCoR/?img_index=1' },
-  { webm: '/ig/03.webm', video: '/ig/03.mp4', poster: '/ig/03.webp', category: 'Game UX Breakdown',    title: 'Balatro',                                     href: 'https://www.instagram.com/p/DYXfX_BgI1f/?img_index=1' },
-  { webm: '/ig/04.webm', video: '/ig/04.mp4', poster: '/ig/04.webp', category: 'Game UX/UI',           title: 'La complejidad no es mala.\nLa confusión sí.', href: 'https://www.instagram.com/p/DYAciUPlN_2/?img_index=1' },
-  { webm: '/ig/05.webm', video: '/ig/05.mp4', poster: '/ig/05.webp', category: 'UX/UI Picks',          title: '5 sitios web para\nreferencias de Game UI',    href: 'https://www.instagram.com/p/DY5pDw0gOrk/?img_index=1' },
-  { webm: '/ig/06.webm', video: '/ig/06.mp4', poster: '/ig/06.webp', category: 'Breakdown Heurístico', title: 'Estética y\ndiseño minimalista',               href: 'https://www.instagram.com/p/DZGu4VdgLmd/?img_index=1' },
+  { webm: '/ig/01.webm', video: '/ig/01.mp4', poster: '/ig/01-sm.webp', category: 'Breakdown Heurístico', title: 'Consistencia y\nestándares',                  href: 'https://www.instagram.com/p/DX9SxLxgMlL/?img_index=1' },
+  { webm: '/ig/02.webm', video: '/ig/02.mp4', poster: '/ig/02-sm.webp', category: 'Accesibilidad',        title: 'Decisiones de accesibilidad\npara Game UX/UI', href: 'https://www.instagram.com/p/DYmldS1gCoR/?img_index=1' },
+  { webm: '/ig/03.webm', video: '/ig/03.mp4', poster: '/ig/03-sm.webp', category: 'Game UX Breakdown',    title: 'Balatro',                                     href: 'https://www.instagram.com/p/DYXfX_BgI1f/?img_index=1' },
+  { webm: '/ig/04.webm', video: '/ig/04.mp4', poster: '/ig/04-sm.webp', category: 'Game UX/UI',           title: 'La complejidad no es mala.\nLa confusión sí.', href: 'https://www.instagram.com/p/DYAciUPlN_2/?img_index=1' },
+  { webm: '/ig/05.webm', video: '/ig/05.mp4', poster: '/ig/05-sm.webp', category: 'UX/UI Picks',          title: '5 sitios web para\nreferencias de Game UI',    href: 'https://www.instagram.com/p/DY5pDw0gOrk/?img_index=1' },
+  { webm: '/ig/06.webm', video: '/ig/06.mp4', poster: '/ig/06-sm.webp', category: 'Breakdown Heurístico', title: 'Estética y\ndiseño minimalista',               href: 'https://www.instagram.com/p/DZGu4VdgLmd/?img_index=1' },
 ];
 
 const GAP = 10;

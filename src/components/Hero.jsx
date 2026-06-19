@@ -152,7 +152,7 @@ function BootSequence({ onComplete }) {
           style={{ border: '1px solid rgba(255,255,255,0.12)' }}
         >
           <img
-            src="/logo-mark.png"
+            src="/logo-mark.svg"
             alt=""
             aria-hidden="true"
             width="56"
@@ -232,6 +232,7 @@ function BootSequence({ onComplete }) {
               background: 'transparent',
               border: '1px solid rgba(255,255,255,0.1)',
               padding: '6px 14px',
+              minHeight: '44px',
               cursor: 'pointer',
               display: 'block',
               marginLeft: 'auto',
@@ -513,6 +514,7 @@ export default function Hero() {
             >
               <div style={{ width: 14, height: 1, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
               <span
+                aria-hidden="true"
                 style={{
                   fontFamily: '"Play", sans-serif',
                   fontSize: '11px',

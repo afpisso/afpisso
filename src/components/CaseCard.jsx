@@ -100,6 +100,8 @@ export default function CaseCard({ caseData, index }) {
           {caseData.thumbnail ? (
             <img
               src={caseData.thumbnail}
+              srcSet={caseData.thumbnail ? `${caseData.thumbnail.replace('.webp', '-sm.webp')} 400w, ${caseData.thumbnail} 800w` : undefined}
+              sizes="(max-width: 640px) 370px, 800px"
               alt={caseData.thumbnailAlt || caseData.title}
               width="800"
               height="450"

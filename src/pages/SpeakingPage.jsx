@@ -419,7 +419,7 @@ export default function SpeakingPage({ onMenuOpen }) {
                   transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.06 }}
                 >
                   <AssetSlot
-                    src="/speaking/poster.jpg"
+                    src="/speaking/poster.webp"
                     alt="Colombia 5.0 official event poster"
                     aspectRatio="4/3"
                   />
