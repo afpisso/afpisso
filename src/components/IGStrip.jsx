@@ -156,18 +156,25 @@ export default function IGStrip() {
   const trackRef     = useRef(null);
   const firstCardRef = useRef(null);
   const rafRef       = useRef(null);
+  // ponytail: cache layout reads — scrollWidth/offsetWidth every RAF = forced reflow 60×/s
+  const halfRef      = useRef(0);
+  const stepRef      = useRef(310);
   const [playing, setPlaying] = useState(true);
   const shouldReduce = useReducedMotion();
 
-  function getStep() {
-    if (!firstCardRef.current) return 310;
-    return firstCardRef.current.offsetWidth + GAP;
-  }
+  // Measure once, update on resize — eliminates forced reflow in RAF tick
+  useEffect(() => {
+    const update = () => {
+      halfRef.current = trackRef.current ? trackRef.current.scrollWidth / 2 : POSTS.length * 310;
+      stepRef.current = firstCardRef.current ? firstCardRef.current.offsetWidth + GAP : 310;
+    };
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
-  function getHalf() {
-    if (!trackRef.current) return POSTS.length * 310;
-    return trackRef.current.scrollWidth / 2;
-  }
+  function getStep() { return stepRef.current; }
+  function getHalf() { return halfRef.current || POSTS.length * 310; }
 
   // RAF auto-scroll
   useEffect(() => {

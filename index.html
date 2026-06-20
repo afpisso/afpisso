@@ -58,7 +58,10 @@
     <!-- Fonts — self-hosted Bebas Neue + Google Fonts Play -->
     <link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/lab/ring1.svg" as="image" type="image/svg+xml" />
-    <link rel="preload" href="/lab/helmet.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      href="/lab/helmet-sm.webp"
+      imagesrcset="/lab/helmet-sm.webp 662w, /lab/helmet.webp 1260w"
+      imagesizes="(max-width: 640px) 42vw, 630px" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- GA4 secondary origins loaded by GTM — dns-prefetch shaves ~100ms off their first request -->

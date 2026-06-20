@@ -223,33 +223,34 @@ export default function HeroStatementPin({ hideLabHeroTopBar = false }) {
               opacity: borderOp,
             }} />
 
-            <m.img src="/lab/helmet.webp"
-              srcSet="/lab/helmet-sm.webp 662w, /lab/helmet.webp 1260w"
-              sizes="(max-width: 640px) 42vw, 630px"
-              alt="Andres Pisso"
-              width="630" height="840"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center top', display: 'block',
-                opacity: helmetOp }}
-            />
-            <m.img src="/lab/face-helmet.webp"
-              srcSet="/lab/face-helmet-sm.webp 662w, /lab/face-helmet.webp 1260w"
-              sizes="(max-width: 640px) 42vw, 630px"
-              alt="" aria-hidden
-              width="630" height="840"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
-                opacity: faceHelmOp, mixBlendMode: 'screen' }}
-            />
-            <m.img src="/lab/face.webp"
-              srcSet="/lab/face-sm.webp 662w, /lab/face.webp 1260w"
-              sizes="(max-width: 640px) 42vw, 630px"
-              alt="" aria-hidden
-              width="630" height="840"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center 75%', display: 'block',
-                opacity: faceOp, mixBlendMode: 'screen' }}
-            />
+            {/* m.div wraps for opacity animation; plain <img> ensures srcset reaches the DOM */}
+            <m.div style={{ position: 'absolute', inset: 0, opacity: helmetOp }}>
+              <img src="/lab/helmet.webp"
+                srcSet="/lab/helmet-sm.webp 662w, /lab/helmet.webp 1260w"
+                sizes="(max-width: 640px) 42vw, 630px"
+                alt="Andres Pisso" width="630" height="840"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+              />
+            </m.div>
+            <m.div style={{ position: 'absolute', inset: 0, opacity: faceHelmOp, mixBlendMode: 'screen' }}>
+              <img src="/lab/face-helmet.webp"
+                srcSet="/lab/face-helmet-sm.webp 662w, /lab/face-helmet.webp 1260w"
+                sizes="(max-width: 640px) 42vw, 630px"
+                alt="" aria-hidden="true" width="630" height="840"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center 75%', display: 'block' }}
+              />
+            </m.div>
+            <m.div style={{ position: 'absolute', inset: 0, opacity: faceOp, mixBlendMode: 'screen' }}>
+              <img src="/lab/face.webp"
+                srcSet="/lab/face-sm.webp 662w, /lab/face.webp 1260w"
+                sizes="(max-width: 640px) 42vw, 630px"
+                alt="" aria-hidden="true" width="630" height="840"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center 75%', display: 'block' }}
+              />
+            </m.div>
 
             <m.div style={{
               position: 'absolute', bottom: 0, left: 0, right: 0,

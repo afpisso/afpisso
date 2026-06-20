@@ -656,7 +656,7 @@ function SignalDancePlayer({ active }) {
         maskImage: 'linear-gradient(to bottom, transparent 0%, black 7%, black 76%, transparent 100%)',
       }}>
         <picture>
-          <source srcSet="/lab/footer.webp" type="image/webp" />
+          <source srcSet="/lab/footer-sm.webp 360w, /lab/footer.webp 1122w" sizes="(max-width: 480px) 100vw, 360px" type="image/webp" />
           <img
             src="/lab/footer.png"
             alt=""
