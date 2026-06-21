@@ -777,7 +777,8 @@ section[id] {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  contain: paint; /* clips transformed ::before/::after even under GPU compositing */
+  contain: paint;
+  clip-path: inset(0 0 0 0); /* hard GPU clip — prevents translated pseudo-elements from escaping bounds */
 }
 
 .logo-name::before,
