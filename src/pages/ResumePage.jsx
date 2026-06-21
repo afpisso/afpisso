@@ -33,7 +33,7 @@ const projects = [
   { title: 'Dungeons & Dragons in Fortnite', type: 'UEFN / Game UX/UI', year: '2025' },
   { title: 'The Walking Dead (NDA)', type: 'Game UX/UI', year: '2025' },
   { title: 'Raptor Heist', type: 'UEFN / Game UX/UI', year: '2025' },
-  { title: 'Havoc Hotel franchise', type: 'UEFN / UX Systems', year: '2023–2024' },
+  { title: 'Havoc Hotel franchise', type: 'UEFN / UX Systems', year: '2025' },
 ];
 
 const skills = [
@@ -46,6 +46,18 @@ const skills = [
 const tools = [
   'Figma', 'FigJam', 'UEFN', 'Unreal Engine (context)', 'Jira', 'Confluence',
   'Adobe Photoshop', 'Adobe Illustrator', 'Notion', 'Miro',
+];
+
+const education = [
+  { year: '2023', degree: "Master's in Digital Graphic Design", institution: 'UNIR — Universidad Internacional de La Rioja' },
+  { year: '2019', degree: 'Specialist in Information Systems Audit', institution: 'Universidad Católica de Colombia' },
+  { year: '2016', degree: 'Specialist in Game Design and Development', institution: 'Michigan State University' },
+  { year: '2015', degree: 'Systems Engineer', institution: 'Universidad Cooperativa de Colombia' },
+];
+
+const certifications = [
+  { year: '2024', label: 'Epic Games Game Design Professional Certificate', note: 'In progress' },
+  { year: '2015', label: 'Gamification', note: 'University of Pennsylvania' },
 ];
 
 export default function ResumePage({ onMenuOpen }) {
@@ -218,10 +230,24 @@ export default function ResumePage({ onMenuOpen }) {
             >
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.education}</h2>
-                <p style={{ fontFamily: '"Play", sans-serif', fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.75 }}>
-                  Digital Design / Interactive Media<br />
-                  Colombia
-                </p>
+                <dl>
+                  {education.map((edu, i) => (
+                    <div key={i} className="flex gap-4 py-3 border-t" style={{ borderColor: 'var(--color-rule)' }}>
+                      <dt className="text-[11px] flex-shrink-0 w-10" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em', paddingTop: 2 }}>
+                        {edu.year}
+                      </dt>
+                      <dd>
+                        <div className="text-[12px] font-bold uppercase mb-0.5" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg)' }}>
+                          {edu.degree}
+                        </div>
+                        <div className="text-[11px]" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.04em' }}>
+                          {edu.institution}
+                        </div>
+                      </dd>
+                    </div>
+                  ))}
+                  <div className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
+                </dl>
               </section>
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.languages}</h2>
@@ -230,6 +256,36 @@ export default function ResumePage({ onMenuOpen }) {
                 </ul>
               </section>
             </m.div>
+
+            {/* Certifications */}
+            <m.section
+              className="mb-16"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
+            >
+              <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>Certifications</h2>
+              <ul>
+                {certifications.map((cert, i) => (
+                  <li key={i} className="flex items-start gap-4 py-3 border-t" style={{ borderColor: 'var(--color-rule)' }}>
+                    <span className="text-[11px] flex-shrink-0 w-10" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em', paddingTop: 2 }}>
+                      {cert.year}
+                    </span>
+                    <div>
+                      <span className="text-[12px] font-bold uppercase" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg)' }}>
+                        {cert.label}
+                      </span>
+                      {cert.note && (
+                        <span className="text-[11px] ml-2" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.04em' }}>
+                          — {cert.note}
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                ))}
+                <li className="border-t" style={{ borderColor: 'var(--color-rule)' }} />
+              </ul>
+            </m.section>
 
             {/* Contact */}
             <m.section
