@@ -6,35 +6,6 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { analytics } from '../utils/analytics';
 import { m } from 'framer-motion';
 
-const experience = [
-  {
-    period: '2025 – Present',
-    role: 'Lead UX/UI Designer',
-    company: 'Game studio (NDA)',
-    description: 'UX Lead across shipped game projects, Fortnite / UEFN live experiences, and VR productions. Responsible for UX strategy, UI system design, design documentation, and cross-discipline collaboration.',
-  },
-  {
-    period: '2023 – 2025',
-    role: 'Lead Game Designer',
-    company: 'Game studio (NDA)',
-    description: 'Defined and maintained creative vision for mobile games, aligning gameplay systems, user flows and UI/UX decisions with audience needs and business goals.',
-  },
-  {
-    period: '2016 – 2023',
-    role: 'Systems Engineer / Game Designer / UX Designer',
-    company: 'Various organizations',
-    description: 'Game design, interaction design, UI/UX, and digital product work across government technology initiatives, educational platforms, and interactive web experiences.',
-  },
-];
-
-const projects = [
-  { title: 'Star Wars: Roguelike One', type: 'UEFN / Game UX/UI', year: '2026' },
-  { title: 'Orcs Must Die: By the Blade', type: 'VR Game UX/UI', year: '2025–2026' },
-  { title: 'Dungeons & Dragons in Fortnite', type: 'UEFN / Game UX/UI', year: '2025' },
-  { title: 'The Walking Dead (NDA)', type: 'Game UX/UI', year: '2025' },
-  { title: 'Raptor Heist', type: 'UEFN / Game UX/UI', year: '2025' },
-  { title: 'Havoc Hotel franchise', type: 'UEFN / UX Systems', year: '2025' },
-];
 
 const skills = [
   'Game UX/UI', 'HUD design', 'UI systems', 'Player flows', 'Onboarding design',
@@ -131,7 +102,7 @@ export default function ResumePage({ onMenuOpen }) {
             >
               <h2 className="sys-label mb-6" style={{ color: 'var(--color-accent)' }}>{r.sections.experience}</h2>
               <dl className="space-y-0">
-                {experience.map((exp, i) => (
+                {r.experience.map((exp, i) => (
                   <div key={i} className="py-6 border-t flex flex-col sm:flex-row gap-4 sm:gap-8" style={{ borderColor: 'var(--color-rule)' }}>
                     <dt className="text-[11px] flex-shrink-0 sm:w-36" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg-mute)', letterSpacing: '0.05em' }}>
                       {exp.period}
@@ -162,7 +133,7 @@ export default function ResumePage({ onMenuOpen }) {
             >
               <h2 className="sys-label mb-6" style={{ color: 'var(--color-accent)' }}>{r.sections.projects}</h2>
               <ul className="space-y-0">
-                {projects.map((proj, i) => (
+                {r.projects.map((proj, i) => (
                   <li key={i} className="flex items-start justify-between gap-6 py-4 border-t" style={{ borderColor: 'var(--color-rule)' }}>
                     <div>
                       <div className="text-[13px] font-bold uppercase" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-fg)' }}>
