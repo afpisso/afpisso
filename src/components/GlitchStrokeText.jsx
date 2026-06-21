@@ -22,21 +22,20 @@ import { useScramble } from '../hooks/useScramble';
 
 const DURATION = 420; // ms — scramble + glitch burst length
 
-export default function GlitchStrokeText({ children, stroke: _stroke, style, className = '', silent = false, effects = true, scramble = true }) {
+export default function GlitchStrokeText({ children, stroke: _stroke, style, className = '', silent = false, effects = true }) {
   const [trigger, setTrigger] = useState(0);
   const [glitching, setGlitching] = useState(false);
   const shouldReduce = useReducedMotion();
 
   const text = String(children ?? '');
   const effectsEnabled = effects && !shouldReduce;
-  const scrambleEnabled = effectsEnabled && scramble;
 
   const scrambled = useScramble(text, {
     duration: DURATION,
     trigger,
-    enabled: scrambleEnabled,
+    enabled: effectsEnabled,
   });
-  const displayed = scrambleEnabled ? scrambled : text;
+  const displayed = effectsEnabled ? scrambled : text;
 
   // useEffect-based cleanup prevents setState-after-unmount if the
   // component unmounts while the glitch animation is still running.
