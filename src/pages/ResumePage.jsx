@@ -48,17 +48,6 @@ const tools = [
   'Adobe Photoshop', 'Adobe Illustrator', 'Notion', 'Miro',
 ];
 
-const education = [
-  { year: '2023', degree: "Master's in Digital Graphic Design", institution: 'UNIR — Universidad Internacional de La Rioja' },
-  { year: '2019', degree: 'Specialist in Information Systems Audit', institution: 'Universidad Católica de Colombia' },
-  { year: '2016', degree: 'Specialist in Game Design and Development', institution: 'Michigan State University' },
-  { year: '2015', degree: 'Systems Engineer', institution: 'Universidad Cooperativa de Colombia' },
-];
-
-const certifications = [
-  { year: '2024', label: 'Epic Games Game Design Professional Certificate', note: 'In progress' },
-  { year: '2015', label: 'Gamification', note: 'University of Pennsylvania' },
-];
 
 export default function ResumePage({ onMenuOpen }) {
   const { t, lang } = useLang();
@@ -231,7 +220,7 @@ export default function ResumePage({ onMenuOpen }) {
               <section>
                 <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{r.sections.education}</h2>
                 <dl>
-                  {education.map((edu, i) => (
+                  {t.about.education.map((edu, i) => (
                     <div key={i} className="flex gap-4 py-3 border-t" style={{ borderColor: 'var(--color-rule)' }}>
                       <dt className="text-[11px] flex-shrink-0 w-10" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em', paddingTop: 2 }}>
                         {edu.year}
@@ -264,9 +253,9 @@ export default function ResumePage({ onMenuOpen }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
             >
-              <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>Certifications</h2>
+              <h2 className="sys-label mb-4" style={{ color: 'var(--color-accent)' }}>{t.about.certificationsLabel}</h2>
               <ul>
-                {certifications.map((cert, i) => (
+                {t.about.certifications.map((cert, i) => (
                   <li key={i} className="flex items-start gap-4 py-3 border-t" style={{ borderColor: 'var(--color-rule)' }}>
                     <span className="text-[11px] flex-shrink-0 w-10" style={{ fontFamily: '"Play", sans-serif', color: 'var(--color-accent)', letterSpacing: '0.05em', paddingTop: 2 }}>
                       {cert.year}
