@@ -776,6 +776,7 @@ section[id] {
 .logo-name {
   position: relative;
   display: inline-block;
+  overflow: hidden;
 }
 
 .logo-name::before,
