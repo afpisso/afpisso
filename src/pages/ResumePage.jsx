@@ -8,30 +8,31 @@ import { m } from 'framer-motion';
 
 const experience = [
   {
-    period: '2023 – Present',
-    role: 'UX Lead',
+    period: '2025 – Present',
+    role: 'Lead UX/UI Designer',
     company: 'Game studio (NDA)',
-    description: 'UX Lead across Game UX/UI, LiveOps, UEFN experiences, and VR productions. Responsible for UX strategy, UI system design, design documentation, and cross-discipline collaboration.',
+    description: 'UX Lead across shipped game projects, Fortnite / UEFN live experiences, and VR productions. Responsible for UX strategy, UI system design, design documentation, and cross-discipline collaboration.',
   },
   {
-    period: '2022 – 2023',
-    role: 'Senior Game UX/UI Designer',
+    period: '2023 – 2025',
+    role: 'Lead Game Designer',
     company: 'Game studio (NDA)',
-    description: 'UI systems design, HUD architecture, component states, player flow design, and handoff documentation for a live game title.',
+    description: 'Defined and maintained creative vision for mobile games, aligning gameplay systems, user flows and UI/UX decisions with audience needs and business goals.',
   },
   {
-    period: '2020 – 2022',
-    role: 'Game Designer / UX/UI Designer',
-    company: 'Various studios and clients',
-    description: 'Game design, interaction design, and product UX/UI across mobile games and educational platforms.',
+    period: '2016 – 2023',
+    role: 'Systems Engineer / Game Designer / UX Designer',
+    company: 'Various organizations',
+    description: 'Game design, interaction design, UI/UX, and digital product work across government technology initiatives, educational platforms, and interactive web experiences.',
   },
 ];
 
 const projects = [
-  { title: 'Orcs Must Die: By the Blade', type: 'VR Game UX/UI', year: '2024' },
-  { title: 'Dungeons & Dragons in Fortnite', type: 'UEFN / Game UX/UI', year: '2024' },
-  { title: 'The Walking Dead (NDA)', type: 'Game UX/UI', year: '2024' },
-  { title: 'Raptor Heist', type: 'UEFN / Game UX/UI', year: '2024' },
+  { title: 'Star Wars: Roguelike One', type: 'UEFN / Game UX/UI', year: '2026' },
+  { title: 'Orcs Must Die: By the Blade', type: 'VR Game UX/UI', year: '2025–2026' },
+  { title: 'Dungeons & Dragons in Fortnite', type: 'UEFN / Game UX/UI', year: '2025' },
+  { title: 'The Walking Dead (NDA)', type: 'Game UX/UI', year: '2025' },
+  { title: 'Raptor Heist', type: 'UEFN / Game UX/UI', year: '2025' },
   { title: 'Havoc Hotel franchise', type: 'UEFN / UX Systems', year: '2023–2024' },
 ];
 
