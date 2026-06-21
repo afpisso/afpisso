@@ -179,6 +179,7 @@ export default function SectionHeading({ label, title, page, delay = 0 }) {
                 <GlitchStrokeText
                   silent
                   effects={!isCompact}
+                  scramble={false}
                   style={isCompact ? {
                     display: 'block',
                     maxWidth: '100%',
