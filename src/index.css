@@ -777,6 +777,7 @@ section[id] {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  contain: paint; /* clips transformed ::before/::after even under GPU compositing */
 }
 
 .logo-name::before,
@@ -788,6 +789,7 @@ section[id] {
   opacity: 0;
   transition: opacity 0.08s;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 /* Nav logo glitch (small displacement) */
