@@ -1,13 +1,26 @@
 <!doctype html>
 <html lang="en" style="color-scheme: dark">
   <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PRC5P6RW');</script>
-    <!-- End Google Tag Manager -->
+    <!-- Google Analytics 4 (gtag) -->
+    <!--
+      Direct gtag instead of a GTM container. The container fired exactly one
+      tag (this same GA4 property) and no other pixels, so it was 118KB of
+      third-party JS to load a script we can load ourselves.
+
+      It also broke event tracking: GTM loads GA4 internally without exposing a
+      global `gtag`, so the `typeof window.gtag === 'function'` guard in
+      src/utils/analytics.js never passed and all custom events (resume_download,
+      email_click, linkedin_click, case_card_click, generate_lead, ...) silently
+      sent nothing. Defining gtag here is what makes those fire.
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JW06M0R1G5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JW06M0R1G5');
+    </script>
+    <!-- End Google Analytics 4 -->
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -202,11 +215,6 @@
     </script>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRC5P6RW"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
