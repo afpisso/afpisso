@@ -211,6 +211,8 @@ function SignalDancePlayer({ active }) {
             src="/lab/footer.png"
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             style={{
               width: '100%',
               height: 'auto',
