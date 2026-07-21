@@ -43,6 +43,16 @@ export const cases = [
     tags: ['UX/UI Systems', 'Product Design', 'VR Interaction', 'Design Documentation', 'UX Leadership'],
     relatedNotes: ['clean-hud-vs-clear-hud', 'feedback-reduces-guesswork', 'what-is-a-game-ui-system'],
     cta: 'View Orcs Must Die: By the Blade case',
+    outcomeStats: [
+      { value: '1', label: 'Year' },
+      { value: '3', label: 'UX/UI team' },
+      { value: 'Shipped', label: 'Status' },
+    ],
+    outcomeStatsEs: [
+      { value: '1', label: 'Año' },
+      { value: '3', label: 'Equipo UX/UI' },
+      { value: 'Lanzado', label: 'Estado' },
+    ],
     content: {
       summary:
         'I joined Orcs Must Die: By the Blade at Teravision Games during mid-to-late production. There was a lot of interface work ahead — gameplay systems, inventory, world interactions, multiplayer, accessibility — and no design system to work from. Every new screen meant starting from scratch.\n\nMy job was to change that. I built the UI design system, created reusable assets, documented the key features, and led a team of two designers through the rest of production. We shipped.',
@@ -438,6 +448,16 @@ export const cases = [
       '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-04.webp',
       '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-05.webp',
       '/cases/zombie-dragon-adventure/dungeons-and-dragons-fortnite-06.webp',
+    ],
+    outcomeStats: [
+      { value: '4', label: 'Months' },
+      { value: '11', label: 'Interconnected systems' },
+      { value: '3', label: 'UX/UI team' },
+    ],
+    outcomeStatsEs: [
+      { value: '4', label: 'Meses' },
+      { value: '11', label: 'Sistemas interconectados' },
+      { value: '3', label: 'Equipo UX/UI' },
     ],
     content: {
       summary:
@@ -1430,6 +1450,18 @@ export const cases = [
       '/cases/zomvilles/zomvilles-07.webp',
       '/cases/zomvilles/zomvilles-08.webp',
       '/cases/zomvilles/zomvilles-09.webp',
+    ],
+    outcomeStats: [
+      { value: '1', label: 'Year' },
+      { value: '9', label: 'People' },
+      { value: '30+', label: 'UX flows' },
+      { value: '100+', label: 'Wireframes' },
+    ],
+    outcomeStatsEs: [
+      { value: '1', label: 'Año' },
+      { value: '9', label: 'Personas' },
+      { value: '30+', label: 'Flujos UX' },
+      { value: '100+', label: 'Wireframes' },
     ],
     content: {
       summary:

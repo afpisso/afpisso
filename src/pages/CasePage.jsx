@@ -948,11 +948,11 @@ function CaseGallery({ gallery = [], caseId, title }) {
 // ── Outcome callout ────────────────────────────────────────────────────────────
 // Prominent metrics band — add outcomeStats: [{value, label}] to cases.js
 // to populate. Shows nothing when field is missing.
-function OutcomeCallout({ stats }) {
+function OutcomeCallout({ stats, label = 'Outcome' }) {
   if (!stats?.length) return null;
   return (
     <m.section
-      aria-label="Outcome"
+      aria-label={label}
       className="relative"
       style={{ borderTop: `1px solid ${RULE}`, borderBottom: `1px solid ${RULE}` }}
       initial={{ opacity: 0, y: 20 }}
@@ -964,7 +964,7 @@ function OutcomeCallout({ stats }) {
       <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(to right, ${ACCENT}, transparent)` }} />
 
       <div className="max-w-[1400px] mx-auto px-6 py-12">
-        <div className="sys-label mb-8" style={{ color: ACCENT }}>{'//'} Outcome</div>
+        <div className="sys-label mb-8" style={{ color: ACCENT }}>{'//'} {label}</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
           {stats.map((s, i) => (
             <m.div
@@ -1150,6 +1150,7 @@ export default function CasePage({ onMenuOpen }) {
     ? { ...caseData.content, ...caseData.contentEs }
     : caseData.content;
   const whatThisShows = (lang === 'es' && caseData.whatThisShowsEs) ? caseData.whatThisShowsEs : caseData.whatThisShows;
+  const outcomeStats = (lang === 'es' && caseData.outcomeStatsEs) ? caseData.outcomeStatsEs : caseData.outcomeStats;
   const visibilityLabel = t.caseStatuses[caseData.visibility] || caseData.status;
   const cp = t.casePage.sections;
   const fl = t.casePage.fieldLabels;
@@ -1286,7 +1287,7 @@ export default function CasePage({ onMenuOpen }) {
         })()}
 
         {/* Outcome callout — renders only when outcomeStats is defined in cases.js */}
-        <OutcomeCallout stats={caseData.outcomeStats} />
+        <OutcomeCallout stats={outcomeStats} label={cp.outcome} />
 
         {/* Body */}
         <article className="max-w-[1400px] mx-auto px-6 pb-28">
