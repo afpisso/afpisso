@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 const SITE_NAME = 'ByAndresFe';
 const BASE_URL = 'https://byandresfe.com';
 const DEFAULT_DESCRIPTION =
-  'Portfolio of Andrés Felipe Pisso, a UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.';
+  'Portfolio of Andrés Felipe Pisso, a Senior Game UX/UI Designer and UX Lead focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.';
 
 /**
  * Sets document.title, meta tags, og/twitter, canonical, and optional
@@ -15,7 +15,7 @@ export function usePageMeta({ title, description, themeColor, article } = {}) {
   useEffect(() => {
     const fullTitle = title
       ? `${title} — ${SITE_NAME}`
-      : `${SITE_NAME} — Game UX/UI Designer & UX Lead`;
+      : 'Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead';
 
     const desc = description || DEFAULT_DESCRIPTION;
     const url = window.location.href.split('?')[0];
