@@ -179,11 +179,14 @@ function BootSequence({ onComplete }) {
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&'
 
 // ── Discipline data for arc gauges ───────────────────────────────────────────
+// Arc fill is derived from years, normalized against the longest track (11Y) —
+// it is NOT a self-rated proficiency score. A gauge a viewer cannot audit reads
+// as padding; tying it to the years already shown keeps the claim checkable.
 const SKILL_DATA = [
-  { value: 0.92, tag: 'LEAD · UX',    metric: '11Y' },
-  { value: 0.78, tag: 'SENIOR · GX',  metric: '8Y'  },
-  { value: 0.84, tag: 'DIRECTOR · PD', metric: '9Y' },
-]
+  { years: 11, tag: 'LEAD · UX',     metric: '11Y' },
+  { years: 8,  tag: 'SENIOR · GX',   metric: '8Y'  },
+  { years: 9,  tag: 'DIRECTOR · PD', metric: '9Y'  },
+].map((d) => ({ ...d, value: d.years / 11 }))
 
 // ══════════════════════════════════════════════════════════════════════════════
 // SCRAMBLE LABEL — characters shuffle before settling on the real text
@@ -246,12 +249,14 @@ function TickCounter({ target, active, style: s }) {
 // DYNAMIC BACKGROUND CANVAS
 // ══════════════════════════════════════════════════════════════════════════════
 
-function DynamicBackground({ phase, mouseX, mouseY, mobile = false }) {
+function DynamicBackground({ phase, mouseX, mouseY, mobile = false, reduced = false }) {
   const canvasRef  = useRef(null)
   const rafRef     = useRef(null)
   const stateRef   = useRef(null)
 
   useEffect(() => {
+    // Respect prefers-reduced-motion: skip the perpetual canvas loop entirely.
+    if (reduced) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -284,6 +289,11 @@ function DynamicBackground({ phase, mouseX, mouseY, mobile = false }) {
     let t = 0
 
     const draw = () => {
+      // Clear before doing work so startLoop() below can reschedule the next frame.
+      rafRef.current = null
+      // Belt-and-suspenders: if the tab went hidden right before this frame ran,
+      // bail without drawing — the visibilitychange listener will restart us.
+      if (document.hidden) return
       const W = canvas.width, H = canvas.height
       ctx.clearRect(0, 0, W, H)
 
@@ -388,15 +398,35 @@ function DynamicBackground({ phase, mouseX, mouseY, mobile = false }) {
       }
 
       t++
-      rafRef.current = requestAnimationFrame(draw)
+      startLoop()
     }
 
-    rafRef.current = requestAnimationFrame(draw)
+    // Pause the RAF loop while the tab is hidden — mirrors GeometryGrid's
+    // document.hidden handling so this canvas doesn't keep painting off-screen.
+    const startLoop = () => { if (!rafRef.current) rafRef.current = requestAnimationFrame(draw) }
+    const stopLoop  = () => { if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null } }
+    const onVisChange = () => { if (document.hidden) stopLoop(); else startLoop() }
+    document.addEventListener('visibilitychange', onVisChange)
+
+    // On mobile, defer the first frame to an idle moment so this decorative
+    // background doesn't compete with the hero's LCP paint. Desktop keeps the
+    // original immediate start — no behavior change there.
+    if (mobile) {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(startLoop, { timeout: 1000 })
+      } else {
+        setTimeout(startLoop, 200)
+      }
+    } else {
+      startLoop()
+    }
+
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(rafRef.current)
+      document.removeEventListener('visibilitychange', onVisChange)
+      stopLoop()
     }
-  }, [phase, mobile])
+  }, [phase, mobile, reduced])
 
   return (
     <canvas
@@ -1551,7 +1581,7 @@ export default function LabHero({ hideTopBar = false }) {
       {!isMobile && <SvgRings phase={phase} parallaxX={parallaxX} parallaxY={parallaxY} reduced={!!reduced} />}
 
       {/* ── Dynamic canvas background ── */}
-      <DynamicBackground phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} mobile={isMobile} />
+      <DynamicBackground phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} mobile={isMobile} reduced={!!reduced} />
 
       {/* ── Data connectors ── */}
       {!isCompact && <DataConnectors phase={phase} mouseX={globalMouseX} mouseY={globalMouseY} />}

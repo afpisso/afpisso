@@ -497,8 +497,12 @@ export default function GeometryGrid({
 
     // Reduce particle count on mobile — visually equivalent, significantly cheaper
     const isMobileViewport = window.innerWidth < 768;
-    const N   = isMobileViewport ? Math.min(particleCount, 400) : particleCount;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const N   = isMobileViewport ? Math.min(particleCount, 260) : particleCount;
+    // Cap DPR to 1 on mobile: raster cost of per-frame arc fills scales with
+    // device-pixel area (dpr^2), so a 3x-DPR phone was rasterizing ~9x the
+    // pixels of a 1x display for a soft particle field where the difference
+    // is not perceptible. Desktop keeps the existing 2x cap unchanged.
+    const dpr = isMobileViewport ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     let w, h;
     let cleanupResize = () => {};
 

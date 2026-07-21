@@ -49,7 +49,14 @@ import Nav     from './components/Nav.jsx'
 import Footer  from './components/Footer.jsx'
 
 // Homepage above-fold sections (below-fold are lazy, won't render — that's fine)
-import Hero      from './components/Hero.jsx'
+//
+// HeroSSR is the crawler-facing hero and is used ONLY here. The interactive
+// hero users see is HeroStatementPin -> LabHero, which lazy-imports LabHero and
+// therefore renders to nothing under renderToStaticMarkup (Suspense is not
+// resolved). Swapping this import for HeroStatementPin strips the hero's
+// indexable text from the pre-rendered homepage — measured, not theoretical.
+// Keep HeroSSR's copy in sync with LabHero when the hero messaging changes.
+import HeroSSR   from './components/HeroSSR.jsx'
 import CaseFiles from './components/CaseFiles.jsx'
 
 // Pages — eager imports so content is in the SSR output
@@ -69,7 +76,7 @@ function HomePageSSR() {
     <div>
       <Nav onMenuOpen={noop} />
       <main>
-        <Hero />
+        <HeroSSR />
         <CaseFiles />
       </main>
       <Footer />

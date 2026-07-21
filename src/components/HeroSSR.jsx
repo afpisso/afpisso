@@ -1,3 +1,16 @@
+/**
+ * HeroSSR — crawler-facing homepage hero.
+ *
+ * NOT rendered to users. The interactive hero is HeroStatementPin -> LabHero.
+ * This exists because HeroStatementPin lazy-imports LabHero, so it renders to
+ * nothing under renderToStaticMarkup during the SSG pre-render. This component
+ * is what Google, LinkedIn previews and AI crawlers actually read.
+ *
+ * Consumed by exactly one place: src/entry-server.jsx.
+ *
+ * If you change the hero messaging in LabHero, change it here too — otherwise
+ * what gets indexed drifts from what users see.
+ */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
@@ -323,7 +336,7 @@ function useActiveSection(ids) {
 }
 
 
-export default function Hero() {
+export default function HeroSSR() {
   const shouldReduce = useReducedMotion();
   const [booted, setBooted] = useState(
     () => shouldReduce || sessionStorage.getItem('booted') === '1'
