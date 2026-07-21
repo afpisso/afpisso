@@ -1718,12 +1718,13 @@ export default function LabHero({ hideTopBar = false }) {
                 lineHeight: 1.35,
               }}
             >
-              {lh.roles.map((role, i) => (
-                <span key={role} style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}>
-                  <span>{role}</span>
-                  {i < lh.roles.length - 1 && <span style={{ color: 'var(--color-accent)', opacity: 0.55 }}>/</span>}
-                </span>
-              ))}
+              {/* On mobile this slot shows the differentiator, not the generic
+                  role list. The hero column already ends flush against the CTA,
+                  so there is no room for both — and "shipped VR + licensed IPs"
+                  earns the space that "UX/UI Designer / Game Designer / Product
+                  Designer" was spending. Desktop still shows both: roles here,
+                  rightCopy in the right HUD. */}
+              {lh.rightCopy.join(' ')}
             </m.div>
           ) : (
             <TitleWord delay={0.42} style={{
