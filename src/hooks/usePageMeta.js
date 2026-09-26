@@ -9,13 +9,13 @@ const DEFAULT_DESCRIPTION =
  * Sets document.title, meta tags, og/twitter, canonical, and optional
  * Article JSON-LD schema for the current route.
  *
- * @param {{ title?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
+ * @param {{ title?: string, fullTitle?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
  */
-export function usePageMeta({ title, description, themeColor, article } = {}) {
+export function usePageMeta({ title, fullTitle: titleOverride, description, themeColor, article } = {}) {
   useEffect(() => {
-    const fullTitle = title
+    const fullTitle = titleOverride || (title
       ? `${title} — ${SITE_NAME}`
-      : 'Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead';
+      : 'Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead');
 
     const desc = description || DEFAULT_DESCRIPTION;
     const url = window.location.href.split('?')[0];
@@ -91,5 +91,5 @@ export function usePageMeta({ title, description, themeColor, article } = {}) {
       // Restore default theme-color when leaving a page that overrode it
       if (themeMeta && themeColor) themeMeta.setAttribute('content', '#080808');
     };
-  }, [title, description, themeColor, article]);
+  }, [title, titleOverride, description, themeColor, article]);
 }

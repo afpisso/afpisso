@@ -2,6 +2,7 @@ export const CASE_ORDER = [
   "orcs-must-die-by-the-blade",
   "zombie-dragon-adventure",
   "star-wars-roguelike-one",
+  "roblox-game-ui-system",
   "courtyard-king",
   "zomvilles",
   "raptor-heist",
@@ -180,5 +181,24 @@ export const casesMeta = [
       "Fortnite"
     ],
     "featured": true
-  }
+  },
+  {
+    "id": "CASE-009",
+    "slug": "roblox-game-ui-system",
+    "title": "Roblox Game UI System",
+    "visibility": "public",
+    "status": "SELECTED WORK",
+    "role": "Game UX/UI Designer",
+    "year": "2026",
+    "tags": [
+      "Roblox",
+      "Game UX/UI",
+      "UI Systems",
+      "Figma"
+    ],
+    "platform": [
+      "Roblox"
+    ],
+    "featured": true
+  },
 ];

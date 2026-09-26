@@ -250,8 +250,8 @@ function buildPageMeta() {
     const rawDesc = c.content?.summary || c.description || ''
     const desc = rawDesc.length > 155 ? rawDesc.slice(0, 152) + '...' : rawDesc
     meta[url] = {
-      title: `${c.title} — Game UX/UI Case Study | ${SITE_NAME}`,
-      description: desc,
+      title: c.seoTitle || `${c.title} — Game UX/UI Case Study | ${SITE_NAME}`,
+      description: c.seoDescription || desc,
       canonical: `${BASE}${url}`,
       ogType: 'article',
       ogImage: `${BASE}/thumbnails/${c.slug}.webp`,
