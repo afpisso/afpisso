@@ -25,6 +25,7 @@ const CDN = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
 // maxWidth = caps wide wordmarks so they don't dominate the marquee
 const CLIENTS = [
   { id: 'fortnite', name: 'Fortnite',           logo: '/logos/Fortnite-Logo.wine.svg', sub: 'UEFN · Creative',      height: 26, maxWidth: 160 },
+  { id: 'roblox',   name: 'Roblox',             logo: '/logos/RobloxLogo.svg',         sub: 'Game UI System',       height: 20, maxWidth: 110 },
   { id: 'starwars', name: 'Star Wars',           logo: '/logos/StarWarsLogo.svg',       sub: 'Roguelike One · UEFN', height: 30, maxWidth: 160 },
   { id: 'meta',     name: 'Meta',               logo: '/logos/metaLogo.svg',            sub: 'VR · Quest Platform',  height: 22, maxWidth: 90  },
   { id: 'omd',      name: 'Orcs Must Die',      logo: '/logos/OMDLogo.svg',             sub: 'VR · Quest 3',        height: 44, maxWidth: 120 },
