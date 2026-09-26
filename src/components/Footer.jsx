@@ -18,6 +18,7 @@ const SKILL_BAR = [
 
 const CLIENT_LOGOS = [
   { id: 'fortnite', name: 'Fortnite', logo: '/logos/Fortnite-Logo.wine.svg', h: 24, w: 130 },
+  { id: 'roblox', name: 'Roblox', logo: '/logos/RobloxLogo.svg', h: 18, w: 100 },
   { id: 'starwars', name: 'Star Wars', logo: '/logos/StarWarsLogo.svg', h: 26, w: 130 },
   { id: 'meta', name: 'Meta', logo: '/logos/metaLogo.svg', h: 18, w: 72 },
   { id: 'omd', name: 'Orcs Must Die', logo: '/logos/OMDLogo.svg', h: 36, w: 100 },

@@ -56,6 +56,7 @@ const IP_LOGOS = [
   '/logos/StarWarsLogo.svg',
   '/logos/OMDLogo.svg',
   '/logos/Fortnite-Logo.wine.svg',
+  '/logos/RobloxLogo.svg',
   '/logos/metaLogo.svg',
   '/logos/DnDLogo.svg',
   '/logos/TWDLogo.svg',
