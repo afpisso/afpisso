@@ -324,7 +324,7 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
                   color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.78)',
                 }}
               >
-                {caseData.title}
+                {caseData.cardTitle || caseData.title}
               </h2>
               <span
                 className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
@@ -481,7 +481,7 @@ function MobileWorkCard({ caseData, index, total }) {
                 color: 'var(--color-fg)', textTransform: 'uppercase',
                 marginBottom: 10,
               }}>
-                {caseData.title}
+                {caseData.cardTitle || caseData.title}
               </h2>
 
               <div className="sys-label" style={{ marginBottom: 7, color: 'var(--color-fg-dim)' }}>
@@ -711,7 +711,7 @@ function WorkGridCard({ caseData, index }) {
             marginBottom: 8,
             textTransform: 'uppercase',
           }}>
-            {caseData.title}
+            {caseData.cardTitle || caseData.title}
           </h2>
 
           {/* Meta */}

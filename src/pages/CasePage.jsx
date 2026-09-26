@@ -203,6 +203,12 @@ function HeroScrollReveal({ caseData, t, lang }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: titleDelay + 0.3, ease: 'easeOut' }}
           >
+            {caseData.heroMeta ? caseData.heroMeta.map((item, i) => (
+              <span key={item} style={{ display: 'contents' }}>
+                {i > 0 && <span style={{ color: ACCENT, opacity: 0.4 }}>·</span>}
+                <span>{item}</span>
+              </span>
+            )) : <>
             {caseData.role && <span>{caseData.role}</span>}
             {caseData.platform?.length > 0 && (
               <>
@@ -216,6 +222,7 @@ function HeroScrollReveal({ caseData, t, lang }) {
                 <span>{caseData.year}</span>
               </>
             )}
+            </>}
           </m.div>
         </div>
 
@@ -945,6 +952,300 @@ function CaseGallery({ gallery = [], caseId, title }) {
   );
 }
 
+// ── Visual showcase ──────────────────────────────────────────────────────────
+// Cases with `heroShots` / `showcase` in cases.js render screens first, copy
+// second. Text fields follow the xEs convention; every image in a section opens
+// in the shared ZoomModal and can be paged with the arrow keys.
+const SHOT_ASPECT = '1792/828';
+const pickLang = (obj, key, lang) => (lang === 'es' && obj?.[`${key}Es`]) || obj?.[key];
+const pad2 = (n) => String(n).padStart(2, '0');
+
+function useShowcaseZoom(srcs, title) {
+  const [index, setIndex] = useState(null);
+  const close = useCallback(() => setIndex(null), []);
+  const nav = useCallback(
+    (dir) => setIndex(i => (i === null ? null : (i + dir + srcs.length) % srcs.length)),
+    [srcs.length],
+  );
+  const modal = (
+    <AnimatePresence>
+      {index !== null && (
+        <ZoomModal items={srcs} activeIndex={index} onClose={close} onNav={nav} title={title} />
+      )}
+    </AnimatePresence>
+  );
+  return [setIndex, modal];
+}
+
+function ShowcaseShot({ shot, lang, onOpen, number, aspect, fill = false, overlayCaption = false, hideCaption = false }) {
+  const [hovered, setHovered] = useState(false);
+  const [scanKey, setScanKey] = useState(0);
+  const caption = pickLang(shot, 'caption', lang);
+  const contain = shot.fit === 'contain';
+
+  return (
+    <figure className={fill ? 'md:h-full' : undefined} style={{ margin: 0, minWidth: 0 }}>
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`${caption || shot.alt || 'Screen'} — zoom`}
+        className={fill ? 'aspect-[1792/828] md:aspect-auto md:h-full' : undefined}
+        onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          position: 'relative', display: 'block', width: '100%', padding: 0,
+          aspectRatio: fill ? undefined : (aspect || shot.aspect || SHOT_ASPECT),
+          overflow: 'hidden', cursor: 'zoom-in',
+          border: `1px solid ${hovered ? 'var(--color-accent-35)' : RULE}`,
+          backgroundColor: contain ? 'rgba(245,245,243,0.025)' : '#000',
+          transition: 'border-color 0.2s ease',
+        }}
+      >
+        <img
+          src={shot.src}
+          alt={shot.alt || caption || ''}
+          loading="lazy"
+          decoding="async"
+          style={{
+            position: 'absolute',
+            inset: contain ? '6%' : 0,
+            width: contain ? '88%' : '100%',
+            height: contain ? '88%' : '100%',
+            objectFit: contain ? 'contain' : 'cover',
+          }}
+        />
+        <m.div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4 }} animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>
+          {GALLERY_CORNERS.map((s, i) => <div key={i} style={{ position: 'absolute', width: 16, height: 16, ...s }} />)}
+        </m.div>
+        <ScanSweep active={hovered} scanKey={scanKey} />
+        {overlayCaption && caption && (
+          <span style={{
+            position: 'absolute', left: 10, bottom: 10, zIndex: 5,
+            fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase',
+            color: FG, backgroundColor: 'rgba(8,8,8,0.82)', border: '1px solid rgba(245,245,243,0.12)',
+            padding: '4px 8px',
+          }}>
+            {caption}
+          </span>
+        )}
+      </button>
+      {!overlayCaption && !hideCaption && caption && (
+        <figcaption style={{
+          display: 'flex', gap: 8, alignItems: 'baseline', marginTop: 10,
+          fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'var(--color-fg-mute)', lineHeight: 1.5,
+        }}>
+          {number && <span style={{ color: 'var(--color-accent-45)', fontWeight: 700 }}>{pad2(number)}</span>}
+          <span>{caption}</span>
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+// Hero composition — three real screens directly under the title
+function ShowcaseTrio({ shots, lang, title }) {
+  const [openZoom, zoomModal] = useShowcaseZoom(shots.map(s => s.src), title);
+  const shouldReduce = useReducedMotion();
+  const [lead, ...side] = shots;
+  return (
+    <m.div
+      className="max-w-[1400px] mx-auto px-6 py-8"
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.38 }}
+    >
+      {zoomModal}
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-2">
+        <div className="md:row-span-2">
+          <ShowcaseShot shot={lead} lang={lang} fill overlayCaption onOpen={() => openZoom(0)} />
+        </div>
+        {side.map((shot, i) => (
+          <ShowcaseShot key={shot.src} shot={shot} lang={lang} aspect={SHOT_ASPECT} overlayCaption onOpen={() => openZoom(i + 1)} />
+        ))}
+      </div>
+    </m.div>
+  );
+}
+
+// Row of screens — stacked or horizontal-scroll on mobile, grid from md up
+function ShotRow({ row, lang, startIndex, numberStart = startIndex, onOpen }) {
+  const label = pickLang(row, 'label', lang);
+  const scroll = row.mobile === 'scroll';
+  return (
+    <div>
+      {label && <div className="sys-label mb-3">{label}</div>}
+      <div
+        className={scroll
+          ? 'flex gap-2 overflow-x-auto snap-x snap-mandatory -mx-6 px-6 pb-2 md:mx-0 md:px-0 md:pb-0 md:grid md:overflow-visible md:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]'
+          : 'grid grid-cols-1 gap-2 md:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]'}
+        style={{ '--cols': row.cols || 1, scrollbarWidth: 'none', scrollPaddingInline: 24 }}
+      >
+        {row.items.map((shot, i) => (
+          <div
+            key={`${shot.src}-${i}`}
+            className={scroll ? 'shrink-0 basis-[82%] snap-start md:basis-auto' : 'md:[grid-column:span_var(--span)/span_var(--span)]'}
+            style={{ minWidth: 0, '--span': shot.span || 1 }}
+          >
+            <ShowcaseShot shot={shot} lang={lang} number={numberStart + i + 1} onOpen={() => onOpen(startIndex + i)} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Screen with numbered markers + legend (markers are decorative; the legend carries meaning)
+function AnnotatedShot({ shot, lang, onOpen }) {
+  const shouldReduce = useReducedMotion();
+  return (
+    <figure style={{ margin: 0 }}>
+      <div style={{ position: 'relative' }}>
+        <ShowcaseShot shot={shot} lang={lang} hideCaption onOpen={onOpen} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6 }}>
+          {shot.markers.map((mk, i) => (
+            <m.span
+              key={i}
+              style={{
+                position: 'absolute', left: `${mk.x}%`, top: `${mk.y}%`, x: '-50%', y: '-50%',
+                width: 'clamp(18px, 1.9vw, 26px)', height: 'clamp(18px, 1.9vw, 26px)', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                backgroundColor: FG, color: '#0a0a0a',
+                fontFamily: MONO, fontSize: 'clamp(9px, 0.8vw, 11px)', fontWeight: 700,
+                boxShadow: '0 0 0 2px var(--color-accent), 0 4px 14px rgba(0,0,0,0.55)',
+              }}
+              initial={shouldReduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1], delay: shouldReduce ? 0 : i * 0.04 }}
+            >
+              {i + 1}
+            </m.span>
+          ))}
+        </div>
+      </div>
+      <figcaption style={{ marginTop: 14 }}>
+        <div className="sys-label mb-3">{pickLang(shot, 'caption', lang)}</div>
+        <ol className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+          {shot.markers.map((mk, i) => (
+            <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: MONO, fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-fg-dim)' }}>
+              <span style={{ flexShrink: 0, width: 18, height: 18, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: FG, color: '#0a0a0a', fontSize: '9px', fontWeight: 700 }}>{i + 1}</span>
+              {pickLang(mk, 'label', lang)}
+            </li>
+          ))}
+        </ol>
+      </figcaption>
+    </figure>
+  );
+}
+
+function ShowcaseSection({ block, lang, caseTitle }) {
+  const shouldReduce = useReducedMotion();
+  const title = pickLang(block, 'title', lang);
+  const body = pickLang(block, 'body', lang);
+  const meta = pickLang(block, 'meta', lang);
+  const reveal = {
+    initial: shouldReduce ? { opacity: 0 } : { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-60px' },
+    transition: { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
+  };
+
+  // Every image in the block, in page order, so the zoom modal can page through the section
+  const shots = useMemo(() => [
+    ...(block.annotated ? [block.annotated] : []),
+    ...(block.rows || []).flatMap(r => r.items),
+    ...(block.type === 'flow' ? block.items : []),
+  ], [block]);
+  const [openZoom, zoomModal] = useShowcaseZoom(shots.map(s => s.src), caseTitle);
+  let cursor = block.annotated ? 1 : 0;
+
+  if (block.type === 'role') {
+    return (
+      <m.section id={block.id} className="py-14 mb-2" style={{ borderBottom: `1px solid ${RULE}` }} {...reveal}>
+        <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-14 items-start">
+          <SectionLabelPrimary>{title}</SectionLabelPrimary>
+          <div>
+            <div className="sys-label mb-4" style={{ color: ACCENT }}>{block.group}</div>
+            <ol className="grid grid-cols-2 lg:grid-cols-4" style={{ borderTop: `1px solid ${RULE}`, borderLeft: `1px solid ${RULE}` }}>
+              {block.items.map((item, i) => (
+                <li key={item.label} style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '16px 16px 18px', minHeight: 92, borderRight: `1px solid ${RULE}`, borderBottom: `1px solid ${RULE}` }}>
+                  <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-accent-45)', fontWeight: 700 }}>{pad2(i + 1)}</span>
+                  <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.15rem, 1.8vw, 1.5rem)', letterSpacing: '0.02em', lineHeight: 1.05, color: FG }}>{pickLang(item, 'label', lang)}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </m.section>
+    );
+  }
+
+  return (
+    <section id={block.id} className="py-14 md:py-20 mb-2" style={{ borderBottom: `1px solid ${RULE}` }}>
+      {zoomModal}
+      <m.div {...reveal} style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+        <SectionLabelPrimary>{title}</SectionLabelPrimary>
+        {meta && <span className="sys-label mb-10">{meta}</span>}
+      </m.div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        {block.annotated && (
+          <m.div {...reveal}>
+            <AnnotatedShot shot={block.annotated} lang={lang} onOpen={() => openZoom(0)} />
+          </m.div>
+        )}
+
+        {block.rows?.map((row, i) => {
+          const start = cursor;
+          cursor += row.items.length;
+          return (
+            <m.div key={i} {...reveal}>
+              <ShotRow row={row} lang={lang} startIndex={start} numberStart={start - (block.annotated ? 1 : 0)} onOpen={openZoom} />
+            </m.div>
+          );
+        })}
+
+        {block.type === 'flow' && (
+          <m.ol {...reveal} className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-6">
+            {block.items.map((shot, i) => (
+              <li key={shot.src} style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 10 }}>
+                  <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', color: ACCENT, fontWeight: 700 }}>{pad2(i + 1)}</span>
+                  <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.2rem, 1.8vw, 1.5rem)', letterSpacing: '0.02em', color: FG, lineHeight: 1 }}>{pickLang(shot, 'caption', lang)}</span>
+                  {i < block.items.length - 1 && (
+                    <span aria-hidden="true" style={{ marginLeft: 'auto', fontFamily: MONO, color: 'var(--color-accent-45)' }}>→</span>
+                  )}
+                </div>
+                <ShowcaseShot shot={shot} lang={lang} aspect="16/10" hideCaption onOpen={() => openZoom(i)} />
+              </li>
+            ))}
+          </m.ol>
+        )}
+      </div>
+
+      {(body || block.points) && (
+        <m.div {...reveal} className="grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-6 md:gap-12 mt-10">
+          {body && (
+            <p style={{ fontFamily: MONO, fontSize: 'clamp(15px, 1.5vw, 17px)', color: 'rgba(240,238,234,0.86)', lineHeight: 1.75, maxWidth: '56ch' }}>
+              {body}
+            </p>
+          )}
+          {block.points && (
+            <ul className="flex flex-wrap gap-2 content-start">
+              {block.points.map(pt => (
+                <li key={pt.label} style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-dim)', border: `1px solid ${RULE}`, padding: '7px 10px', lineHeight: 1.3 }}>
+                  {pickLang(pt, 'label', lang)}
+                </li>
+              ))}
+            </ul>
+          )}
+        </m.div>
+      )}
+    </section>
+  );
+}
+
 // ── Outcome callout ────────────────────────────────────────────────────────────
 // Prominent metrics band — add outcomeStats: [{value, label}] to cases.js
 // to populate. Shows nothing when field is missing.
@@ -1066,8 +1367,9 @@ export default function CasePage({ onMenuOpen }) {
 
   usePageMeta({
     title: caseData ? caseData.title : 'Case Study',
+    fullTitle: caseData?.seoTitle,
     description: caseData
-      ? (lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : caseData.description)
+      ? (lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : (caseData.seoDescription || caseData.description))
       : undefined,
     themeColor: '#ff2540',
   });
@@ -1161,6 +1463,7 @@ export default function CasePage({ onMenuOpen }) {
   // reconnecting on every render (which caused active-section tracking to fail).
   const tocSections = useMemo(() => [
     content?.summary                         && { id: 'cs-summary',      label: cp.executiveSummary },
+    ...(caseData.showcase || []).map(b => ({ id: b.id, label: pickLang(b, 'toc', lang) })),
     content?.projectSnapshot                 && { id: 'cs-snapshot',     label: cp.projectSnapshot },
     content?.myOwnership                     && { id: 'cs-ownership',    label: cp.myOwnership },
     content?.context                         && { id: 'cs-context',      label: cp.context },
@@ -1181,7 +1484,7 @@ export default function CasePage({ onMenuOpen }) {
     content?.whatILearned                    && { id: 'cs-learned',      label: cp.whatILearned || 'What I learned' },
     content?.nextSteps                       && { id: 'cs-next',         label: cp.nextSteps },
     whatThisShows                            && { id: 'cs-shows',        label: cp.whatThisShows || 'What this shows' },
-  ].filter(Boolean), [content, whatThisShows, cp]);
+  ].filter(Boolean), [content, whatThisShows, cp, caseData.showcase, lang]);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, backgroundColor: 'var(--color-bg)' }}>
@@ -1214,6 +1517,11 @@ export default function CasePage({ onMenuOpen }) {
               title={caseData.title}
             />
           </m.div>
+        )}
+
+        {/* Hero composition — real screens, only when heroShots is defined */}
+        {caseData.heroShots?.length > 0 && (
+          <ShowcaseTrio shots={caseData.heroShots} lang={lang} title={caseData.title} />
         )}
 
         {/* gallery moved — renders after outcomes section below */}
@@ -1321,6 +1629,11 @@ export default function CasePage({ onMenuOpen }) {
                   </div>
                 </m.section>
               )}
+
+              {/* Visual-first sections — only when showcase is defined */}
+              {caseData.showcase?.map(block => (
+                <ShowcaseSection key={block.id} block={block} lang={lang} caseTitle={caseData.title} />
+              ))}
 
               {/* Project Snapshot — quick-scan table for recruiters */}
               {content?.projectSnapshot && (
