@@ -27,7 +27,7 @@ const CLIENT_LOGOS = [
 ];
 
 const CONNECT_LINKS = [
-  { label: 'LINKEDIN', handle: 'in/afpisso', href: 'https://linkedin.com/in/afpisso' },
+  { label: 'LINKEDIN', handle: 'in/byandresfe', href: 'https://linkedin.com/in/byandresfe' },
   { label: 'INSTAGRAM', handle: '@byandresfe', href: 'https://instagram.com/byandresfe' },
   { label: 'X', handle: '@byandresfe', href: 'https://x.com/byandresfe' },
   { label: 'EMAIL', handle: 'hi@byandresfe.com', href: 'mailto:hi@byandresfe.com' },
