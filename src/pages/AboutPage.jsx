@@ -9,6 +9,7 @@ import SignalTrigger from '../components/SignalTrigger';
 import GlitchStrokeText from '../components/GlitchStrokeText';
 import SectionHeading from '../components/SectionHeading';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { pageMeta } from '../data/pageMeta.js';
 import PhotoGridOverlay from '../components/PhotoGridOverlay';
 import GeometryGrid from '../components/GeometryGrid';
 import { m, AnimatePresence, useTransform, useScroll, useReducedMotion } from 'framer-motion';
@@ -75,10 +76,8 @@ export default function AboutPage({ onMenuOpen }) {
   const shouldReduce = useReducedMotion();
 
   usePageMeta({
-    title: lang === 'es' ? 'Sobre mí' : 'About',
-    description: lang === 'es'
-      ? 'Sobre Andrés Felipe Pisso — UX Lead y Diseñador Game UX/UI enfocado en claridad, retroalimentación y mejores decisiones.'
-      : 'About Andrés Felipe Pisso — UX Lead and Game UX/UI Designer focused on clarity, feedback, and better decisions.',
+    fullTitle: pageMeta['/about'][lang].title,
+    description: pageMeta['/about'][lang].description,
   });
 
   const mouseRef = useMousePos();

@@ -23,6 +23,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 // ── Data imports (plain JS modules — no React deps) ─────────────────────────
 import { fieldNotes } from '../src/data/fieldNotes.js'
 import { cases }      from '../src/data/cases.js'
+import { pageMeta } from '../src/data/pageMeta.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root      = path.resolve(__dirname, '..')
@@ -31,11 +32,9 @@ const ssrBundle = path.join(root, 'dist-ssr', 'entry-server.js')
 
 const BASE      = 'https://byandresfe.com'
 const SITE_NAME = 'ByAndresFe'
-const BUILD_DATE = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
 
-const DEFAULT_TITLE = 'Game UX/UI Designer & UX Lead — Andres Felipe Pisso'
-const DEFAULT_DESC  =
-  'Portfolio of Andres Felipe Pisso, a UX Lead and Game UX/UI Designer focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.'
+const DEFAULT_TITLE = pageMeta['/'].en.title
+const DEFAULT_DESC = pageMeta['/'].en.description
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
 const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking']
@@ -127,7 +126,7 @@ function buildNoteSchema(note) {
     description: note.summary,
     url: `${BASE}/notes/${note.slug}`,
     datePublished: note.date,
-    dateModified: note.date,
+    dateModified: note.dateModified || note.date,
     inLanguage: ['en', 'es'],
     keywords: [note.category, 'Game UX', 'Game UI', 'UX Design'].join(', '),
     author: PERSON_REF,
@@ -231,6 +230,10 @@ function buildPageMeta() {
     canonical: `${BASE}/notes`,
     ogType: 'website',
     schema: buildNotesIndexSchema(),
+  }
+
+  for (const [route, localized] of Object.entries(pageMeta)) {
+    Object.assign(meta[route], localized.en)
   }
 
   for (const note of fieldNotes) {
@@ -343,13 +346,7 @@ function injectMeta(html, pageMeta) {
     html = html.replace(/(<meta property="og:image:height" content=")[^"]*(")/,  `$1$2`)
   }
 
-  // Hreflang — EN and ES serve from the same URLs (client-side language switch)
-  const hreflangTags = [
-    `<link rel="alternate" hreflang="en" href="${escAttr(canonical)}" />`,
-    `<link rel="alternate" hreflang="es-CO" href="${escAttr(canonical)}" />`,
-    `<link rel="alternate" hreflang="x-default" href="${escAttr(canonical)}" />`,
-  ].join('\n    ')
-  html = html.replace('</head>', `    ${hreflangTags}\n  </head>`)
+  // Language switching uses one URL; no separate localized URLs exist.
 
   // Inject page-specific schema before </head>
   if (schema) {
@@ -362,37 +359,14 @@ function injectMeta(html, pageMeta) {
 
 // ── Sitemap generation ──────────────────────────────────────────────────────
 function generateSitemap() {
-  const now = BUILD_DATE
-
-  const noteLastmods = Object.fromEntries(fieldNotes.map(n => [`/notes/${n.slug}`, n.date]))
-
-  const pages = [
-    { loc: `${BASE}/`,         priority: '1.0', changefreq: 'monthly', lastmod: now },
-    { loc: `${BASE}/work`,     priority: '0.9', changefreq: 'monthly', lastmod: now },
-    { loc: `${BASE}/about`,    priority: '0.8', changefreq: 'monthly', lastmod: now },
-    { loc: `${BASE}/resume`,   priority: '0.7', changefreq: 'monthly', lastmod: now },
-    { loc: `${BASE}/speaking`, priority: '0.6', changefreq: 'monthly', lastmod: now },
-    { loc: `${BASE}/notes`,    priority: '0.8', changefreq: 'weekly',  lastmod: now },
-    ...fieldNotes.map(n => ({
-      loc: `${BASE}/notes/${n.slug}`,
-      priority: '0.7',
-      changefreq: 'monthly',
-      lastmod: n.date,
-    })),
-    ...cases.filter(c => c.content).map(c => ({
-      loc: `${BASE}/case/${c.slug}`,
-      priority: c.featured ? '0.8' : '0.5',
-      changefreq: 'monthly',
-      lastmod: now,
-    })),
-  ]
-
-  const urls = pages.map(p => `  <url>
-    <loc>${p.loc}</loc>
-    <lastmod>${p.lastmod}</lastmod>
-    <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
-  </url>`).join('\n')
+  const noteDates = new Map(fieldNotes.map(n => [`/notes/${n.slug}`, n.dateModified || n.date]))
+  const urls = routes.map(route => {
+    const lastmod = noteDates.get(route)
+    return `  <url>
+    <loc>${BASE}${route}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
+  </url>`
+  }).join('\n')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -444,6 +418,12 @@ async function main() {
       fail++
     }
   }
+
+  // A real 404 document lets Vercel keep HTTP status 404 for unknown routes.
+  let notFound = injectMeta(template, { title: 'Page not found — ByAndresFe', description: 'This page could not be found. Explore the portfolio, case studies and field notes.', canonical: `${BASE}/404`, ogType: 'website', schema: null })
+  notFound = notFound.replace(/(<meta name="robots" content=")[^"]*(")/, '$1noindex, follow$2')
+  notFound = notFound.replace('<div id="root"></div>', `<div id="root">${render('/__not_found__')}</div>`)
+  fs.writeFileSync(path.join(distDir, '404.html'), notFound, 'utf-8')
 
   // 4. Generate sitemap with lastmod dates
   const sitemap = generateSitemap()

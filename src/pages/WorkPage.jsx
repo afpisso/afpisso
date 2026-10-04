@@ -9,6 +9,7 @@ import ScrambleText from '../components/ScrambleText';
 import SectionTag from '../components/SectionTag';
 import { StatusDiamond } from '../components/CyberIcons';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { pageMeta } from '../data/pageMeta.js';
 import { analytics } from '../utils/analytics';
 import SignalTrigger from '../components/SignalTrigger';
 import { usePageTransition } from '../contexts/TransitionContext';
@@ -770,10 +771,8 @@ export default function WorkPage({ onMenuOpen }) {
   const { t, lang } = useLang();
 
   usePageMeta({
-    title: lang === 'es' ? 'Trabajo seleccionado' : 'Selected Work',
-    description: lang === 'es'
-      ? 'Casos de estudio de Game UX/UI, UEFN, VR y sistemas de interfaz por Andrés Felipe Pisso. Cada caso documenta el problema real de diseño, el rol y las decisiones que dieron forma al trabajo.'
-      : 'Selected UX/UI case studies by Andrés Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
+    fullTitle: pageMeta['/work'][lang].title,
+    description: pageMeta['/work'][lang].description,
   });
 
   useEffect(() => {

@@ -346,7 +346,7 @@ const NAV_LINKS = [
 const CONTACT_LINK = { label: 'CONTACT', to: '/#contact' }
 
 const CONNECT_LINKS = [
-  { label: 'LINKEDIN',  handle: 'in/byandresfe',  href: 'https://linkedin.com/in/byandresfe'  },
+  { label: 'LINKEDIN',  handle: 'in/afpisso',  href: 'https://linkedin.com/in/afpisso'  },
   { label: 'INSTAGRAM', handle: '@byandresfe',     href: 'https://instagram.com/byandresfe'    },
   { label: 'X',         handle: '@byandresfe',     href: 'https://x.com/byandresfe'            },
   { label: 'EMAIL',     handle: 'afp.fenrir',      href: 'mailto:afp.fenrir@gmail.com'         },

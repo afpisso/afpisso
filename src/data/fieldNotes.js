@@ -120,3 +120,45 @@ export const getNoteType = (note, lang) =>
 
 export const getNoteCategory = (note, lang) =>
   lang === 'es' && note.categoryEs ? note.categoryEs : note.category;
+
+fieldNotes.push(...[
+  {
+    "id": "FN-007",
+    "slug": "uefn-ux-lessons",
+    "title": "UEFN UX Lessons: Designing Inside Fortnite",
+    "titleEs": "Lecciones de UX en UEFN: diseñar dentro de Fortnite",
+    "category": "UEFN",
+    "categoryEs": "UEFN",
+    "date": "2026-05-22",
+    "dateModified": "2026-10-04",
+    "summary": "UEFN UX lessons on onboarding, player feedback and interface constraints. Review the first useful action and the boundaries of the platform in a real build.",
+    "summaryEs": "Lecciones de UX en UEFN sobre onboarding, feedback y restricciones de interfaz. Cómo revisar la primera acción útil y los límites de plataforma en una versión real.",
+    "readTime": "3 min",
+    "type": "Analysis",
+    "typeEs": "Análisis",
+    "relatedCases": [
+      "zombie-dragon-adventure",
+      "raptor-heist",
+      "havoc-hotel-3"
+    ]
+  },
+  {
+    "id": "FN-009",
+    "slug": "player-decision-making-ux",
+    "title": "How Game UX Shapes Player Decisions",
+    "titleEs": "Cómo el UX del juego moldea las decisiones del jugador",
+    "category": "Decision UX",
+    "categoryEs": "Decisiones del jugador",
+    "date": "2026-06-05",
+    "dateModified": "2026-10-04",
+    "summary": "Game UX shapes how players compare upgrades, costs and consequences. Review what the interface shows at the decision moment before blaming player skill.",
+    "summaryEs": "Game UX cambia cómo el jugador compara mejoras, costos y consecuencias. Revisa qué muestra la interfaz al decidir antes de atribuir el problema a su habilidad.",
+    "readTime": "3 min",
+    "type": "Analysis",
+    "typeEs": "Análisis",
+    "relatedCases": [
+      "zombie-dragon-adventure",
+      "courtyard-king"
+    ]
+  }
+]);

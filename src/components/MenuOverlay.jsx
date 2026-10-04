@@ -81,7 +81,7 @@ const MENU_ITEMS = [
 ];
 
 const SOCIAL = [
-  { label: 'LINKEDIN',  handle: 'in/byandresfe',  href: 'https://linkedin.com/in/byandresfe', icon: 'linkedin' },
+  { label: 'LINKEDIN',  handle: 'in/afpisso',  href: 'https://linkedin.com/in/afpisso', icon: 'linkedin' },
   { label: 'INSTAGRAM', handle: '@byandresfe',     href: 'https://instagram.com/byandresfe', icon: 'instagram' },
   { label: 'X',         handle: '@byandresfe',     href: 'https://x.com/byandresfe', icon: 'x' },
 ];

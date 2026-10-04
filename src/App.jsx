@@ -9,6 +9,7 @@ import { SignalAudioProvider } from './contexts/SignalAudioContext';
 import { TransitionProvider } from './contexts/TransitionContext';
 import HuntHUD from './components/HuntHUD';
 import { usePageMeta } from './hooks/usePageMeta';
+import { pageMeta } from './data/pageMeta.js';
 import Nav from './components/Nav';
 import HeroStatementPin from './components/HeroStatementPin';
 import CaseFiles from './components/CaseFiles';
@@ -126,7 +127,8 @@ function LabRoute({ onMenuOpen }) {
 // ── Ticker content ─────────────────────────────────────────────────────────────
 // ── HomePage ───────────────────────────────────────────────────────────────────
 function HomePage({ onMenuOpen }) {
-  usePageMeta({});
+  const { lang } = useLang();
+  usePageMeta({ fullTitle: pageMeta['/'][lang].title, description: pageMeta['/'][lang].description });
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />

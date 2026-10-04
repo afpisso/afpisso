@@ -67,6 +67,7 @@ import NotesPage  from './pages/NotesPage.jsx'
 import NotePage   from './pages/NotePage.jsx'
 import CasePage   from './pages/CasePage.jsx'
 import SpeakingPage from './pages/SpeakingPage.jsx'
+import NotFoundPage from './pages/NotFoundPage.jsx'
 
 // No-op prop for event handlers that aren't needed during SSR
 const noop = () => {}
@@ -95,6 +96,7 @@ function AppSSR() {
       <Route path="/notes"         element={<NotesPage  onMenuOpen={noop} />} />
       <Route path="/notes/:slug"   element={<NotePage  onMenuOpen={noop} />} />
       <Route path="/case/:slug"    element={<CasePage  onMenuOpen={noop} />} />
+      <Route path="*" element={<NotFoundPage onMenuOpen={noop} />} />
     </Routes>
   )
 }

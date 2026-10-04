@@ -6,6 +6,7 @@ import { fieldNotes, getNoteCategory, getNoteSummary, getNoteTitle, getNoteType 
 import { useLang } from '../contexts/LangContext';
 import SectionTag from '../components/SectionTag';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { pageMeta } from '../data/pageMeta.js';
 import SignalTrigger from '../components/SignalTrigger';
 import CyberBtn from '../components/CyberBtn';
 import { m } from 'framer-motion';
@@ -205,10 +206,8 @@ export default function NotesPage({ onMenuOpen }) {
   const { t, lang } = useLang();
 
   usePageMeta({
-    title: 'Field Notes',
-    description: lang === 'es'
-      ? 'Frameworks, análisis y notas de Andrés Felipe Pisso sobre UX/UI para juegos, sistemas de interfaz, HUD, accesibilidad, UEFN, VR y diseño de producto digital.'
-      : 'Field notes, frameworks and breakdowns by Andrés Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
+    fullTitle: pageMeta['/notes'][lang].title,
+    description: pageMeta['/notes'][lang].description,
   });
 
   useEffect(() => {
