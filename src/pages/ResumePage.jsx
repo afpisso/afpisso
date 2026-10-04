@@ -263,7 +263,7 @@ export default function ResumePage({ onMenuOpen }) {
                 >
                   hi@byandresfe.com
                 </a>
-                <a href="https://linkedin.com/in/afpisso" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-fg-dim)' }}
+                <a href="https://linkedin.com/in/byandresfe" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-fg-dim)' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-dim)'}
                   onClick={() => analytics.linkedinClick('resume-page')}

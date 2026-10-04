@@ -33,7 +33,7 @@
 
 - [Portfolio](https://byandresfe.com): Full case studies and approach.
 - [Contact](https://byandresfe.com/#contact): Preferred first contact.
-- [LinkedIn](https://linkedin.com/in/afpisso): Professional profile.
+- [LinkedIn](https://linkedin.com/in/byandresfe): Professional profile.
 
 ## Usage
 
