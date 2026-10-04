@@ -475,7 +475,7 @@ export default function HeroSSR() {
           <div className="mb-6">
             <h1
               className="uppercase"
-              aria-label="Andrés Felipe Pisso"
+              aria-label="Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead in Bogotá, Colombia"
               style={{
                 fontFamily: '"Bebas Neue", sans-serif',
                 fontSize: 'clamp(4.5rem, 14vw, 13rem)',
@@ -483,6 +483,7 @@ export default function HeroSSR() {
                 letterSpacing: '-0.01em',
               }}
             >
+              <span className="sr-only">Senior Game UX/UI Designer &amp; UX Lead in Bogotá, Colombia. </span>
               {nameLines.map((line, lineIdx) => (
                 <m.div
                   key={lineIdx}

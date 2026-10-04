@@ -3,6 +3,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { pageMeta } from '../data/pageMeta.js';
 import { analytics } from '../utils/analytics';
 import { m } from 'framer-motion';
 
@@ -25,10 +26,8 @@ export default function ResumePage({ onMenuOpen }) {
   const r = t.resume;
 
   usePageMeta({
-    title: lang === 'es' ? 'CV' : 'Resume',
-    description: lang === 'es'
-      ? 'CV de Andrés Felipe Pisso — UX Lead y Diseñador Game UX/UI con 11+ años de experiencia.'
-      : 'Resume of Andrés Felipe Pisso — UX Lead and Game UX/UI Designer with 11+ years of experience.',
+    fullTitle: pageMeta['/resume'][lang].title,
+    description: pageMeta['/resume'][lang].description,
   });
 
   // Track resume page view on mount
@@ -264,7 +263,7 @@ export default function ResumePage({ onMenuOpen }) {
                 >
                   hi@byandresfe.com
                 </a>
-                <a href="https://linkedin.com/in/byandresfe" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-fg-dim)' }}
+                <a href="https://linkedin.com/in/afpisso" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-fg-dim)' }}
                   onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--color-fg-dim)'}
                   onClick={() => analytics.linkedinClick('resume-page')}

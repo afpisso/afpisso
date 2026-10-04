@@ -530,3 +530,314 @@ export const noteArticles = {
     ],
   },
 };
+
+Object.assign(noteArticles, {
+  "player-decision-making-ux": {
+    "en": [
+      {
+        "type": "paragraph",
+        "text": "A bad player decision is not always a skill problem. Sometimes the interface asked for a choice before it made the relevant information easy to see. The useful question is not only why the player chose an option, but what the interface showed at that moment."
+      },
+      {
+        "type": "heading",
+        "text": "Available information is not processed information"
+      },
+      {
+        "type": "paragraph",
+        "text": "A tooltip can describe an item's effect and still fail. If the player must hover, stop, read small text, and remember the description during a tense moment, the information is technically present but practically unavailable. Decision UX must account for attention, timing, and the player's current task."
+      },
+      {
+        "type": "callout",
+        "text": "Design for the player's distracted state. Choice moments rarely arrive when attention is unlimited."
+      },
+      {
+        "type": "paragraph",
+        "text": "Consider a hypothetical upgrade screen: one card offers more damage, another a shorter cooldown. If the cards show different units or hide the current values, the player has to calculate the tradeoff before choosing. Showing the current and resulting state makes the comparison usable. It does not tell the player which build to pursue."
+      },
+      {
+        "type": "heading",
+        "text": "How choice presentation changes decisions"
+      },
+      {
+        "type": "paragraph",
+        "text": "Upgrade screens, inventories, skill trees, and dialogue choices all frame options. Order, default selection, visual emphasis, and wording can guide attention before the player compares value. That influence is not automatically wrong. It becomes a problem when the frame hides an important cost, consequence, or difference."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Make the consequence of each option concrete and comparable.",
+          "Use visual emphasis to support priority, not to disguise weaker value.",
+          "Mark a default choice as a starting point, not as an unexplained recommendation.",
+          "Show scarcity, cost, and permanence before confirmation.",
+          "Reduce confirmation friction for reversible choices; add a clear pause for irreversible ones."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Close the feedback loop"
+      },
+      {
+        "type": "paragraph",
+        "text": "Players refine decisions when they can connect a choice to an outcome. An upgrade that activates silently during a chaotic fight teaches little. A readable change in damage, resource state, or a post-run summary gives the player evidence. Feedback does not need to interrupt play. It needs to be visible enough for an attentive player to trace cause and effect."
+      },
+      {
+        "type": "heading",
+        "text": "Where decision UX breaks"
+      },
+      {
+        "type": "paragraph",
+        "text": "Too many options can arrive before players understand the system. Similar options can become a coin toss when descriptions are abstract or uneven. Permanent choices can feel punitive when permanence appears only after selection. In each case, the interface gives the form of choice without enough context for an informed choice."
+      },
+      {
+        "type": "callout",
+        "text": "If players hesitate, guess, or regret a choice, inspect the signal before judging the player."
+      },
+      {
+        "type": "heading",
+        "text": "A practical review"
+      },
+      {
+        "type": "paragraph",
+        "text": "Watch real sessions around one decision. Note what the player notices, what they ask, where they pause, and what they believe will happen. Then compare that expectation with the intended rule. Improve the information at the decision moment: clearer comparison, visible consequence, stronger state change, or a better time to ask. The goal is not to remove depth. It is to make depth legible."
+      },
+      {
+        "type": "paragraph",
+        "text": "Review the decision again after the change. A shorter hesitation is useful evidence, but it is not proof that the choice became better. Check whether players understand the tradeoff, whether they can explain the outcome, and whether the interface still supports deliberate choices for experienced players. Clarity should reduce guesswork while preserving room for judgment. Repeat this review when context, difficulty, or timing changes. Record what changed and why, including the remaining uncertainty."
+      }
+    ],
+    "es": [
+      {
+        "type": "paragraph",
+        "text": "Una mala decisión del jugador no siempre es un problema de habilidad. A veces la interfaz pidió elegir antes de hacer visible la información relevante. La pregunta útil no es solo por qué eligió una opción, sino qué le mostró la interfaz en ese momento."
+      },
+      {
+        "type": "heading",
+        "text": "La información disponible no es información procesada"
+      },
+      {
+        "type": "paragraph",
+        "text": "Un tooltip puede describir el efecto de un objeto y aun así fallar. Si el jugador debe pasar el cursor, detenerse, leer texto pequeño y recordar la descripción durante un momento de tensión, la información está presente, pero no resulta accesible. La UX de decisiones debe considerar atención, tiempo y tarea actual."
+      },
+      {
+        "type": "callout",
+        "text": "Diseña para el estado distraído del jugador. Los momentos de elección rara vez llegan cuando la atención es ilimitada."
+      },
+      {
+        "type": "paragraph",
+        "text": "Piensa en una pantalla hipotética de mejoras: una tarjeta ofrece más daño y otra reduce el cooldown. Si cada tarjeta usa unidades distintas u oculta los valores actuales, el jugador tiene que calcular el intercambio antes de elegir. Mostrar el estado actual y el resultante permite comparar sin decidir por él qué build seguir."
+      },
+      {
+        "type": "heading",
+        "text": "Cómo la presentación cambia las decisiones"
+      },
+      {
+        "type": "paragraph",
+        "text": "Pantallas de mejoras, inventarios, árboles de habilidades y diálogos enmarcan las opciones. El orden, la selección inicial, el peso visual y la redacción dirigen la atención antes de comparar el valor. Esa influencia no es mala por sí sola. El problema aparece cuando oculta un costo, una consecuencia o una diferencia importante."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Haz concreta y comparable la consecuencia de cada opción.",
+          "Usa el énfasis visual para marcar prioridad, no para disfrazar un valor menor.",
+          "Presenta la opción inicial como punto de partida, no como recomendación inexplicada.",
+          "Muestra escasez, costo y permanencia antes de confirmar.",
+          "Reduce pasos para decisiones reversibles y marca con claridad las irreversibles."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Cierra el ciclo de retroalimentación"
+      },
+      {
+        "type": "paragraph",
+        "text": "Los jugadores afinan sus decisiones cuando pueden conectar una elección con un resultado. Una mejora que se activa en silencio durante un combate caótico enseña poco. Un cambio legible en el daño, los recursos o un resumen de partida ofrece evidencia. La retroalimentación no debe interrumpir el juego; debe ser visible para que un jugador atento pueda seguir causa y efecto."
+      },
+      {
+        "type": "heading",
+        "text": "Dónde se rompe la UX de decisiones"
+      },
+      {
+        "type": "paragraph",
+        "text": "A veces llegan demasiadas opciones antes de que el jugador entienda el sistema. Otras veces dos opciones parecen iguales porque sus descripciones son abstractas o desiguales. Una elección permanente se siente como castigo si la permanencia aparece después de seleccionar. En esos casos hay forma de elección, pero falta contexto."
+      },
+      {
+        "type": "callout",
+        "text": "Si el jugador duda, adivina o se arrepiente, revisa primero la señal antes de juzgar al jugador."
+      },
+      {
+        "type": "heading",
+        "text": "Una revisión práctica"
+      },
+      {
+        "type": "paragraph",
+        "text": "Observa sesiones reales alrededor de una decisión. Registra qué nota el jugador, qué pregunta, dónde se detiene y qué cree que ocurrirá. Compara esa expectativa con la regla prevista. Mejora la información en el momento: comparación más clara, consecuencia visible, cambio de estado más fuerte o mejor timing. La meta no es quitar profundidad, sino volverla legible."
+      },
+      {
+        "type": "paragraph",
+        "text": "Revisa la decisión después del cambio. Una duda más corta es una señal útil, pero no prueba que la elección sea mejor. Comprueba si los jugadores entienden el intercambio, si pueden explicar el resultado y si la interfaz todavía permite decidir con intención a quienes ya conocen el sistema. La claridad reduce las adivinanzas sin quitar espacio al criterio. Repite la revisión si cambia el contexto, la dificultad o el momento."
+      }
+    ]
+  },
+  "uefn-ux-lessons": {
+    "en": [
+      {
+        "type": "paragraph",
+        "text": "UEFN is not a blank canvas. It is Fortnite's canvas with your experience built inside it. Good UX starts by identifying the boundary: what the island team can shape, what belongs to the surrounding platform, and what must be checked in the current build."
+      },
+      {
+        "type": "heading",
+        "text": "Design the boundary"
+      },
+      {
+        "type": "paragraph",
+        "text": "Before defining the layout, separate island-owned information from platform-owned surfaces. Check which inputs, notifications and HUD elements the tested build can control. A visual proposal is not evidence that a surface can be implemented; validate it in the actual version and on the intended devices."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Inventory the information players already receive from the platform.",
+          "Mark which signals your island must provide itself.",
+          "Test the real HUD, input, resolution, and device combinations before committing to a layout.",
+          "Use a fallback signal when a custom surface is unavailable or easy to miss."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Consider a hypothetical cooperative island where players select a class before entering a shared lobby. Before refining the class cards, check whether the player can tell that the selection was accepted, where to go next and whether the group is ready. A readable card cannot solve an unclear transition between those states."
+      },
+      {
+        "type": "heading",
+        "text": "Use familiarity as shorthand"
+      },
+      {
+        "type": "paragraph",
+        "text": "Players arrive with expectations from Fortnite: familiar inputs, pacing, feedback, and visual patterns. That familiarity can shorten onboarding, but it also makes deviations expensive. Reuse conventions when they fit. When the island changes a familiar rule, state the change at the moment it matters and show the next action clearly."
+      },
+      {
+        "type": "heading",
+        "text": "Onboard the island, not the platform"
+      },
+      {
+        "type": "paragraph",
+        "text": "The opening should teach the island's difference: its objective, first useful action, and one or two rules that affect play. A single orientation cue, a plain-language notification, and an early confirmation can be enough to establish direction. Avoid turning the first minute into a manual. Players need to enter the loop and then learn through feedback."
+      },
+      {
+        "type": "callout",
+        "text": "The best first test is simple: can a new player say what to do next without asking?"
+      },
+      {
+        "type": "heading",
+        "text": "Where the experience earns attention"
+      },
+      {
+        "type": "paragraph",
+        "text": "The lobby or entry surface sets expectations. A clear title, honest description, and representative preview reduce the gap between promise and play. Inside the island, inspect the first decision, first objective, and first moment of feedback. These moments reveal whether the interface communicates the core loop or asks players to guess."
+      },
+      {
+        "type": "heading",
+        "text": "Treat constraints as design inputs"
+      },
+      {
+        "type": "paragraph",
+        "text": "A platform constraint may remove a surface level option while leaving the core experience intact. Before fighting it, ask whether it blocks a core player action or only a preferred visual treatment. If the action survives, choose another signal. If it does not, document the constraint and test a different route in the current build."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Measure the path to the first meaningful action in seconds.",
+          "Remove screens and inputs that do not help players reach the loop.",
+          "Review readability at the target distance, resolution, and device.",
+          "Test with players who know Fortnite and players who do not share the island's assumptions."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep a short decision log for the tested build: intended player action, signal used, known platform dependency, and observed failure. This makes later reviews faster and keeps the team honest about what was verified. The log can stay lightweight; its value is making assumptions visible before they become interface debt."
+      },
+      {
+        "type": "callout",
+        "text": "Design around the platform's real boundaries. Recheck those boundaries whenever the build, device, or feature set changes."
+      }
+    ],
+    "es": [
+      {
+        "type": "paragraph",
+        "text": "UEFN no es un lienzo en blanco. Es el lienzo de Fortnite con tu experiencia construida dentro. Una buena UX empieza por identificar el límite: qué puede definir el equipo de la isla, qué pertenece a la plataforma y qué debe comprobarse en la versión real."
+      },
+      {
+        "type": "heading",
+        "text": "Diseña el límite"
+      },
+      {
+        "type": "paragraph",
+        "text": "Antes de definir el layout, separa la información de la isla de las superficies de plataforma. Comprueba qué entradas, notificaciones y elementos del HUD puede controlar la versión que se prueba. Una propuesta visual no demuestra que esa superficie pueda implementarse; valídala en la versión real y los dispositivos previstos."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Haz inventario de la información que ya entrega la plataforma.",
+          "Marca qué señales debe aportar la isla.",
+          "Prueba HUD, entradas, resolución y dispositivos reales antes de fijar un layout.",
+          "Prepara una señal alternativa cuando una superficie personalizada no esté disponible o pase desapercibida."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Piensa en una isla cooperativa hipotética donde los jugadores eligen clase antes de entrar a un lobby compartido. Antes de pulir las tarjetas, revisa si el jugador entiende que se aceptó la selección, adónde ir después y si el grupo está listo. Una tarjeta legible no resuelve una transición confusa entre esos estados."
+      },
+      {
+        "type": "heading",
+        "text": "Usa la familiaridad como abreviatura"
+      },
+      {
+        "type": "paragraph",
+        "text": "Los jugadores llegan con expectativas de Fortnite: entradas, ritmo, retroalimentación y patrones visuales conocidos. Esa familiaridad puede acortar la incorporación, pero también vuelve costosas las desviaciones. Reutiliza convenciones cuando encajen. Si la isla cambia una regla conocida, comunica el cambio cuando importe y muestra con claridad la siguiente acción."
+      },
+      {
+        "type": "heading",
+        "text": "Incorpora a la isla, no a la plataforma"
+      },
+      {
+        "type": "paragraph",
+        "text": "El inicio debe enseñar qué hace diferente a la isla: su objetivo, la primera acción útil y una o dos reglas que afectan el juego. Una señal de orientación, una notificación en lenguaje claro y una confirmación temprana pueden bastar. Evita convertir el primer minuto en un manual. El jugador necesita entrar al bucle y aprender mediante retroalimentación."
+      },
+      {
+        "type": "callout",
+        "text": "La primera prueba es sencilla: ¿un jugador nuevo puede decir qué hacer después sin preguntar?"
+      },
+      {
+        "type": "heading",
+        "text": "Dónde la experiencia gana atención"
+      },
+      {
+        "type": "paragraph",
+        "text": "El lobby o la superficie de entrada fija expectativas. Un título claro, una descripción honesta y una vista previa representativa reducen la distancia entre promesa y experiencia. Dentro de la isla, revisa la primera decisión, el primer objetivo y la primera señal de resultado. Ahí se ve si la interfaz comunica el bucle central o pide adivinar."
+      },
+      {
+        "type": "heading",
+        "text": "Trata las restricciones como datos de diseño"
+      },
+      {
+        "type": "paragraph",
+        "text": "Una restricción de plataforma puede quitar una opción visual sin bloquear la experiencia central. Antes de combatirla, pregunta si impide una acción esencial o solo un tratamiento visual preferido. Si la acción sigue funcionando, busca otra señal. Si no, documenta el límite y prueba otra ruta en la versión actual."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Mide en segundos el camino hasta la primera acción significativa.",
+          "Elimina pantallas y entradas que no ayuden a llegar al bucle.",
+          "Revisa legibilidad a la distancia, resolución y dispositivo previstos.",
+          "Prueba con jugadores que conocen Fortnite y con jugadores que no comparten las suposiciones de la isla."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Conserva un registro breve de decisiones para la versión probada: acción prevista, señal usada, dependencia de plataforma y fallo observado. Así las revisiones futuras son más rápidas y las suposiciones quedan visibles antes de convertirse en deuda de interfaz. El registro puede ser ligero; su valor está en hacer comprobable cada elección."
+      },
+      {
+        "type": "callout",
+        "text": "Diseña alrededor de los límites reales de la plataforma. Vuelve a comprobarlos cuando cambien la versión, el dispositivo o las funciones."
+      }
+    ]
+  }
+});

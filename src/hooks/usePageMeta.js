@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
+import { pageMeta } from '../data/pageMeta.js';
 
 const SITE_NAME = 'ByAndresFe';
 const BASE_URL = 'https://byandresfe.com';
-const DEFAULT_DESCRIPTION =
-  'Portfolio of Andrés Felipe Pisso, a Senior Game UX/UI Designer and UX Lead focused on clarity, feedback, UI systems, HUD design, LiveOps UX, UEFN and better decisions across games and digital products. 11+ years.';
+const DEFAULT_DESCRIPTION = pageMeta['/'].en.description;
 
 /**
  * Sets document.title, meta tags, og/twitter, canonical, and optional
@@ -11,17 +11,21 @@ const DEFAULT_DESCRIPTION =
  *
  * @param {{ title?: string, fullTitle?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
  */
-export function usePageMeta({ title, fullTitle: titleOverride, description, themeColor, article } = {}) {
+export function usePageMeta({ title, fullTitle: titleOverride, description, themeColor, article, robots = 'index, follow' } = {}) {
   useEffect(() => {
     const fullTitle = titleOverride || (title
       ? `${title} — ${SITE_NAME}`
-      : 'Andrés Felipe Pisso — Senior Game UX/UI Designer & UX Lead');
+      : pageMeta['/'].en.title);
 
     const desc = description || DEFAULT_DESCRIPTION;
-    const url = window.location.href.split('?')[0];
+    const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+    const url = `${BASE_URL}${pathname}`;
 
     // Page title
     document.title = fullTitle;
+
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    if (robotsMeta) robotsMeta.setAttribute('content', robots);
 
     // Meta description
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -38,6 +42,9 @@ export function usePageMeta({ title, fullTitle: titleOverride, description, them
     if (ogUrl) ogUrl.setAttribute('content', url);
 
     // Twitter
+    const twUrl = document.querySelector('meta[name="twitter:url"]');
+    if (twUrl) twUrl.setAttribute('content', url);
+
     const twTitle = document.querySelector('meta[name="twitter:title"]');
     if (twTitle) twTitle.setAttribute('content', fullTitle);
 
@@ -91,5 +98,5 @@ export function usePageMeta({ title, fullTitle: titleOverride, description, them
       // Restore default theme-color when leaving a page that overrode it
       if (themeMeta && themeColor) themeMeta.setAttribute('content', '#080808');
     };
-  }, [title, titleOverride, description, themeColor, article]);
+  }, [title, titleOverride, description, themeColor, article, robots]);
 }

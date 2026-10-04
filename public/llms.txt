@@ -22,6 +22,13 @@
 - [What Game Teams Can Learn from Accessibility Settings](https://byandresfe.com/notes/game-accessibility-checklist): Accessibility as a design quality signal.
 - [VR Interface Clarity: What Changes in Spatial UI](https://byandresfe.com/notes/vr-ux-interface-clarity): Practical differences when designing for VR.
 
+- [UEFN UX Lessons: Designing Inside Fortnite](https://byandresfe.com/notes/uefn-ux-lessons): Onboarding, feedback and platform constraints in a tested build.
+- [How Game UX Shapes Player Decisions](https://byandresfe.com/notes/player-decision-making-ux): Comparing options, costs and consequences at the decision moment.
+
+## Speaking
+
+- [Game UX/UI Talks & Workshops](https://byandresfe.com/speaking): Colombia 5.0 Game UI Systems workshop and La fricción correcta, an IxDF Colombia talk on difficulty, feedback and motivation.
+
 ## Contact
 
 - [Portfolio](https://byandresfe.com): Full case studies and approach.

@@ -156,11 +156,12 @@ export default function NotePage({ onMenuOpen }) {
   const dateLocale = lang === 'es' ? 'es-CO' : 'en-US';
 
   usePageMeta({
-    title,
+    fullTitle: `${title} — Field Notes | ByAndresFe`,
+    robots: meta ? 'index, follow' : 'noindex, follow',
     description: meta
       ? (lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary)
       : '',
-    article: meta ? { datePublished: meta.date, dateModified: meta.date } : undefined,
+    article: meta ? { datePublished: meta.date, dateModified: meta.dateModified || meta.date } : undefined,
   });
 
   // Inject BreadcrumbList schema for note pages

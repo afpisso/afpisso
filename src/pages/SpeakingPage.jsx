@@ -6,6 +6,7 @@ import SectionTag from '../components/SectionTag';
 import CyberBtn from '../components/CyberBtn';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { pageMeta } from '../data/pageMeta.js';
 import { ZoomModal, ScanSweep } from '../components/ZoomModal';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
@@ -217,12 +218,8 @@ export default function SpeakingPage({ onMenuOpen }) {
   const s = t.speaking;
 
   usePageMeta({
-    title: lang === 'es'
-      ? 'Speaking · Colombia 5.0 Workshop'
-      : 'Speaking · Colombia 5.0 Workshop',
-    description: lang === 'es'
-      ? 'Taller en Colombia 5.0 sobre Game UI Systems: cómo construir sistemas de UI reutilizables y funcionales para videojuegos. Andrés Felipe Pisso.'
-      : 'Workshop at Colombia 5.0 on Game UI Systems: how to build reusable, functional UI systems for video games. Andrés Felipe Pisso.',
+    fullTitle: pageMeta['/speaking'][lang].title,
+    description: pageMeta['/speaking'][lang].description,
   });
 
   return (
@@ -258,8 +255,8 @@ export default function SpeakingPage({ onMenuOpen }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.06 }}
                 >
-                  Colombia 5.0<br />
-                  <span style={{ color: 'var(--color-fg-dim)', opacity: 0.72 }}>Workshop</span>
+                  Game UX/UI<br />
+                  <span style={{ color: 'var(--color-fg-dim)', opacity: 0.72 }}>{lang === 'es' ? 'Charlas y talleres' : 'Talks & workshops'}</span>
                 </m.h1>
 
                 <m.p
@@ -458,6 +455,23 @@ export default function SpeakingPage({ onMenuOpen }) {
                 </m.div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="py-20" aria-labelledby="ixdf-talk" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+          <div className="max-w-[1400px] mx-auto px-6">
+            <SectionTag label="IxDF Colombia · 09.09.2026 · Online" page="006" />
+            <h2 id="ixdf-talk" className="uppercase mt-8 mb-5" style={{ fontFamily: BEBAS, fontSize: 'clamp(2rem, 5vw, 4.5rem)', lineHeight: 1.05 }}>
+              La fricción correcta
+            </h2>
+            <p className="max-w-[680px] mb-6" style={{ fontFamily: MONO, color: 'var(--color-fg-dim)', lineHeight: 1.8 }}>
+              {lang === 'es'
+                ? 'Una charla sobre lo que Game UX puede aportar a Product UX: cómo distinguir un reto que permite aprender de una interfaz que dificulta entender qué hacer. Dificultad, feedback y motivación vistos desde decisiones de diseño.'
+                : 'A talk on what Game UX can bring to Product UX: distinguishing a challenge that supports learning from an interface that makes the next action hard to understand. Difficulty, feedback and motivation through design decisions.'}
+            </p>
+            <a href="https://ixdf.org/meetups/la-friccion-correcta-lo-que-game-ux-le-ensena-a-product-ux-sobre-dificultad-feedback-y-motivacion-sep-9th-2026" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" style={{ fontFamily: MONO }}>
+              {lang === 'es' ? 'Ver la ficha de la charla en IxDF' : 'View the talk details at IxDF'}
+            </a>
           </div>
         </section>
 
