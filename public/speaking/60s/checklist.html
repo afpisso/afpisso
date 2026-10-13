@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<base href="/speaking/60s/">
+<title>La revisión del primer minuto — byandresfe</title>
+<style>
+@font-face{font-family:Play;font-weight:400;src:url(assets/play-400.woff2) format('woff2')}
+@font-face{font-family:Play;font-weight:700;src:url(assets/play-700.woff2) format('woff2')}
+@font-face{font-family:Mono;font-weight:500;src:url(assets/mono-500.woff2) format('woff2')}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#888;font-family:Play,system-ui,sans-serif;color:#0a0a0a}
+.page{width:210mm;height:297mm;margin:8mm auto;background:#fff;padding:14mm 15mm 12mm;position:relative;page-break-after:always;overflow:hidden}
+@media print{body{background:#fff}.page{margin:0}}
+.mono{font-family:Mono,Consolas,monospace;font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:7.5pt}
+.red{color:#ff2540}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:1.2pt solid #0a0a0a;padding-bottom:3mm}
+header b{letter-spacing:.2em;font-size:10pt}
+h1{font-size:27pt;line-height:1;text-transform:uppercase;margin:7mm 0 2mm}
+h2{font-size:13pt;text-transform:uppercase;margin:7mm 0 3mm;display:flex;align-items:center;gap:2.5mm}
+h2::before{content:"";width:3mm;height:3mm;background:#ff2540}
+.lead{font-size:10.5pt;color:#444;margin:0 0 6mm;max-width:150mm}
+.item{display:grid;grid-template-columns:9mm 1fr;gap:4mm;padding:4.6mm 0;border-top:.6pt solid #cfcfcf;align-items:start}
+.box{width:7mm;height:7mm;border:1.2pt solid #0a0a0a;clip-path:polygon(0 0,calc(100% - 2mm) 0,100% 2mm,100% 100%,0 100%);background:#0a0a0a}
+.box::after{content:"";display:block;margin:1.2pt;height:calc(100% - 2.4pt);background:#fff;clip-path:polygon(0 0,calc(100% - 1.8mm) 0,100% 1.8mm,100% 100%,0 100%)}
+.item h3{margin:0;font-size:14pt;line-height:1.15}
+.item p{margin:1.4mm 0 0;font-size:10.8pt;color:#444;line-height:1.3}
+.item.plus{background:#0a0a0a;color:#fff;padding:4mm;margin-top:3mm;border:0;clip-path:polygon(0 0,calc(100% - 6mm) 0,100% 6mm,100% 100%,0 100%)}
+.item.plus p{color:#ccc}.item.plus .box{background:#ff2540;border-color:#ff2540}.item.plus .box::after{background:#0a0a0a}
+footer{position:absolute;left:15mm;right:15mm;bottom:9mm;display:flex;justify-content:space-between;border-top:1.2pt solid #0a0a0a;padding-top:2.5mm}
+.steps{display:grid;grid-template-columns:1fr 1fr 4fr 2fr 2fr;gap:1.5mm}
+.steps div{border-top:2.5pt solid #ff2540;padding-top:2mm;font-size:9.4pt;line-height:1.25}
+.steps b{display:block;font-family:Mono,monospace;font-size:11pt;color:#ff2540}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:2mm;border-bottom:1.2pt solid #ff2540;color:#ff2540}
+td{height:15.5mm;border-bottom:.6pt solid #cfcfcf;border-right:.6pt solid #e4e4e4;font-size:9pt;color:#777;padding:2mm;vertical-align:top}
+td:last-child{border-right:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.row{display:grid;grid-template-columns:24mm 1fr;border-top:.6pt solid #cfcfcf;padding:3mm 0;font-size:10.2pt;line-height:1.25}
+.row b{font-size:9.5pt}.row span{color:#444}
+.rule{background:#f1f1f1;padding:3mm 4mm;font-size:10pt;margin-top:4mm;clip-path:polygon(0 0,calc(100% - 4mm) 0,100% 4mm,100% 100%,0 100%)}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header><b>BYANDRESFE</b><span class="mono">60 segundos para que quieran seguir jugando</span></header>
+  <h1>La revisión del <span class="red">primer minuto</span></h1>
+  <p class="lead">Siete preguntas que tu jugador se hace sin decirlas. Siéntalo frente a tu build, no expliques nada y marca solo lo que <b>viste</b> que pasó.</p>
+
+  <div class="item"><i class="box"></i><div><h3><span class="red">01 Objetivo</span> — ¿Reconoce una primera acción?</h3><p>A los 10 segundos puede decir qué intenta conseguir. El objetivo está dentro del juego, no en la descripción de la página.</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">02 Controles</span> — ¿Sabe cómo ejecutarla?</h3><p>Botón + verbo junto a la interacción, con el glifo del dispositivo que está usando. Hay un lugar donde consultar los controles.</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">03 Feedback</span> — ¿Entiende lo que ocurrió?</h3><p>Después de actuar cambia un estado visible y aparece el siguiente paso. Con los efectos apagados se sigue entendiendo.</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">04 Jerarquía</span> — ¿Encuentra la señal importante?</h3><p>En el primer minuto la pantalla muestra lo que sirve a la primera acción. Tienda, rachas y mapa pueden esperar.</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">05 Aprendizaje</span> — ¿Puede practicar la regla nueva?</h3><p>Una regla a la vez, en el momento en que se necesita y con una oportunidad segura de usarla.</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">06 Recuperación</span> — ¿Sabe cómo volver a intentar?</h3><p>El error dice qué faltó y dónde resolverlo. "Falta un cristal. Recógelo en el pedestal." en lugar de "No disponible".</p></div></div>
+  <div class="item"><i class="box"></i><div><h3><span class="red">07 Accesibilidad</span> — ¿Puede percibir y operar lo esencial?</h3><p>Sin audio · sin depender solo del color · con cada dispositivo que anuncias · en la pantalla final, con texto legible y control sobre efectos.</p></div></div>
+  <div class="item plus"><i class="box"></i><div><h3>+ La razón para continuar</h3><p>El minuto termina con algo ganado (una recompensa que se ve) y algo pendiente (la siguiente meta ya a la vista).</p></div></div>
+
+  <footer><span class="mono">byandresfe.com · @byandresfe</span><span class="mono">Andrés Felipe Pisso — Game UX/UI Lead · 1 / 2</span></footer>
+</div>
+
+<div class="page">
+  <header><b>BYANDRESFE</b><span class="mono">Kit de playtest para game jam</span></header>
+
+  <h2>Un playtest que cabe en diez minutos</h2>
+  <div class="steps">
+    <div><b>1 min</b>Preparar y acordar el registro</div>
+    <div><b>1 min</b>Abrir la build sin explicar la solución</div>
+    <div><b>4 min</b>Observar y registrar cualquier ayuda que tuviste que dar</div>
+    <div><b>2 min</b>Preguntar qué esperaba y dónde dudó</div>
+    <div><b>2 min</b>Elegir un cambio y cómo volver a probarlo</div>
+  </div>
+  <div class="rule"><b>Manos lejos del teclado y boca cerrada.</b> Cada ayuda que das es una barrera que el juego no resolvió solo.</div>
+
+  <h2>Lo que viste ≠ lo que crees</h2>
+  <table>
+    <tr><th class="mono" style="width:30%">Observación (hecho)</th><th class="mono" style="width:33%">Hipótesis (tuya)</th><th class="mono">Cambio a probar</th></tr>
+    <tr><td>Presionó E tres veces.</td><td>La confirmación pasó desapercibida.</td><td>Mostrar el nuevo estado junto a la acción.</td></tr>
+    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+  </table>
+
+  <div class="two">
+    <div><h2>Qué corregir primero</h2>
+      <div class="row"><b class="red">Primero</b><span><b>Lo que impide jugar.</b> Entrar, leer, operar la acción o recuperar el control.</span></div>
+      <div class="row"><b class="red">Después</b><span><b>Lo que genera duda.</b> Objetivo, estado de la acción y siguiente paso.</span></div>
+      <div class="row"><b class="red">Si sobra</b><span><b>El acabado que puedes verificar.</b> Efectos y ajustes sin romper la build.</span></div>
+    </div>
+    <div><h2>Síntoma → dónde mirar</h2>
+      <div class="row" style="grid-template-columns:36mm 1fr"><b>No empieza</b><span>01 Objetivo · 02 Controles</span></div>
+      <div class="row" style="grid-template-columns:36mm 1fr"><b>Repite la acción</b><span>03 Feedback · fallo técnico</span></div>
+      <div class="row" style="grid-template-columns:36mm 1fr"><b>Pierde el siguiente paso</b><span>04 Jerarquía · 05 Aprendizaje</span></div>
+      <div class="row" style="grid-template-columns:36mm 1fr"><b>Solo algunos pueden</b><span>07 Accesibilidad · dispositivo</span></div>
+    </div>
+  </div>
+  <div class="rule">Nunca metas un cambio que no alcanzas a volver a probar antes de entregar.</div>
+
+  <footer><span class="mono">byandresfe.com · @byandresfe</span><span class="mono">Material libre para la comunidad · 2 / 2</span></footer>
+</div>
+</body>
+</html>
