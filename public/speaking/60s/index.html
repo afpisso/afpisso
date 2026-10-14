@@ -129,6 +129,15 @@ p,li{font-size:38px;line-height:1.3}
 .faro.full .o,.faro.full .ping,.faro.full .glow{z-index:2}
 .faro.full .obj{top:16%}.faro.full .cnt{top:25%}.faro.full .pse{bottom:14%}
 .over{position:relative;z-index:3}
+/* prueba en vivo: indicador */
+.live{display:flex;align-items:center;gap:16px;font-size:24px;color:var(--fg);background:rgba(8,8,10,.85);padding:14px 22px;border:2px solid var(--rule)}
+.live i{width:14px;height:14px;border-radius:50%;background:var(--red);animation:pulse 1.6s ease-in-out infinite;box-shadow:0 0 14px var(--red)}
+/* tu turno: jugador detenido + reloj HUD */
+.faro .huh{position:absolute;left:75.5%;bottom:50%;z-index:2;translate:-50% 0;font:700 2.6em/1 Play,sans-serif;color:#fff;text-shadow:0 0 .3em #ff2540;animation:hbob 3s ease-in-out infinite}
+@keyframes hbob{50%{translate:-50% -16px}}
+.timer.hud{position:absolute;right:110px;top:150px;z-index:3;font-size:64px;gap:18px;background:rgba(8,8,10,.88);padding:18px 30px 18px 22px;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%)}
+.timer.hud svg{width:76px;height:76px}
 /* Q&A: mundo en calma + marcador de misión */
 .faro.qa .qx{position:absolute;left:81%;top:42%;z-index:2;translate:-50% -50%;font:700 360px/1 Play,sans-serif;color:#fff;
   text-shadow:0 0 18px #ff2540,0 0 60px #ff2540,0 0 140px #ff2540aa;animation:qbob 4.2s ease-in-out infinite}
@@ -318,9 +327,9 @@ td:first-child{font-weight:700}
     <div><div class="tag mono in" style="margin-bottom:12px">Acabas de entrar a este juego</div>
       <h2 class="in" style="font-size:92px">¿Qué harías primero?</h2>
       <p class="in" style="margin-top:10px;font-size:40px">Una respuesta en el chat. <b class="red">Sin explicaciones.</b></p></div>
-    <div class="timer" data-secs="60" data-at="1"><svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="55"/><circle cx="65" cy="65" r="55"/></svg><span>60</span></div>
+    <div class="live mono in"><i></i>Leyendo el chat</div>
   </div>
-  <aside>1:00 — NO explicar el juego. Clic = arranca el reloj de 60 s. Leer respuestas del chat en voz alta: van a ser distintas entre sí. Ese desacuerdo ES el punto de la charla.</aside>
+  <aside>1:00 — NO explicar el juego. Sin reloj: no esperar en silencio. El chat llega con 5–15 s de retraso; mientras tanto, describir la escena sin dar pistas ("veo un personaje, un pedestal, una puerta…"). Leer cada respuesta en voz alta a medida que llega. Con 4–5 respuestas distintas (unos 40 s), avanzar: ese desacuerdo ES el punto de la charla.</aside>
 </section>
 
 <!-- 03 INTENCIÓN -->
@@ -486,7 +495,8 @@ td:first-child{font-weight:700}
   <div class="over" style="position:absolute;left:110px;right:110px;bottom:92px;display:flex;align-items:center;justify-content:flex-end;gap:34px">
     <div class="dnum in" style="margin:0;font-size:120px">04</div>
     <div><div class="dname in" style="margin-bottom:4px;font-size:34px">Jerarquía visual</div>
-      <div class="swap"><p class="q" style="font-size:50px" data-until="1">Todo compite.</p><p class="q" style="font-size:50px" data-at="1">La primera acción <span class="red">tiene prioridad.</span></p></div></div>
+      <div class="swap"><p class="q" style="font-size:50px" data-until="1">Todo compite.</p><p class="q" style="font-size:50px" data-at="1">La primera acción <span class="red">tiene prioridad.</span></p></div>
+      <p class="dim" style="font-size:28px;margin-top:8px" data-at="1">Tienda, racha y mapa esperan a que el jugador los necesite.</p></div>
   </div>
   <aside>21:00 — Dejar el HUD saturado 5 segundos: "¿dónde miran?" Todo parpadea y pide atención: racha, oferta, misiones, invitación, minimapa. Clic: se limpia. Regla: la información útil depende de la acción y del momento. Tienda, racha y mapa pueden esperar al minuto 3.</aside>
 </section>
@@ -597,18 +607,20 @@ td:first-child{font-weight:700}
 
 <!-- TU TURNO -->
 <section data-label="Tu turno — 2 minutos">
-  <div class="split" style="grid-template-columns:1fr 520px">
-    <div><div class="tag mono in">Ahora con tu juego</div>
-      <h2 class="in">¿Dónde se queda<br><span class="red">detenido</span> tu jugador?</h2>
-      <div class="list" style="margin-top:50px;gap:20px">
-        <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">A</span><h3>La acción que esperabas.</h3></div>
-        <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">B</span><h3>Lo que hizo en su lugar.</h3></div>
-        <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">C</span><h3>La señal que cambiarías.</h3></div>
-      </div></div>
-    <div class="timer" data-secs="120" data-at="2" style="justify-content:center"><svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="55"/><circle cx="65" cy="65" r="55"/></svg><span>2:00</span></div>
+  <div class="faro full turn" data-f="d pingd huh"></div>
+  <div style="position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,#0a0a0af5 0,#0a0a0ad9 40%,#0a0a0a00 66%)"></div>
+  <div class="over" style="margin-top:20px;width:1050px">
+    <div class="tag mono in">Ahora con tu juego</div>
+    <h2 class="in">¿Dónde se queda<br><span class="red">detenido</span> tu jugador?</h2>
+    <div class="list" style="margin-top:46px;gap:18px">
+      <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">A</span><h3>La acción que esperabas.</h3></div>
+      <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">B</span><h3>Lo que hizo en su lugar.</h3></div>
+      <div class="row" style="grid-template-columns:90px 1fr" data-at="1"><span class="n mono">C</span><h3>La señal que cambiarías.</h3></div>
+    </div>
   </div>
-  <div class="foot in">Escríbelo en el chat: <b>un momento de duda</b> de tu propio juego.</div>
-  <aside>35:30 — Clic 1: las tres preguntas. Clic 2: reloj de 2 minutos. Mientras corre, leer 2–3 respuestas del chat y diagnosticar con el número de la decisión (01–07).</aside>
+  <div class="timer hud" data-secs="120" data-at="2"><svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="55"/><circle cx="65" cy="65" r="55"/></svg><span>2:00</span></div>
+  <div class="foot in" style="z-index:3">Escríbelo en el chat: <b>un momento de duda</b> de tu propio juego.</div>
+  <aside>35:30 — Clic 1: las tres preguntas. Clic 2: reloj de 2 minutos. Mientras corre, leer 2–3 respuestas del chat y diagnosticar con el número de la decisión (01–07). Si el chat está lento, contar un momento de duda propio (Faro o Steal an Egg) para romper el hielo.</aside>
 </section>
 
 <!-- PLAYTEST -->
@@ -664,8 +676,8 @@ td:first-child{font-weight:700}
     <div class="in"><span class="mono">07 Accesibilidad</span><p>¿Puede percibir y operar lo esencial?</p></div>
     <div class="in"><span class="mono">04 Jerarquía</span><p>¿Encuentra la señal importante?</p></div>
   </div>
-  <div class="qr in"><img src="assets/qr.svg" alt="QR byandresfe.com"><p>byandresfe.com</p><span class="mono red" style="font-size:24px">@byandresfe</span></div>
-  <aside>43:00 — Pausa de 10 s para capturas. "Esta slide es la charla completa". El material queda disponible en byandresfe.com.</aside>
+  <div class="qr in"><img src="assets/qr.svg" alt="QR byandresfe.com/speaking/60s"><p style="font-size:30px">byandresfe.com/<br>speaking/60s</p><span class="mono red" style="font-size:24px">@byandresfe</span></div>
+  <aside>43:00 — Pausa de 10 s para capturas. "Esta slide es la charla completa". El QR lleva a esta misma presentación: byandresfe.com/speaking/60s.</aside>
 </section>
 
 <!-- 25 GRACIAS -->
@@ -688,7 +700,7 @@ td:first-child{font-weight:700}
   <div class="over" style="margin-top:110px;width:1150px">
     <div class="tag mono in">Nuevo objetivo — haz tu pregunta</div>
     <h1 class="in" style="font-size:156px">¿Preguntas?</h1>
-    <p class="in" style="margin-top:44px;font-size:44px">Escríbelas en el chat o levanta la mano.</p>
+    <p class="in" style="margin-top:44px;font-size:44px">Escríbelas en el chat o reacciona con ✋ para tomar la palabra.</p>
   </div>
   <div class="foot in" style="z-index:3">El material queda en <b>byandresfe.com · @byandresfe</b></div>
   <aside>45:00 — Ronda de preguntas. Si alguien quiere una revisión de su prototipo, invitarlo a escribir por @byandresfe.</aside>
@@ -783,7 +795,7 @@ F.hud=['hudx',`
  <div class="hot" style="left:24%;top:79%">${sq('bolt','var(--y)')}${sq('shield','var(--c)')}${sq('heart','#ff2540','2')}${sq('gem','var(--p)')}${sq('star','#fff')}${sq('map','#fff7')}</div>
  <div class="chat" style="left:3%;top:79%"><b>[Kira_77]</b> gg<br><b>[Sistema]</b> Reinicio en 10 min</div>`];
 F.prmg=['o prm','<span class="kbd rnd">A</span>Recoger cristal'];F.pseg=['o pse','<span class="kbd">☰</span>Pausa y controles'];
-F.obj3=['o obj','◆ Nuevo objetivo: enciende el faro'];F.cnt2=['o cnt ok','PUERTA ABIERTA ✓'];F.pingf=['ping far',''];
+F.huh=['huh','?'];F.obj3=['o obj','◆ Nuevo objetivo: enciende el faro'];F.cnt2=['o cnt ok','PUERTA ABIERTA ✓'];F.pingf=['ping far',''];
 const CARS=[['car1','418/98','10%','6%','34s','-6s','',1],['car2','258/89','22%','3.6%','50s','-30s','rev',.85],['car4','99/26','15%','1.7%','70s','-20s','',.7],['car3','426/54','33%','2.4%','60s','-44s','rev',.7]];
 const car=c=>`<i class="car ${c[6]}" style="--img:url(assets/${c[0]}.png);--ar:${c[1]};--y:${c[2]};--h:${c[3]};--d:${c[4]};--dl:${c[5]};--o:${c[7]}"></i>`;
 const lay=(n,k)=>`<img class="L" style="--k:${k}" src="assets/bg${n}.png" alt="">`;
