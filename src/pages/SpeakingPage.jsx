@@ -8,6 +8,7 @@ import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { pageMeta } from '../data/pageMeta.js';
 import { ZoomModal, ScanSweep } from '../components/ZoomModal';
+import { Link } from 'react-router-dom';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
@@ -212,6 +213,51 @@ function RevealRule({ delay = 0 }) {
   );
 }
 
+// ── Talks index ── newest first; `to` = internal page, `href` = anchor on this page
+const TALKS = [
+  { to: '/speaking/60s', meta: 'Cali Game Jam · 14.10.2026 · Online',
+    title: { es: '60 segundos para que quieran seguir jugando', en: '60 seconds to make them keep playing' },
+    sub:   { es: 'Charla · presentación + checklist descargable', en: 'Talk · slides + downloadable checklist' } },
+  { href: '#ixdf', meta: 'IxDF Colombia · 09.09.2026 · Online',
+    title: { es: 'La fricción correcta', en: 'La fricción correcta' },
+    sub:   { es: 'Charla · Game UX × Product UX · slides en PDF', en: 'Talk · Game UX × Product UX · PDF slides' } },
+  { href: '#game-ui-systems', meta: 'Colombia 5.0 · Workshop',
+    title: { es: 'Game UI Systems', en: 'Game UI Systems' },
+    sub:   { es: 'Taller · de pantallas bonitas a interfaces que funcionan', en: 'Workshop · from pretty screens to working interfaces' } },
+];
+
+function TalkCard({ talk, lang, i }) {
+  const inner = (
+    <>
+      <div className="sys-label mb-4" style={{ color: 'var(--color-fg-mute)' }}>{talk.meta}</div>
+      <h3 className="uppercase mb-3" style={{ fontFamily: BEBAS, fontSize: 'clamp(1.7rem, 3vw, 2.6rem)', color: 'var(--color-fg)', lineHeight: 1.02 }}>
+        {talk.title[lang] || talk.title.es}
+      </h3>
+      <p style={{ fontFamily: MONO, fontSize: '13px', color: 'var(--color-fg-dim)', lineHeight: 1.6 }}>{talk.sub[lang] || talk.sub.es}</p>
+      <span className="inline-block mt-5" style={{ fontFamily: MONO, fontSize: '12px', letterSpacing: '0.12em', color: ACCENT }}>
+        {lang === 'es' ? 'VER →' : 'VIEW →'}
+      </span>
+    </>
+  );
+  const style = { display: 'block', height: '100%', padding: '1.75rem', border: '1px solid var(--color-rule)', backgroundColor: 'rgba(8,8,8,0.42)', transition: 'border-color 0.2s' };
+  const hover = {
+    onMouseEnter: e => { e.currentTarget.style.borderColor = 'rgba(255,37,64,0.45)'; },
+    onMouseLeave: e => { e.currentTarget.style.borderColor = 'var(--color-rule)'; },
+  };
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.45, ease: EASE_OUT, delay: 0.06 * i }}
+    >
+      {talk.to
+        ? <Link to={talk.to} style={style} {...hover}>{inner}</Link>
+        : <a href={talk.href} style={style} {...hover}>{inner}</a>}
+    </m.div>
+  );
+}
+
 // ── SpeakingPage ───────────────────────────────────────────────────────────────
 export default function SpeakingPage({ onMenuOpen }) {
   const { t, lang } = useLang();
@@ -292,8 +338,18 @@ export default function SpeakingPage({ onMenuOpen }) {
           </div>
         </section>
 
+        {/* ── TALKS INDEX ───────────────────────────────────────────────────── */}
+        <section className="py-20" aria-label={lang === 'es' ? 'Charlas' : 'Talks'} style={{ borderBottom: '1px solid var(--color-rule)' }}>
+          <div className="max-w-[1400px] mx-auto px-6">
+            <div className="sys-label mb-8">{lang === 'es' ? 'Charlas y talleres' : 'Talks & workshops'}</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px]">
+              {TALKS.map((talk, i) => <TalkCard key={talk.meta} talk={talk} lang={lang} i={i} />)}
+            </div>
+          </div>
+        </section>
+
         {/* ── BODY COPY + CONTEXT ───────────────────────────────────────────── */}
-        <section className="py-24" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+        <section id="game-ui-systems" className="py-24" style={{ borderBottom: '1px solid var(--color-rule)', scrollMarginTop: '6rem' }}>
           <div className="max-w-[1400px] mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-16 lg:gap-24">
 
@@ -458,7 +514,7 @@ export default function SpeakingPage({ onMenuOpen }) {
           </div>
         </section>
 
-        <section className="py-20" aria-labelledby="ixdf-talk" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+        <section id="ixdf" className="py-20" aria-labelledby="ixdf-talk" style={{ borderBottom: '1px solid var(--color-rule)', scrollMarginTop: '6rem' }}>
           <div className="max-w-[1400px] mx-auto px-6">
             <SectionTag label="IxDF Colombia · 09.09.2026 · Online" page="006" />
             <h2 id="ixdf-talk" className="uppercase mt-8 mb-5" style={{ fontFamily: BEBAS, fontSize: 'clamp(2rem, 5vw, 4.5rem)', lineHeight: 1.05 }}>
@@ -469,9 +525,14 @@ export default function SpeakingPage({ onMenuOpen }) {
                 ? 'Una charla sobre lo que Game UX puede aportar a Product UX: cómo distinguir un reto que permite aprender de una interfaz que dificulta entender qué hacer. Dificultad, feedback y motivación vistos desde decisiones de diseño.'
                 : 'A talk on what Game UX can bring to Product UX: distinguishing a challenge that supports learning from an interface that makes the next action hard to understand. Difficulty, feedback and motivation through design decisions.'}
             </p>
+            <div className="flex flex-wrap items-center gap-6 mb-2">
+              <CyberBtn href="/speaking/ixdf/la-friccion-correcta.pdf" target="_blank" rel="noopener" variant="accent-ghost" size="md">
+                {lang === 'es' ? 'Descargar slides (PDF)' : 'Download slides (PDF)'}
+              </CyberBtn>
             <a href="https://ixdf.org/meetups/la-friccion-correcta-lo-que-game-ux-le-ensena-a-product-ux-sobre-dificultad-feedback-y-motivacion-sep-9th-2026" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" style={{ fontFamily: MONO }}>
               {lang === 'es' ? 'Ver la ficha de la charla en IxDF' : 'View the talk details at IxDF'}
             </a>
+            </div>
           </div>
         </section>
 

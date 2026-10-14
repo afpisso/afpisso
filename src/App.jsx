@@ -38,6 +38,7 @@ const NotesPage       = lazy(() => import('./pages/NotesPage'));
 const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
+const TalkSixtyPage   = lazy(() => import('./pages/TalkSixtyPage'));
 const LabHome         = lazy(() => import('./pages/LabHome')); // isolated prototype — /lab
 const NotFoundPage    = lazy(() => import('./pages/NotFoundPage'));
 
@@ -159,7 +160,7 @@ function getActiveMenuSection(location) {
   if (path === '/work' || path.startsWith('/case/') || path.startsWith('/case-studies/')) return 'WORK';
   if (path === '/about' || path === '/resume') return 'ABOUT';
   if (path === '/notes' || path.startsWith('/notes/')) return 'JOURNAL';
-  if (path === '/speaking') return 'SPEAKING';
+  if (path === '/speaking' || path.startsWith('/speaking/')) return 'SPEAKING';
   if (path === '/classified') return 'WORK';
 
   return 'HOME';
@@ -234,6 +235,7 @@ function AppRoutes() {
           <Route path="/case/:slug"    element={<CasePage        onMenuOpen={open} />} />
           <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
           <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
+          <Route path="/speaking/60s" element={<TalkSixtyPage   onMenuOpen={open} />} />
           <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
           {/* Legacy routes */}
           <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />

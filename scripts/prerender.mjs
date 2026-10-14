@@ -37,7 +37,7 @@ const DEFAULT_TITLE = pageMeta['/'].en.title
 const DEFAULT_DESC = pageMeta['/'].en.description
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
-const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking']
+const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s']
 
 const routes = [
   ...staticRoutes,
@@ -223,6 +223,19 @@ function buildPageMeta() {
     ],
   }
 
+  meta['/speaking/60s'] = {
+    title: '60 segundos para que quieran seguir jugando — Charla de Game UX',
+    description: '',
+    canonical: `${BASE}/speaking/60s`,
+    ogType: 'website',
+    schema: [
+      breadcrumb(
+        { name: 'Speaking', url: `${BASE}/speaking` },
+        { name: '60 segundos', url: `${BASE}/speaking/60s` },
+      ),
+    ],
+  }
+
   meta['/notes'] = {
     title: `Field Notes on Game UX/UI Design — Andres Felipe Pisso`,
     description:
@@ -235,6 +248,8 @@ function buildPageMeta() {
   for (const [route, localized] of Object.entries(pageMeta)) {
     Object.assign(meta[route], localized.en)
   }
+  // Spanish-language talk: share previews in the language of its audience
+  Object.assign(meta['/speaking/60s'], pageMeta['/speaking/60s'].es)
 
   for (const note of fieldNotes) {
     const url = `/notes/${note.slug}`

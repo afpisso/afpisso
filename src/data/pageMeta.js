@@ -49,6 +49,16 @@ export const pageMeta = {
       "description": "Charlas y talleres de Andrés Felipe Pisso sobre sistemas de Game UI, claridad y fricción. Colombia 5.0 y La fricción correcta con IxDF."
     }
   },
+  "/speaking/60s": {
+    "en": {
+      "title": "60 Seconds to Keep Them Playing — Game UX Talk | Andrés Pisso",
+      "description": "Slides and free checklist from the Cali Game Jam talk: 7 UX decisions for a game's first minute. Objective, controls, feedback, hierarchy, learning, recovery, accessibility."
+    },
+    "es": {
+      "title": "60 segundos para que quieran seguir jugando — Charla de Game UX",
+      "description": "Presentación y checklist gratis de la charla en Cali Game Jam: 7 decisiones de UX para el primer minuto de tu juego. Objetivo, controles, feedback, jerarquía y más."
+    }
+  },
   "/notes": {
     "en": {
       "title": "Game UX/UI Field Notes — Andrés Felipe Pisso",
