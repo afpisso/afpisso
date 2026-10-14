@@ -129,6 +129,16 @@ p,li{font-size:38px;line-height:1.3}
 .faro.full .o,.faro.full .ping,.faro.full .glow{z-index:2}
 .faro.full .obj{top:16%}.faro.full .cnt{top:25%}.faro.full .pse{bottom:14%}
 .over{position:relative;z-index:3}
+/* Q&A: mundo en calma + marcador de misión */
+.faro.qa .qx{position:absolute;left:81%;top:42%;z-index:2;translate:-50% -50%;font:700 360px/1 Play,sans-serif;color:#fff;
+  text-shadow:0 0 18px #ff2540,0 0 60px #ff2540,0 0 140px #ff2540aa;animation:qbob 4.2s ease-in-out infinite}
+.faro.qa .qg{position:absolute;left:81%;top:42%;z-index:1;width:30em;height:30em;margin:-15em;border-radius:50%;
+  background:radial-gradient(closest-side,#ff2540a0,#ff254000);mix-blend-mode:screen;animation:pulse 4.2s ease-in-out infinite}
+.faro.qa .qp{position:absolute;left:81%;top:42%;z-index:2;width:9em;height:9em;margin:-4.5em;border:.1em solid #ff2540;border-radius:50%;animation:ping 4.2s var(--out) infinite}
+.faro.qa .qk{position:absolute;left:81%;top:72%;z-index:2;translate:-50% 0;background:var(--fg);color:#000;font-size:.8em;padding:.42em 1em .42em .7em;
+  clip-path:polygon(0 0,calc(100% - .55em) 0,100% .55em,100% 100%,0 100%)}
+.faro.qa .qk .kbd{background:#000;color:#fff;box-shadow:none}
+@keyframes qbob{50%{translate:-50% calc(-50% - 26px)}}
 
 /* esquina cortada: panel con borde y chaflán superior derecho */
 .cut,.stats div,.rule,.vs>div,.g7>div,.demo,.a11y>div,.me-id,.bapanel{position:relative;border:0;background:var(--bc,var(--rule));clip-path:polygon(0 0,calc(100% - var(--c,28px)) 0,100% var(--c,28px),100% 100%,0 100%)}
@@ -673,10 +683,14 @@ td:first-child{font-weight:700}
 
 <!-- 26 PREGUNTAS -->
 <section data-label="Preguntas">
-  <div class="tag mono in">Preguntas y respuestas</div>
-  <h1 class="in" style="margin-top:60px">¿Preguntas?</h1>
-  <p class="in dim" style="margin-top:44px;font-size:44px">Escríbelas en el chat o levanta la mano.</p>
-  <div class="foot in">El material queda en <b>byandresfe.com · @byandresfe</b></div>
+  <div class="faro full end qa"></div>
+  <div style="position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,#0a0a0af2 0,#0a0a0acc 36%,#0a0a0a00 64%)"></div>
+  <div class="over" style="margin-top:110px;width:1150px">
+    <div class="tag mono in">Nuevo objetivo — haz tu pregunta</div>
+    <h1 class="in" style="font-size:156px">¿Preguntas?</h1>
+    <p class="in" style="margin-top:44px;font-size:44px">Escríbelas en el chat o levanta la mano.</p>
+  </div>
+  <div class="foot in" style="z-index:3">El material queda en <b>byandresfe.com · @byandresfe</b></div>
   <aside>45:00 — Ronda de preguntas. Si alguien quiere una revisión de su prototipo, invitarlo a escribir por @byandresfe.</aside>
 </section>
 
@@ -774,7 +788,8 @@ const CARS=[['car1','418/98','10%','6%','34s','-6s','',1],['car2','258/89','22%'
 const car=c=>`<i class="car ${c[6]}" style="--img:url(assets/${c[0]}.png);--ar:${c[1]};--y:${c[2]};--h:${c[3]};--d:${c[4]};--dl:${c[5]};--o:${c[7]}"></i>`;
 const lay=(n,k)=>`<img class="L" style="--k:${k}" src="assets/bg${n}.png" alt="">`;
 const strip=(i,t,w)=>`<i class="S" style="--i:url(assets/${i});--t:${t}s${w?';--w:'+w:''}"></i>`;
-$('.faro.end').forEach(f=>{f.innerHTML=strip('loop1.jpg',400)+strip('loop2.png',130)+car(CARS[2])+car(CARS[3])+strip('loop3.png',55)+car(CARS[0])+car(CARS[1])+strip('loop5.png',14)+strip('loopw.png',3.8,'98.086cqw')+'<i class="chr walk"></i>'});
+$('.faro.end:not(.qa)').forEach(f=>{f.innerHTML=strip('loop1.jpg',400)+strip('loop2.png',130)+car(CARS[2])+car(CARS[3])+strip('loop3.png',55)+car(CARS[0])+car(CARS[1])+strip('loop5.png',14)+strip('loopw.png',3.8,'98.086cqw')+'<i class="chr walk"></i>'});
+$('.faro.qa').forEach(f=>{f.innerHTML=strip('loop1.jpg',1200)+strip('loop2.png',420)+car(CARS[2])+car(CARS[3])+strip('loop3.png',180)+car(CARS[0])+car(CARS[1])+strip('loop5.png',60)+'<i class="qg"></i><i class="qp"></i><i class="qx">?</i><span class="qk mono"><span class="kbd">✋</span>Preguntar</span>'});
 $('.faro:not(.end)').forEach(f=>{let h=lay(1,1)+lay(2,.75)+car(CARS[2])+car(CARS[3])+lay(3,.45)+car(CARS[0])+car(CARS[1])+lay(5,.15)
     +'<img src="assets/bg4x.png" alt=""><img class="dopen" src="assets/bg4-open.png" alt=""><i class="dglow"></i><i class="chgl"></i><i class="chg"></i><i class="chr"></i>';
   f.dataset.f.split(' ').filter(Boolean).forEach(t=>{const[k,r]=t.split('@'),[a,u]=(r||'').split('-');
