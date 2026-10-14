@@ -39,6 +39,8 @@ const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
 const TalkSixtyPage   = lazy(() => import('./pages/TalkSixtyPage'));
+const GameUISystemsPage = lazy(() => import('./pages/GameUISystemsPage'));
+const SpeakingStrip   = lazy(() => import('./components/SpeakingStrip'));
 const LabHome         = lazy(() => import('./pages/LabHome')); // isolated prototype — /lab
 const NotFoundPage    = lazy(() => import('./pages/NotFoundPage'));
 
@@ -141,6 +143,7 @@ function HomePage({ onMenuOpen }) {
         <CaseFiles />
         <Suspense fallback={<SectionFallback />}>
           <FieldNotes />
+          <SpeakingStrip />
           <IGStrip />
           <Contact />
         </Suspense>
@@ -236,6 +239,7 @@ function AppRoutes() {
           <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
           <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
           <Route path="/speaking/60s" element={<TalkSixtyPage   onMenuOpen={open} />} />
+          <Route path="/speaking/game-ui-systems" element={<GameUISystemsPage onMenuOpen={open} />} />
           <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
           {/* Legacy routes */}
           <Route path="/case-studies/:slug" element={<CasePage onMenuOpen={open} />} />

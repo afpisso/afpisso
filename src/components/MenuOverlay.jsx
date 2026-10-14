@@ -76,7 +76,7 @@ const MENU_ITEMS = [
   { en: 'WORK',    es: 'TRABAJO',  page: '001', href: '/work',    sub_en: 'Selected projects, 2019–2026',   sub_es: 'Proyectos selectos, 2019–2026'  },
   { en: 'ABOUT',   es: 'SOBRE MÍ', page: '002', href: '/about',   sub_en: 'Biography & process',             sub_es: 'Biografía y proceso'            },
   { en: 'FIELD NOTES', es: 'NOTAS',   page: '003', href: '/notes',   sub_en: 'Notes, essays & experiments',     sub_es: 'Notas, ensayos y experimentos'  },
-  { en: 'SPEAKING', es: 'SPEAKING', page: '004', href: '/speaking',  sub_en: 'Colombia 5.0 · Game UI Systems workshop',    sub_es: 'Colombia 5.0 · Taller Game UI Systems' },
+  { en: 'SPEAKING', es: 'SPEAKING', page: '004', href: '/speaking',  sub_en: 'Cali Game Jam · IxDF · Colombia 5.0',    sub_es: 'Cali Game Jam · IxDF · Colombia 5.0' },
   { en: 'CONTACT',  es: 'CONTACTO',  page: '005', href: '/#contact',  sub_en: 'Inquiries & availability',          sub_es: 'Consultas y disponibilidad'      },
 ];
 

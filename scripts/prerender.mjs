@@ -37,7 +37,7 @@ const DEFAULT_TITLE = pageMeta['/'].en.title
 const DEFAULT_DESC = pageMeta['/'].en.description
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
-const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s']
+const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s', '/speaking/game-ui-systems']
 
 const routes = [
   ...staticRoutes,
@@ -220,6 +220,19 @@ function buildPageMeta() {
     ogType: 'website',
     schema: [
       breadcrumb({ name: 'Speaking', url: `${BASE}/speaking` }),
+    ],
+  }
+
+  meta['/speaking/game-ui-systems'] = {
+    title: 'Game UI Systems Workshop at Colombia 5.0 — Andrés Felipe Pisso',
+    description: '',
+    canonical: `${BASE}/speaking/game-ui-systems`,
+    ogType: 'website',
+    schema: [
+      breadcrumb(
+        { name: 'Speaking', url: `${BASE}/speaking` },
+        { name: 'Game UI Systems', url: `${BASE}/speaking/game-ui-systems` },
+      ),
     ],
   }
 

@@ -68,6 +68,7 @@ import NotePage   from './pages/NotePage.jsx'
 import CasePage   from './pages/CasePage.jsx'
 import SpeakingPage from './pages/SpeakingPage.jsx'
 import TalkSixtyPage from './pages/TalkSixtyPage.jsx'
+import GameUISystemsPage from './pages/GameUISystemsPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
 // No-op prop for event handlers that aren't needed during SSR
@@ -95,6 +96,7 @@ function AppSSR() {
       <Route path="/resume"        element={<ResumePage onMenuOpen={noop} />} />
       <Route path="/speaking"      element={<SpeakingPage onMenuOpen={noop} />} />
       <Route path="/speaking/60s"  element={<TalkSixtyPage onMenuOpen={noop} />} />
+      <Route path="/speaking/game-ui-systems" element={<GameUISystemsPage onMenuOpen={noop} />} />
       <Route path="/notes"         element={<NotesPage  onMenuOpen={noop} />} />
       <Route path="/notes/:slug"   element={<NotePage  onMenuOpen={noop} />} />
       <Route path="/case/:slug"    element={<CasePage  onMenuOpen={noop} />} />

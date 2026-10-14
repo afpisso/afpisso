@@ -49,6 +49,16 @@ export const pageMeta = {
       "description": "Charlas y talleres de Andrés Felipe Pisso sobre sistemas de Game UI, claridad y fricción. Colombia 5.0 y La fricción correcta con IxDF."
     }
   },
+  "/speaking/game-ui-systems": {
+    "en": {
+      "title": "Game UI Systems Workshop at Colombia 5.0 — Andrés Felipe Pisso",
+      "description": "Workshop by Andrés Felipe Pisso at Colombia 5.0: building reusable, production-ready game UI systems in Figma, with components, states and rules."
+    },
+    "es": {
+      "title": "Taller Game UI Systems en Colombia 5.0 — Andrés Felipe Pisso",
+      "description": "Taller de Andrés Felipe Pisso en Colombia 5.0: cómo construir sistemas de UI para juegos reutilizables y listos para producción en Figma."
+    }
+  },
   "/speaking/60s": {
     "en": {
       "title": "60 Seconds to Keep Them Playing — Game UX Talk | Andrés Pisso",
