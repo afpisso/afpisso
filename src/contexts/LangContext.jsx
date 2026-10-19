@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import { SPANISH_ONLY, localizePath } from '../utils/i18nRoutes.js';
 
 const translations = {
   en: {
@@ -897,34 +899,45 @@ const translations = {
 
 const LangContext = createContext(null);
 
-export function LangProvider({ children }) {
-  const [lang, setLang] = useState(() => {
+// Language comes from the URL: `base` is the router's language ('es' under
+// /es), and Spanish-only pages are always 'es'. Switching language loads the
+// equivalent URL so every language has its own crawlable address.
+export function LangProvider({ base = 'en', children }) {
+  const { pathname } = useLocation();
+  const lang = base === 'es' || SPANISH_ONLY.has(pathname) ? 'es' : 'en';
+
+  // First visit to an English URL from a Spanish-preferring browser (or a
+  // returning visitor who chose Spanish) goes to the Spanish equivalent.
+  // Never redirects away from /es, so crawlers can always render Spanish pages.
+  useEffect(() => {
+    if (base !== 'en') return;
     let stored = null;
     try { stored = localStorage.getItem('lang'); } catch (_) { /* storage unavailable */ }
-    if (stored === 'en' || stored === 'es') return stored;
-    // Auto-detect from browser and persist immediately so every subsequent
-    // page load (refresh, new tab, direct URL) uses the same language.
-    const browser = navigator.language.slice(0, 2).toLowerCase();
-    const detected = browser === 'es' ? 'es' : 'en';
-    try { localStorage.setItem('lang', detected); } catch (_) { /* storage unavailable */ }
-    return detected;
-  });
+    const pref = stored === 'en' || stored === 'es'
+      ? stored
+      : (navigator.language || '').slice(0, 2).toLowerCase() === 'es' ? 'es' : 'en';
+    try { localStorage.setItem('lang', pref); } catch (_) { /* storage unavailable */ }
+    const { pathname: path, search, hash } = window.location;
+    const target = localizePath(path + search + hash, pref);
+    if (target !== path + search + hash) window.location.replace(target);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Keep <html lang="…"> in sync with the active language
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  function toggleLang() {
-    const next = lang === 'en' ? 'es' : 'en';
-    setLang(next);
-    try { localStorage.setItem('lang', next); } catch (_) { /* storage unavailable */ }
-  }
-
   function changeLang(l) {
     if (l !== 'en' && l !== 'es') return;
-    setLang(l);
     try { localStorage.setItem('lang', l); } catch (_) { /* storage unavailable */ }
+    const { pathname: path, search, hash } = window.location;
+    const target = localizePath(path + search + hash, l);
+    if (target !== path + search + hash) window.location.assign(target);
+  }
+
+  function toggleLang() {
+    changeLang(lang === 'en' ? 'es' : 'en');
   }
 
   const value = useMemo(

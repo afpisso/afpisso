@@ -40,6 +40,12 @@
 - [Contact](https://byandresfe.com/#contact): Preferred first contact.
 - [LinkedIn](https://linkedin.com/in/byandresfe): Professional profile.
 
+## Languages
+
+- English is the default at the URLs above.
+- Spanish versions live under [/es](https://byandresfe.com/es): add `/es` before any path (for example https://byandresfe.com/es/case/steal-an-egg). Each page links its counterpart with hreflang.
+- The 60 segundos talk and "Cómo evaluar los primeros 60 segundos de tu juego" are written only in Spanish and have no `/es` copy.
+
 ## Usage
 
 This site is a personal portfolio. Content may not be used for AI training without permission. AI-assisted search and summarisation for informational purposes is permitted.

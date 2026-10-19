@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { m, AnimatePresence, useAnimation, useMotionValue, useSpring } from 'framer-motion';
 import { useLang } from '../contexts/LangContext';
+import { langFromPath, localizePath } from '../utils/i18nRoutes.js';
 
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 const STRINGS = {
@@ -264,7 +265,7 @@ function renderContent(text) {
     result.push(
       <a
         key={`a${match.index}`}
-        href={href}
+        href={isInternal ? localizePath(href, langFromPath(window.location.pathname)) : href}
         {...(isInternal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
         style={{
           color: 'var(--color-accent)',

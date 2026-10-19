@@ -105,10 +105,10 @@ function AppSSR() {
   )
 }
 
-export function render(url) {
+export function render(url, lang = 'en') {
   return renderToStaticMarkup(
-    <StaticRouter location={url}>
-      <LangProvider>
+    <StaticRouter location={url} basename={lang === 'es' ? '/es' : undefined}>
+      <LangProvider base={lang}>
         <SignalAudioProvider>
           <HuntProvider>
             <AppSSR />

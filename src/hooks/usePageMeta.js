@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { pageMeta } from '../data/pageMeta.js';
+import { alternatesFor, langFromPath, localizePath } from '../utils/i18nRoutes.js';
 
 const SITE_NAME = 'ByAndresFe';
 const BASE_URL = 'https://byandresfe.com';
@@ -19,7 +20,8 @@ export function usePageMeta({ title, fullTitle: titleOverride, socialTitle, soci
 
     const desc = description || DEFAULT_DESCRIPTION;
     const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
-    const url = `${BASE_URL}${pathname}`;
+    // Spanish-only pages reached under /es canonicalize to their single URL
+    const url = `${BASE_URL}${localizePath(pathname, langFromPath(pathname))}`;
 
     // Page title
     document.title = fullTitle;
@@ -54,6 +56,16 @@ export function usePageMeta({ title, fullTitle: titleOverride, socialTitle, soci
     // Canonical
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', url);
+
+    // hreflang alternates for the current route
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    for (const { hreflang, href } of alternatesFor(pathname)) {
+      const link = document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = hreflang;
+      link.href = href;
+      document.head.appendChild(link);
+    }
 
     // Theme color — per-page override, restored on unmount
     const themeMeta = document.querySelector('meta[name="theme-color"]');

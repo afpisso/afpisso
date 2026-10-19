@@ -16,6 +16,21 @@
       "source": "/case-studies/:slug",
       "destination": "/case/:slug",
       "permanent": true
+    },
+    {
+      "source": "/es/case-studies/:slug",
+      "destination": "/es/case/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/es/speaking/60s",
+      "destination": "/speaking/60s",
+      "permanent": true
+    },
+    {
+      "source": "/es/notes/primer-minuto-ux-videojuegos",
+      "destination": "/notes/primer-minuto-ux-videojuegos",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -25,6 +40,14 @@
     },
     {
       "source": "/lab",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/es/classified",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/es/lab",
       "destination": "/index.html"
     }
   ],

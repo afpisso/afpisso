@@ -286,7 +286,7 @@ function AppRoutes() {
 }
 
 // ── Root ───────────────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ lang = 'en' }) {
   // Console hint — visible in browser devtools, thematic breadcrumb
   useEffect(() => {
     console.log(
@@ -302,7 +302,7 @@ export default function App() {
     // boilerplate needed. Manual useReducedMotion() hooks in Hero,
     // CaseCard, GlitchStrokeText etc. remain for custom JS logic.
     <MotionConfig reducedMotion="user">
-      <LangProvider>
+      <LangProvider base={lang}>
         <LenisProvider>
           <SignalAudioProvider>
             <HuntProvider>
