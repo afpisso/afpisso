@@ -62,7 +62,7 @@ export const fieldNotes = [
     categoryEs: 'Referencia',
     date: '2026-05-01',
     summary:
-      'A lot of UI problems start before anyone opens Figma. They start in language: when HUD, menu, modal, overlay, tooltip, inventory, and loadout mean different things to different people.',
+      'Many UI problems start before Figma, in language: when HUD, menu, modal, overlay, tooltip and loadout mean different things to different people.',
     summaryEs:
       'Muchos problemas de UI empiezan antes de abrir Figma. Empiezan en el lenguaje: cuando HUD, menú, modal, overlay, tooltip, inventario o loadout significan cosas distintas para cada persona.',
     readTime: '5 min',
@@ -173,6 +173,7 @@ fieldNotes.push(...[
     "date": "2026-10-18",
     "summary": "Article in Spanish. Review the first minute of your game: goal, controls, feedback and accessibility, with a real Steal an Egg example and a checklist for your next playtest.",
     "summaryEs": "Evalúa la UX del primer minuto de tu videojuego: objetivo, controles, feedback y accesibilidad, con ejemplos y un checklist para tu próximo playtest.",
+    "ogImage": "/notes/fn010-steal-an-egg-safe-zone-only.webp",
     "keywords": "UX en videojuegos, primera experiencia del jugador, onboarding en videojuegos, FTUX, playtest, feedback al jugador, accesibilidad en videojuegos",
     "readTime": "12 min",
     "type": "Guide",

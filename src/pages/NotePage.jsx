@@ -240,7 +240,10 @@ export default function NotePage({ onMenuOpen }) {
   const dateLocale = lang === 'es' ? 'es-CO' : 'en-US';
 
   usePageMeta({
-    fullTitle: meta?.seoTitle ? `${meta.seoTitle} | ByAndresFe` : `${title} — Field Notes | ByAndresFe`,
+    // Mirrors the prerender: long titles drop the section label to avoid truncation
+    fullTitle: meta?.seoTitle
+      ? `${meta.seoTitle} | ByAndresFe`
+      : (`${title} — Field Notes | ByAndresFe`.length > 60 ? `${title} | ByAndresFe` : `${title} — Field Notes | ByAndresFe`),
     robots: meta ? 'index, follow' : 'noindex, follow',
     description: meta
       ? (lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary)
