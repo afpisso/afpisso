@@ -11,6 +11,8 @@
 - [Havoc Hotel 3](https://byandresfe.com/case/havoc-hotel-3): Co-op UI systems, HUD design, UEFN experience design. 2025.
 - [Zomvilles](https://byandresfe.com/case/zomvilles): Mobile roguelite UX, progression systems, player experience flows. 2024.
 - [Star Wars Roguelike One](https://byandresfe.com/case/star-wars-roguelike-one): Game UX/UI for a Star Wars roguelike experience. 2026.
+- [Steal an Egg](https://byandresfe.com/case/steal-an-egg): UX/UI Lead and Technical UI. Roblox-to-Fortnite (UEFN) adaptation: three D-pad entry points, a production UI system, shops, hotbar and leaderboard. 2026.
+- [Brainrot Room Rush](https://byandresfe.com/case/roblox-game-ui-system): UX/UI for a shipped Roblox game. HUD, rewards, stores, progression, collection and a reusable UI component system.
 - [Kodety](https://byandresfe.com/case/kodety): Award-winning educational coding game. Colombia Crea Digital winner. 2015–2016.
 
 ## Field Notes
@@ -21,14 +23,16 @@
 - [UI Terminology for Game Teams](https://byandresfe.com/notes/ui-terminology-for-game-teams): Shared language for cross-functional game teams.
 - [What Game Teams Can Learn from Accessibility Settings](https://byandresfe.com/notes/game-accessibility-checklist): Accessibility as a design quality signal.
 - [VR Interface Clarity: What Changes in Spatial UI](https://byandresfe.com/notes/vr-ux-interface-clarity): Practical differences when designing for VR.
-
 - [UEFN UX Lessons: Designing Inside Fortnite](https://byandresfe.com/notes/uefn-ux-lessons): Onboarding, feedback and platform constraints in a tested build.
 - [How Game UX Shapes Player Decisions](https://byandresfe.com/notes/player-decision-making-ux): Comparing options, costs and consequences at the decision moment.
 - [Cómo evaluar los primeros 60 segundos de tu juego](https://byandresfe.com/notes/primer-minuto-ux-videojuegos): Spanish guide to reviewing first-minute UX (goal, controls, feedback, accessibility) and running a short playtest.
 
 ## Speaking
 
-- [Game UX/UI Talks & Workshops](https://byandresfe.com/speaking): Colombia 5.0 Game UI Systems workshop and La fricción correcta, an IxDF Colombia talk on difficulty, feedback and motivation.
+- [Game UX/UI Talks & Workshops](https://byandresfe.com/speaking): Index of talks and workshops.
+- [60 segundos para que quieran seguir jugando](https://byandresfe.com/speaking/60s): Cali Game Jam talk (Spanish) on seven UX decisions for a game's first minute, with slides and a free checklist.
+- [Game UI Systems workshop](https://byandresfe.com/speaking/game-ui-systems): Colombia 5.0 workshop on building reusable, production-ready game UI systems in Figma.
+- La fricción correcta: IxDF Colombia talk (Spanish) on difficulty, feedback and motivation, listed on the speaking page.
 
 ## Contact
 

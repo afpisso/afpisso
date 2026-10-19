@@ -42,11 +42,11 @@ export const pageMeta = {
   "/speaking": {
     "en": {
       "title": "Game UX/UI Talks & Workshops — Andrés Felipe Pisso",
-      "description": "Talks and workshops by Andrés Felipe Pisso on Game UI systems, interface clarity and friction. Colombia 5.0 workshop and La fricción correcta at IxDF."
+      "description": "Game UX/UI talks and workshops by Andrés Felipe Pisso: 60 segundos at Cali Game Jam, Game UI Systems at Colombia 5.0 and La fricción correcta at IxDF."
     },
     "es": {
       "title": "Charlas y talleres de Game UX/UI — Andrés Felipe Pisso",
-      "description": "Charlas y talleres de Andrés Felipe Pisso sobre sistemas de Game UI, claridad y fricción. Colombia 5.0 y La fricción correcta con IxDF."
+      "description": "Charlas y talleres de Game UX/UI de Andrés Felipe Pisso: 60 segundos en Cali Game Jam, Game UI Systems en Colombia 5.0 y La fricción correcta con IxDF."
     }
   },
   "/speaking/game-ui-systems": {
@@ -62,11 +62,11 @@ export const pageMeta = {
   "/speaking/60s": {
     "en": {
       "title": "60 Seconds to Keep Them Playing — Game UX Talk | Andrés Pisso",
-      "description": "Slides and free checklist from the Cali Game Jam talk: 7 UX decisions for a game's first minute. Objective, controls, feedback, hierarchy, learning, recovery, accessibility."
+      "description": "Slides and free checklist from the Cali Game Jam talk: 7 UX decisions for a game's first minute, from objective and controls to feedback and accessibility."
     },
     "es": {
       "title": "60 segundos para que quieran seguir jugando — Charla de Game UX",
-      "description": "Presentación y checklist gratis de la charla en Cali Game Jam: 7 decisiones de UX para el primer minuto de tu juego. Objetivo, controles, feedback, jerarquía y más."
+      "description": "Presentación y checklist gratis de la charla en Cali Game Jam: 7 decisiones de UX para el primer minuto de tu juego, del objetivo a la accesibilidad."
     }
   },
   "/notes": {

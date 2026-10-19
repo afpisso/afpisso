@@ -33,6 +33,32 @@ const ssrBundle = path.join(root, 'dist-ssr', 'entry-server.js')
 const BASE      = 'https://byandresfe.com'
 const SITE_NAME = 'ByAndresFe'
 
+// Pixel size of a PNG or WebP in public/ (from its header), so og:image can
+// declare real dimensions. Returns null for other formats or missing files.
+function imageSize(publicPath) {
+  try {
+    const b = fs.readFileSync(path.join(root, 'public', publicPath))
+    if (b.toString('ascii', 1, 4) === 'PNG') return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) }
+    if (b.toString('ascii', 0, 4) !== 'RIFF') return null
+    const chunk = b.toString('ascii', 12, 16)
+    if (chunk === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff }
+    if (chunk === 'VP8X') return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) }
+    if (chunk === 'VP8L') {
+      const bits = b.readUInt32LE(21)
+      return { w: 1 + (bits & 0x3fff), h: 1 + ((bits >> 14) & 0x3fff) }
+    }
+  } catch { /* missing file */ }
+  return null
+}
+
+// Notes over ~60 chars drop the section label so the title is not truncated
+function noteMetaTitle(note) {
+  if (note.seoTitle) return `${note.seoTitle} | ${SITE_NAME}`
+  const full = `${note.title} — Field Notes | ${SITE_NAME}`
+  return full.length > 60 ? `${note.title} | ${SITE_NAME}` : full
+}
+const noteImage = (note) => note.ogImage || note.cover
+
 const DEFAULT_TITLE = pageMeta['/'].en.title
 const DEFAULT_DESC = pageMeta['/'].en.description
 
@@ -138,6 +164,7 @@ function buildNoteSchema(note) {
     isPartOf: { '@id': `${BASE}/notes#blog` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/notes/${note.slug}` },
   }
+  if (noteImage(note)) posting.image = `${BASE}${noteImage(note)}`
   if (note.titleEs && !note.language)   posting.alternativeHeadline = note.titleEs
   if (note.summaryEs && !note.language) posting.abstract = note.summaryEs
   return [
@@ -162,6 +189,7 @@ function buildCaseSchema(c) {
     keywords: (c.tags || []).join(', '),
     genre: 'Game UX/UI Design',
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/case/${c.slug}` },
+    image: `${BASE}/thumbnails/${c.slug}.webp`,
   }
   if (c.headlineEs)    work.alternativeHeadline = c.headlineEs
   if (c.descriptionEs) work.abstract = c.descriptionEs
@@ -266,15 +294,18 @@ function buildPageMeta() {
     Object.assign(meta[route], localized.en)
   }
   // Spanish-language talk: share previews in the language of its audience
-  Object.assign(meta['/speaking/60s'], pageMeta['/speaking/60s'].es)
+  Object.assign(meta['/speaking/60s'], pageMeta['/speaking/60s'].es, { lang: 'es' })
 
   for (const note of fieldNotes) {
     const url = `/notes/${note.slug}`
     meta[url] = {
-      title: note.seoTitle ? `${note.seoTitle} | ${SITE_NAME}` : `${note.title} — Field Notes | ${SITE_NAME}`,
+      title: noteMetaTitle(note),
       description: noteSummary(note),
       canonical: `${BASE}${url}`,
       ogType: 'article',
+      lang: note.language,
+      ogImage: noteImage(note) && `${BASE}${noteImage(note)}`,
+      ogImageAlt: noteTitle(note),
       schema: buildNoteSchema(note),
     }
   }
@@ -292,6 +323,7 @@ function buildPageMeta() {
       canonical: `${BASE}${url}`,
       ogType: 'article',
       ogImage: `${BASE}/thumbnails/${c.slug}.webp`,
+      ogImageAlt: c.thumbnailAlt || c.title,
       schema: buildCaseSchema(c),
     }
   }
@@ -301,7 +333,7 @@ function buildPageMeta() {
 
 // ── HTML meta injection ─────────────────────────────────────────────────────
 function injectMeta(html, pageMeta) {
-  const { title, description, canonical, ogType, schema, ogImage, socialTitle, socialDescription } = pageMeta
+  const { title, description, canonical, ogType, schema, ogImage, ogImageAlt, socialTitle, socialDescription, lang } = pageMeta
 
   const t = escTitle(title)
   const d = escAttr(description)
@@ -379,9 +411,23 @@ function injectMeta(html, pageMeta) {
       /(<meta name="twitter:image"\s+content=")[^"]*(")/,
       `$1${escAttr(ogImage)}$2`
     )
-    // Clear fixed dimensions — thumbnail ratios differ from og-image.png
-    html = html.replace(/(<meta property="og:image:width" content=")[^"]*(")/,  `$1$2`)
-    html = html.replace(/(<meta property="og:image:height" content=")[^"]*(")/,  `$1$2`)
+    // Real dimensions of the override image; drop the tags when they are unknown
+    const size = imageSize(ogImage.replace(BASE, ''))
+    for (const [k, v] of [['width', size?.w], ['height', size?.h]]) {
+      const re = new RegExp(`\\s*<meta property="og:image:${k}" content="[^"]*" />`)
+      html = v ? html.replace(re, (m) => m.replace(/content="[^"]*"/, `content="${v}"`)) : html.replace(re, '')
+    }
+    if (ogImageAlt) {
+      html = html.replace(/(<meta property="og:image:alt"\s+content=")[^"]*(")/, `$1${escAttr(ogImageAlt)}$2`)
+      html = html.replace(/(<meta name="twitter:image:alt"\s+content=")[^"]*(")/, `$1${escAttr(ogImageAlt)}$2`)
+    }
+  }
+
+  // Page language: Spanish-only pages declare es and swap the OG locales
+  if (lang === 'es') {
+    html = html.replace(/<html lang="en"/, '<html lang="es"')
+    html = html.replace(/(<meta property="og:locale"\s+content=")en_US(")/, '$1es_CO$2')
+    html = html.replace(/(<meta property="og:locale:alternate" content=")es_CO(")/, '$1en_US$2')
   }
 
   // Language switching uses one URL; no separate localized URLs exist.

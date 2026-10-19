@@ -284,6 +284,7 @@ function PageGhost({ slug }) {
   return (
     <img
       src={`/thumbnails/${slug}.webp`}
+      alt=""
       aria-hidden="true"
       style={{
         position: 'absolute',
