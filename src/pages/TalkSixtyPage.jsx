@@ -49,7 +49,7 @@ const COPY = {
     ],
     casesLabel: 'Casos de la charla',
     cases: [
-      ['Steal an Egg', 'Roblox → Fortnite/UEFN: navegación con gamepad y un Slow Mode que el juego activa por ti.', null],
+      ['Steal an Egg', 'Roblox → Fortnite/UEFN: navegación con gamepad y un Slow Mode que el juego activa por ti.', '/case/steal-an-egg'],
       ['Orcs Must Die! By the Blade', 'Tutorial de VR: una regla a la vez, dentro del mundo.', '/case/orcs-must-die-by-the-blade'],
     ],
     caseCta: 'Ver caso',
@@ -89,7 +89,7 @@ const COPY = {
     ],
     casesLabel: 'Cases in the talk',
     cases: [
-      ['Steal an Egg', 'Roblox → Fortnite/UEFN: gamepad navigation and a Slow Mode the game toggles for you.', null],
+      ['Steal an Egg', 'Roblox → Fortnite/UEFN: gamepad navigation and a Slow Mode the game toggles for you.', '/case/steal-an-egg'],
       ['Orcs Must Die! By the Blade', 'VR tutorial: one rule at a time, inside the world.', '/case/orcs-must-die-by-the-blade'],
     ],
     caseCta: 'View case',

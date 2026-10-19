@@ -9,9 +9,9 @@ const DEFAULT_DESCRIPTION = pageMeta['/'].en.description;
  * Sets document.title, meta tags, og/twitter, canonical, and optional
  * Article JSON-LD schema for the current route.
  *
- * @param {{ title?: string, fullTitle?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
+ * @param {{ title?: string, fullTitle?: string, socialTitle?: string, socialDescription?: string, description?: string, themeColor?: string, article?: { datePublished?: string, dateModified?: string } }} options
  */
-export function usePageMeta({ title, fullTitle: titleOverride, description, themeColor, article, robots = 'index, follow' } = {}) {
+export function usePageMeta({ title, fullTitle: titleOverride, socialTitle, socialDescription, description, themeColor, article, robots = 'index, follow' } = {}) {
   useEffect(() => {
     const fullTitle = titleOverride || (title
       ? `${title} — ${SITE_NAME}`
@@ -33,10 +33,10 @@ export function usePageMeta({ title, fullTitle: titleOverride, description, them
 
     // Open Graph
     const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', fullTitle);
+    if (ogTitle) ogTitle.setAttribute('content', socialTitle || fullTitle);
 
     const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute('content', desc);
+    if (ogDesc) ogDesc.setAttribute('content', socialDescription || desc);
 
     const ogUrl = document.querySelector('meta[property="og:url"]');
     if (ogUrl) ogUrl.setAttribute('content', url);
@@ -46,10 +46,10 @@ export function usePageMeta({ title, fullTitle: titleOverride, description, them
     if (twUrl) twUrl.setAttribute('content', url);
 
     const twTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twTitle) twTitle.setAttribute('content', fullTitle);
+    if (twTitle) twTitle.setAttribute('content', socialTitle || fullTitle);
 
     const twDesc = document.querySelector('meta[name="twitter:description"]');
-    if (twDesc) twDesc.setAttribute('content', desc);
+    if (twDesc) twDesc.setAttribute('content', socialDescription || desc);
 
     // Canonical
     const canonical = document.querySelector('link[rel="canonical"]');
@@ -98,5 +98,5 @@ export function usePageMeta({ title, fullTitle: titleOverride, description, them
       // Restore default theme-color when leaving a page that overrode it
       if (themeMeta && themeColor) themeMeta.setAttribute('content', '#080808');
     };
-  }, [title, titleOverride, description, themeColor, article, robots]);
+  }, [title, titleOverride, socialTitle, socialDescription, description, themeColor, article, robots]);
 }

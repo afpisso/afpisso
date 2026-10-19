@@ -283,6 +283,8 @@ function buildPageMeta() {
     meta[url] = {
       title: c.seoTitle || `${c.title} — Game UX/UI Case Study | ${SITE_NAME}`,
       description: c.seoDescription || desc,
+      socialTitle: c.ogTitle,
+      socialDescription: c.ogDescription,
       canonical: `${BASE}${url}`,
       ogType: 'article',
       ogImage: `${BASE}/thumbnails/${c.slug}.webp`,
@@ -295,7 +297,7 @@ function buildPageMeta() {
 
 // ── HTML meta injection ─────────────────────────────────────────────────────
 function injectMeta(html, pageMeta) {
-  const { title, description, canonical, ogType, schema, ogImage } = pageMeta
+  const { title, description, canonical, ogType, schema, ogImage, socialTitle, socialDescription } = pageMeta
 
   const t = escTitle(title)
   const d = escAttr(description)
@@ -329,16 +331,20 @@ function injectMeta(html, pageMeta) {
     `$1${c}$2`
   )
 
+  // Social title/description default to the page title/description unless a page overrides them
+  const st = escAttr(socialTitle || title)
+  const sd = socialDescription ? escAttr(socialDescription) : d
+
   // OG title
   html = html.replace(
     /(<meta property="og:title"\s+content=")[^"]*(")/,
-    `$1${escAttr(title)}$2`
+    `$1${st}$2`
   )
 
   // OG description
   html = html.replace(
     /(<meta property="og:description"\s+content=")[^"]*(")/,
-    `$1${d}$2`
+    `$1${sd}$2`
   )
 
   // Twitter url
@@ -350,13 +356,13 @@ function injectMeta(html, pageMeta) {
   // Twitter title
   html = html.replace(
     /(<meta name="twitter:title"\s+content=")[^"]*(")/,
-    `$1${escAttr(title)}$2`
+    `$1${st}$2`
   )
 
   // Twitter description
   html = html.replace(
     /(<meta name="twitter:description"\s+content=")[^"]*(")/,
-    `$1${d}$2`
+    `$1${sd}$2`
   )
 
   // OG image + Twitter image — page-specific override (e.g. case thumbnails)

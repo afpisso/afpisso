@@ -1,5 +1,6 @@
 export const CASE_ORDER = [
   "orcs-must-die-by-the-blade",
+  "steal-an-egg",
   "zombie-dragon-adventure",
   "star-wars-roguelike-one",
   "roblox-game-ui-system",
@@ -201,4 +202,25 @@ export const casesMeta = [
     ],
     "featured": true
   },
+  {
+    "id": "CASE-010",
+    "slug": "steal-an-egg",
+    "title": "Steal an Egg",
+    "visibility": "public",
+    "status": "SELECTED WORK",
+    "role": "UX/UI Lead · Technical UI",
+    "year": "2026",
+    "tags": [
+      "UEFN",
+      "UX/UI Lead",
+      "Controller Navigation",
+      "UI Systems",
+      "Technical UI"
+    ],
+    "platform": [
+      "UEFN",
+      "Fortnite"
+    ],
+    "featured": true
+  }
 ];

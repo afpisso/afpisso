@@ -1169,6 +1169,53 @@ function AnnotatedShot({ shot, lang, onOpen }) {
   );
 }
 
+// Data table — real <table> so input mappings and trade-offs stay readable text
+function ShowcaseTable({ table, lang }) {
+  const cols = (lang === 'es' && table.columnsEs) || table.columns;
+  const rows = (lang === 'es' && table.rowsEs) || table.rows;
+  const cellBase = { fontFamily: MONO, textAlign: 'left', verticalAlign: 'top', padding: '14px 16px', borderBottom: `1px solid ${RULE}` };
+  return (
+    <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0" tabIndex={0} role="region" aria-label={pickLang(table, 'caption', lang)}>
+      <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse', borderTop: `1px solid ${RULE}` }}>
+        <caption className="sys-label" style={{ captionSide: 'top', textAlign: 'left', paddingBottom: 12 }}>{pickLang(table, 'caption', lang)}</caption>
+        <thead>
+          <tr>
+            {cols.map(c => (
+              <th key={c} scope="col" style={{ ...cellBase, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, fontWeight: 700 }}>{c}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              {r.map((cell, j) => j === 0
+                ? <th key={j} scope="row" style={{ ...cellBase, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(1.15rem, 1.6vw, 1.45rem)', letterSpacing: '0.02em', lineHeight: 1.1, color: FG, whiteSpace: 'nowrap' }}>{cell}</th>
+                : <td key={j} style={{ ...cellBase, fontSize: '13px', lineHeight: 1.65, color: DIM }}>{cell}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// Missing-asset slots — review only: rendered by the dev server, never in a production build
+function PendingAssets({ items }) {
+  if (!import.meta.env.DEV || !items?.length) return null;
+  return (
+    <aside aria-label="Pending assets (draft only)" style={{ border: '1px dashed var(--color-accent-45)', padding: '16px 18px' }}>
+      <div className="sys-label mb-3" style={{ color: ACCENT }}>Draft only · pending assets</div>
+      <ul style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {items.map(it => (
+          <li key={it.file} style={{ fontFamily: MONO, fontSize: '12px', lineHeight: 1.6, color: DIM }}>
+            <span style={{ color: FG }}>{it.file}</span> — {it.need}
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
+
 function ShowcaseSection({ block, lang, caseTitle }) {
   const shouldReduce = useReducedMotion();
   const title = pickLang(block, 'title', lang);
@@ -1249,6 +1296,12 @@ function ShowcaseSection({ block, lang, caseTitle }) {
             <AnnotatedShot shot={block.annotated} lang={lang} onOpen={() => openZoom(0)} />
           </m.div>
         )}
+
+        {block.tables?.map((table, i) => (
+          <m.div key={i} {...reveal}>
+            <ShowcaseTable table={table} lang={lang} />
+          </m.div>
+        ))}
 
         {block.rows?.map((row, i) => {
           const start = cursor;
@@ -1431,6 +1484,8 @@ export default function CasePage({ onMenuOpen }) {
   usePageMeta({
     title: caseData ? caseData.title : 'Case Study',
     fullTitle: caseData?.seoTitle,
+    socialTitle: caseData?.ogTitle,
+    socialDescription: caseData?.ogDescription,
     description: caseData
       ? (lang === 'es' && caseData.descriptionEs ? caseData.descriptionEs : (caseData.seoDescription || caseData.description))
       : undefined,
