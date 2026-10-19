@@ -43,7 +43,8 @@ export function SignalAudioProvider({ children }) {
 
     if (!signalAudioOn) {
       if (typeof audio.pause === 'function') audio.pause();
-      audio.currentTime = 0;
+      // Seeking unloaded audio starts a download; only rewind after it played
+      if (audio.currentTime) audio.currentTime = 0;
       return;
     }
 
@@ -69,7 +70,7 @@ export function SignalAudioProvider({ children }) {
   return (
     <SignalAudioContext.Provider value={value}>
       {children}
-      <audio ref={audioRef} preload="metadata" aria-hidden="true">
+      <audio ref={audioRef} preload="none" aria-hidden="true">
         <source src="/lab/footeraudio.ogg" type="audio/ogg; codecs=opus" />
         <source src="/lab/footeraudio.mp3" type="audio/mpeg" />
       </audio>

@@ -361,7 +361,7 @@ export default function NotePage({ onMenuOpen }) {
                 ← {np.fieldNotesLabel}
               </Link>
               <span style={{ color: 'var(--color-rule)', fontSize: '10px' }}>/</span>
-              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
+              <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)' }}>
                 {meta.id}
               </span>
             </m.div>
@@ -480,7 +480,7 @@ export default function NotePage({ onMenuOpen }) {
                           onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent-30)'; e.currentTarget.style.backgroundColor = 'rgba(255,37,64,0.03)'; }}
                           onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-rule)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
-                          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', opacity: 0.7 }}>
+                          <span style={{ fontFamily: '"Play", sans-serif', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)' }}>
                             {nextNote.id}
                           </span>
                           <p style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 'clamp(22px, 1.8vw, 28px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-fg)', margin: '5px 0 0', lineHeight: 1.1 }}>

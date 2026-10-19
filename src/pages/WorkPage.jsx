@@ -471,7 +471,7 @@ function MobileWorkCard({ caseData, index, total }) {
               <div style={{
                 fontFamily: '"Play", sans-serif',
                 fontSize: '9px', letterSpacing: '0.16em',
-                color: 'var(--color-accent-45)', marginBottom: 8,
+                color: 'var(--color-accent)', marginBottom: 8,
               }}>
                 {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
               </div>
