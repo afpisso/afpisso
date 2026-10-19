@@ -15,6 +15,27 @@ const BASE_URL = 'https://byandresfe.com';
 
 // ─── Block renderers ──────────────────────────────────────────────────────
 
+const LINK_STYLE = { color: 'var(--color-fg)', textDecoration: 'underline', textDecorationColor: 'var(--color-accent)', textUnderlineOffset: '3px' };
+
+// Inline markup: **bold** and [label](href). Internal /notes links use the router.
+function Inline({ text }) {
+  if (typeof text !== 'string') return text;
+  return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g).map((part, i) => {
+    const bold = part.match(/^\*\*([^*]+)\*\*$/);
+    if (bold) return <strong key={i} style={{ color: 'var(--color-fg)', fontWeight: 700 }}>{bold[1]}</strong>;
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (!link) return part;
+    const [, label, href] = link;
+    if (href.startsWith('/notes')) return <Link key={i} to={href} style={LINK_STYLE}>{label}</Link>;
+    const external = href.startsWith('http');
+    return (
+      <a key={i} href={href} style={LINK_STYLE} {...(external && { target: '_blank', rel: 'noopener noreferrer' })}>
+        {label}
+      </a>
+    );
+  });
+}
+
 function Paragraph({ text }) {
   return (
     <p style={{
@@ -24,7 +45,7 @@ function Paragraph({ text }) {
       color: 'rgba(245,245,243,0.72)',
       marginBottom: '1.5rem',
     }}>
-      {text}
+      <Inline text={text} />
     </p>
   );
 }
@@ -80,7 +101,7 @@ function List({ items }) {
             color: 'var(--color-accent)',
             fontSize: '10px', top: '4px',
           }}>◆</span>
-          {item}
+          <Inline text={item} />
         </li>
       ))}
     </ul>
@@ -105,8 +126,68 @@ function Callout({ text }) {
         margin: 0,
         opacity: 0.9,
       }}>
-        {text}
+        <Inline text={text} />
       </p>
+    </div>
+  );
+}
+
+function Quote({ text }) {
+  return (
+    <blockquote style={{
+      margin: '2rem 0',
+      padding: '4px 0 4px 20px',
+      borderLeft: '2px solid var(--color-accent)',
+      fontFamily: '"Play", sans-serif',
+      fontSize: '15px',
+      lineHeight: 1.8,
+      color: 'rgba(245,245,243,0.85)',
+    }}>
+      <Inline text={text} />
+    </blockquote>
+  );
+}
+
+const CELL_STYLE = {
+  fontFamily: '"Play", sans-serif',
+  fontSize: '13px',
+  lineHeight: 1.7,
+  textAlign: 'left',
+  verticalAlign: 'top',
+  padding: '12px 14px',
+  borderBottom: '1px solid var(--color-rule)',
+};
+
+function Table({ head, rows, caption }) {
+  return (
+    <div style={{ margin: '2rem 0', overflowX: 'auto' }}>
+      <table style={{ width: '100%', minWidth: '480px', borderCollapse: 'collapse' }}>
+        {caption && (
+          <caption className="sys-label" style={{ captionSide: 'top', textAlign: 'left', paddingBottom: '10px' }}>
+            {caption}
+          </caption>
+        )}
+        <thead>
+          <tr>
+            {head.map((h, i) => (
+              <th key={i} scope="col" style={{ ...CELL_STYLE, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)', borderBottomColor: 'rgba(255,37,64,0.35)' }}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, r) => (
+            <tr key={r}>
+              {row.map((cell, c) => (
+                <td key={c} style={{ ...CELL_STYLE, color: c === 0 ? 'rgba(245,245,243,0.85)' : 'rgba(245,245,243,0.65)' }}>
+                  <Inline text={cell} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -118,6 +199,8 @@ function renderBlock(block, i) {
     case 'subheading': return <Subheading key={i} text={block.text} />;
     case 'list':       return <List       key={i} items={block.items} />;
     case 'callout':    return <Callout    key={i} text={block.text} />;
+    case 'quote':      return <Quote      key={i} text={block.text} />;
+    case 'table':      return <Table      key={i} head={block.head} rows={block.rows} caption={block.caption} />;
     case 'image':      return (
       <div key={i} style={{ margin: '2rem 0' }}>
         <ZoomableImage
@@ -150,13 +233,14 @@ export default function NotePage({ onMenuOpen }) {
 
   const meta    = fieldNotes.find((n) => n.slug === slug);
   const article = noteArticles?.[slug];
-  const blocks  = article?.[lang] ?? article?.en ?? [];
+  // Single-language notes (e.g. Spanish only) fall back to whatever exists
+  const blocks  = article?.[lang] ?? article?.en ?? article?.es ?? [];
 
   const title = meta ? getNoteTitle(meta, lang) : 'Field Note';
   const dateLocale = lang === 'es' ? 'es-CO' : 'en-US';
 
   usePageMeta({
-    fullTitle: `${title} — Field Notes | ByAndresFe`,
+    fullTitle: meta?.seoTitle ? `${meta.seoTitle} | ByAndresFe` : `${title} — Field Notes | ByAndresFe`,
     robots: meta ? 'index, follow' : 'noindex, follow',
     description: meta
       ? (lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary)
@@ -344,6 +428,7 @@ export default function NotePage({ onMenuOpen }) {
 
               {/* Main content */}
               <m.article
+                lang={meta.language}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
