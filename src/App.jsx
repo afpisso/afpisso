@@ -131,7 +131,25 @@ function LabRoute({ onMenuOpen }) {
 // ── HomePage ───────────────────────────────────────────────────────────────────
 function HomePage({ onMenuOpen }) {
   const { lang } = useLang();
+  const location = useLocation();
+  const lenisRef = useLenis();
   usePageMeta({ fullTitle: pageMeta['/'][lang].title, description: pageMeta['/'][lang].description });
+
+  // Plain links to /#contact (case CTA, llms.txt, external) land on the contact
+  // section once the lazy section has mounted
+  useEffect(() => {
+    if (location.hash !== '#contact') return;
+    let tries = 0;
+    const id = setInterval(() => {
+      const el = document.getElementById('contact');
+      if (!el && ++tries < 40) return;
+      clearInterval(id);
+      if (!el) return;
+      if (lenisRef?.current) lenisRef.current.scrollTo(el, { offset: -80, duration: 1.0 });
+      else el.scrollIntoView();
+    }, 100);
+    return () => clearInterval(id);
+  }, [location.hash, lenisRef]);
   return (
     <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       <div className="scan-line" aria-hidden="true" />

@@ -174,9 +174,9 @@ function HeroScrollReveal({ caseData, t, lang }) {
           </m.div>
 
           {/* Title — character-level stagger with blur, left-aligned */}
-          <h1 style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 11vw, 148px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase', textAlign: 'left' }}>
+          {/* Characters are aria-hidden for the stagger; the heading carries the readable name */}
+          <h1 aria-label={line2 ? `${line1} ${line2}` : line1} style={{ margin: 0, fontFamily: BEBAS, fontWeight: 400, fontSize: 'clamp(52px, 11vw, 148px)', lineHeight: 0.88, letterSpacing: '0.005em', textTransform: 'uppercase', textAlign: 'left' }}>
             <m.span
-              aria-label={line1}
               style={{ display: 'block' }}
               variants={lineVariants}
               initial={shouldReduce ? 'visible' : 'hidden'}
@@ -187,7 +187,6 @@ function HeroScrollReveal({ caseData, t, lang }) {
 
             {line2 && (
               <m.span
-                aria-label={line2}
                 style={{ display: 'block', color: DIM }}
                 variants={lineVariants}
                 initial={shouldReduce ? 'visible' : 'hidden'}
@@ -2469,7 +2468,7 @@ export default function CasePage({ onMenuOpen }) {
                   {t.casePage_cta.body}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <CyberBtn variant="solid" to="/contact">
+                  <CyberBtn variant="solid" to="/#contact">
                     {t.contact.contactMe}
                   </CyberBtn>
                   <CyberBtn variant="ghost" to="/work">

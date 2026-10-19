@@ -77,7 +77,6 @@ export default function SectionTag({ label, page, className, style }) {
             fontSize: '10px',
             letterSpacing: '0.14em',
             color: 'var(--color-fg-mute)',
-            opacity: 0.7,
           }}
         >
           {page}

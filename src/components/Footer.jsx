@@ -180,7 +180,8 @@ function SignalDancePlayer({ active }) {
 
     if (!signalOn) {
       video.pause();
-      video.currentTime = 0;
+      // Seeking an unloaded video starts a download; only rewind after it played
+      if (video.currentTime) video.currentTime = 0;
       return;
     }
 
@@ -225,7 +226,7 @@ function SignalDancePlayer({ active }) {
         </picture>
         <video
           ref={videoRef}
-          preload="metadata"
+          preload="none"
           muted
           playsInline
           loop
