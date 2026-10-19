@@ -160,5 +160,25 @@ fieldNotes.push(...[
       "zombie-dragon-adventure",
       "courtyard-king"
     ]
+  },
+  {
+    "id": "FN-010",
+    "slug": "primer-minuto-ux-videojuegos",
+    "language": "es",
+    "title": "How to Evaluate the First 60 Seconds of Your Game",
+    "titleEs": "Cómo evaluar los primeros 60 segundos de tu juego",
+    "seoTitle": "UX en videojuegos: cómo evaluar los primeros 60 segundos",
+    "category": "Game UX / Onboarding",
+    "categoryEs": "Game UX / Onboarding",
+    "date": "2026-10-18",
+    "summary": "Article in Spanish. Review the first minute of your game: goal, controls, feedback and accessibility, with a real Steal an Egg example and a checklist for your next playtest.",
+    "summaryEs": "Evalúa la UX del primer minuto de tu videojuego: objetivo, controles, feedback y accesibilidad, con ejemplos y un checklist para tu próximo playtest.",
+    "keywords": "UX en videojuegos, primera experiencia del jugador, onboarding en videojuegos, FTUX, playtest, feedback al jugador, accesibilidad en videojuegos",
+    "readTime": "12 min",
+    "type": "Guide",
+    "typeEs": "Guía",
+    "relatedCases": [
+      "steal-an-egg"
+    ]
   }
 ]);

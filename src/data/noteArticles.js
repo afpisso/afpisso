@@ -841,3 +841,436 @@ Object.assign(noteArticles, {
     ]
   }
 });
+
+// Spanish-only note: NotePage falls back to `es` for English visitors.
+Object.assign(noteArticles, {
+  "primer-minuto-ux-videojuegos": {
+    "es": [
+      {
+        "type": "paragraph",
+        "text": "Alguien abre tu build por primera vez. El personaje aparece frente a un pedestal y una puerta cerrada. La persona camina hacia la puerta, prueba un botón y vuelve al punto de partida. Entonces pregunta: «¿Qué tengo que hacer?»."
+      },
+      {
+        "type": "paragraph",
+        "text": "Tú sabes que debe recoger el cristal y usarlo para abrir la puerta. Llevas días trabajando con esa regla. Para quien acaba de entrar, la relación entre esos elementos todavía está por descubrir."
+      },
+      {
+        "type": "paragraph",
+        "text": "Esa diferencia es un buen punto de partida para evaluar la **UX en videojuegos**: observar qué información tiene realmente el jugador cuando intenta actuar. En este artículo voy a recorrer siete decisiones que revisaría durante la primera experiencia y una forma de probarlas sin convertir al desarrollador en el tutorial."
+      },
+      {
+        "type": "paragraph",
+        "text": "Esta revisión aborda el onboarding dentro de la primera experiencia del jugador, o FTUX (First-Time User Experience)."
+      },
+      {
+        "type": "paragraph",
+        "text": "Los 60 segundos son una ventana de observación. Un juego de exploración puede necesitar un ritmo distinto al de uno de acción. Aquí nos sirven para acotar la revisión: cómo empieza alguien a jugar, qué entiende de la respuesta y qué encuentra que le interese hacer después."
+      },
+      {
+        "type": "heading",
+        "text": "1. Qué observar durante el primer minuto"
+      },
+      {
+        "type": "paragraph",
+        "text": "Antes de añadir instrucciones, comprobaría si el jugador puede reconocer una primera acción relacionada con el objetivo. Después miraría qué hace con la respuesta que recibe."
+      },
+      {
+        "type": "paragraph",
+        "text": "En **Faro**, el prototipo ilustrativo de mi charla, esto significa acercarse al cristal, recogerlo y reconocer que ahora puede usarlo en la puerta. El ejemplo permite seguir la misma mecánica mientras cambiamos las señales que la acompañan."
+      },
+      {
+        "type": "paragraph",
+        "text": "Me interesa registrar el recorrido, incluidas las dudas. ¿Se acerca a un objeto que parece interactivo pero no lo es? ¿Prueba distintas teclas? ¿Recoge el cristal y sigue buscándolo porque no percibió el cambio?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Una pausa, por sí sola, no demuestra confusión. Puede estar mirando el escenario o decidiendo qué explorar. Conviene observar qué ocurre después y preguntarle qué esperaba, en lugar de interpretar cada segundo sin movimiento como un fallo."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Completar el tutorial tampoco demuestra comprensión.** Una persona puede seguir una flecha y pulsar el botón indicado sin entender para qué sirve la acción. Una comprobación más útil es observar si aplica la misma regla en una situación equivalente cuando la indicación ya no está."
+      },
+      {
+        "type": "paragraph",
+        "text": "Y queda una pregunta adicional: ¿qué le ofrece el juego después de esa primera acción? Abrir una puerta puede comunicar progreso y revelar algo que quiera explorar. Un inicio comprensible todavía necesita poner al alcance una parte interesante de la experiencia. Eso también hay que probarlo."
+      },
+      {
+        "type": "heading",
+        "text": "2. Siete decisiones que ayudan a empezar"
+      },
+      {
+        "type": "paragraph",
+        "text": "Estas preguntas sirven para localizar problemas. El ajuste depende del género, del dispositivo y de la incertidumbre que quieras conservar como parte del juego."
+      },
+      {
+        "type": "subheading",
+        "text": "Objetivo: ¿qué intento conseguir ahora?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** El jugador recorre el escenario o interactúa con objetos sin encontrar una acción que le permita avanzar."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** La premisa del juego está clara para el equipo, pero la primera tarea depende de información que solo aparece en la descripción de la página o en una explicación externa."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Conectaría una acción concreta con su consecuencia. En Faro: «Recoge el cristal para abrir la puerta». Según la experiencia, esa relación también puede aparecer en la forma del receptáculo, la composición del escenario o una reacción del mundo."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Observaría qué intenta primero alguien que no conoce la build y qué pista utiliza. Si descubrir la relación es parte del puzzle, comprobaría que puede experimentar y aprender de la respuesta sin que yo le revele la solución."
+      },
+      {
+        "type": "subheading",
+        "text": "Controles: ¿cómo puedo ejecutar esa acción?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** La persona encuentra el objeto correcto, pero prueba botones o busca fuera del juego cómo usarlo."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** Reconocer un objeto interactivo no explica necesariamente el input. Una tecla mostrada para otro dispositivo añade otra duda."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Mostraría botón y verbo cerca de la interacción: «E · Recoger cristal». El prompt aparecería cuando la acción esté disponible. También dejaría una forma de consultar los controles y revisaría el recorrido de abrir un menú, navegarlo y volver al juego."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Probaría cada dispositivo anunciado en la build real, incluyendo la salida de los menús. En plataformas como UEFN, comprobaría qué señales admite cada superficie antes de dar por implementable un comportamiento del diseño."
+      },
+      {
+        "type": "subheading",
+        "text": "Feedback: ¿qué acaba de pasar?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** El jugador pulsa varias veces, revisa el inventario o intenta recoger de nuevo un objeto que ya obtuvo."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** Puede haber recibido una animación sin reconocer el cambio de estado. También puede existir un fallo técnico o una demora. La repetición del input no basta para elegir una explicación."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Haría reconocible el resultado. En Faro, el cristal desaparece, el contador pasa de 0/1 a 1/1 y el objetivo se actualiza. Si una acción tarda, distinguiría que el juego recibió el input de que ya completó la acción."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Miraría si reconoce el nuevo estado y actúa en consecuencia. También reduciría los efectos para comprobar que la información sigue disponible. Desarrollo esta distinción en [mi nota sobre feedback y confirmación de acciones](/notes/feedback-reduces-guesswork)."
+      },
+      {
+        "type": "subheading",
+        "text": "Jerarquía visual: ¿qué es lo importante aquí?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** Una oferta, una notificación o un indicador secundario captura la atención mientras la tarea actual pasa desapercibida."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** Las señales compiten sin una prioridad relacionada con lo que el jugador necesita decidir en ese momento."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Revisaría qué información sostiene la primera acción y qué puede aparecer después o consultarse a demanda. En Faro, la tienda y la racha pueden esperar. En otro juego, un mapa o un recurso pueden ser imprescindibles desde el inicio."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Observaría si encuentra la información que necesita mientras juega, también bajo presión. No retiraría un elemento solo porque la captura se ve más limpia. Esa diferencia es el centro de [mi análisis sobre claridad del HUD](/notes/clean-hud-vs-clear-hud)."
+      },
+      {
+        "type": "subheading",
+        "text": "Aprendizaje: ¿qué regla necesito en este momento?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** La persona cierra una pantalla de instrucciones y, al llegar al objeto, ya no recuerda cómo interactuar."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** La explicación llegó antes de que hubiera una oportunidad de usarla, o presentó demasiadas reglas juntas."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Daría contexto y una oportunidad segura de practicar cada regla nueva. En Faro, la secuencia es moverse, recoger y usar. Mantendría ayuda consultable para quien la necesite y una salida adecuada para quien ya conoce los controles."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Después de la primera práctica, observaría una situación equivalente con menos ayuda. Si la persona solo avanza mientras la instrucción le dicta cada paso, todavía falta comprobar qué aprendió."
+      },
+      {
+        "type": "subheading",
+        "text": "Recuperación: ¿qué pasó y cómo vuelvo a intentar?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** La puerta no abre y el jugador repite la acción, abandona la zona o supone que encontró un bug."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión.** «No disponible» no distingue entre falta de un recurso, estar fuera de rango o un fallo del juego."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Comunicaría la condición que falta y una salida útil. En Faro: «Falta un cristal. Recógelo en el pedestal». Si descubrir esa condición es el reto, graduaría la ayuda para conservar la posibilidad de resolverlo. También revisaría cómo reintentar después de fallar."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Probaría deliberadamente una acción sin cumplir sus requisitos y observaría si la persona puede continuar. Un recorrido que solo prueba los casos de éxito deja estas situaciones fuera de la revisión."
+      },
+      {
+        "type": "subheading",
+        "text": "Accesibilidad: ¿puedo percibir y ejecutar lo esencial?"
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué observar.** Una señal deja de funcionar sin audio, un estado solo se diferencia por color o una acción resulta difícil de ejecutar con los controles disponibles."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Por qué puede generar confusión o exclusión.** El diseño depende de una capacidad, un dispositivo o unas condiciones que no todos comparten."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Qué cambiaría.** Ofrecería alternativas para las señales esenciales, revisaría la legibilidad a la escala final y el control sobre efectos e inputs. Por ejemplo, combinar color con forma y texto, o proporcionar alternativas a mantener o pulsar repetidamente un botón cuando corresponda."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Cómo lo comprobaría.** Haría revisiones con el audio desactivado, distintos dispositivos y la pantalla de destino. Una simulación sin color ayuda a detectar dependencias, pero no sustituye pruebas con personas con distintas necesidades. Las [Xbox Accessibility Guidelines](https://learn.microsoft.com/en-us/gaming/accessibility/guidelines) permiten profundizar en estas barreras."
+      },
+      {
+        "type": "heading",
+        "text": "3. Un ejemplo real: Slow Mode en Steal an Egg"
+      },
+      {
+        "type": "paragraph",
+        "text": "En la adaptación de **Steal an Egg de Roblox a Fortnite/UEFN**, trabajé en UX/UI y su implementación. La transición de táctil a consola y PC obligaba a reconsiderar dónde vivían las acciones y cuántos pasos necesitaba cada una."
+      },
+      {
+        "type": "paragraph",
+        "text": "Uno de los problemas aparecía al comprar mucha velocidad: cruzar el mapa era rápido, pero recorrer las tiendas físicas se volvía difícil. Slow Mode permitía desplazarse más despacio."
+      },
+      {
+        "type": "subheading",
+        "text": "El cambio de contexto"
+      },
+      {
+        "type": "paragraph",
+        "text": "En Roblox, el ajuste estaba disponible como un interruptor en el HUD. En nuestra versión de Fortnite pasó a Settings. La función seguía existiendo, pero acceder a ella requería navegar por un menú."
+      },
+      {
+        "type": "paragraph",
+        "text": "En los playtests internos observamos un patrón: lo activaban dentro de la safe zone, donde estaban las tiendas, y lo desactivaban al salir para recuperar velocidad. El recorrido podía requerir unas ocho pulsaciones para cambiar el ajuste, y había que repetirlo en la siguiente transición."
+      },
+      {
+        "type": "paragraph",
+        "text": "Es una observación de esas pruebas internas. No es un tiempo promedio ni un dato sobre toda la población de jugadores."
+      },
+      {
+        "type": "subheading",
+        "text": "La decisión"
+      },
+      {
+        "type": "paragraph",
+        "text": "Añadimos un tercer estado junto a Off y On: **Safe zone only**. El jugador puede elegir que el juego aplique Slow Mode en la zona correspondiente y recupere la velocidad fuera de ella."
+      },
+      {
+        "type": "image",
+        "src": "/notes/fn010-steal-an-egg-safe-zone-only.webp",
+        "alt": "Settings de Steal an Egg con las opciones Off, On y Safe Zone Only; la tercera aparece seleccionada.",
+        "aspect": "16/9",
+        "objectFit": "contain",
+        "caption": "Captura del gameplay incluido en la presentación: Slow Mode ofrece tres estados y explica el comportamiento de «Safe zone only»."
+      },
+      {
+        "type": "subheading",
+        "text": "Qué resultado puedo mostrar"
+      },
+      {
+        "type": "paragraph",
+        "text": "La interfaz implementada y el [clip público de Settings](https://byandresfe.com/speaking/60s/presentacion/assets/egg-slowmode.mp4) permiten comprobar que existe la tercera opción y cómo se comunica. La regla de diseño evita pedir un cambio manual en cada transición cuando el jugador elige ese modo. Para verificar su ejecución hay que comprobar ambos límites de zona, además de los estados On y Off."
+      },
+      {
+        "type": "paragraph",
+        "text": "No medimos una mejora de retención ni una reducción porcentual de errores. El caso documenta una conducta observada en pruebas internas y la respuesta de diseño que implementamos."
+      },
+      {
+        "type": "paragraph",
+        "text": "Además, este problema aparecía después de progresar, no necesariamente durante los primeros 60 segundos. Lo incluyo porque muestra un límite de esa primera revisión: una experiencia que funciona al comenzar puede introducir fricción cuando cambian las capacidades del personaje. El primer minuto es el inicio de la evaluación."
+      },
+      {
+        "type": "heading",
+        "text": "4. Cómo hacer un playtest del primer minuto sin explicar el juego"
+      },
+      {
+        "type": "paragraph",
+        "text": "Busca a alguien que no conozca la build y tenga un perfil relevante para la experiencia. Si evalúas un juego para personas familiarizadas con Fortnite, registra esa familiaridad. Si buscas llegar a principiantes, incluye a principiantes."
+      },
+      {
+        "type": "paragraph",
+        "text": "Para observar el descubrimiento inicial, una consigna puede ser:"
+      },
+      {
+        "type": "quote",
+        "text": "«Abre el juego y empieza como lo harías normalmente. Estamos revisando la build. Si te quedas detenido, puedes decirlo o parar cuando quieras»."
+      },
+      {
+        "type": "paragraph",
+        "text": "Evitaría empezar con «recoge el cristal y abre la puerta» si quiero comprobar si el juego comunica precisamente ese objetivo. Para evaluar otra tarea, sí puedo dar un objetivo concreto, cuidando que la consigna no revele el recorrido que quiero observar."
+      },
+      {
+        "type": "subheading",
+        "text": "Un formato ligero de diez minutos"
+      },
+      {
+        "type": "table",
+        "head": [
+          "Tiempo",
+          "Qué hacer"
+        ],
+        "rows": [
+          [
+            "1 minuto",
+            "Explicar la sesión y acordar cualquier registro de pantalla o audio."
+          ],
+          [
+            "1 minuto",
+            "Dejar que abra la build y explore sin anticipar la solución."
+          ],
+          [
+            "4 minutos",
+            "Observar el juego y registrar acciones, bloqueos y ayudas."
+          ],
+          [
+            "2 minutos",
+            "Preguntar qué esperaba que ocurriera y dónde dudó."
+          ],
+          [
+            "2 minutos",
+            "Elegir un cambio y definir cómo volver a probarlo."
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Durante la entrada mantendría las manos lejos del teclado. En una interacción rápida, dejaría las preguntas para después. En tareas que lo permitan, pedir pensar en voz alta puede aportar contexto, teniendo presente que la conversación también puede influir en la conducta."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Intervendría si la persona lo pide, muestra malestar o un problema técnico impide continuar.** Si hace falta ayudar para revisar una parte posterior, registraría cuándo y qué información le di. A partir de ahí ya conoce una pista que la build no le había comunicado por sí sola."
+      },
+      {
+        "type": "paragraph",
+        "text": "Una ayuda es algo que investigar. Puede revelar una barrera de interfaz, una instrucción inadecuada o una necesidad de apoyo. El contexto decide qué significa."
+      },
+      {
+        "type": "subheading",
+        "text": "Observación e interpretación"
+      },
+      {
+        "type": "paragraph",
+        "text": "Esta tabla es hipotética, no recoge resultados de Steal an Egg:"
+      },
+      {
+        "type": "table",
+        "head": [
+          "Observación",
+          "Hipótesis",
+          "Cambio que probaría"
+        ],
+        "rows": [
+          [
+            "Pulsó la tecla de interacción tres veces después de recoger el objeto.",
+            "La confirmación pasó desapercibida.",
+            "Mostrar el nuevo estado cerca de la interacción y observar otro primer intento."
+          ],
+          [
+            "Llegó a la puerta sin el cristal y volvió a pulsar varias veces.",
+            "La condición para abrirla era poco clara.",
+            "Comunicar el requisito que falta y comprobar qué hace después."
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "«No entendió» comprime demasiado. Registrar la conducta y preguntar qué esperaba ayuda a precisar el problema antes de elegir la solución."
+      },
+      {
+        "type": "paragraph",
+        "text": "Si quiero volver a comprobar descubrimiento, buscaría otra persona que no haya visto la versión anterior. Quien ya la probó puede recordar la regla, aunque la señal siga siendo débil. Una prueba breve permite encontrar problemas posibles; no demuestra por sí sola una mejora de retención."
+      },
+      {
+        "type": "heading",
+        "text": "5. Qué corregir primero"
+      },
+      {
+        "type": "paragraph",
+        "text": "Con poco tiempo, empezaría por **lo que impide jugar**: un menú del que no se puede salir, una acción esencial que no se puede ejecutar o una instrucción que resulta ilegible en el dispositivo anunciado."
+      },
+      {
+        "type": "paragraph",
+        "text": "Después revisaría las dudas que aparecen repetidamente: no reconocer el objetivo, insistir en una acción ya completada o perder el siguiente paso. La recurrencia es una pista para investigar, no una explicación automática de la causa."
+      },
+      {
+        "type": "paragraph",
+        "text": "Dejaría para después una animación adicional de celebración si el jugador todavía no reconoce que obtuvo la recompensa. Primero comprobaría que el estado se comunica. Luego evaluaría cómo reforzar la sensación de recibirla."
+      },
+      {
+        "type": "paragraph",
+        "text": "Antes de integrar cada cambio, reservaría tiempo para probarlo en la build de entrega. Una corrección también puede alterar otro input, tapar información o dejar de funcionar en gamepad."
+      },
+      {
+        "type": "heading",
+        "text": "Checklist y recursos"
+      },
+      {
+        "type": "paragraph",
+        "text": "Durante el primer minuto, comprueba si el jugador:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Reconoce una acción inicial relacionada con el objetivo.",
+          "Encuentra el input y puede ejecutarlo.",
+          "Reconoce el resultado y el cambio de estado.",
+          "Encuentra la información importante para ese momento.",
+          "Puede practicar la regla nueva y aplicarla después.",
+          "Entiende cómo continuar o reintentar ante un bloqueo.",
+          "Puede percibir y operar lo esencial con alternativas pertinentes."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Registra qué ocurrió y qué ayuda hizo falta. Marca «no aplica» cuando corresponda. Evitaría convertir la lista en una puntuación de aprobado: una sola barrera puede impedir llegar al resto del juego."
+      },
+      {
+        "type": "paragraph",
+        "text": "Puedes [descargar el checklist en PDF](https://byandresfe.com/speaking/60s/checklist-primer-minuto.pdf), usar la [versión web](https://byandresfe.com/speaking/60s/presentacion/checklist.html) o consultar la [presentación «60 segundos para que quieran seguir jugando»](https://byandresfe.com/speaking/60s/presentacion/#1)."
+      },
+      {
+        "type": "paragraph",
+        "text": "Para profundizar en las restricciones de plataforma, dejé [una nota sobre diseño de UX dentro de Fortnite/UEFN](/notes/uefn-ux-lessons)."
+      },
+      {
+        "type": "callout",
+        "text": "Antes de tu próximo playtest, anota una cosa que hoy solo se entiende porque tú la explicas. Observa qué ocurre cuando otra persona intenta jugar sin esa explicación."
+      },
+      {
+        "type": "subheading",
+        "text": "Referencias para ampliar la revisión"
+      },
+      {
+        "type": "list",
+        "items": [
+          "[Thinking Aloud: The #1 Usability Tool](https://www.nngroup.com/articles/thinking-aloud-the-1-usability-tool/), Nielsen Norman Group. Introducción al método y a los efectos de las intervenciones del facilitador.",
+          "[XAG 103: Additional channels for visual and audio cues](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103), Microsoft. Alternativas para comunicar señales importantes.",
+          "[XAG 107: Input](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107), Microsoft. Barreras de entrada que van más allá del remapeo."
+        ]
+      }
+    ]
+  }
+});

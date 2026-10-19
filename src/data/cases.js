@@ -4,6 +4,7 @@
  */
 export const CASE_ORDER = [
   'orcs-must-die-by-the-blade',   // Strongest: VR UX, UI Systems, Lead role, shipped studio game
+  'steal-an-egg',                  // Lead + Technical UI: Roblox → Fortnite adaptation, controller navigation
   'zombie-dragon-adventure',       // UEFN complex systems, D&D IP, FTUX, documentation
   'star-wars-roguelike-one',       // Licensed IP, roguelike, live UEFN, combat UX
   'roblox-game-ui-system',         // Final UI craft + systems: HUD, stores, rewards, collection
@@ -2172,11 +2173,16 @@ export const cases = [
   {
     id: 'CASE-009',
     slug: 'roblox-game-ui-system',
-    title: 'Roblox Game UI System',
-    cardTitle: 'Roblox Game UI',
-    seoTitle: 'Roblox Game UI System | Andrés Pisso',
-    seoDescription: 'Game UX/UI case study for a shipped Roblox experience covering HUDs, rewards, stores, progression, collection systems and reusable UI components.',
-    thumbnailAlt: 'Roblox Game UI System — Card Album and Room Rewards screens from a shipped Roblox experience',
+    title: 'Brainrot Room Rush',
+    titleLines: ['Brainrot', 'Room Rush'],
+    descriptor: 'Roblox Game UI System',
+    heroSubtitle: 'Designing a Roblox Game UI System',
+    heroSubtitleEs: 'Diseño de un sistema de UI para un juego de Roblox',
+    seoTitle: 'Brainrot Room Rush | Roblox Game UI System | Andrés Pisso',
+    seoDescription: 'Game UX/UI case study for Brainrot Room Rush, a shipped Roblox experience covering HUDs, rewards, stores, progression, collection systems and reusable UI components.',
+    ogTitle: 'Brainrot Room Rush | Roblox Game UI System',
+    ogDescription: 'Game UX/UI case study for a shipped Roblox experience covering gameplay HUDs, rewards, stores, progression, collection systems and reusable UI components.',
+    thumbnailAlt: 'Brainrot Room Rush — Card Album and Room Rewards screens from the Roblox game UI system',
     role: 'Game UX/UI Designer',
     platform: ['Roblox'],
     heroMeta: ['Shipped Roblox Experience', 'Game UX/UI', 'Figma'],
@@ -2194,7 +2200,7 @@ export const cases = [
     descriptionEs: 'HUD, progresión, tiendas y sistemas de UI reutilizables para una experiencia de Roblox publicada.',
     tags: ['Roblox', 'Game UX/UI', 'UI Systems', 'Figma'],
     relatedNotes: ['what-is-a-game-ui-system', 'clean-hud-vs-clear-hud', 'feedback-reduces-guesswork'],
-    cta: 'View Roblox Game UI System case',
+    cta: 'View Brainrot Room Rush case',
     // Hero composition — three real screens rendered right under the title
     heroShots: [
       { src: '/cases/roblox-game-ui-system/album.webp', alt: 'Card Album screen with filters, rarity tags, item detail and equipment slots', caption: 'Card Album', captionEs: 'Álbum de cartas' },
@@ -2205,14 +2211,10 @@ export const cases = [
     showcase: [
       {
         id: 'cs-surface',
-        toc: 'UI Surface',
-        tocEs: 'Superficie UI',
-        title: 'The UI Surface',
-        titleEs: 'La superficie de UI',
-        body: 'One visual language across gameplay, progression, rewards and monetization.',
-        bodyEs: 'Un solo lenguaje visual para gameplay, progresión, recompensas y monetización.',
-        meta: '12 screens',
-        metaEs: '12 pantallas',
+        toc: 'UI Surface', tocEs: 'Superficie UI',
+        title: 'The UI Surface', titleEs: 'La superficie de UI',
+        body: 'One visual language across gameplay, progression, rewards and monetization.', bodyEs: 'Un solo lenguaje visual para gameplay, progresión, recompensas y monetización.',
+        meta: '12 screens', metaEs: '12 pantallas',
         rows: [
           {
             cols: 3,
@@ -2232,34 +2234,42 @@ export const cases = [
               { src: '/cases/roblox-game-ui-system/album.webp', caption: 'Card Album', captionEs: 'Álbum de cartas' },
             ],
           },
+          {
+            label: 'Featured screens', labelEs: 'Pantallas destacadas',
+            cols: 1,
+            items: [{ src: '/cases/roblox-game-ui-system/album.webp', caption: 'Card Album', captionEs: 'Álbum de cartas' }],
+          },
+          {
+            cols: 2,
+            items: [
+              { src: '/cases/roblox-game-ui-system/room-rewards.webp', caption: 'Room Rewards', captionEs: 'Recompensas de sala' },
+              { src: '/cases/roblox-game-ui-system/store-premium.webp', caption: 'Premium Store', captionEs: 'Tienda premium' },
+            ],
+          },
         ],
       },
       {
         id: 'cs-myrole',
         type: 'role',
-        toc: 'My Role',
-        tocEs: 'Mi rol',
-        title: 'My Role',
-        titleEs: 'Mi rol',
+        toc: 'My Role', tocEs: 'Mi rol',
+        title: 'My Role', titleEs: 'Mi rol',
+        groupLabel: 'Scope', groupLabelEs: 'Alcance',
         group: 'Game UX/UI',
         items: [
-          { label: 'User flows', labelEs: 'Flujos de usuario' },
-          { label: 'Wireframes' },
+          { label: 'User Flows', labelEs: 'Flujos de usuario' },
+          { label: 'Wireframes', labelEs: 'Wireframes' },
           { label: 'Final UI', labelEs: 'UI final' },
-          { label: 'Design system & components', labelEs: 'Design system y componentes' },
-          { label: 'Interaction states', labelEs: 'Estados de interacción' },
-          { label: 'Production assets', labelEs: 'Assets de producción' },
-          { label: 'Figma handoff', labelEs: 'Handoff en Figma' },
+          { label: 'Design System & Components', labelEs: 'Design system y componentes' },
+          { label: 'Interaction States', labelEs: 'Estados de interacción' },
+          { label: 'Production Assets', labelEs: 'Assets de producción' },
+          { label: 'Figma Handoff', labelEs: 'Handoff en Figma' },
         ],
       },
       {
         id: 'cs-hud',
-        toc: 'Gameplay HUD',
-        tocEs: 'HUD de gameplay',
-        title: 'Gameplay HUD',
-        titleEs: 'HUD de gameplay',
-        body: 'Gameplay information had to remain readable without competing with the action. Room progress, run time and enemies left sit in fixed top slots; weapon, ammo and actions stay on the thumb side.',
-        bodyEs: 'La información de juego tenía que seguir legible sin competir con la acción. Progreso de sala, tiempo y enemigos restantes viven en posiciones fijas arriba; arma, munición y acciones quedan del lado del pulgar.',
+        toc: 'Gameplay HUD', tocEs: 'HUD de gameplay',
+        title: 'Gameplay HUD', titleEs: 'HUD de gameplay',
+        body: 'Gameplay information had to remain readable without competing with the action. Room progress, run time and enemies left sit in fixed top slots; weapon, ammo and actions stay on the thumb side.', bodyEs: 'La información de juego tenía que seguir legible sin competir con la acción. Progreso de sala, tiempo y enemigos restantes viven en posiciones fijas arriba; arma, munición y acciones quedan del lado del pulgar.',
         rows: [
           { cols: 1, items: [{ src: '/cases/roblox-game-ui-system/gameplay-01.webp', aspect: '1920/864', caption: 'In-game capture', captionEs: 'Captura en juego' }] },
           {
@@ -2270,8 +2280,7 @@ export const cases = [
             ],
           },
           {
-            label: 'HUD iterations',
-            labelEs: 'Iteraciones del HUD',
+            label: 'HUD iterations', labelEs: 'Iteraciones del HUD',
             cols: 4,
             mobile: 'scroll',
             items: [
@@ -2292,12 +2301,9 @@ export const cases = [
       },
       {
         id: 'cs-rewards',
-        toc: 'Rewards',
-        tocEs: 'Recompensas',
-        title: 'Rewards that keep the loop moving',
-        titleEs: 'Recompensas que mantienen el loop en marcha',
-        body: 'Reward screens had to communicate value, rarity and next actions quickly while staying visually consistent with the game’s playful tone.',
-        bodyEs: 'Las pantallas de recompensa tenían que comunicar valor, rareza y siguiente acción rápido, sin salirse del tono juguetón del juego.',
+        toc: 'Rewards & Progression', tocEs: 'Recompensas y progresión',
+        title: 'Rewards & Progression', titleEs: 'Recompensas y progresión',
+        body: 'Reward screens had to communicate value, rarity and next actions quickly while staying visually consistent with the game’s playful tone.', bodyEs: 'Las pantallas de recompensa tenían que comunicar valor, rareza y siguiente acción rápido, sin salirse del tono juguetón del juego.',
         rows: [
           { cols: 1, items: [{ src: '/cases/roblox-game-ui-system/room-rewards.webp', caption: 'Room Rewards · pick one of four, the fourth is locked to the VIP store', captionEs: 'Recompensas de sala · elige una de cuatro, la cuarta está bloqueada para la tienda VIP' }] },
           {
@@ -2305,7 +2311,7 @@ export const cases = [
             items: [
               { src: '/cases/roblox-game-ui-system/victory.webp', caption: 'Victory', captionEs: 'Victoria' },
               { src: '/cases/roblox-game-ui-system/defeat.webp', caption: 'Defeat', captionEs: 'Derrota' },
-              { src: '/cases/roblox-game-ui-system/defeat-stats.webp', caption: 'Defeat · run stats', captionEs: 'Derrota · estadísticas' },
+              { src: '/cases/roblox-game-ui-system/defeat-stats.webp', caption: 'Defeat · run stats', captionEs: 'Derrota · estadísticas de la partida' },
             ],
           },
         ],
@@ -2317,17 +2323,13 @@ export const cases = [
       },
       {
         id: 'cs-stores',
-        toc: 'Stores',
-        tocEs: 'Tiendas',
-        title: 'One system, multiple store types',
-        titleEs: 'Un sistema, varios tipos de tienda',
-        body: 'A shared component language allowed different store categories to scale without redesigning the interaction model from scratch.',
-        bodyEs: 'Un lenguaje de componentes compartido permitió escalar distintas categorías de tienda sin rediseñar el modelo de interacción desde cero.',
+        toc: 'Stores', tocEs: 'Tiendas',
+        title: 'One System, Multiple Store Types', titleEs: 'Un sistema, varios tipos de tienda',
+        body: 'A shared component language allowed different store categories to scale without redesigning the interaction model from scratch.', bodyEs: 'Un lenguaje de componentes compartido permitió escalar distintas categorías de tienda sin rediseñar el modelo de interacción desde cero.',
         annotated: {
           src: '/cases/roblox-game-ui-system/store-premium.webp',
           alt: 'Premium Store with annotated tabs, item cards, pricing, rarity, obtained state and detail panel',
-          caption: 'Premium Store',
-          captionEs: 'Tienda premium',
+          caption: 'Premium Store', captionEs: 'Tienda premium',
           markers: [
             { x: 8.6, y: 20.5, label: 'Category tabs', labelEs: 'Tabs de categoría' },
             { x: 9.1, y: 34.2, label: 'Selected state', labelEs: 'Estado seleccionado' },
@@ -2364,17 +2366,13 @@ export const cases = [
       },
       {
         id: 'cs-collection',
-        toc: 'Collection',
-        tocEs: 'Colección',
-        title: 'Designing for collection, comparison and equipment',
-        titleEs: 'Diseñar para coleccionar, comparar y equipar',
-        body: 'The collection system needed to support browsing, comparison and equipment without losing clarity as the number of cards and states increased.',
-        bodyEs: 'El sistema de colección tenía que permitir explorar, comparar y equipar sin perder claridad a medida que crecían las cartas y los estados.',
+        toc: 'Collection', tocEs: 'Colección',
+        title: 'Designing for Collection, Comparison and Equipment', titleEs: 'Diseñar para coleccionar, comparar y equipar',
+        body: 'The collection system needed to support browsing, comparison and equipment without losing clarity as the number of cards and states increased.', bodyEs: 'El sistema de colección tenía que permitir explorar, comparar y equipar sin perder claridad a medida que crecían las cartas y los estados.',
         annotated: {
           src: '/cases/roblox-game-ui-system/album.webp',
           alt: 'Card Album with annotated filters, search, rarity, ownership, locked and equipped states, item detail, bonuses and equipment slots',
-          caption: 'Card Album',
-          captionEs: 'Álbum de cartas',
+          caption: 'Card Album', captionEs: 'Álbum de cartas',
           markers: [
             { x: 15.9, y: 20.8, label: 'Filters', labelEs: 'Filtros' },
             { x: 36.6, y: 20.8, label: 'Search', labelEs: 'Búsqueda' },
@@ -2389,8 +2387,7 @@ export const cases = [
         },
         rows: [
           {
-            label: 'Zoom-ins',
-            labelEs: 'Detalles',
+            label: 'Zoom-ins', labelEs: 'Detalles',
             cols: 2,
             items: [
               { src: '/cases/roblox-game-ui-system/zoom-album-cards.webp', aspect: '800/250', caption: 'Rarity, ownership, selected and equipped', captionEs: 'Rareza, cantidad, seleccionada y equipada' },
@@ -2408,12 +2405,9 @@ export const cases = [
       },
       {
         id: 'cs-system',
-        toc: 'UI System',
-        tocEs: 'Sistema UI',
-        title: 'One visual language. Multiple systems.',
-        titleEs: 'Un lenguaje visual. Varios sistemas.',
-        body: 'Reusable components helped maintain consistency across gameplay, stores, rewards and progression while making iteration faster.',
-        bodyEs: 'Los componentes reutilizables mantuvieron la consistencia entre gameplay, tiendas, recompensas y progresión, y aceleraron la iteración.',
+        toc: 'UI System', tocEs: 'Sistema UI',
+        title: 'One Visual Language. Multiple Systems.', titleEs: 'Un lenguaje visual. Varios sistemas.',
+        body: 'Reusable components helped maintain consistency across gameplay, stores, rewards and progression while making iteration faster.', bodyEs: 'Los componentes reutilizables mantuvieron la consistencia entre gameplay, tiendas, recompensas y progresión, y aceleraron la iteración.',
         rows: [
           {
             cols: 2,
@@ -2444,26 +2438,28 @@ export const cases = [
       {
         id: 'cs-flow',
         type: 'flow',
-        toc: 'Flow to Final UI',
-        tocEs: 'Del flujo a la UI final',
-        title: 'From structure to production-ready UI',
-        titleEs: 'De la estructura a UI lista para producción',
-        body: 'The process moved from player flow and information hierarchy into wireframes, final visual design and implementation-ready assets.',
-        bodyEs: 'El proceso fue del flujo del jugador y la jerarquía de información a wireframes, diseño visual final y assets listos para implementar.',
+        toc: 'Structure to Production', tocEs: 'De estructura a producción',
+        title: 'From Structure to Production-Ready UI', titleEs: 'De la estructura a UI lista para producción',
+        body: 'The process moved from player flow and information hierarchy into wireframes, final visual design and implementation-ready assets.', bodyEs: 'El proceso fue del flujo del jugador y la jerarquía de información a wireframes, diseño visual final y assets listos para implementar.',
         items: [
-          { src: '/cases/roblox-game-ui-system/flow-wireframe.webp', fit: 'contain', caption: 'Wireframe', captionEs: 'Wireframe' },
-          { src: '/cases/roblox-game-ui-system/flow-structure.webp', fit: 'contain', caption: 'Structure', captionEs: 'Estructura' },
-          { src: '/cases/roblox-game-ui-system/album.webp', fit: 'contain', caption: 'Final UI', captionEs: 'UI final' },
-          { src: '/cases/roblox-game-ui-system/sys-card-back.webp', fit: 'contain', caption: 'Production asset', captionEs: 'Asset de producción' },
+          {
+            caption: 'Flow', captionEs: 'Flujo',
+            note: 'Card Album · equip loop', noteEs: 'Álbum de cartas · loop de equipar',
+            steps: ['Open album', 'Filter or search', 'Select a card', 'Review detail & bonus', 'Equip card', 'Slot filled · bonus active'],
+            stepsEs: ['Abrir álbum', 'Filtrar o buscar', 'Elegir una carta', 'Revisar detalle y bono', 'Equipar carta', 'Slot ocupado · bono activo'],
+          },
+          { src: '/cases/roblox-game-ui-system/flow-02-wireframe.webp', zoomSrc: '/cases/roblox-game-ui-system/flow-structure.webp', aspect: '767/500', fit: 'contain', caption: 'Wireframe', captionEs: 'Wireframe', note: 'Structure pass', noteEs: 'Pase de estructura', alt: 'Card Album structure pass: card grid, detail panel and equip action' },
+          { src: '/cases/roblox-game-ui-system/flow-03-final.webp', zoomSrc: '/cases/roblox-game-ui-system/album.webp', aspect: '922/530', fit: 'contain', caption: 'Final UI', captionEs: 'UI final', note: 'Same area, final visual design', noteEs: 'Misma zona, diseño visual final', alt: 'Final Card Album: card states, detail panel, damage bonus and equip action' },
+          { src: '/cases/roblox-game-ui-system/sys-card-back.webp', aspect: '662/908', fit: 'contain', caption: 'Production', captionEs: 'Producción', note: 'Card asset for implementation', noteEs: 'Asset de carta para implementación', alt: 'Card back asset exported for implementation' },
         ],
       },
     ],
     content: {
       summary:
-        'I worked on the UX/UI of a shipped Roblox experience, designing player-facing flows from wireframes through final UI and production-ready assets. The interface system covered gameplay HUDs, rewards, stores, progression, player selection, tutorials and collection mechanics while maintaining a consistent visual language across the experience.',
+        'I worked on the UX/UI of Brainrot Room Rush, a shipped Roblox experience, designing player-facing flows from wireframes through final UI and production-ready assets. The interface system covered gameplay HUDs, rewards, stores, progression, player selection, tutorials and collection mechanics while maintaining a consistent visual language across the experience.',
       quickFacts: {
         role: 'Game UX/UI Designer',
-        game: 'Brainrot Horrors',
+        game: 'Brainrot Room Rush (formerly Brainrot Horrors)',
         platform: 'Roblox · PC / Mobile',
         scope: 'HUD · Rewards · Stores · Progression · Collection',
         tools: 'Figma',
@@ -2471,12 +2467,13 @@ export const cases = [
         status: 'Shipped',
       },
     },
+
     contentEs: {
       summary:
-        'Trabajé en el UX/UI de una experiencia de Roblox publicada, diseñando los flujos del jugador desde wireframes hasta UI final y assets listos para producción. El sistema de interfaz cubrió HUDs de gameplay, recompensas, tiendas, progresión, selección de jugadores, tutoriales y mecánicas de colección, con un lenguaje visual consistente en toda la experiencia.',
+        'Trabajé en el UX/UI de Brainrot Room Rush, una experiencia de Roblox publicada, diseñando los flujos del jugador desde wireframes hasta UI final y assets listos para producción. El sistema de interfaz cubrió HUDs de gameplay, recompensas, tiendas, progresión, selección de jugadores, tutoriales y mecánicas de colección, con un lenguaje visual consistente en toda la experiencia.',
       quickFacts: {
         role: 'Game UX/UI Designer',
-        game: 'Brainrot Horrors',
+        game: 'Brainrot Room Rush (antes Brainrot Horrors)',
         platform: 'Roblox · PC / Mobile',
         scope: 'HUD · Recompensas · Tiendas · Progresión · Colección',
         tools: 'Figma',
@@ -2486,5 +2483,344 @@ export const cases = [
     },
     whatThisShows: 'Shipped Roblox UI built as a system, not a collection of isolated screens.',
     whatThisShowsEs: 'UI de Roblox publicada, construida como sistema y no como una colección de pantallas aisladas.',
+  },
+  {
+    id: 'CASE-010',
+    slug: 'steal-an-egg',
+    title: 'Steal an Egg',
+    titleLines: ['Steal', 'an Egg'],
+    descriptor: 'Roblox to Fortnite UI Adaptation',
+    heroSubtitle: 'Adapting UI and navigation from Roblox to Fortnite',
+    heroSubtitleEs: 'Adaptación de UI y navegación de Roblox a Fortnite',
+    seoTitle: 'Steal an Egg | Adapting UI and Navigation from Roblox to Fortnite | Andrés Pisso',
+    seoDescription: 'Game UX/UI case study for Steal an Egg on Fortnite (UEFN): controller navigation with the D-pad, a production UI system and hands-on Technical UI implementation.',
+    ogTitle: 'Steal an Egg | Roblox to Fortnite UI Adaptation',
+    ogDescription: 'UX/UI Lead and Technical UI case study: D-pad navigation, a production UI system and implemented shops, hotbar and leaderboard for a Fortnite island.',
+    thumbnailAlt: 'Steal an Egg key art: a player in Fortnite carrying a giant spiked egg away from a sleeping orange dinosaur',
+    trailerSrc: '/cases/steal-an-egg/steal-an-egg-trailer.mp4',
+    role: 'UX/UI Lead · Technical UI',
+    platform: ['UEFN', 'Fortnite'],
+    heroMeta: ['UX/UI Lead', 'Technical UI Implementation', 'Fortnite / UEFN', '2026'],
+    playUrl: 'https://www.fortnite.com/@gargantuaa/6898-9449-5160',
+    playLabel: 'Play the island · 6898-9449-5160',
+    playLabelEs: 'Jugar la isla · 6898-9449-5160',
+    focus: 'Controller navigation, production UI system and Technical UI for a Roblox-to-Fortnite adaptation.',
+    focusEs: 'Navegación con mando, sistema de UI para producción y Technical UI en una adaptación de Roblox a Fortnite.',
+    status: 'SELECTED WORK',
+    visibility: 'public',
+    statusColor: 'accent',
+    year: '2026',
+    featured: true,
+    category: 'games',
+    headline: 'Moving a HUD of on-screen buttons to three D-pad entry points.',
+    headlineEs: 'Llevar un HUD de botones en pantalla a tres accesos del D-pad.',
+    description: 'UX/UI Lead and Technical UI on the Fortnite adaptation of a Roblox game: D-pad navigation, a UI system for production and implemented shops, hotbar and leaderboard.',
+    descriptionEs: 'UX/UI Lead y Technical UI en la adaptación a Fortnite de un juego de Roblox: navegación con D-pad, sistema de UI para producción e implementación de tiendas, hotbar y leaderboard.',
+    tags: ['UEFN', 'UX/UI Lead', 'Controller Navigation', 'UI Systems', 'Technical UI'],
+    relatedNotes: ['uefn-ux-lessons', 'what-is-a-game-ui-system', 'clean-hud-vs-clear-hud'],
+    cta: 'View Steal an Egg case',
+    // Public reference, verified on fortnite.gg/island/6898-9449-5160 on Oct 4, 2026
+    outcomeStats: [
+      { value: '18,829', label: 'All-time peak concurrent players · Fortnite.GG · checked Oct 4, 2026' },
+      { value: 'Sep 28', label: '2026 release · peak recorded within the first week' },
+    ],
+    outcomeStatsEs: [
+      { value: '18.829', label: 'Pico histórico de jugadores concurrentes · Fortnite.GG · consultado el 4 oct 2026' },
+      { value: '28 sep', label: 'Lanzamiento 2026 · pico registrado en la primera semana' },
+    ],
+    showcase: [
+      {
+        id: 'cs-scope',
+        bodyFirst: true,
+        toc: 'Context & Scope', tocEs: 'Contexto y alcance',
+        title: 'Context & Scope', titleEs: 'Contexto y alcance',
+        body: 'Steal an Egg is a Fortnite adaptation of a game that first found its audience on Roblox. Players steal eggs, hatch pets, earn income from them, buy speed upgrades and keep progressing.\n\nThe Fortnite version is a collaboration between Do Big Studios and TeraCreators, built in UEFN.\n\nI led UX/UI and implemented part of the interface myself. Engineering implemented screens too, working from the UI system I built, so my files had to hold up as production material and not only as design reference.',
+        bodyEs: 'Steal an Egg es la adaptación a Fortnite de un juego que encontró primero su audiencia en Roblox. El jugador roba huevos, incuba mascotas, genera ingresos con ellas, compra mejoras de velocidad y sigue progresando.\n\nLa versión de Fortnite es una colaboración entre Do Big Studios y TeraCreators, construida en UEFN.\n\nLideré UX/UI e implementé parte de la interfaz. Ingeniería también implementó pantallas a partir del sistema de UI que construí, así que mis archivos tenían que servir como material de producción y no solo como referencia de diseño.',
+        rows: [
+          { cols: 2, items: [{ src: '/cases/steal-an-egg/hud.webp', aspect: '16/9', alt: 'Fortnite HUD mockup: Shop/Index group on the left, Eggs/Pets group on the right, hotbar at the bottom, each with its gamepad prompt', caption: 'HUD with its three entry points · Figma mockup', captionEs: 'HUD con sus tres accesos · mockup en Figma' }, { src: '/cases/steal-an-egg/hud-ingame.webp', aspect: '16/9', alt: 'In-game HUD in Fortnite: Shop and Index buttons on the left with a D-pad prompt, Eggs and Pets on the right, LB/RB hotbar at the bottom and a Zoom 1/5 indicator', caption: 'The same HUD in game · gamepad prompts', captionEs: 'El mismo HUD en el juego · prompts de mando' }] },
+        ],
+        points: [
+          { label: 'UX/UI Lead' },
+          { label: 'Technical UI' },
+          { label: 'Fortnite / UEFN' },
+          { label: 'Do Big Studios × TeraCreators' },
+        ],
+      },
+      {
+        id: 'cs-problem',
+        bodyFirst: true,
+        toc: 'The Challenge', tocEs: 'El reto',
+        title: 'From On-Screen Buttons to a Controller', titleEs: 'De botones en pantalla a un mando',
+        body: 'The original interface leans on direct interaction. Shops, index, pets, eggs and a speed toggle each sit on the HUD as something the player presses.\n\nIn Fortnite the same systems had to be reachable from a gamepad, within the inputs and technical scope of our UEFN implementation. One input per system was not available, and reassigning controls that Fortnite players already expect would have traded one problem for another.\n\nThe work came down to four questions: which inputs we could use, how to group systems behind them, which expected controls to leave alone, and how the player moves between sub-screens once a group is open.',
+        bodyEs: 'La interfaz original se apoya en la interacción directa. Tiendas, index, mascotas, huevos y un toggle de velocidad están en el HUD como elementos que el jugador presiona.\n\nEn Fortnite esos mismos sistemas tenían que ser accesibles desde un mando, dentro de las entradas y el alcance técnico de nuestra implementación en UEFN. No había una entrada por sistema, y reasignar controles que los jugadores de Fortnite ya esperan habría cambiado un problema por otro.\n\nEl trabajo se redujo a cuatro preguntas: qué entradas podíamos usar, cómo agrupar los sistemas detrás de ellas, qué controles esperados no tocar y cómo se mueve el jugador entre subpantallas cuando un grupo ya está abierto.',
+        rows: [
+          { cols: 1, items: [{ src: '/cases/steal-an-egg/nav-mapping-notes.webp', aspect: '16/9', alt: 'Early Figma exploration with working notes in Spanish about merging Store and Index into one toggle and Eggs and Pets into another, with tab navigation', caption: 'First input-mapping pass with working notes (in Spanish) · Figma exploration, not the final layout', captionEs: 'Primer pase de mapeo de entradas con notas de trabajo · exploración en Figma, no es el layout final' }] },
+        ],
+        points: [
+          { label: 'Available inputs', labelEs: 'Entradas disponibles' },
+          { label: 'Grouping systems', labelEs: 'Agrupar sistemas' },
+          { label: 'Expected controls', labelEs: 'Controles esperados' },
+          { label: 'Sub-screen navigation', labelEs: 'Navegación entre subpantallas' },
+        ],
+        pending: [
+          { file: 'roblox-hud-ref.webp', need: 'Capture of the original Roblox HUD for a side-by-side with the Fortnite HUD. Confirm it can be shown; caption it as the original game, not my work.' },
+        ],
+      },
+      {
+        id: 'cs-navigation',
+        bodyFirst: true,
+        toc: 'D-Pad Navigation', tocEs: 'Navegación con D-pad',
+        title: 'Three D-Pad Entry Points', titleEs: 'Tres accesos con el D-pad',
+        body: 'We used the D-pad as the main way into the menus. Each direction opens a group of screens instead of a single screen.\n\nLeft and right follow position: the left group sits on the left edge of the HUD and the right group on the right edge. Up follows motion: the inventory opens from the bottom of the screen upward, so the direction matches how the panel moves. The two rules are related, not identical.\n\nInside a group, every sub-screen has a tab. The player moves focus to the tabs and selects one like any other button. There are no dedicated shortcuts for switching tabs.\n\nThe intent was a small set of rules that stay the same across screens and are quick to learn. We have not run usability tests on this model, so that is still an intent and not a result.',
+        bodyEs: 'Usamos el D-pad como acceso principal a los menús. Cada dirección abre un grupo de pantallas en lugar de una sola.\n\nIzquierda y derecha siguen la posición: el grupo izquierdo está en el borde izquierdo del HUD y el derecho en el borde derecho. Arriba sigue el movimiento: el inventario se abre desde la parte inferior de la pantalla hacia arriba, así que la dirección coincide con el movimiento del panel. Las dos reglas están relacionadas, pero no son la misma.\n\nDentro de un grupo, cada subpantalla tiene una pestaña. El jugador lleva el foco a las pestañas y selecciona una como cualquier otro botón. No hay atajos dedicados para cambiar de pestaña.\n\nLa intención fue tener pocas reglas, iguales en todas las pantallas y rápidas de aprender. No hemos hecho pruebas de usabilidad sobre este modelo, así que sigue siendo una intención y no un resultado.',
+        tables: [
+          {
+            caption: 'D-pad mapping', captionEs: 'Mapeo del D-pad',
+            columns: ['Input', 'Opens', 'Contains', 'Association'],
+            columnsEs: ['Entrada', 'Abre', 'Contiene', 'Asociación'],
+            rows: [
+              ['D-pad Left', 'Left menu group', 'Shops and Index, plus a small entry to Settings, where the speed setting lives', 'Position: the group sits on the left of the HUD'],
+              ['D-pad Right', 'Right menu group', 'Pets and Eggs', 'Position: the group sits on the right of the HUD'],
+              ['D-pad Up', 'Inventory', 'The player inventory', 'Motion: the panel opens from the bottom upward'],
+            ],
+            rowsEs: [
+              ['D-pad izquierda', 'Grupo de menús izquierdo', 'Tiendas e Index, más un acceso discreto a Settings, donde está el ajuste de velocidad', 'Posición: el grupo está a la izquierda del HUD'],
+              ['D-pad derecha', 'Grupo de menús derecho', 'Pets y Eggs', 'Posición: el grupo está a la derecha del HUD'],
+              ['D-pad arriba', 'Inventario', 'El inventario del jugador', 'Movimiento: el panel se abre de abajo hacia arriba'],
+            ],
+          },
+          {
+            caption: 'The B button, by context', captionEs: 'El botón B según el contexto',
+            columns: ['Context', 'What B does'],
+            columnsEs: ['Contexto', 'Qué hace B'],
+            rows: [
+              ['Gameplay', 'Changes the camera zoom step'],
+              ['Screens such as shops', 'Closes the screen'],
+            ],
+            rowsEs: [
+              ['Gameplay', 'Cambia el paso de zoom de la cámara'],
+              ['Pantallas como las tiendas', 'Cierra la pantalla'],
+            ],
+          },
+          {
+            caption: 'Intent and trade-offs', captionEs: 'Intención y compromisos',
+            columns: ['Decision', 'Intent', 'Trade-off'],
+            columnsEs: ['Decisión', 'Intención', 'Compromiso'],
+            rows: [
+              ['Groups, not screens', 'Three inputs cover every menu, so there is less to memorize', 'A screen inside a group takes an extra step: open the group, then pick its tab'],
+              ['Tabs as buttons', 'One selection rule everywhere and no extra inputs taken', 'Switching tabs is slower than a dedicated shortcut would be'],
+              ['Expected controls stay', 'Fortnite players keep the inputs they already know', 'Fewer free inputs left for the game\'s own systems'],
+            ],
+            rowsEs: [
+              ['Grupos, no pantallas', 'Tres entradas cubren todos los menús, así que hay menos que memorizar', 'Una pantalla dentro de un grupo pide un paso más: abrir el grupo y luego elegir su pestaña'],
+              ['Pestañas como botones', 'Una sola regla de selección y ninguna entrada adicional ocupada', 'Cambiar de pestaña es más lento que con un atajo dedicado'],
+              ['Controles esperados intactos', 'Los jugadores de Fortnite conservan las entradas que ya conocen', 'Quedan menos entradas libres para los sistemas propios del juego'],
+            ],
+          },
+        ],
+        rows: [
+          {
+            label: 'Left group · D-pad Left', labelEs: 'Grupo izquierdo · D-pad izquierda',
+            cols: 2,
+            items: [
+              { src: '/cases/steal-an-egg/nav-left-shop.webp', aspect: '16/9', alt: 'Left group open on the Shop tab; the close button shows the B prompt', caption: 'Shop tab, B closes the screen · Figma mockup', captionEs: 'Pestaña Shop, B cierra la pantalla · mockup en Figma' },
+              { src: '/cases/steal-an-egg/nav-left-index.webp', aspect: '16/9', alt: 'Left group open on the Index tab, with Shop and Index tabs stacked beside the Pet Index window', caption: 'Index tab selected · Figma mockup', captionEs: 'Pestaña Index seleccionada · mockup en Figma' },
+            ],
+          },
+          {
+            label: 'Left group in game', labelEs: 'Grupo izquierdo en el juego',
+            cols: 1,
+            items: [
+              { video: '/cases/steal-an-egg/clip-menus.mp4', src: '/cases/steal-an-egg/clip-menus-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Shop opens and moves through Speed, money, Featured and Passes, then the Pet Index pages through its collections', caption: 'Shop and Index in game · gamepad', captionEs: 'Shop e Index en el juego · mando' },
+            ],
+          },
+          {
+            label: 'Right group · D-pad Right', labelEs: 'Grupo derecho · D-pad derecha',
+            cols: 2,
+            items: [
+              { src: '/cases/steal-an-egg/nav-right-eggs.webp', aspect: '16/9', alt: 'Right group open on the Eggs tab with the Growing Eggs list and a Close (B) button', caption: 'Eggs tab · Figma mockup', captionEs: 'Pestaña Eggs · mockup en Figma' },
+              { src: '/cases/steal-an-egg/nav-right-pets.webp', aspect: '16/9', alt: 'Right group open on the Pets tab with equip actions and a Close (B) button', caption: 'Pets tab · Figma mockup', captionEs: 'Pestaña Pets · mockup en Figma' },
+            ],
+          },
+          {
+            label: 'Inventory · D-pad Up', labelEs: 'Inventario · D-pad arriba',
+            cols: 1,
+            items: [
+              { src: '/cases/steal-an-egg/nav-inventory.webp', aspect: '16/9', alt: 'Inventory panel open above the hotbar with Pets, Eggs and Gear tabs and a B close button', caption: 'Inventory open above the hotbar · Figma mockup', captionEs: 'Inventario abierto sobre la hotbar · mockup en Figma' },
+            ],
+          },
+        ],
+        pending: [
+          { file: 'clip-nav-right.mp4', need: 'Opening the right group and selecting tabs.' },
+          { file: 'clip-inventory.mp4', need: 'Opening the inventory with D-pad Up (shows the bottom-to-top motion).' },
+          { file: 'clip-close-b.mp4', need: 'Closing a shop with B.' },
+        ],
+      },
+      {
+        id: 'cs-camera-speed',
+        bodyFirst: true,
+        toc: 'Camera & Speed', tocEs: 'Cámara y velocidad',
+        title: 'Camera Zoom and the Speed Setting', titleEs: 'Zoom de cámara y ajuste de velocidad',
+        body: 'Two smaller adaptations follow the same reasoning.\n\nCamera. Within the technical scope of our implementation we did not have the mouse-scroll zoom the Roblox version uses. We approximated it with five discrete zoom steps, on B for gamepad and Q on PC. My part was the adaptation proposal. I did not program the camera system.\n\nSpeed. After buying many speed upgrades, a player can move too fast to walk comfortably between the physical shops in the world. The original solves this with a toggle on the HUD. In our adaptation the adjustment lives in Settings, reached from the left group.\n\nThat move has a cost. It takes a persistent control off the HUD, and it also puts the option more steps away and makes it less visible.\n\nIn internal playtests we saw players turn the setting on inside the safe zone, where the shops are, and off again when they left it. Each change meant navigating Settings again. We added a third state next to Off and On: Safe zone only, which applies the slower speed inside the zone and restores full speed outside it. This was an observation from internal tests; we did not measure its effect.',
+        bodyEs: 'Dos adaptaciones más pequeñas siguen el mismo razonamiento.\n\nCámara. En el alcance técnico de nuestra implementación no contábamos con el zoom por scroll del mouse que usa la versión de Roblox. Nos aproximamos con cinco pasos discretos de zoom, en B para mando y Q en PC. Mi parte fue la propuesta de adaptación. No programé el sistema de cámara.\n\nVelocidad. Después de comprar muchas mejoras de velocidad, el jugador puede moverse demasiado rápido para desplazarse con comodidad entre las tiendas físicas del mundo. El original lo resuelve con un toggle en el HUD. En nuestra adaptación el ajuste vive en Settings, al que se llega desde el grupo izquierdo.\n\nEse cambio tiene un costo. Quita un control persistente del HUD, y también deja la opción a más pasos y la hace menos visible.\n\nEn playtests internos vimos que los jugadores activaban el ajuste dentro de la safe zone, donde están las tiendas, y lo desactivaban al salir. Cada cambio obligaba a volver a navegar Settings. Añadimos un tercer estado junto a Off y On: Safe zone only, que aplica la velocidad reducida dentro de la zona y la recupera fuera. Fue una observación de pruebas internas; no medimos su efecto.',
+        tables: [
+          {
+            caption: 'Original and adaptation', captionEs: 'Original y adaptación',
+            columns: ['Feature', 'Roblox original', 'Fortnite adaptation'],
+            columnsEs: ['Función', 'Original en Roblox', 'Adaptación en Fortnite'],
+            rows: [
+              ['Camera zoom', 'Mouse scroll', 'Five discrete steps · B on gamepad, Q on PC'],
+              ['Speed adjustment', 'Toggle on the HUD', 'Setting inside Settings, reached from the left group'],
+            ],
+            rowsEs: [
+              ['Zoom de cámara', 'Scroll del mouse', 'Cinco pasos discretos · B en mando, Q en PC'],
+              ['Ajuste de velocidad', 'Toggle en el HUD', 'Ajuste dentro de Settings, desde el grupo izquierdo'],
+            ],
+          },
+        ],
+        rows: [
+          {
+            cols: 2,
+            items: [
+              { video: '/cases/steal-an-egg/clip-speed.mp4', src: '/cases/steal-an-egg/clip-speed-poster.webp', aspect: '16/9', alt: 'Gameplay clip: a player with a large speed upgrade runs across several themed zones of the map in seconds', caption: 'Crossing the map at high speed', captionEs: 'Cruzar el mapa a alta velocidad' },
+              { video: '/cases/steal-an-egg/clip-slowmode.mp4', src: '/cases/steal-an-egg/clip-slowmode-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Settings screen with Slow Mode set to Off, On or Safe Zone Only, with a line explaining the selected option', caption: 'Slow Mode in Settings: Off, On, Safe zone only', captionEs: 'Slow Mode en Settings: Off, On, Safe zone only' },
+            ],
+          },
+        ],
+        pending: [
+          { file: 'clip-zoom.mp4', need: 'Cycling through the five zoom steps with B (or Q on PC).' },
+        ],
+      },
+      {
+        id: 'cs-system',
+        bodyFirst: true,
+        toc: 'UI System', tocEs: 'Sistema de UI',
+        title: 'A UI System Built for Production', titleEs: 'Un sistema de UI hecho para producción',
+        body: 'I built the full UI design system for the project. Its purpose was practical: engineering needed to implement screens from it, and I needed the same base for the screens I implemented myself.\n\nEvery shop uses the same window: a header with the title and close button, a content area on a dark panel, and the same card and price-button pattern. Color separates one shop from another. The structure does not change.\n\nI also adapted the iconography and visual elements of the original to this system.',
+        bodyEs: 'Construí el sistema completo de diseño de UI del proyecto. Su propósito era práctico: ingeniería necesitaba implementar pantallas a partir de él, y yo necesitaba la misma base para las pantallas que implementé.\n\nTodas las tiendas usan la misma ventana: un encabezado con título y botón de cierre, un área de contenido sobre un panel oscuro y el mismo patrón de tarjeta y botón de precio. El color distingue una tienda de otra. La estructura no cambia.\n\nTambién adapté la iconografía y los elementos visuales del original a este sistema.',
+        rows: [
+          { cols: 1, items: [{ src: '/cases/steal-an-egg/sys-hotbar.webp', aspect: '1920/165', alt: 'Footer component: speed and money counters, backpack button, ten-slot hotbar and a timer', caption: 'HUD footer: counters, hotbar and timer · Figma component', captionEs: 'Footer del HUD: contadores, hotbar y temporizador · componente en Figma' }] },
+          {
+            cols: 2,
+            items: [
+              { src: '/cases/steal-an-egg/sys-left-group.webp', aspect: '4/3', fit: 'contain', alt: 'Left group component with its D-pad prompt, Shop and Index buttons with notification badges, and the Settings entry', caption: 'Left group with input prompt and badges · Figma component', captionEs: 'Grupo izquierdo con prompt de entrada y badges · componente en Figma' },
+              { src: '/cases/steal-an-egg/sys-right-group.webp', aspect: '4/3', fit: 'contain', alt: 'Right group component with its D-pad prompt and Eggs and Pets buttons with counters', caption: 'Right group with counters · Figma component', captionEs: 'Grupo derecho con contadores · componente en Figma' },
+            ],
+          },
+          {
+            label: 'One window, different shops', labelEs: 'Una ventana, distintas tiendas',
+            cols: 2,
+            items: [
+              { src: '/cases/steal-an-egg/shop-sell.webp', aspect: '957/606', fit: 'contain', alt: 'Sell Pets window with sort options, selectable pet cards, total value and a Sell button', caption: 'Sell shop · Figma design', captionEs: 'Tienda de venta · diseño en Figma' },
+              { src: '/cases/steal-an-egg/shop-fuse.webp', aspect: '957/606', fit: 'contain', alt: 'Fuse Machine window with three pet slots feeding one egg result', caption: 'Fuse Machine · Figma design', captionEs: 'Fuse Machine · diseño en Figma' },
+            ],
+          },
+          { cols: 1, items: [{ src: '/cases/steal-an-egg/shop-trail.webp', aspect: '1200/355', alt: 'Trail Shop window with six trail cards, each with two price buttons', caption: 'Trail shop · Figma design', captionEs: 'Tienda de trails · diseño en Figma' }] },
+        ],
+        points: [
+          { label: 'Shared window', labelEs: 'Ventana compartida' },
+          { label: 'Card + price button', labelEs: 'Tarjeta + botón de precio' },
+          { label: 'Notification badges', labelEs: 'Badges de notificación' },
+          { label: 'Input prompts', labelEs: 'Prompts de entrada' },
+          { label: 'Tab states', labelEs: 'Estados de pestaña' },
+        ],
+        pending: [
+          { file: 'sys-states.webp', need: 'Component states sheet (buttons, tabs, cards: default / focused / selected / disabled) exported from Figma.' },
+          { file: 'sys-icons.webp', need: 'Iconography set adapted from the original.' },
+          { file: 'sys-figma-vs-uefn.webp', need: 'One component shown in Figma next to its UEFN widget, to show design-to-implementation correspondence.' },
+        ],
+      },
+      {
+        id: 'cs-techui',
+        bodyFirst: true,
+        toc: 'Technical UI', tocEs: 'Technical UI',
+        title: 'What I Implemented', titleEs: 'Lo que implementé',
+        body: 'I did not implement the whole interface. These are the parts I built in UEFN myself. Engineering implemented other screens on the same system.',
+        bodyEs: 'No implementé toda la interfaz. Estas son las partes que construí en UEFN. Ingeniería implementó otras pantallas sobre el mismo sistema.',
+        tables: [
+          {
+            caption: 'My Technical UI work', captionEs: 'Mi trabajo de Technical UI',
+            columns: ['Piece', 'My part'],
+            columnsEs: ['Pieza', 'Mi parte'],
+            rows: [
+              ['Shop screens', 'Implemented'],
+              ['HUD hotbar', 'Implemented'],
+              ['Leaderboard', 'Designed and implemented'],
+              ['CTA animations', 'Implemented'],
+              ['Reward animations', 'Implemented'],
+            ],
+            rowsEs: [
+              ['Pantallas de tiendas', 'Implementación'],
+              ['Hotbar del HUD', 'Implementación'],
+              ['Leaderboard', 'Diseño e implementación'],
+              ['Animaciones de CTA', 'Implementación'],
+              ['Animaciones de recompensas', 'Implementación'],
+            ],
+          },
+        ],
+        rows: [
+          {
+            cols: 2,
+            items: [
+              { src: '/cases/steal-an-egg/shop-main.webp', aspect: '4/3', fit: 'contain', alt: 'Main Shop window with a limited-time egg offer, passes and speed packs', caption: 'Shop · Figma design', captionEs: 'Shop · diseño en Figma' },
+              { src: '/cases/steal-an-egg/shop-speed.webp', aspect: '4/3', fit: 'contain', alt: 'Speed Shop window with a double-speed offer, treadmill upgrade and speed packs', caption: 'Speed shop · Figma design', captionEs: 'Tienda de velocidad · diseño en Figma' },
+            ],
+          },
+          {
+            cols: 1,
+            items: [
+              { video: '/cases/steal-an-egg/clip-trails.mp4', src: '/cases/steal-an-egg/clip-trails-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Trail Shop opens in game and scrolls through trail cards with speed multipliers and Equip and Unequip buttons', caption: 'Trail shop in game', captionEs: 'Tienda de trails en el juego' },
+            ],
+          },
+        ],
+        pending: [
+          { file: 'shop-ingame.webp', need: 'In-game capture of the main Shop, to pair with shop-main.webp as a Figma / game comparison.' },
+          { file: 'clip-shops.mp4', need: 'Shop screens in use: focus states, purchase, close.' },
+          { file: 'clip-hotbar.mp4', need: 'Hotbar in use during gameplay.' },
+          { file: 'clip-leaderboard.mp4 + leaderboard-figma.webp', need: 'Leaderboard working in game, plus its Figma design. Confirm what it ranks before describing it.' },
+          { file: 'clip-cta-reward.mp4', need: 'CTA and reward animations.' },
+        ],
+      },
+    ],
+    content: {
+      summary:
+        'Steal an Egg is the Fortnite adaptation of a game that first succeeded on Roblox, made as a collaboration between Do Big Studios and TeraCreators. I led UX/UI, built the UI system that engineering and I implemented from, and implemented the shops, the HUD hotbar, the leaderboard and the CTA and reward animations myself. The main UX problem was moving a HUD built around on-screen buttons to controller navigation, within the scope of our UEFN implementation.',
+      quickFacts: {
+        role: 'UX/UI Lead · Technical UI',
+        studio: 'Do Big Studios × TeraCreators',
+        platform: 'Fortnite / UEFN',
+        scope: 'Navigation · UI system · Technical UI',
+        tools: 'Figma · UEFN',
+        year: '2026',
+        status: 'Live',
+      },
+      outcome:
+        'Fortnite.GG lists Steal an Egg as released on September 28, 2026, with an all-time peak of 18,829 concurrent players reached in its first week. I checked that figure on October 4, 2026, when the live count was around 8,800.\n\nThat number belongs to the game and to the whole team. It does not show that my UX decisions changed retention, conversion or engagement, and I have no usability test results or before-and-after comparisons that would.\n\nWhat I can point to is what shipped: the D-pad navigation model, the UI system that engineering and I worked from, and the shops, hotbar, leaderboard and CTA and reward animations I implemented.',
+      whatILearned:
+        'Adapting an interface between platforms was mostly a question of inputs, not of screens. The screens could stay close to the original. What had to be redesigned was how the player reaches them, and each answer depended on what our UEFN implementation could support.\n\nImplementing part of the UI myself meant I met those limits directly instead of hearing about them at handoff.',
+      nextSteps:
+        'Three trade-offs are still open. Whether players find the speed setting now that it sits inside Settings. Whether selecting tabs as buttons is fast enough for players who move between shops often. Whether up for inventory reads as clearly as left and right do.\n\nNone of these has been tested yet. A short round of observed play sessions would be enough to start answering them.',
+    },
+    contentEs: {
+      summary:
+        'Steal an Egg es la adaptación a Fortnite de un juego que tuvo éxito primero en Roblox, hecha en colaboración entre Do Big Studios y TeraCreators. Lideré UX/UI, construí el sistema de UI desde el que implementamos ingeniería y yo, e implementé las tiendas, la hotbar del HUD, el leaderboard y las animaciones de CTA y recompensas. El problema principal de UX fue llevar un HUD basado en botones en pantalla a una navegación con mando, dentro del alcance de nuestra implementación en UEFN.',
+      quickFacts: {
+        role: 'UX/UI Lead · Technical UI',
+        studio: 'Do Big Studios × TeraCreators',
+        platform: 'Fortnite / UEFN',
+        scope: 'Navegación · Sistema de UI · Technical UI',
+        tools: 'Figma · UEFN',
+        year: '2026',
+        status: 'Activo',
+      },
+      outcome:
+        'Fortnite.GG registra el lanzamiento de Steal an Egg el 28 de septiembre de 2026, con un pico histórico de 18.829 jugadores concurrentes alcanzado en su primera semana. Consulté la cifra el 4 de octubre de 2026, cuando el conteo en vivo rondaba los 8.800.\n\nEse número es del juego y de todo el equipo. No demuestra que mis decisiones de UX cambiaran la retención, la conversión o el engagement, y no tengo resultados de pruebas de usabilidad ni comparativas de antes y después que lo hagan.\n\nLo que sí puedo señalar es lo que se entregó: el modelo de navegación con D-pad, el sistema de UI con el que trabajamos ingeniería y yo, y las tiendas, la hotbar, el leaderboard y las animaciones de CTA y recompensas que implementé.',
+      whatILearned:
+        'Adaptar una interfaz entre plataformas fue sobre todo una cuestión de entradas, no de pantallas. Las pantallas podían mantenerse cerca del original. Lo que hubo que rediseñar fue cómo llega el jugador a ellas, y cada respuesta dependía de lo que nuestra implementación en UEFN podía soportar.\n\nImplementar parte de la UI hizo que me encontrara con esos límites directamente, en lugar de enterarme de ellos en el handoff.',
+      nextSteps:
+        'Quedan tres compromisos abiertos. Si los jugadores encuentran el ajuste de velocidad ahora que está dentro de Settings. Si seleccionar pestañas como botones es suficientemente rápido para quien se mueve seguido entre tiendas. Si arriba para el inventario se entiende con la misma claridad que izquierda y derecha.\n\nNinguno se ha probado todavía. Una ronda corta de sesiones de juego observadas bastaría para empezar a responderlos.',
+    },
+    whatThisShows: 'A cross-platform adaptation taken from input mapping to a UI system to hands-on implementation, with the trade-offs stated and the open questions left open.',
+    whatThisShowsEs: 'Una adaptación entre plataformas llevada del mapeo de entradas al sistema de UI y a la implementación directa, con los compromisos declarados y las preguntas abiertas sin cerrar en falso.',
   },
 ];

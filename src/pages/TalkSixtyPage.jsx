@@ -16,6 +16,7 @@ const BEBAS  = '"Bebas Neue", sans-serif';
 const DECK_URL      = '/speaking/60s/presentacion';
 const CHECKLIST_PDF = '/speaking/60s/checklist-primer-minuto.pdf';
 const CHECKLIST_WEB = '/speaking/60s/presentacion/checklist.html';
+const ARTICLE_URL   = '/notes/primer-minuto-ux-videojuegos';
 
 const COPY = {
   es: {
@@ -47,9 +48,13 @@ const COPY = {
       ['Observación ≠ hipótesis', 'Anota hechos (“presionó E tres veces”), no juicios. El cambio es una apuesta que necesita otra prueba.'],
       ['Prioridad con poco tiempo', 'Primero lo que impide jugar, después lo que genera duda, y si sobra, el acabado que puedes verificar.'],
     ],
+    articleLabel: 'Para profundizar',
+    articleTitle: 'Cómo evaluar los primeros 60 segundos de tu juego',
+    articleBody: 'La versión escrita de la charla: qué observar en cada decisión y cómo comprobarla, el caso de Slow Mode en Steal an Egg y un formato de playtest de diez minutos.',
+    articleCta: 'Leer el artículo',
     casesLabel: 'Casos de la charla',
     cases: [
-      ['Steal an Egg', 'Roblox → Fortnite/UEFN: navegación con gamepad y un Slow Mode que el juego activa por ti.', null],
+      ['Steal an Egg', 'Roblox → Fortnite/UEFN: navegación con gamepad y un Slow Mode que el juego activa por ti.', '/case/steal-an-egg'],
       ['Orcs Must Die! By the Blade', 'Tutorial de VR: una regla a la vez, dentro del mundo.', '/case/orcs-must-die-by-the-blade'],
     ],
     caseCta: 'Ver caso',
@@ -87,9 +92,13 @@ const COPY = {
       ['Observation ≠ hypothesis', 'Log facts (“pressed E three times”), not judgments. A change is a bet that needs another test.'],
       ['Priorities when time is short', 'First what blocks play, then what creates doubt, and if there is time, polish you can verify.'],
     ],
+    articleLabel: 'Further reading',
+    articleTitle: 'Cómo evaluar los primeros 60 segundos de tu juego',
+    articleBody: 'The written version of the talk, in Spanish: what to observe for each decision and how to test it, the Steal an Egg Slow Mode case and a ten-minute playtest format.',
+    articleCta: 'Read the article',
     casesLabel: 'Cases in the talk',
     cases: [
-      ['Steal an Egg', 'Roblox → Fortnite/UEFN: gamepad navigation and a Slow Mode the game toggles for you.', null],
+      ['Steal an Egg', 'Roblox → Fortnite/UEFN: gamepad navigation and a Slow Mode the game toggles for you.', '/case/steal-an-egg'],
       ['Orcs Must Die! By the Blade', 'VR tutorial: one rule at a time, inside the world.', '/case/orcs-must-die-by-the-blade'],
     ],
     caseCta: 'View case',
@@ -217,6 +226,18 @@ export default function TalkSixtyPage({ onMenuOpen }) {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ── ARTÍCULO ── */}
+        <section className="py-20" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+          <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-24">
+            <Reveal><div className="sys-label">{c.articleLabel}</div></Reveal>
+            <Reveal delay={0.06}>
+              <h2 className="uppercase mb-4" style={{ ...h2Style, fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>{c.articleTitle}</h2>
+              <p className="mb-8" style={bodyStyle}>{c.articleBody}</p>
+              <CyberBtn to={ARTICLE_URL} variant="solid" size="md">{c.articleCta}</CyberBtn>
+            </Reveal>
           </div>
         </section>
 

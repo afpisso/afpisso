@@ -325,8 +325,9 @@ function CaseRow({ caseData, rowIndex, isHovered, onHover, lang, t }) {
                   color: isHovered ? 'var(--color-fg)' : 'rgba(240,238,234,0.78)',
                 }}
               >
-                {caseData.cardTitle || caseData.title}
+                {caseData.title}
               </h2>
+              {caseData.descriptor && <span className="sys-label" style={{ color: 'var(--color-fg-dim)' }}>{caseData.descriptor}</span>}
               <span
                 className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-1 transition-opacity duration-200"
                 style={{
@@ -482,8 +483,9 @@ function MobileWorkCard({ caseData, index, total }) {
                 color: 'var(--color-fg)', textTransform: 'uppercase',
                 marginBottom: 10,
               }}>
-                {caseData.cardTitle || caseData.title}
+                {caseData.title}
               </h2>
+              {caseData.descriptor && <span className="sys-label" style={{ display: 'block', marginTop: -4, marginBottom: 8, color: 'var(--color-fg-dim)' }}>{caseData.descriptor}</span>}
 
               <div className="sys-label" style={{ marginBottom: 7, color: 'var(--color-fg-dim)' }}>
                 {caseData.role} · {caseData.year}
@@ -712,8 +714,9 @@ function WorkGridCard({ caseData, index }) {
             marginBottom: 8,
             textTransform: 'uppercase',
           }}>
-            {caseData.cardTitle || caseData.title}
+            {caseData.title}
           </h2>
+          {caseData.descriptor && <span className="sys-label" style={{ display: 'block', marginBottom: 8, color: 'var(--color-fg-dim)' }}>{caseData.descriptor}</span>}
 
           {/* Meta */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>

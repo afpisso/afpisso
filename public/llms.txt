@@ -24,6 +24,7 @@
 
 - [UEFN UX Lessons: Designing Inside Fortnite](https://byandresfe.com/notes/uefn-ux-lessons): Onboarding, feedback and platform constraints in a tested build.
 - [How Game UX Shapes Player Decisions](https://byandresfe.com/notes/player-decision-making-ux): Comparing options, costs and consequences at the decision moment.
+- [Cómo evaluar los primeros 60 segundos de tu juego](https://byandresfe.com/notes/primer-minuto-ux-videojuegos): Spanish guide to reviewing first-minute UX (goal, controls, feedback, accessibility) and running a short playtest.
 
 ## Speaking
 
