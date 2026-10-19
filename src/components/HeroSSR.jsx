@@ -583,7 +583,7 @@ export default function HeroSSR() {
                   {t.hero.cta1}
                 </CyberBtn>
                 <CyberBtn
-                  href="/about"
+                  to="/about"
                   variant="ghost"
                   size="sm"
                 >

@@ -24,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { fieldNotes } from '../src/data/fieldNotes.js'
 import { cases }      from '../src/data/cases.js'
 import { pageMeta } from '../src/data/pageMeta.js'
+import { SPANISH_ONLY, localizePath, alternatesFor } from '../src/utils/i18nRoutes.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root      = path.resolve(__dirname, '..')
@@ -51,18 +52,12 @@ function imageSize(publicPath) {
   return null
 }
 
-// Notes over ~60 chars drop the section label so the title is not truncated
-function noteMetaTitle(note) {
-  if (note.seoTitle) return `${note.seoTitle} | ${SITE_NAME}`
-  const full = `${note.title} — Field Notes | ${SITE_NAME}`
-  return full.length > 60 ? `${note.title} | ${SITE_NAME}` : full
-}
-const noteImage = (note) => note.ogImage || note.cover
-
 const DEFAULT_TITLE = pageMeta['/'].en.title
 const DEFAULT_DESC = pageMeta['/'].en.description
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
+// Language-neutral paths; each one renders in English and, unless it is
+// Spanish-only, again under /es.
 const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s', '/speaking/game-ui-systems']
 
 const routes = [
@@ -71,8 +66,12 @@ const routes = [
   ...cases.filter(c => c.content).map(c => `/case/${c.slug}`),
 ]
 
+// [{ route, lang, url }] — url is the published path
+const pages = routes.flatMap(route => SPANISH_ONLY.has(route)
+  ? [{ route, lang: 'es', url: route }]
+  : ['en', 'es'].map(lang => ({ route, lang, url: localizePath(route, lang) })))
+
 // ── HTML escape helpers ─────────────────────────────────────────────────────
-const esc      = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 const escAttr  = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
 const escTitle = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -80,62 +79,79 @@ const escTitle = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').rep
 const PERSON_REF  = { '@id': `${BASE}/#person` }
 const WEBSITE_REF = { '@id': `${BASE}/#website` }
 
-function breadcrumb(...items) {
+const LABELS = {
+  en: { home: 'Home', work: 'Case Studies', notes: 'Field Notes', about: 'About', resume: 'Resume', speaking: 'Speaking' },
+  es: { home: 'Inicio', work: 'Casos de estudio', notes: 'Notas de campo', about: 'Sobre mí', resume: 'CV', speaking: 'Charlas' },
+}
+
+// Absolute URL of a route in a language
+const abs = (route, lang) => `${BASE}${localizePath(route, lang)}`
+
+function breadcrumb(lang, ...items) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/` },
+      { '@type': 'ListItem', position: 1, name: LABELS[lang].home, item: abs('/', lang) },
       ...items.map((item, i) => ({
         '@type': 'ListItem',
         position: i + 2,
         name: item.name,
-        item: item.url,
+        item: abs(item.route, lang),
       })),
     ],
   }
 }
 
-function buildWorkSchema() {
+// Spanish-only notes publish their Spanish title/summary in every language
+const noteTitle = (note, lang) => (note.language === 'es' || lang === 'es' ? note.titleEs || note.title : note.title)
+const noteSummary = (note, lang) => (note.language === 'es' || lang === 'es' ? note.summaryEs || note.summary : note.summary)
+
+// Notes over ~60 chars drop the section label so the title is not truncated
+function noteMetaTitle(note, lang) {
+  if (note.seoTitle) return `${note.seoTitle} | ${SITE_NAME}`
+  const title = noteTitle(note, lang)
+  const full = `${title} — ${LABELS[lang].notes} | ${SITE_NAME}`
+  return full.length > 60 ? `${title} | ${SITE_NAME}` : full
+}
+const noteImage = (note) => note.ogImage || note.cover
+
+function buildWorkSchema(lang) {
   return [
-    breadcrumb({ name: 'Case Studies', url: `${BASE}/work` }),
+    breadcrumb(lang, { name: LABELS[lang].work, route: '/work' }),
     {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      '@id': `${BASE}/work#collection`,
-      name: 'Game UX/UI Case Studies — Andres Felipe Pisso',
-      description: 'Selected UX/UI case studies covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
-      url: `${BASE}/work`,
+      '@id': `${abs('/work', lang)}#collection`,
+      name: pageMeta['/work'][lang].title,
+      description: pageMeta['/work'][lang].description,
+      url: abs('/work', lang),
+      inLanguage: lang,
       author: PERSON_REF,
       isPartOf: WEBSITE_REF,
     },
   ]
 }
 
-function buildAboutSchema() {
+function buildNotesIndexSchema(lang) {
   return [
-    breadcrumb({ name: 'About', url: `${BASE}/about` }),
-  ]
-}
-
-function buildNotesIndexSchema() {
-  return [
-    breadcrumb({ name: 'Field Notes', url: `${BASE}/notes` }),
+    breadcrumb(lang, { name: LABELS[lang].notes, route: '/notes' }),
     {
       '@context': 'https://schema.org',
       '@type': 'Blog',
-      '@id': `${BASE}/notes#blog`,
-      name: 'Field Notes on Game UX/UI Design',
-      description: 'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
-      url: `${BASE}/notes`,
+      '@id': `${abs('/notes', lang)}#blog`,
+      name: pageMeta['/notes'][lang].title,
+      description: pageMeta['/notes'][lang].description,
+      url: abs('/notes', lang),
+      inLanguage: lang,
       author: PERSON_REF,
       isPartOf: WEBSITE_REF,
       blogPost: fieldNotes.map(n => ({
         '@type': 'BlogPosting',
-        url: `${BASE}/notes/${n.slug}`,
-        headline: noteTitle(n),
-        description: noteSummary(n),
-        keywords: n.category,
+        url: abs(`/notes/${n.slug}`, lang),
+        headline: noteTitle(n, lang),
+        description: noteSummary(n, lang),
+        keywords: lang === 'es' ? n.categoryEs || n.category : n.category,
         datePublished: n.date,
         author: PERSON_REF,
       })),
@@ -143,188 +159,122 @@ function buildNotesIndexSchema() {
   ]
 }
 
-// Spanish-only notes publish their Spanish title/summary as the primary metadata
-const noteTitle = (note) => (note.language === 'es' ? note.titleEs : note.title)
-const noteSummary = (note) => (note.language === 'es' ? note.summaryEs : note.summary)
-
-function buildNoteSchema(note) {
+function buildNoteSchema(note, lang) {
+  const route = `/notes/${note.slug}`
+  const url = abs(route, lang)
   const posting = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    '@id': `${BASE}/notes/${note.slug}#article`,
-    headline: noteTitle(note),
-    description: noteSummary(note),
-    url: `${BASE}/notes/${note.slug}`,
+    '@id': `${url}#article`,
+    headline: noteTitle(note, lang),
+    description: noteSummary(note, lang),
+    url,
     datePublished: note.date,
     dateModified: note.dateModified || note.date,
-    inLanguage: note.language ? [note.language] : ['en', 'es'],
+    inLanguage: lang,
     keywords: note.keywords || [note.category, 'Game UX', 'Game UI', 'UX Design'].join(', '),
     author: PERSON_REF,
     publisher: PERSON_REF,
-    isPartOf: { '@id': `${BASE}/notes#blog` },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/notes/${note.slug}` },
+    isPartOf: { '@id': `${abs('/notes', lang)}#blog` },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   }
   if (noteImage(note)) posting.image = `${BASE}${noteImage(note)}`
-  if (note.titleEs && !note.language)   posting.alternativeHeadline = note.titleEs
-  if (note.summaryEs && !note.language) posting.abstract = note.summaryEs
   return [
-    breadcrumb(
-      { name: 'Field Notes', url: `${BASE}/notes` },
-      { name: noteTitle(note), url: `${BASE}/notes/${note.slug}` }
+    breadcrumb(lang,
+      { name: LABELS[lang].notes, route: '/notes' },
+      { name: noteTitle(note, lang), route },
     ),
     posting,
   ]
 }
 
-function buildCaseSchema(c) {
+function buildCaseSchema(c, lang) {
+  const route = `/case/${c.slug}`
+  const url = abs(route, lang)
   const work = {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
-    '@id': `${BASE}/case/${c.slug}#work`,
+    '@id': `${url}#work`,
     name: c.title,
-    description: c.description,
-    url: `${BASE}/case/${c.slug}`,
-    inLanguage: ['en', 'es'],
+    description: lang === 'es' ? c.descriptionEs || c.description : c.description,
+    url,
+    inLanguage: lang,
     creator: PERSON_REF,
     keywords: (c.tags || []).join(', '),
     genre: 'Game UX/UI Design',
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/case/${c.slug}` },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     image: `${BASE}/thumbnails/${c.slug}.webp`,
   }
-  if (c.headlineEs)    work.alternativeHeadline = c.headlineEs
-  if (c.descriptionEs) work.abstract = c.descriptionEs
+  const headline = lang === 'es' ? c.headlineEs : c.headline
+  if (headline) work.alternativeHeadline = headline
   return [
-    breadcrumb(
-      { name: 'Case Studies', url: `${BASE}/work` },
-      { name: c.title, url: `${BASE}/case/${c.slug}` }
+    breadcrumb(lang,
+      { name: LABELS[lang].work, route: '/work' },
+      { name: c.title, route },
     ),
     work,
   ]
 }
 
+const clip = (s = '') => (s.length > 155 ? s.slice(0, 152) + '...' : s)
+
 // ── Page meta map ───────────────────────────────────────────────────────────
-function buildPageMeta() {
+// Keyed by language-neutral route; titles/descriptions of static pages come
+// from src/data/pageMeta.js so the SPA and the prerender stay in sync.
+function buildPageMeta(lang) {
   const meta = {}
-
-  // Homepage — title/desc already in index.html; schema already inline; skip injection
-  meta['/'] = {
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESC,
-    canonical: `${BASE}/`,
-    ogType: 'website',
-    schema: null,
+  const L = LABELS[lang]
+  const page = (route, extra) => {
+    meta[route] = { ...pageMeta[route][lang], ogType: 'website', schema: null, ...extra }
   }
 
-  meta['/work'] = {
-    title: `Game UX/UI Case Studies — Andres Felipe Pisso`,
-    description:
-      'Selected UX/UI case studies by Andres Felipe Pisso covering game UX, UI systems, HUD clarity, UEFN, VR interfaces, LiveOps UX, accessibility and player decision-making.',
-    canonical: `${BASE}/work`,
-    ogType: 'website',
-    schema: buildWorkSchema(),
-  }
-
-  meta['/resume'] = {
-    title: `Resume — Andres Felipe Pisso | UX Lead & Game UX/UI Designer`,
-    description:
-      'Resume of Andres Felipe Pisso — UX Lead and Game UX/UI Designer with 11+ years of experience across game UX, UI systems, HUD design, LiveOps UX, UEFN, and VR.',
-    canonical: `${BASE}/resume`,
-    ogType: 'website',
-    schema: [
-      breadcrumb({ name: 'Resume', url: `${BASE}/resume` }),
-    ],
-  }
-
-  meta['/about'] = {
-    title: `Andres Felipe Pisso — UX Lead & Game UX/UI Designer`,
-    description:
-      'Andres Felipe Pisso is a UX Lead and Game UX/UI Designer based in Bogotá, Colombia. 11+ years across games, VR, UEFN, LiveOps UX, and digital products. Available for freelance and remote contracts.',
-    canonical: `${BASE}/about`,
-    ogType: 'website',
-    schema: buildAboutSchema(),
-  }
-
-  meta['/speaking'] = {
-    title: `Speaking on Game UX/UI Design — Andres Felipe Pisso`,
-    description:
-      'Andres Felipe Pisso speaks on Game UI Systems, design systems for games, reusable UI in Figma, component structure, and production-ready UI handoff. Available for talks, workshops, and panels.',
-    canonical: `${BASE}/speaking`,
-    ogType: 'website',
-    schema: [
-      breadcrumb({ name: 'Speaking', url: `${BASE}/speaking` }),
-    ],
-  }
-
-  meta['/speaking/game-ui-systems'] = {
-    title: 'Game UI Systems Workshop at Colombia 5.0 — Andrés Felipe Pisso',
-    description: '',
-    canonical: `${BASE}/speaking/game-ui-systems`,
-    ogType: 'website',
-    schema: [
-      breadcrumb(
-        { name: 'Speaking', url: `${BASE}/speaking` },
-        { name: 'Game UI Systems', url: `${BASE}/speaking/game-ui-systems` },
-      ),
-    ],
-  }
-
-  meta['/speaking/60s'] = {
-    title: '60 segundos para que quieran seguir jugando — Charla de Game UX',
-    description: '',
-    canonical: `${BASE}/speaking/60s`,
-    ogType: 'website',
-    schema: [
-      breadcrumb(
-        { name: 'Speaking', url: `${BASE}/speaking` },
-        { name: '60 segundos', url: `${BASE}/speaking/60s` },
-      ),
-    ],
-  }
-
-  meta['/notes'] = {
-    title: `Field Notes on Game UX/UI Design — Andres Felipe Pisso`,
-    description:
-      'Field notes, frameworks and breakdowns by Andres Felipe Pisso on UX clarity, UI systems, HUD design, feedback, accessibility, UEFN, VR UX and digital product thinking.',
-    canonical: `${BASE}/notes`,
-    ogType: 'website',
-    schema: buildNotesIndexSchema(),
-  }
-
-  for (const [route, localized] of Object.entries(pageMeta)) {
-    Object.assign(meta[route], localized.en)
-  }
-  // Spanish-language talk: share previews in the language of its audience
-  Object.assign(meta['/speaking/60s'], pageMeta['/speaking/60s'].es, { lang: 'es' })
+  // Homepage — schema already inline in index.html
+  page('/')
+  page('/work', { schema: buildWorkSchema(lang) })
+  page('/resume', { schema: [breadcrumb(lang, { name: L.resume, route: '/resume' })] })
+  page('/about', { schema: [breadcrumb(lang, { name: L.about, route: '/about' })] })
+  page('/speaking', { schema: [breadcrumb(lang, { name: L.speaking, route: '/speaking' })] })
+  page('/speaking/game-ui-systems', {
+    schema: [breadcrumb(lang,
+      { name: L.speaking, route: '/speaking' },
+      { name: 'Game UI Systems', route: '/speaking/game-ui-systems' },
+    )],
+  })
+  page('/speaking/60s', {
+    schema: [breadcrumb(lang,
+      { name: L.speaking, route: '/speaking' },
+      { name: '60 segundos', route: '/speaking/60s' },
+    )],
+  })
+  page('/notes', { schema: buildNotesIndexSchema(lang) })
 
   for (const note of fieldNotes) {
-    const url = `/notes/${note.slug}`
-    meta[url] = {
-      title: noteMetaTitle(note),
-      description: noteSummary(note),
-      canonical: `${BASE}${url}`,
+    meta[`/notes/${note.slug}`] = {
+      title: noteMetaTitle(note, lang),
+      description: noteSummary(note, lang),
       ogType: 'article',
-      lang: note.language,
       ogImage: noteImage(note) && `${BASE}${noteImage(note)}`,
-      ogImageAlt: noteTitle(note),
-      schema: buildNoteSchema(note),
+      ogImageAlt: noteTitle(note, lang),
+      schema: buildNoteSchema(note, lang),
     }
   }
 
   for (const c of cases) {
-    const url = `/case/${c.slug}`
-    // Keep description under 160 chars for meta
-    const rawDesc = c.content?.summary || c.description || ''
-    const desc = rawDesc.length > 155 ? rawDesc.slice(0, 152) + '...' : rawDesc
-    meta[url] = {
-      title: c.seoTitle || `${c.title} — Game UX/UI Case Study | ${SITE_NAME}`,
-      description: c.seoDescription || desc,
-      socialTitle: c.ogTitle,
-      socialDescription: c.ogDescription,
-      canonical: `${BASE}${url}`,
+    const es = lang === 'es'
+    const desc = clip(es
+      ? c.contentEs?.summary || c.descriptionEs || c.content?.summary || c.description
+      : c.content?.summary || c.description)
+    meta[`/case/${c.slug}`] = {
+      title: es
+        ? `${c.title} — Caso de estudio Game UX/UI | ${SITE_NAME}`
+        : c.seoTitle || `${c.title} — Game UX/UI Case Study | ${SITE_NAME}`,
+      description: es ? desc : c.seoDescription || desc,
+      socialTitle: es ? undefined : c.ogTitle,
+      socialDescription: es ? undefined : c.ogDescription,
       ogType: 'article',
       ogImage: `${BASE}/thumbnails/${c.slug}.webp`,
       ogImageAlt: c.thumbnailAlt || c.title,
-      schema: buildCaseSchema(c),
+      schema: buildCaseSchema(c, lang),
     }
   }
 
@@ -333,7 +283,7 @@ function buildPageMeta() {
 
 // ── HTML meta injection ─────────────────────────────────────────────────────
 function injectMeta(html, pageMeta) {
-  const { title, description, canonical, ogType, schema, ogImage, ogImageAlt, socialTitle, socialDescription, lang } = pageMeta
+  const { title, description, canonical, ogType, schema, ogImage, ogImageAlt, socialTitle, socialDescription, lang, alternates = [] } = pageMeta
 
   const t = escTitle(title)
   const d = escAttr(description)
@@ -423,14 +373,20 @@ function injectMeta(html, pageMeta) {
     }
   }
 
-  // Page language: Spanish-only pages declare es and swap the OG locales
+  // Page language: Spanish pages declare es and swap the OG locales
   if (lang === 'es') {
     html = html.replace(/<html lang="en"/, '<html lang="es"')
     html = html.replace(/(<meta property="og:locale"\s+content=")en_US(")/, '$1es_CO$2')
     html = html.replace(/(<meta property="og:locale:alternate" content=")es_CO(")/, '$1en_US$2')
   }
 
-  // Language switching uses one URL; no separate localized URLs exist.
+  // Reciprocal hreflang; single-language pages have no alternate locale
+  if (alternates.length) {
+    const links = alternates.map(a => `\n    <link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('')
+    html = html.replace(/(<link rel="canonical" href="[^"]*" \/>)/, `$1${links}`)
+  } else {
+    html = html.replace(/\s*<meta property="og:locale:alternate" content="[^"]*" \/>/, '')
+  }
 
   // Inject page-specific schema before </head>
   if (schema) {
@@ -444,16 +400,18 @@ function injectMeta(html, pageMeta) {
 // ── Sitemap generation ──────────────────────────────────────────────────────
 function generateSitemap() {
   const noteDates = new Map(fieldNotes.map(n => [`/notes/${n.slug}`, n.dateModified || n.date]))
-  const urls = routes.map(route => {
+  const urls = pages.map(({ route, url }) => {
     const lastmod = noteDates.get(route)
+    const links = alternatesFor(route)
+      .map(a => `\n    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('')
     return `  <url>
-    <loc>${BASE}${route}</loc>${lastmod ? `
-    <lastmod>${lastmod}</lastmod>` : ''}
+    <loc>${BASE}${url}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}${links}
   </url>`
   }).join('\n')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls}
 </urlset>
 `
@@ -472,14 +430,21 @@ async function main() {
 
   const template = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8')
   const { render } = await import(pathToFileURL(ssrBundle).href)
-  const pageMeta = buildPageMeta()
+  const pageMeta = { en: buildPageMeta('en'), es: buildPageMeta('es') }
 
   let ok = 0, fail = 0
 
-  for (const url of routes) {
+  for (const { route, lang, url } of pages) {
     try {
-      const appHtml = render(url)
-      const meta = pageMeta[url] || { title: DEFAULT_TITLE, description: DEFAULT_DESC, canonical: `${BASE}${url}`, ogType: 'website', schema: null }
+      // /es pages render under the /es basename so in-app links keep the prefix
+      const appHtml = render(url, url.startsWith('/es') ? 'es' : 'en')
+      const meta = {
+        title: DEFAULT_TITLE, description: DEFAULT_DESC, ogType: 'website', schema: null,
+        ...pageMeta[lang][route],
+        canonical: `${BASE}${url}`,
+        lang,
+        alternates: alternatesFor(route),
+      }
 
       // 1. Inject meta tags + schema
       let html = injectMeta(template, meta)
@@ -512,7 +477,7 @@ async function main() {
   // 4. Generate sitemap with lastmod dates
   const sitemap = generateSitemap()
   fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf-8')
-  console.log(`  ✓  sitemap.xml (${routes.length} URLs with lastmod)`)
+  console.log(`  ✓  sitemap.xml (${pages.length} URLs with hreflang alternates)`)
 
   console.log(`\n  Pre-rendered ${ok} routes${fail ? `, ${fail} failed` : ''}.`)
   if (fail > 0) process.exit(1)

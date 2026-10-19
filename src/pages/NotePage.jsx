@@ -17,7 +17,7 @@ const BASE_URL = 'https://byandresfe.com';
 
 const LINK_STYLE = { color: 'var(--color-fg)', textDecoration: 'underline', textDecorationColor: 'var(--color-accent)', textUnderlineOffset: '3px' };
 
-// Inline markup: **bold** and [label](href). Internal /notes links use the router.
+// Inline markup: **bold** and [label](href). Internal links use the router (keeps the /es prefix).
 function Inline({ text }) {
   if (typeof text !== 'string') return text;
   return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g).map((part, i) => {
@@ -26,7 +26,7 @@ function Inline({ text }) {
     const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (!link) return part;
     const [, label, href] = link;
-    if (href.startsWith('/notes')) return <Link key={i} to={href} style={LINK_STYLE}>{label}</Link>;
+    if (href.startsWith('/')) return <Link key={i} to={href} style={LINK_STYLE}>{label}</Link>;
     const external = href.startsWith('http');
     return (
       <a key={i} href={href} style={LINK_STYLE} {...(external && { target: '_blank', rel: 'noopener noreferrer' })}>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
+import { localizePath } from '../utils/i18nRoutes.js';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 const ACCENT = '#ff2540';
@@ -92,7 +93,7 @@ export default function TalkCard({ talk, lang, featured = false, index = 0, comp
       transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.07 * index }}
     >
       {talk.to.includes('#')
-        ? <a href={talk.to} style={linkStyle} aria-label={t(talk.title)} {...hover}>{body}</a>
+        ? <a href={localizePath(talk.to, lang)} style={linkStyle} aria-label={t(talk.title)} {...hover}>{body}</a>
         : <Link to={talk.to} style={linkStyle} aria-label={t(talk.title)} {...hover}>{body}</Link>}
     </m.div>
   );
