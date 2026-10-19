@@ -2496,7 +2496,8 @@ export const cases = [
     seoDescription: 'Game UX/UI case study for Steal an Egg on Fortnite (UEFN): controller navigation with the D-pad, a production UI system and hands-on Technical UI implementation.',
     ogTitle: 'Steal an Egg | Roblox to Fortnite UI Adaptation',
     ogDescription: 'UX/UI Lead and Technical UI case study: D-pad navigation, a production UI system and implemented shops, hotbar and leaderboard for a Fortnite island.',
-    thumbnailAlt: 'Steal an Egg — Fortnite HUD mockup with D-pad prompts for the Shop/Index and Eggs/Pets menu groups',
+    thumbnailAlt: 'Steal an Egg key art: a player in Fortnite carrying a giant spiked egg away from a sleeping orange dinosaur',
+    trailerSrc: '/cases/steal-an-egg/steal-an-egg-trailer.mp4',
     role: 'UX/UI Lead · Technical UI',
     platform: ['UEFN', 'Fortnite'],
     heroMeta: ['UX/UI Lead', 'Technical UI Implementation', 'Fortnite / UEFN', '2026'],
@@ -2536,17 +2537,13 @@ export const cases = [
         body: 'Steal an Egg is a Fortnite adaptation of a game that first found its audience on Roblox. Players steal eggs, hatch pets, earn income from them, buy speed upgrades and keep progressing.\n\nThe Fortnite version is a collaboration between Do Big Studios and TeraCreators, built in UEFN.\n\nI led UX/UI and implemented part of the interface myself. Engineering implemented screens too, working from the UI system I built, so my files had to hold up as production material and not only as design reference.',
         bodyEs: 'Steal an Egg es la adaptación a Fortnite de un juego que encontró primero su audiencia en Roblox. El jugador roba huevos, incuba mascotas, genera ingresos con ellas, compra mejoras de velocidad y sigue progresando.\n\nLa versión de Fortnite es una colaboración entre Do Big Studios y TeraCreators, construida en UEFN.\n\nLideré UX/UI e implementé parte de la interfaz. Ingeniería también implementó pantallas a partir del sistema de UI que construí, así que mis archivos tenían que servir como material de producción y no solo como referencia de diseño.',
         rows: [
-          { cols: 1, items: [{ src: '/cases/steal-an-egg/hud.webp', aspect: '16/9', alt: 'Fortnite HUD mockup: Shop/Index group on the left, Eggs/Pets group on the right, hotbar at the bottom, each with its gamepad prompt', caption: 'HUD with its three entry points · Figma mockup', captionEs: 'HUD con sus tres accesos · mockup en Figma' }] },
+          { cols: 2, items: [{ src: '/cases/steal-an-egg/hud.webp', aspect: '16/9', alt: 'Fortnite HUD mockup: Shop/Index group on the left, Eggs/Pets group on the right, hotbar at the bottom, each with its gamepad prompt', caption: 'HUD with its three entry points · Figma mockup', captionEs: 'HUD con sus tres accesos · mockup en Figma' }, { src: '/cases/steal-an-egg/hud-ingame.webp', aspect: '16/9', alt: 'In-game HUD in Fortnite: Shop and Index buttons on the left with a D-pad prompt, Eggs and Pets on the right, LB/RB hotbar at the bottom and a Zoom 1/5 indicator', caption: 'The same HUD in game · gamepad prompts', captionEs: 'El mismo HUD en el juego · prompts de mando' }] },
         ],
         points: [
           { label: 'UX/UI Lead' },
           { label: 'Technical UI' },
           { label: 'Fortnite / UEFN' },
           { label: 'Do Big Studios × TeraCreators' },
-        ],
-        pending: [
-          { file: 'hero.jpg + hero.webp + /thumbnails/steal-an-egg(-sm).webp', need: 'Real gameplay capture. The hero and card currently use a Figma mockup.' },
-          { file: 'hud-ingame.webp', need: 'In-game HUD capture showing the main entry points, to replace or pair with this mockup.' },
         ],
       },
       {
@@ -2631,6 +2628,13 @@ export const cases = [
             ],
           },
           {
+            label: 'Left group in game', labelEs: 'Grupo izquierdo en el juego',
+            cols: 1,
+            items: [
+              { video: '/cases/steal-an-egg/clip-menus.mp4', src: '/cases/steal-an-egg/clip-menus-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Shop opens and moves through Speed, money, Featured and Passes, then the Pet Index pages through its collections', caption: 'Shop and Index in game · gamepad', captionEs: 'Shop e Index en el juego · mando' },
+            ],
+          },
+          {
             label: 'Right group · D-pad Right', labelEs: 'Grupo derecho · D-pad derecha',
             cols: 2,
             items: [
@@ -2647,11 +2651,9 @@ export const cases = [
           },
         ],
         pending: [
-          { file: 'clip-nav-left.mp4', need: 'Opening the left group and selecting tabs, recorded in game with a gamepad.' },
           { file: 'clip-nav-right.mp4', need: 'Opening the right group and selecting tabs.' },
           { file: 'clip-inventory.mp4', need: 'Opening the inventory with D-pad Up (shows the bottom-to-top motion).' },
           { file: 'clip-close-b.mp4', need: 'Closing a shop with B.' },
-          { file: 'video renderer', need: 'CasePage showcase rows only render images today. Add a video item (controls, no autoplay under reduced motion) when the first clip arrives.' },
         ],
       },
       {
@@ -2659,8 +2661,8 @@ export const cases = [
         bodyFirst: true,
         toc: 'Camera & Speed', tocEs: 'Cámara y velocidad',
         title: 'Camera Zoom and the Speed Setting', titleEs: 'Zoom de cámara y ajuste de velocidad',
-        body: 'Two smaller adaptations follow the same reasoning.\n\nCamera. Within the technical scope of our implementation we did not have the mouse-scroll zoom the Roblox version uses. We approximated it with five discrete zoom steps, on B for gamepad and Q on PC. My part was the adaptation proposal. I did not program the camera system.\n\nSpeed. After buying many speed upgrades, a player can move too fast to walk comfortably between the physical shops in the world. The original solves this with a toggle on the HUD. In our adaptation the adjustment lives in Settings, reached from the left group.\n\nThat move has a cost. It takes a persistent control off the HUD, and it also puts the option more steps away and makes it less visible.',
-        bodyEs: 'Dos adaptaciones más pequeñas siguen el mismo razonamiento.\n\nCámara. En el alcance técnico de nuestra implementación no contábamos con el zoom por scroll del mouse que usa la versión de Roblox. Nos aproximamos con cinco pasos discretos de zoom, en B para mando y Q en PC. Mi parte fue la propuesta de adaptación. No programé el sistema de cámara.\n\nVelocidad. Después de comprar muchas mejoras de velocidad, el jugador puede moverse demasiado rápido para desplazarse con comodidad entre las tiendas físicas del mundo. El original lo resuelve con un toggle en el HUD. En nuestra adaptación el ajuste vive en Settings, al que se llega desde el grupo izquierdo.\n\nEse cambio tiene un costo. Quita un control persistente del HUD, y también deja la opción a más pasos y la hace menos visible.',
+        body: 'Two smaller adaptations follow the same reasoning.\n\nCamera. Within the technical scope of our implementation we did not have the mouse-scroll zoom the Roblox version uses. We approximated it with five discrete zoom steps, on B for gamepad and Q on PC. My part was the adaptation proposal. I did not program the camera system.\n\nSpeed. After buying many speed upgrades, a player can move too fast to walk comfortably between the physical shops in the world. The original solves this with a toggle on the HUD. In our adaptation the adjustment lives in Settings, reached from the left group.\n\nThat move has a cost. It takes a persistent control off the HUD, and it also puts the option more steps away and makes it less visible.\n\nIn internal playtests we saw players turn the setting on inside the safe zone, where the shops are, and off again when they left it. Each change meant navigating Settings again. We added a third state next to Off and On: Safe zone only, which applies the slower speed inside the zone and restores full speed outside it. This was an observation from internal tests; we did not measure its effect.',
+        bodyEs: 'Dos adaptaciones más pequeñas siguen el mismo razonamiento.\n\nCámara. En el alcance técnico de nuestra implementación no contábamos con el zoom por scroll del mouse que usa la versión de Roblox. Nos aproximamos con cinco pasos discretos de zoom, en B para mando y Q en PC. Mi parte fue la propuesta de adaptación. No programé el sistema de cámara.\n\nVelocidad. Después de comprar muchas mejoras de velocidad, el jugador puede moverse demasiado rápido para desplazarse con comodidad entre las tiendas físicas del mundo. El original lo resuelve con un toggle en el HUD. En nuestra adaptación el ajuste vive en Settings, al que se llega desde el grupo izquierdo.\n\nEse cambio tiene un costo. Quita un control persistente del HUD, y también deja la opción a más pasos y la hace menos visible.\n\nEn playtests internos vimos que los jugadores activaban el ajuste dentro de la safe zone, donde están las tiendas, y lo desactivaban al salir. Cada cambio obligaba a volver a navegar Settings. Añadimos un tercer estado junto a Off y On: Safe zone only, que aplica la velocidad reducida dentro de la zona y la recupera fuera. Fue una observación de pruebas internas; no medimos su efecto.',
         tables: [
           {
             caption: 'Original and adaptation', captionEs: 'Original y adaptación',
@@ -2676,10 +2678,17 @@ export const cases = [
             ],
           },
         ],
+        rows: [
+          {
+            cols: 2,
+            items: [
+              { video: '/cases/steal-an-egg/clip-speed.mp4', src: '/cases/steal-an-egg/clip-speed-poster.webp', aspect: '16/9', alt: 'Gameplay clip: a player with a large speed upgrade runs across several themed zones of the map in seconds', caption: 'Crossing the map at high speed', captionEs: 'Cruzar el mapa a alta velocidad' },
+              { video: '/cases/steal-an-egg/clip-slowmode.mp4', src: '/cases/steal-an-egg/clip-slowmode-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Settings screen with Slow Mode set to Off, On or Safe Zone Only, with a line explaining the selected option', caption: 'Slow Mode in Settings: Off, On, Safe zone only', captionEs: 'Slow Mode en Settings: Off, On, Safe zone only' },
+            ],
+          },
+        ],
         pending: [
           { file: 'clip-zoom.mp4', need: 'Cycling through the five zoom steps with B (or Q on PC).' },
-          { file: 'clip-speed.mp4', need: 'Changing the speed setting in Settings and walking between physical shops before and after.' },
-          { file: 'settings-ingame.webp', need: 'In-game capture of the Settings screen showing the speed setting.' },
         ],
       },
       {
@@ -2755,6 +2764,12 @@ export const cases = [
             items: [
               { src: '/cases/steal-an-egg/shop-main.webp', aspect: '4/3', fit: 'contain', alt: 'Main Shop window with a limited-time egg offer, passes and speed packs', caption: 'Shop · Figma design', captionEs: 'Shop · diseño en Figma' },
               { src: '/cases/steal-an-egg/shop-speed.webp', aspect: '4/3', fit: 'contain', alt: 'Speed Shop window with a double-speed offer, treadmill upgrade and speed packs', caption: 'Speed shop · Figma design', captionEs: 'Tienda de velocidad · diseño en Figma' },
+            ],
+          },
+          {
+            cols: 1,
+            items: [
+              { video: '/cases/steal-an-egg/clip-trails.mp4', src: '/cases/steal-an-egg/clip-trails-poster.webp', aspect: '16/9', alt: 'Gameplay clip: the Trail Shop opens in game and scrolls through trail cards with speed multipliers and Equip and Unequip buttons', caption: 'Trail shop in game', captionEs: 'Tienda de trails en el juego' },
             ],
           },
         ],

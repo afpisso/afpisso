@@ -1073,6 +1073,79 @@ function ShowcaseShot({ shot, lang, onOpen, number, aspect, fill = false, overla
   );
 }
 
+// Silent gameplay loop — plays only while on screen, never autoplays under
+// reduced motion, and always offers a pause control (moving content > 5s)
+function ShowcaseClip({ shot, lang, number }) {
+  const caption = pickLang(shot, 'caption', lang);
+  const shouldReduce = useReducedMotion();
+  const videoRef = useRef(null);
+  const [paused, setPaused] = useState(!!shouldReduce);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = videoRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.35 });
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const node = videoRef.current;
+    if (!node) return;
+    if (visible && !paused) node.play().catch(() => {});
+    else node.pause();
+  }, [visible, paused]);
+
+  const label = paused
+    ? (lang === 'es' ? 'Reproducir clip' : 'Play clip')
+    : (lang === 'es' ? 'Pausar clip' : 'Pause clip');
+
+  return (
+    <figure style={{ margin: 0, minWidth: 0 }}>
+      <div style={{ position: 'relative', aspectRatio: shot.aspect || SHOT_ASPECT, overflow: 'hidden', border: `1px solid ${RULE}`, backgroundColor: '#000' }}>
+        <video
+          ref={videoRef}
+          src={shot.video}
+          poster={shot.src}
+          muted
+          loop
+          playsInline
+          preload="none"
+          aria-label={shot.alt || caption}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <button
+          type="button"
+          onClick={() => setPaused(p => !p)}
+          aria-label={label}
+          title={label}
+          style={{
+            position: 'absolute', right: 10, bottom: 10, zIndex: 5,
+            width: 32, height: 32, display: 'grid', placeItems: 'center',
+            color: FG, backgroundColor: 'rgba(8,8,8,0.82)', border: '1px solid rgba(245,245,243,0.18)',
+            cursor: 'pointer',
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="currentColor">
+            {paused ? <path d="M2 1l9 5-9 5z" /> : <><rect x="2" y="1" width="3" height="10" /><rect x="7" y="1" width="3" height="10" /></>}
+          </svg>
+        </button>
+      </div>
+      {caption && (
+        <figcaption style={{
+          display: 'flex', gap: 8, alignItems: 'baseline', marginTop: 10,
+          fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'var(--color-fg-mute)', lineHeight: 1.5,
+        }}>
+          {number && <span style={{ color: 'var(--color-accent-45)', fontWeight: 700 }}>{pad2(number)}</span>}
+          <span>{caption}</span>
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 // Hero composition — three real screens directly under the title
 function ShowcaseTrio({ shots, lang, title }) {
   const [openZoom, zoomModal] = useShowcaseZoom(shots.map(s => s.src), title);
@@ -1117,7 +1190,9 @@ function ShotRow({ row, lang, startIndex, numberStart = startIndex, onOpen }) {
             className={scroll ? 'shrink-0 basis-[82%] snap-start md:basis-auto' : 'md:[grid-column:span_var(--span)/span_var(--span)]'}
             style={{ minWidth: 0, '--span': shot.span || 1 }}
           >
-            <ShowcaseShot shot={shot} lang={lang} number={numberStart + i + 1} onOpen={() => onOpen(startIndex + i)} />
+            {shot.video
+              ? <ShowcaseClip shot={shot} lang={lang} number={numberStart + i + 1} />
+              : <ShowcaseShot shot={shot} lang={lang} number={numberStart + i + 1} onOpen={() => onOpen(startIndex + i)} />}
           </div>
         ))}
       </div>
