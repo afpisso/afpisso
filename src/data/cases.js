@@ -2519,14 +2519,14 @@ export const cases = [
     tags: ['UEFN', 'UX/UI Lead', 'Controller Navigation', 'UI Systems', 'Technical UI'],
     relatedNotes: ['uefn-ux-lessons', 'what-is-a-game-ui-system', 'clean-hud-vs-clear-hud'],
     cta: 'View Steal an Egg case',
-    // Public reference, verified on fortnite.gg/island/6898-9449-5160 on Oct 4, 2026
+    // Public reference, verified on fortnite.gg/island/6898-9449-5160 on Oct 19, 2026
     outcomeStats: [
-      { value: '18,829', label: 'All-time peak concurrent players · Fortnite.GG · checked Oct 4, 2026' },
-      { value: 'Sep 28', label: '2026 release · peak recorded within the first week' },
+      { value: '73,770', label: 'All-time peak concurrent players · Fortnite.GG · checked Oct 19, 2026' },
+      { value: 'Sep 28', label: '2026 release · peak reached on Oct 17, three weeks after launch' },
     ],
     outcomeStatsEs: [
-      { value: '18.829', label: 'Pico histórico de jugadores concurrentes · Fortnite.GG · consultado el 4 oct 2026' },
-      { value: '28 sep', label: 'Lanzamiento 2026 · pico registrado en la primera semana' },
+      { value: '73.770', label: 'Pico histórico de jugadores concurrentes · Fortnite.GG · consultado el 19 oct 2026' },
+      { value: '28 sep', label: 'Lanzamiento 2026 · pico alcanzado el 17 oct, tres semanas después' },
     ],
     showcase: [
       {
@@ -2795,7 +2795,7 @@ export const cases = [
         status: 'Live',
       },
       outcome:
-        'Fortnite.GG lists Steal an Egg as released on September 28, 2026, with an all-time peak of 18,829 concurrent players reached in its first week. I checked that figure on October 4, 2026, when the live count was around 8,800.\n\nThat number belongs to the game and to the whole team. It does not show that my UX decisions changed retention, conversion or engagement, and I have no usability test results or before-and-after comparisons that would.\n\nWhat I can point to is what shipped: the D-pad navigation model, the UI system that engineering and I worked from, and the shops, hotbar, leaderboard and CTA and reward animations I implemented.',
+        'Fortnite.GG lists Steal an Egg as released on September 28, 2026, with an all-time peak of 73,770 concurrent players reached on October 17, 2026. I checked that figure on October 19, 2026, when the live count was around 14,100.\n\nThat number belongs to the game and to the whole team. It does not show that my UX decisions changed retention, conversion or engagement, and I have no usability test results or before-and-after comparisons that would.\n\nWhat I can point to is what shipped: the D-pad navigation model, the UI system that engineering and I worked from, and the shops, hotbar, leaderboard and CTA and reward animations I implemented.',
       whatILearned:
         'Adapting an interface between platforms was mostly a question of inputs, not of screens. The screens could stay close to the original. What had to be redesigned was how the player reaches them, and each answer depended on what our UEFN implementation could support.\n\nImplementing part of the UI myself meant I met those limits directly instead of hearing about them at handoff.',
       nextSteps:
@@ -2814,7 +2814,7 @@ export const cases = [
         status: 'Activo',
       },
       outcome:
-        'Fortnite.GG registra el lanzamiento de Steal an Egg el 28 de septiembre de 2026, con un pico histórico de 18.829 jugadores concurrentes alcanzado en su primera semana. Consulté la cifra el 4 de octubre de 2026, cuando el conteo en vivo rondaba los 8.800.\n\nEse número es del juego y de todo el equipo. No demuestra que mis decisiones de UX cambiaran la retención, la conversión o el engagement, y no tengo resultados de pruebas de usabilidad ni comparativas de antes y después que lo hagan.\n\nLo que sí puedo señalar es lo que se entregó: el modelo de navegación con D-pad, el sistema de UI con el que trabajamos ingeniería y yo, y las tiendas, la hotbar, el leaderboard y las animaciones de CTA y recompensas que implementé.',
+        'Fortnite.GG registra el lanzamiento de Steal an Egg el 28 de septiembre de 2026, con un pico histórico de 73.770 jugadores concurrentes alcanzado el 17 de octubre de 2026. Consulté la cifra el 19 de octubre de 2026, cuando el conteo en vivo rondaba los 14.100.\n\nEse número es del juego y de todo el equipo. No demuestra que mis decisiones de UX cambiaran la retención, la conversión o el engagement, y no tengo resultados de pruebas de usabilidad ni comparativas de antes y después que lo hagan.\n\nLo que sí puedo señalar es lo que se entregó: el modelo de navegación con D-pad, el sistema de UI con el que trabajamos ingeniería y yo, y las tiendas, la hotbar, el leaderboard y las animaciones de CTA y recompensas que implementé.',
       whatILearned:
         'Adaptar una interfaz entre plataformas fue sobre todo una cuestión de entradas, no de pantallas. Las pantallas podían mantenerse cerca del original. Lo que hubo que rediseñar fue cómo llega el jugador a ellas, y cada respuesta dependía de lo que nuestra implementación en UEFN podía soportar.\n\nImplementar parte de la UI hizo que me encontrara con esos límites directamente, en lugar de enterarme de ellos en el handoff.',
       nextSteps:
