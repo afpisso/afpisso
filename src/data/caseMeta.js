@@ -185,7 +185,7 @@ export const casesMeta = [
   {
     "id": "CASE-009",
     "slug": "roblox-game-ui-system",
-    "title": "Roblox Game UI System",
+    "title": "Brainrot Room Rush",
     "visibility": "public",
     "status": "SELECTED WORK",
     "role": "Game UX/UI Designer",

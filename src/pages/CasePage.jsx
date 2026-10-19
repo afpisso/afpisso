@@ -60,7 +60,10 @@ function HeroScrollReveal({ caseData, t, lang }) {
   });
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
 
-  const [line1, line2] = _splitTitle(caseData.title.toUpperCase());
+  // titleLines lets a case control the break (e.g. to match the game logo)
+  const [line1, line2] = caseData.titleLines
+    ? caseData.titleLines.map(s => s.toUpperCase())
+    : _splitTitle(caseData.title.toUpperCase());
   const titleDelay = (line1.length + (line2?.length ?? 0)) * 0.028;
 
   const charVariants = {
@@ -196,6 +199,18 @@ function HeroScrollReveal({ caseData, t, lang }) {
             )}
           </h1>
 
+          {/* Descriptor — what the work was, kept separate from the project name */}
+          {caseData.heroSubtitle && (
+            <m.p
+              style={{ margin: '18px 0 0', fontFamily: MONO, fontSize: 'clamp(15px, 1.7vw, 20px)', letterSpacing: '0.02em', lineHeight: 1.4, color: 'rgba(240,238,234,0.86)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: titleDelay + 0.2, ease: 'easeOut' }}
+            >
+              {(lang === 'es' && caseData.heroSubtitleEs) || caseData.heroSubtitle}
+            </m.p>
+          )}
+
           {/* Meta row — role · platform · year */}
           <m.div
             style={{ marginTop: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center', fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'rgba(245,245,243,0.38)', textTransform: 'uppercase' }}
@@ -224,6 +239,20 @@ function HeroScrollReveal({ caseData, t, lang }) {
             )}
             </>}
           </m.div>
+
+          {/* Live build — only when playUrl is defined */}
+          {caseData.playUrl && (
+            <m.div
+              style={{ marginTop: 22 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: titleDelay + 0.4, ease: 'easeOut' }}
+            >
+              <CyberBtn href={caseData.playUrl} target="_blank" rel="noopener noreferrer" size="sm">
+                {(lang === 'es' && caseData.playLabelEs) || caseData.playLabel}
+              </CyberBtn>
+            </m.div>
+          )}
         </div>
 
         {/* scroll cue — pulsing line at bottom-center */}
@@ -977,7 +1006,7 @@ function useShowcaseZoom(srcs, title) {
   return [setIndex, modal];
 }
 
-function ShowcaseShot({ shot, lang, onOpen, number, aspect, fill = false, overlayCaption = false, hideCaption = false }) {
+function ShowcaseShot({ shot, lang, onOpen, number, aspect, fill = false, overlayCaption = false, hideCaption = false, boxClassName }) {
   const [hovered, setHovered] = useState(false);
   const [scanKey, setScanKey] = useState(0);
   const caption = pickLang(shot, 'caption', lang);
@@ -989,12 +1018,13 @@ function ShowcaseShot({ shot, lang, onOpen, number, aspect, fill = false, overla
         type="button"
         onClick={onOpen}
         aria-label={`${caption || shot.alt || 'Screen'} — zoom`}
-        className={fill ? 'aspect-[1792/828] md:aspect-auto md:h-full' : undefined}
+        className={boxClassName || (fill ? 'aspect-[1792/828] md:aspect-auto md:h-full' : undefined)}
         onMouseEnter={() => { setHovered(true); setScanKey(k => k + 1); }}
         onMouseLeave={() => setHovered(false)}
         style={{
           position: 'relative', display: 'block', width: '100%', padding: 0,
-          aspectRatio: fill ? undefined : (aspect || shot.aspect || SHOT_ASPECT),
+          aspectRatio: fill || boxClassName ? undefined : (aspect || shot.aspect || SHOT_ASPECT),
+          '--ar': shot.aspect,
           overflow: 'hidden', cursor: 'zoom-in',
           border: `1px solid ${hovered ? 'var(--color-accent-35)' : RULE}`,
           backgroundColor: contain ? 'rgba(245,245,243,0.025)' : '#000',
@@ -1155,31 +1185,54 @@ function ShowcaseSection({ block, lang, caseTitle }) {
   const shots = useMemo(() => [
     ...(block.annotated ? [block.annotated] : []),
     ...(block.rows || []).flatMap(r => r.items),
-    ...(block.type === 'flow' ? block.items : []),
+    ...(block.type === 'flow' ? block.items.filter(s => s.src) : []),
   ], [block]);
-  const [openZoom, zoomModal] = useShowcaseZoom(shots.map(s => s.src), caseTitle);
+  const [openZoom, zoomModal] = useShowcaseZoom(shots.map(s => s.zoomSrc || s.src), caseTitle);
   let cursor = block.annotated ? 1 : 0;
 
   if (block.type === 'role') {
+    const cell = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 18, padding: 'clamp(18px, 2vw, 28px)', minHeight: 'clamp(124px, 11vw, 156px)', borderRight: `1px solid ${RULE}`, borderBottom: `1px solid ${RULE}` };
     return (
-      <m.section id={block.id} className="py-14 mb-2" style={{ borderBottom: `1px solid ${RULE}` }} {...reveal}>
-        <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-14 items-start">
-          <SectionLabelPrimary>{title}</SectionLabelPrimary>
-          <div>
-            <div className="sys-label mb-4" style={{ color: ACCENT }}>{block.group}</div>
-            <ol className="grid grid-cols-2 lg:grid-cols-4" style={{ borderTop: `1px solid ${RULE}`, borderLeft: `1px solid ${RULE}` }}>
-              {block.items.map((item, i) => (
-                <li key={item.label} style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '16px 16px 18px', minHeight: 92, borderRight: `1px solid ${RULE}`, borderBottom: `1px solid ${RULE}` }}>
-                  <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', color: 'var(--color-accent-45)', fontWeight: 700 }}>{pad2(i + 1)}</span>
-                  <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.15rem, 1.8vw, 1.5rem)', letterSpacing: '0.02em', lineHeight: 1.05, color: FG }}>{pickLang(item, 'label', lang)}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
+      <m.section id={block.id} className="py-16 md:py-24 mb-2" style={{ borderBottom: `1px solid ${RULE}` }} {...reveal}>
+        <SectionLabelPrimary>{title}</SectionLabelPrimary>
+        <ol className="grid grid-cols-2 lg:grid-cols-4" style={{ borderTop: `1px solid ${RULE}`, borderLeft: `1px solid ${RULE}` }}>
+          <li style={{ ...cell, backgroundColor: 'var(--color-accent-08)' }}>
+            <span className="sys-label" style={{ color: ACCENT }}>{pickLang(block, 'groupLabel', lang)}</span>
+            <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.7rem, 2.8vw, 2.5rem)', letterSpacing: '0.02em', lineHeight: 0.95, color: FG }}>{block.group}</span>
+          </li>
+          {block.items.map((item, i) => (
+            <li key={item.label} style={cell}>
+              <span style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: 'var(--color-accent-45)', fontWeight: 700 }}>{pad2(i + 1)}</span>
+              <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.35rem, 2.1vw, 1.9rem)', letterSpacing: '0.02em', lineHeight: 1, color: FG }}>{pickLang(item, 'label', lang)}</span>
+            </li>
+          ))}
+        </ol>
       </m.section>
     );
   }
+
+  const textBlock = (body || block.points) && (
+    <m.div {...reveal} className={`grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-6 md:gap-12 ${block.bodyFirst ? 'mb-10' : 'mt-10'}`}>
+      {body && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: '56ch' }}>
+          {body.split('\n\n').map((para, i) => (
+            <p key={i} style={{ fontFamily: MONO, fontSize: 'clamp(15px, 1.5vw, 17px)', color: 'rgba(240,238,234,0.86)', lineHeight: 1.75 }}>
+              {para}
+            </p>
+          ))}
+        </div>
+      )}
+      {block.points && (
+        <ul className="flex flex-wrap gap-2 content-start">
+          {block.points.map(pt => (
+            <li key={pt.label} style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-dim)', border: `1px solid ${RULE}`, padding: '7px 10px', lineHeight: 1.3 }}>
+              {pickLang(pt, 'label', lang)}
+            </li>
+          ))}
+        </ul>
+      )}
+    </m.div>
+  );
 
   return (
     <section id={block.id} className="py-14 md:py-20 mb-2" style={{ borderBottom: `1px solid ${RULE}` }}>
@@ -1189,6 +1242,7 @@ function ShowcaseSection({ block, lang, caseTitle }) {
         {meta && <span className="sys-label mb-10">{meta}</span>}
       </m.div>
 
+      {block.bodyFirst && textBlock}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
         {block.annotated && (
           <m.div {...reveal}>
@@ -1206,42 +1260,51 @@ function ShowcaseSection({ block, lang, caseTitle }) {
           );
         })}
 
-        {block.type === 'flow' && (
-          <m.ol {...reveal} className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-6">
-            {block.items.map((shot, i) => (
-              <li key={shot.src} style={{ minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 10 }}>
-                  <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', color: ACCENT, fontWeight: 700 }}>{pad2(i + 1)}</span>
-                  <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.2rem, 1.8vw, 1.5rem)', letterSpacing: '0.02em', color: FG, lineHeight: 1 }}>{pickLang(shot, 'caption', lang)}</span>
-                  {i < block.items.length - 1 && (
-                    <span aria-hidden="true" style={{ marginLeft: 'auto', fontFamily: MONO, color: 'var(--color-accent-45)' }}>→</span>
-                  )}
-                </div>
-                <ShowcaseShot shot={shot} lang={lang} aspect="16/10" hideCaption onOpen={() => openZoom(i)} />
-              </li>
-            ))}
-          </m.ol>
-        )}
+        {block.type === 'flow' && (() => {
+          let zoomIndex = -1;
+          const panel = 'max-h-[440px] md:h-[clamp(240px,24vw,300px)]';
+          return (
+            <m.ol {...reveal} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,1.3fr)_minmax(0,0.7fr)] gap-x-2 gap-y-10">
+              {block.items.map((stage, i) => {
+                const label = pickLang(stage, 'caption', lang);
+                const note = pickLang(stage, 'note', lang);
+                if (stage.src) zoomIndex += 1;
+                const idx = zoomIndex;
+                return (
+                  <li key={label} style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 12 }}>
+                      <span style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.16em', color: ACCENT, fontWeight: 700 }}>{pad2(i + 1)}</span>
+                      <span style={{ fontFamily: BEBAS, fontSize: 'clamp(1.35rem, 2vw, 1.75rem)', letterSpacing: '0.02em', color: FG, lineHeight: 1 }}>{label}</span>
+                      {i < block.items.length - 1 && (
+                        <span aria-hidden="true" className="hidden lg:inline" style={{ marginLeft: 'auto', fontFamily: MONO, color: 'var(--color-accent-45)' }}>→</span>
+                      )}
+                    </div>
+                    {stage.steps ? (
+                      <ol className={panel} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 14, padding: 'clamp(16px, 1.6vw, 22px)', border: `1px solid ${RULE}`, backgroundColor: 'rgba(245,245,243,0.025)' }}>
+                        {((lang === 'es' && stage.stepsEs) || stage.steps).map((step, s) => (
+                          <li key={step} style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: MONO, fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', color: s === stage.steps.length - 1 ? FG : 'var(--color-fg-dim)', lineHeight: 1.3 }}>
+                            <span aria-hidden="true" style={{ flexShrink: 0, width: 8, height: 8, border: `1px solid ${s === stage.steps.length - 1 ? ACCENT : 'var(--color-fg-mute)'}`, backgroundColor: s === stage.steps.length - 1 ? ACCENT : 'transparent', transform: 'rotate(45deg)' }} />
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <ShowcaseShot shot={stage} lang={lang} hideCaption boxClassName={`aspect-[var(--ar)] ${panel} md:aspect-auto`} onOpen={() => openZoom(idx)} />
+                    )}
+                    {note && (
+                      <p style={{ marginTop: 10, fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-mute)', lineHeight: 1.5 }}>{note}</p>
+                    )}
+                  </li>
+                );
+              })}
+            </m.ol>
+          );
+        })()}
+
+        <PendingAssets items={block.pending} />
       </div>
 
-      {(body || block.points) && (
-        <m.div {...reveal} className="grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-6 md:gap-12 mt-10">
-          {body && (
-            <p style={{ fontFamily: MONO, fontSize: 'clamp(15px, 1.5vw, 17px)', color: 'rgba(240,238,234,0.86)', lineHeight: 1.75, maxWidth: '56ch' }}>
-              {body}
-            </p>
-          )}
-          {block.points && (
-            <ul className="flex flex-wrap gap-2 content-start">
-              {block.points.map(pt => (
-                <li key={pt.label} style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-fg-dim)', border: `1px solid ${RULE}`, padding: '7px 10px', lineHeight: 1.3 }}>
-                  {pickLang(pt, 'label', lang)}
-                </li>
-              ))}
-            </ul>
-          )}
-        </m.div>
-      )}
+      {!block.bodyFirst && textBlock}
     </section>
   );
 }
@@ -2101,7 +2164,7 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabelPrimary>{t.casePage.sections.outcome}</SectionLabelPrimary>
-                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch' }}>{content.outcome}</p>
+                  <p style={{ fontFamily: MONO, fontSize: '16px', color: 'rgba(240,238,234,0.88)', lineHeight: 1.9, maxWidth: '68ch', whiteSpace: 'pre-line' }}>{content.outcome}</p>
                 </m.section>
               )}
 
@@ -2212,7 +2275,7 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{cp.whatILearned || 'What I learned'}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px' }}>{content.whatILearned}</p>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px', whiteSpace: 'pre-line' }}>{content.whatILearned}</p>
                 </m.section>
               )}
 
@@ -2228,7 +2291,7 @@ export default function CasePage({ onMenuOpen }) {
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <SectionLabel>{t.casePage.sections.nextSteps}</SectionLabel>
-                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85 }}>{content.nextSteps}</p>
+                  <p style={{ fontFamily: MONO, fontSize: '14px', color: DIM, lineHeight: 1.85, maxWidth: '640px', whiteSpace: 'pre-line' }}>{content.nextSteps}</p>
                 </m.section>
               )}
 

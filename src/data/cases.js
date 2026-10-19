@@ -2172,11 +2172,16 @@ export const cases = [
   {
     id: 'CASE-009',
     slug: 'roblox-game-ui-system',
-    title: 'Roblox Game UI System',
-    cardTitle: 'Roblox Game UI',
-    seoTitle: 'Roblox Game UI System | Andrés Pisso',
-    seoDescription: 'Game UX/UI case study for a shipped Roblox experience covering HUDs, rewards, stores, progression, collection systems and reusable UI components.',
-    thumbnailAlt: 'Roblox Game UI System — Card Album and Room Rewards screens from a shipped Roblox experience',
+    title: 'Brainrot Room Rush',
+    titleLines: ['Brainrot', 'Room Rush'],
+    descriptor: 'Roblox Game UI System',
+    heroSubtitle: 'Designing a Roblox Game UI System',
+    heroSubtitleEs: 'Diseño de un sistema de UI para un juego de Roblox',
+    seoTitle: 'Brainrot Room Rush | Roblox Game UI System | Andrés Pisso',
+    seoDescription: 'Game UX/UI case study for Brainrot Room Rush, a shipped Roblox experience covering HUDs, rewards, stores, progression, collection systems and reusable UI components.',
+    ogTitle: 'Brainrot Room Rush | Roblox Game UI System',
+    ogDescription: 'Game UX/UI case study for a shipped Roblox experience covering gameplay HUDs, rewards, stores, progression, collection systems and reusable UI components.',
+    thumbnailAlt: 'Brainrot Room Rush — Card Album and Room Rewards screens from the Roblox game UI system',
     role: 'Game UX/UI Designer',
     platform: ['Roblox'],
     heroMeta: ['Shipped Roblox Experience', 'Game UX/UI', 'Figma'],
@@ -2194,7 +2199,7 @@ export const cases = [
     descriptionEs: 'HUD, progresión, tiendas y sistemas de UI reutilizables para una experiencia de Roblox publicada.',
     tags: ['Roblox', 'Game UX/UI', 'UI Systems', 'Figma'],
     relatedNotes: ['what-is-a-game-ui-system', 'clean-hud-vs-clear-hud', 'feedback-reduces-guesswork'],
-    cta: 'View Roblox Game UI System case',
+    cta: 'View Brainrot Room Rush case',
     // Hero composition — three real screens rendered right under the title
     heroShots: [
       { src: '/cases/roblox-game-ui-system/album.webp', alt: 'Card Album screen with filters, rarity tags, item detail and equipment slots', caption: 'Card Album', captionEs: 'Álbum de cartas' },
@@ -2205,14 +2210,10 @@ export const cases = [
     showcase: [
       {
         id: 'cs-surface',
-        toc: 'UI Surface',
-        tocEs: 'Superficie UI',
-        title: 'The UI Surface',
-        titleEs: 'La superficie de UI',
-        body: 'One visual language across gameplay, progression, rewards and monetization.',
-        bodyEs: 'Un solo lenguaje visual para gameplay, progresión, recompensas y monetización.',
-        meta: '12 screens',
-        metaEs: '12 pantallas',
+        toc: 'UI Surface', tocEs: 'Superficie UI',
+        title: 'The UI Surface', titleEs: 'La superficie de UI',
+        body: 'One visual language across gameplay, progression, rewards and monetization.', bodyEs: 'Un solo lenguaje visual para gameplay, progresión, recompensas y monetización.',
+        meta: '12 screens', metaEs: '12 pantallas',
         rows: [
           {
             cols: 3,
@@ -2232,34 +2233,42 @@ export const cases = [
               { src: '/cases/roblox-game-ui-system/album.webp', caption: 'Card Album', captionEs: 'Álbum de cartas' },
             ],
           },
+          {
+            label: 'Featured screens', labelEs: 'Pantallas destacadas',
+            cols: 1,
+            items: [{ src: '/cases/roblox-game-ui-system/album.webp', caption: 'Card Album', captionEs: 'Álbum de cartas' }],
+          },
+          {
+            cols: 2,
+            items: [
+              { src: '/cases/roblox-game-ui-system/room-rewards.webp', caption: 'Room Rewards', captionEs: 'Recompensas de sala' },
+              { src: '/cases/roblox-game-ui-system/store-premium.webp', caption: 'Premium Store', captionEs: 'Tienda premium' },
+            ],
+          },
         ],
       },
       {
         id: 'cs-myrole',
         type: 'role',
-        toc: 'My Role',
-        tocEs: 'Mi rol',
-        title: 'My Role',
-        titleEs: 'Mi rol',
+        toc: 'My Role', tocEs: 'Mi rol',
+        title: 'My Role', titleEs: 'Mi rol',
+        groupLabel: 'Scope', groupLabelEs: 'Alcance',
         group: 'Game UX/UI',
         items: [
-          { label: 'User flows', labelEs: 'Flujos de usuario' },
-          { label: 'Wireframes' },
+          { label: 'User Flows', labelEs: 'Flujos de usuario' },
+          { label: 'Wireframes', labelEs: 'Wireframes' },
           { label: 'Final UI', labelEs: 'UI final' },
-          { label: 'Design system & components', labelEs: 'Design system y componentes' },
-          { label: 'Interaction states', labelEs: 'Estados de interacción' },
-          { label: 'Production assets', labelEs: 'Assets de producción' },
-          { label: 'Figma handoff', labelEs: 'Handoff en Figma' },
+          { label: 'Design System & Components', labelEs: 'Design system y componentes' },
+          { label: 'Interaction States', labelEs: 'Estados de interacción' },
+          { label: 'Production Assets', labelEs: 'Assets de producción' },
+          { label: 'Figma Handoff', labelEs: 'Handoff en Figma' },
         ],
       },
       {
         id: 'cs-hud',
-        toc: 'Gameplay HUD',
-        tocEs: 'HUD de gameplay',
-        title: 'Gameplay HUD',
-        titleEs: 'HUD de gameplay',
-        body: 'Gameplay information had to remain readable without competing with the action. Room progress, run time and enemies left sit in fixed top slots; weapon, ammo and actions stay on the thumb side.',
-        bodyEs: 'La información de juego tenía que seguir legible sin competir con la acción. Progreso de sala, tiempo y enemigos restantes viven en posiciones fijas arriba; arma, munición y acciones quedan del lado del pulgar.',
+        toc: 'Gameplay HUD', tocEs: 'HUD de gameplay',
+        title: 'Gameplay HUD', titleEs: 'HUD de gameplay',
+        body: 'Gameplay information had to remain readable without competing with the action. Room progress, run time and enemies left sit in fixed top slots; weapon, ammo and actions stay on the thumb side.', bodyEs: 'La información de juego tenía que seguir legible sin competir con la acción. Progreso de sala, tiempo y enemigos restantes viven en posiciones fijas arriba; arma, munición y acciones quedan del lado del pulgar.',
         rows: [
           { cols: 1, items: [{ src: '/cases/roblox-game-ui-system/gameplay-01.webp', aspect: '1920/864', caption: 'In-game capture', captionEs: 'Captura en juego' }] },
           {
@@ -2270,8 +2279,7 @@ export const cases = [
             ],
           },
           {
-            label: 'HUD iterations',
-            labelEs: 'Iteraciones del HUD',
+            label: 'HUD iterations', labelEs: 'Iteraciones del HUD',
             cols: 4,
             mobile: 'scroll',
             items: [
@@ -2292,12 +2300,9 @@ export const cases = [
       },
       {
         id: 'cs-rewards',
-        toc: 'Rewards',
-        tocEs: 'Recompensas',
-        title: 'Rewards that keep the loop moving',
-        titleEs: 'Recompensas que mantienen el loop en marcha',
-        body: 'Reward screens had to communicate value, rarity and next actions quickly while staying visually consistent with the game’s playful tone.',
-        bodyEs: 'Las pantallas de recompensa tenían que comunicar valor, rareza y siguiente acción rápido, sin salirse del tono juguetón del juego.',
+        toc: 'Rewards & Progression', tocEs: 'Recompensas y progresión',
+        title: 'Rewards & Progression', titleEs: 'Recompensas y progresión',
+        body: 'Reward screens had to communicate value, rarity and next actions quickly while staying visually consistent with the game’s playful tone.', bodyEs: 'Las pantallas de recompensa tenían que comunicar valor, rareza y siguiente acción rápido, sin salirse del tono juguetón del juego.',
         rows: [
           { cols: 1, items: [{ src: '/cases/roblox-game-ui-system/room-rewards.webp', caption: 'Room Rewards · pick one of four, the fourth is locked to the VIP store', captionEs: 'Recompensas de sala · elige una de cuatro, la cuarta está bloqueada para la tienda VIP' }] },
           {
@@ -2305,7 +2310,7 @@ export const cases = [
             items: [
               { src: '/cases/roblox-game-ui-system/victory.webp', caption: 'Victory', captionEs: 'Victoria' },
               { src: '/cases/roblox-game-ui-system/defeat.webp', caption: 'Defeat', captionEs: 'Derrota' },
-              { src: '/cases/roblox-game-ui-system/defeat-stats.webp', caption: 'Defeat · run stats', captionEs: 'Derrota · estadísticas' },
+              { src: '/cases/roblox-game-ui-system/defeat-stats.webp', caption: 'Defeat · run stats', captionEs: 'Derrota · estadísticas de la partida' },
             ],
           },
         ],
@@ -2317,17 +2322,13 @@ export const cases = [
       },
       {
         id: 'cs-stores',
-        toc: 'Stores',
-        tocEs: 'Tiendas',
-        title: 'One system, multiple store types',
-        titleEs: 'Un sistema, varios tipos de tienda',
-        body: 'A shared component language allowed different store categories to scale without redesigning the interaction model from scratch.',
-        bodyEs: 'Un lenguaje de componentes compartido permitió escalar distintas categorías de tienda sin rediseñar el modelo de interacción desde cero.',
+        toc: 'Stores', tocEs: 'Tiendas',
+        title: 'One System, Multiple Store Types', titleEs: 'Un sistema, varios tipos de tienda',
+        body: 'A shared component language allowed different store categories to scale without redesigning the interaction model from scratch.', bodyEs: 'Un lenguaje de componentes compartido permitió escalar distintas categorías de tienda sin rediseñar el modelo de interacción desde cero.',
         annotated: {
           src: '/cases/roblox-game-ui-system/store-premium.webp',
           alt: 'Premium Store with annotated tabs, item cards, pricing, rarity, obtained state and detail panel',
-          caption: 'Premium Store',
-          captionEs: 'Tienda premium',
+          caption: 'Premium Store', captionEs: 'Tienda premium',
           markers: [
             { x: 8.6, y: 20.5, label: 'Category tabs', labelEs: 'Tabs de categoría' },
             { x: 9.1, y: 34.2, label: 'Selected state', labelEs: 'Estado seleccionado' },
@@ -2364,17 +2365,13 @@ export const cases = [
       },
       {
         id: 'cs-collection',
-        toc: 'Collection',
-        tocEs: 'Colección',
-        title: 'Designing for collection, comparison and equipment',
-        titleEs: 'Diseñar para coleccionar, comparar y equipar',
-        body: 'The collection system needed to support browsing, comparison and equipment without losing clarity as the number of cards and states increased.',
-        bodyEs: 'El sistema de colección tenía que permitir explorar, comparar y equipar sin perder claridad a medida que crecían las cartas y los estados.',
+        toc: 'Collection', tocEs: 'Colección',
+        title: 'Designing for Collection, Comparison and Equipment', titleEs: 'Diseñar para coleccionar, comparar y equipar',
+        body: 'The collection system needed to support browsing, comparison and equipment without losing clarity as the number of cards and states increased.', bodyEs: 'El sistema de colección tenía que permitir explorar, comparar y equipar sin perder claridad a medida que crecían las cartas y los estados.',
         annotated: {
           src: '/cases/roblox-game-ui-system/album.webp',
           alt: 'Card Album with annotated filters, search, rarity, ownership, locked and equipped states, item detail, bonuses and equipment slots',
-          caption: 'Card Album',
-          captionEs: 'Álbum de cartas',
+          caption: 'Card Album', captionEs: 'Álbum de cartas',
           markers: [
             { x: 15.9, y: 20.8, label: 'Filters', labelEs: 'Filtros' },
             { x: 36.6, y: 20.8, label: 'Search', labelEs: 'Búsqueda' },
@@ -2389,8 +2386,7 @@ export const cases = [
         },
         rows: [
           {
-            label: 'Zoom-ins',
-            labelEs: 'Detalles',
+            label: 'Zoom-ins', labelEs: 'Detalles',
             cols: 2,
             items: [
               { src: '/cases/roblox-game-ui-system/zoom-album-cards.webp', aspect: '800/250', caption: 'Rarity, ownership, selected and equipped', captionEs: 'Rareza, cantidad, seleccionada y equipada' },
@@ -2408,12 +2404,9 @@ export const cases = [
       },
       {
         id: 'cs-system',
-        toc: 'UI System',
-        tocEs: 'Sistema UI',
-        title: 'One visual language. Multiple systems.',
-        titleEs: 'Un lenguaje visual. Varios sistemas.',
-        body: 'Reusable components helped maintain consistency across gameplay, stores, rewards and progression while making iteration faster.',
-        bodyEs: 'Los componentes reutilizables mantuvieron la consistencia entre gameplay, tiendas, recompensas y progresión, y aceleraron la iteración.',
+        toc: 'UI System', tocEs: 'Sistema UI',
+        title: 'One Visual Language. Multiple Systems.', titleEs: 'Un lenguaje visual. Varios sistemas.',
+        body: 'Reusable components helped maintain consistency across gameplay, stores, rewards and progression while making iteration faster.', bodyEs: 'Los componentes reutilizables mantuvieron la consistencia entre gameplay, tiendas, recompensas y progresión, y aceleraron la iteración.',
         rows: [
           {
             cols: 2,
@@ -2444,26 +2437,28 @@ export const cases = [
       {
         id: 'cs-flow',
         type: 'flow',
-        toc: 'Flow to Final UI',
-        tocEs: 'Del flujo a la UI final',
-        title: 'From structure to production-ready UI',
-        titleEs: 'De la estructura a UI lista para producción',
-        body: 'The process moved from player flow and information hierarchy into wireframes, final visual design and implementation-ready assets.',
-        bodyEs: 'El proceso fue del flujo del jugador y la jerarquía de información a wireframes, diseño visual final y assets listos para implementar.',
+        toc: 'Structure to Production', tocEs: 'De estructura a producción',
+        title: 'From Structure to Production-Ready UI', titleEs: 'De la estructura a UI lista para producción',
+        body: 'The process moved from player flow and information hierarchy into wireframes, final visual design and implementation-ready assets.', bodyEs: 'El proceso fue del flujo del jugador y la jerarquía de información a wireframes, diseño visual final y assets listos para implementar.',
         items: [
-          { src: '/cases/roblox-game-ui-system/flow-wireframe.webp', fit: 'contain', caption: 'Wireframe', captionEs: 'Wireframe' },
-          { src: '/cases/roblox-game-ui-system/flow-structure.webp', fit: 'contain', caption: 'Structure', captionEs: 'Estructura' },
-          { src: '/cases/roblox-game-ui-system/album.webp', fit: 'contain', caption: 'Final UI', captionEs: 'UI final' },
-          { src: '/cases/roblox-game-ui-system/sys-card-back.webp', fit: 'contain', caption: 'Production asset', captionEs: 'Asset de producción' },
+          {
+            caption: 'Flow', captionEs: 'Flujo',
+            note: 'Card Album · equip loop', noteEs: 'Álbum de cartas · loop de equipar',
+            steps: ['Open album', 'Filter or search', 'Select a card', 'Review detail & bonus', 'Equip card', 'Slot filled · bonus active'],
+            stepsEs: ['Abrir álbum', 'Filtrar o buscar', 'Elegir una carta', 'Revisar detalle y bono', 'Equipar carta', 'Slot ocupado · bono activo'],
+          },
+          { src: '/cases/roblox-game-ui-system/flow-02-wireframe.webp', zoomSrc: '/cases/roblox-game-ui-system/flow-structure.webp', aspect: '767/500', fit: 'contain', caption: 'Wireframe', captionEs: 'Wireframe', note: 'Structure pass', noteEs: 'Pase de estructura', alt: 'Card Album structure pass: card grid, detail panel and equip action' },
+          { src: '/cases/roblox-game-ui-system/flow-03-final.webp', zoomSrc: '/cases/roblox-game-ui-system/album.webp', aspect: '922/530', fit: 'contain', caption: 'Final UI', captionEs: 'UI final', note: 'Same area, final visual design', noteEs: 'Misma zona, diseño visual final', alt: 'Final Card Album: card states, detail panel, damage bonus and equip action' },
+          { src: '/cases/roblox-game-ui-system/sys-card-back.webp', aspect: '662/908', fit: 'contain', caption: 'Production', captionEs: 'Producción', note: 'Card asset for implementation', noteEs: 'Asset de carta para implementación', alt: 'Card back asset exported for implementation' },
         ],
       },
     ],
     content: {
       summary:
-        'I worked on the UX/UI of a shipped Roblox experience, designing player-facing flows from wireframes through final UI and production-ready assets. The interface system covered gameplay HUDs, rewards, stores, progression, player selection, tutorials and collection mechanics while maintaining a consistent visual language across the experience.',
+        'I worked on the UX/UI of Brainrot Room Rush, a shipped Roblox experience, designing player-facing flows from wireframes through final UI and production-ready assets. The interface system covered gameplay HUDs, rewards, stores, progression, player selection, tutorials and collection mechanics while maintaining a consistent visual language across the experience.',
       quickFacts: {
         role: 'Game UX/UI Designer',
-        game: 'Brainrot Horrors',
+        game: 'Brainrot Room Rush (formerly Brainrot Horrors)',
         platform: 'Roblox · PC / Mobile',
         scope: 'HUD · Rewards · Stores · Progression · Collection',
         tools: 'Figma',
@@ -2471,12 +2466,13 @@ export const cases = [
         status: 'Shipped',
       },
     },
+
     contentEs: {
       summary:
-        'Trabajé en el UX/UI de una experiencia de Roblox publicada, diseñando los flujos del jugador desde wireframes hasta UI final y assets listos para producción. El sistema de interfaz cubrió HUDs de gameplay, recompensas, tiendas, progresión, selección de jugadores, tutoriales y mecánicas de colección, con un lenguaje visual consistente en toda la experiencia.',
+        'Trabajé en el UX/UI de Brainrot Room Rush, una experiencia de Roblox publicada, diseñando los flujos del jugador desde wireframes hasta UI final y assets listos para producción. El sistema de interfaz cubrió HUDs de gameplay, recompensas, tiendas, progresión, selección de jugadores, tutoriales y mecánicas de colección, con un lenguaje visual consistente en toda la experiencia.',
       quickFacts: {
         role: 'Game UX/UI Designer',
-        game: 'Brainrot Horrors',
+        game: 'Brainrot Room Rush (antes Brainrot Horrors)',
         platform: 'Roblox · PC / Mobile',
         scope: 'HUD · Recompensas · Tiendas · Progresión · Colección',
         tools: 'Figma',
