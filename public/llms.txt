@@ -30,6 +30,7 @@
 ## Speaking
 
 - [Game UX/UI Talks & Workshops](https://byandresfe.com/speaking): Index of talks and workshops.
+- [El juego detrás del juego](https://byandresfe.com/speaking/detras-del-juego): CUN talk (Spanish) with interactive 3D slides: a game island built layer by layer, from sketch to game, with the roles behind it and the Colombian games market.
 - [60 segundos para que quieran seguir jugando](https://byandresfe.com/speaking/60s): Cali Game Jam talk (Spanish) on seven UX decisions for a game's first minute, with slides and a free checklist.
 - [Game UI Systems workshop](https://byandresfe.com/speaking/game-ui-systems): Colombia 5.0 workshop on building reusable, production-ready game UI systems in Figma.
 - La fricción correcta: IxDF Colombia talk (Spanish) on difficulty, feedback and motivation, listed on the speaking page.
