@@ -59,6 +59,16 @@ export const pageMeta = {
       "description": "Taller de Andrés Felipe Pisso en Colombia 5.0: cómo construir sistemas de UI para juegos reutilizables y listos para producción en Figma."
     }
   },
+  "/speaking/detras-del-juego": {
+    "en": {
+      "title": "The Game Behind the Game — Game Development Talk | Andrés Pisso",
+      "description": "Interactive slides from the CUN talk: a 3D island built layer by layer, from sketch to game, with the roles behind it and the Colombian games market."
+    },
+    "es": {
+      "title": "El juego detrás del juego — Charla sobre desarrollo de videojuegos",
+      "description": "Presentación interactiva de la charla en la CUN: una isla 3D que se construye capa a capa, del boceto al juego, con sus oficios y el mercado colombiano."
+    }
+  },
   "/speaking/60s": {
     "en": {
       "title": "60 Seconds to Keep Them Playing — Game UX Talk | Andrés Pisso",

@@ -1,6 +1,19 @@
 // Talks & workshops, newest first. `to` is the route of the talk page.
 export const talks = [
   {
+    id: 'detras-del-juego',
+    to: '/speaking/detras-del-juego',
+    cover: '/speaking/detras-del-juego/cover.webp',
+    event: 'CUN',
+    date: '18.11.2026',
+    format: { es: 'Charla · Presencial', en: 'Talk · In person' },
+    title: { es: 'El juego detrás del juego', en: 'El juego detrás del juego' },
+    summary: {
+      es: 'Qué hay detrás de un videojuego: una isla 3D que se construye capa a capa, del boceto al juego, con sus oficios y el mercado colombiano.',
+      en: 'What lies behind a video game: a 3D island built layer by layer, from sketch to game, with its roles and the Colombian market.',
+    },
+  },
+  {
     id: '60s',
     to: '/speaking/60s',
     cover: '/speaking/60s/cover.webp',

@@ -63,7 +63,7 @@ const DEFAULT_TITLE = pageMeta['/'].en.title
 const DEFAULT_DESC = pageMeta['/'].en.description
 
 // ── Routes to pre-render ────────────────────────────────────────────────────
-const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s', '/speaking/game-ui-systems']
+const staticRoutes = ['/', '/work', '/about', '/notes', '/resume', '/speaking', '/speaking/60s', '/speaking/detras-del-juego', '/speaking/game-ui-systems']
 
 const routes = [
   ...staticRoutes,
@@ -281,6 +281,19 @@ function buildPageMeta() {
     ],
   }
 
+  meta['/speaking/detras-del-juego'] = {
+    title: 'El juego detrás del juego — Charla sobre desarrollo de videojuegos',
+    description: '',
+    canonical: `${BASE}/speaking/detras-del-juego`,
+    ogType: 'website',
+    schema: [
+      breadcrumb(
+        { name: 'Speaking', url: `${BASE}/speaking` },
+        { name: 'El juego detrás del juego', url: `${BASE}/speaking/detras-del-juego` },
+      ),
+    ],
+  }
+
   meta['/notes'] = {
     title: `Field Notes on Game UX/UI Design — Andres Felipe Pisso`,
     description:
@@ -295,6 +308,7 @@ function buildPageMeta() {
   }
   // Spanish-language talk: share previews in the language of its audience
   Object.assign(meta['/speaking/60s'], pageMeta['/speaking/60s'].es, { lang: 'es' })
+  Object.assign(meta['/speaking/detras-del-juego'], pageMeta['/speaking/detras-del-juego'].es, { lang: 'es' })
 
   for (const note of fieldNotes) {
     const url = `/notes/${note.slug}`

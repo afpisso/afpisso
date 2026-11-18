@@ -39,6 +39,7 @@ const NotePage        = lazy(() => import('./pages/NotePage'));
 const ClassifiedPage  = lazy(() => import('./pages/ClassifiedPage'));
 const SpeakingPage    = lazy(() => import('./pages/SpeakingPage'));
 const TalkSixtyPage   = lazy(() => import('./pages/TalkSixtyPage'));
+const TalkDetrasPage  = lazy(() => import('./pages/TalkDetrasPage'));
 const GameUISystemsPage = lazy(() => import('./pages/GameUISystemsPage'));
 const SpeakingStrip   = lazy(() => import('./components/SpeakingStrip'));
 const LabHome         = lazy(() => import('./pages/LabHome')); // isolated prototype — /lab
@@ -257,6 +258,7 @@ function AppRoutes() {
           <Route path="/classified"   element={<ClassifiedPage  onMenuOpen={open} />} />
           <Route path="/speaking"     element={<SpeakingPage    onMenuOpen={open} />} />
           <Route path="/speaking/60s" element={<TalkSixtyPage   onMenuOpen={open} />} />
+          <Route path="/speaking/detras-del-juego" element={<TalkDetrasPage onMenuOpen={open} />} />
           <Route path="/speaking/game-ui-systems" element={<GameUISystemsPage onMenuOpen={open} />} />
           <Route path="/lab"          element={<LabRoute onMenuOpen={open} />} />
           {/* Legacy routes */}
