@@ -566,6 +566,9 @@ ol, ul { list-style: none; }
   body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
   .topbar .btn { display: none; }
   .cta-row .btn { flex: 1 1 100%; }
+  /* La franja roja del registro pasa a una esquina: no queda detrás del texto ni del botón */
+  .register__action { justify-items: stretch; }
+  .register__panel::before { bottom: auto; right: 0; width: 40%; height: 52px; opacity: 1; clip-path: polygon(30% 0, 100% 0, 100% 100%); }
   .prize--rest { align-content: start; min-height: 17rem; --art-w: 72%; --art-r: -12%; --art-b: -10%; }
 }
 
@@ -584,6 +587,10 @@ ol, ul { list-style: none; }
   .terms__item--wide { grid-column: 1 / -1; }
   .fair__list { grid-template-columns: 1fr 1fr; }
   .next__inner { grid-template-columns: 1fr auto; }
+}
+
+@media (min-width: 768px) and (max-width: 959px) {
+  .register__panel::before { bottom: auto; right: 0; width: 34%; height: 60px; opacity: 1; clip-path: polygon(30% 0, 100% 0, 100% 100%); }
 }
 
 @media (min-width: 960px) {
