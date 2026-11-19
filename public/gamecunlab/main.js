@@ -1,12 +1,15 @@
 // GAME CUN LAB — comportamiento de la landing (sin dependencias)
 
-// Pega aquí el enlace del formulario oficial de registro (Google Forms, Microsoft Forms, etc.).
-// Mientras esté vacío, los botones de registro llevan a la sección #registro y muestran un aviso.
+// Formulario oficial de registro. Solo lo abren los botones "Registrar mis códigos" ([data-form-open]);
+// los enlaces "Ya tengo mis códigos" van al ancla #registro.
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfB2RwsJnDpivFp2RFbHw8AVpbEEniTsscBvyIaEX8haJiBrg/viewform";
 
-// Horario oficial (hora de Colombia, UTC-5)
-const START = new Date("2026-11-19T16:00:00-05:00").getTime();
-const END = new Date("2026-11-20T13:00:00-05:00").getTime();
+// Única fuente de fechas (hora de Colombia, UTC-5).
+const START = new Date("2026-11-19T16:00:00-05:00").getTime(); // apertura del juego
+const END = new Date("2026-11-20T13:00:00-05:00").getTime();   // cierre del juego
+// Cierre del formulario: sin confirmar. Mientras sea null el formulario no se cierra solo.
+// Si se confirma una fecha distinta, ponla aquí (p. ej. "2026-11-20T18:00:00-05:00").
+const FORM_END = null;
 
 const root = document.documentElement;
 
@@ -19,37 +22,38 @@ const nowOverride = (() => {
 const now = () => Date.now() + (nowOverride ?? 0);
 
 /* ---------- Formulario ---------- */
-if (FORM_URL) {
-  document.querySelectorAll("[data-form-link]").forEach((a) => {
-    a.href = FORM_URL;
-    a.target = "_blank";
-    a.rel = "noopener";
-    if (!a.querySelector(".sr-only")) {
-      a.insertAdjacentHTML("beforeend", '<span class="sr-only">(se abre en una pestaña nueva)</span>');
-    }
-  });
-} else {
-  const primary = document.querySelector("[data-form-primary]");
-  const pending = document.querySelector("[data-form-pending]");
-  if (primary) primary.setAttribute("aria-disabled", "true");
-  if (primary) primary.addEventListener("click", (e) => { e.preventDefault(); pending?.focus(); });
-  if (pending) { pending.hidden = false; pending.tabIndex = -1; }
-}
+const formButtons = document.querySelectorAll("[data-form-open]");
+formButtons.forEach((a) => {
+  if (!FORM_URL) { a.setAttribute("aria-disabled", "true"); return; }
+  a.href = FORM_URL;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.insertAdjacentHTML("beforeend", '<span class="sr-only">(se abre en una pestaña nueva)</span>');
+});
+
+/* ---------- Reglas desplegables ---------- */
+const terms = document.getElementById("reglas-detalle");
+const openTerms = () => { if (terms) terms.open = true; };
+document.querySelectorAll("[data-open-rules]").forEach((a) => a.addEventListener("click", openTerms));
+if (location.hash === "#reglas-detalle") openTerms();
 
 /* ---------- Estado del concurso + cuenta regresiva ---------- */
 const $ = (s) => document.querySelector(s);
 const label = $("[data-status-label]");
 const sr = $("[data-status-sr]");
 const countdown = $("[data-countdown]");
-const closedMsg = $("[data-status-closed]");
+const formClosedMsg = $("[data-form-closed]");
 const units = {};
 document.querySelectorAll("[data-unit]").forEach((el) => (units[el.dataset.unit] = el));
-const trackBar = $("[data-track]");
-const trackText = $("[data-track-text]");
+
+const LABELS = {
+  before: "El concurso comienza el 19 nov a las 4:00 p. m.",
+  live: "Concurso abierto. Cierra el 20 nov a la 1:00 p. m.",
+  closed: "Concurso finalizado",
+};
 
 const pad = (n) => String(n).padStart(2, "0");
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-
 function spell(ms) {
   const m = Math.floor(ms / 60000);
   const d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
@@ -62,23 +66,22 @@ function spell(ms) {
 
 let lastState = "";
 let lastSrMinute = -1;
+let timer = 0;
 
 function update() {
   const t = now();
   const state = t < START ? "before" : t < END ? "live" : "closed";
-  const target = state === "before" ? START : END;
-  const left = Math.max(0, target - t);
+  const formOpen = FORM_END === null || t < new Date(FORM_END).getTime();
+  const left = Math.max(0, (state === "before" ? START : END) - t);
 
   if (state !== lastState) {
     root.dataset.state = state;
-    label.textContent =
-      state === "before" ? "El concurso abre en" :
-      state === "live" ? "En vivo · el concurso cierra en" :
-      "Concurso cerrado";
+    label.textContent = LABELS[state];
     countdown.hidden = state === "closed";
-    closedMsg.hidden = state !== "closed";
     lastState = state;
   }
+  root.dataset.form = formOpen ? "open" : "closed";
+  if (formClosedMsg) formClosedMsg.hidden = formOpen;
 
   if (state !== "closed") {
     const s = Math.floor(left / 1000);
@@ -88,32 +91,22 @@ function update() {
     units.s.textContent = pad(s % 60);
   }
 
-  // Texto para lectores de pantalla: se actualiza por minuto, no por segundo
+  // Lectores de pantalla: se actualiza por minuto, no por segundo
   const minute = Math.floor(left / 60000);
-  if (minute !== lastSrMinute) {
+  if (minute !== lastSrMinute || state === "closed") {
     lastSrMinute = minute;
     sr.textContent =
-      state === "before" ? `El concurso abre en ${spell(left)}.` :
-      state === "live" ? `El concurso está en curso y cierra en ${spell(left)}.` :
-      "El concurso cerró. Se están verificando los resultados.";
+      state === "before" ? `Faltan ${spell(left)} para que comience el concurso.` :
+      state === "live" ? `El concurso está abierto. Faltan ${spell(left)} para el cierre.` :
+      "El concurso finalizó.";
   }
 
-  // Línea de tiempo
-  const p = Math.min(1, Math.max(0, (t - START) / (END - START)));
-  trackBar.style.setProperty("--p", p.toFixed(4));
-  const txt =
-    state === "before" ? "Aún no empieza" :
-    state === "live" ? `En curso · quedan ${spell(left)}` :
-    "Finalizado";
-  if (trackText.textContent !== txt) trackText.textContent = txt;
-  trackBar.setAttribute("aria-label",
-    state === "live" ? `Línea de tiempo: ${Math.round(p * 100)} % del concurso transcurrido.` :
-    state === "before" ? "Línea de tiempo: el concurso aún no empieza." :
-    "Línea de tiempo: el concurso terminó.");
+  // Al terminar, el contador se detiene (salvo que falte cerrar el formulario)
+  if (state === "closed" && formOpen && FORM_END === null) clearInterval(timer);
 }
 
 update();
-setInterval(update, 1000);
+timer = setInterval(update, 1000);
 
 /* ---------- Revelado al hacer scroll ---------- */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
