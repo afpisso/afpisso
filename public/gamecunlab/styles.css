@@ -187,7 +187,7 @@ ol, ul { list-style: none; }
 .nav { display: none; gap: 1.75rem; }
 .nav a {
   font-size: .875rem; font-weight: 600; text-decoration: none; color: var(--ink-3);
-  position: relative; padding-block: .4rem;
+  position: relative; display: inline-flex; align-items: center; min-height: 44px; padding-block: .4rem;
 }
 .nav a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
@@ -326,6 +326,26 @@ ol, ul { list-style: none; }
 .step__qr img { width: 96px; height: 96px; padding: 8px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
 .step__qr figcaption { font-size: .875rem; font-weight: 700; max-width: 14ch; }
 .steps__note { margin-top: 1.5rem; font-weight: 600; color: var(--ink-2); }
+
+/* ---------- Charlas ---------- */
+.talks { background: var(--paper); padding-block: clamp(2rem, 1.6rem + 2vw, 3rem); }
+.talks__inner { display: grid; gap: 1.25rem 3rem; }
+.talks__head { display: grid; gap: .5rem; align-content: start; }
+.talks__heading {
+  font-family: var(--f-display); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem); line-height: .95;
+}
+.talks__head p { color: var(--ink-2); max-width: 40ch; }
+.talks__list { display: grid; gap: .75rem; }
+.talk {
+  display: grid; gap: .35rem; align-content: start;
+  padding: 1.1rem 1.25rem 1.25rem; background: var(--paper-2);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+.talk__kind { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-variation-settings: "wdth" 112; color: var(--red-deep); }
+.talk__title { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.4rem, 1.2rem + .8vw, 1.75rem); line-height: 1.05; text-wrap: balance; }
+.talk__when { color: var(--ink-2); font-weight: 600; }
+.talk .btn { margin-top: .5rem; width: fit-content; }
 
 /* ---------- Prizes ---------- */
 .prizes { background: var(--paper-2); overflow: clip; }
@@ -581,6 +601,7 @@ ol, ul { list-style: none; }
 
 @media (min-width: 768px) {
   .dock { display: none; }
+  .talks__list { grid-template-columns: 1fr 1fr; }
   .steps__list { grid-template-columns: repeat(3, 1fr); column-gap: 2rem; }
   .rules__grid { grid-template-columns: 1fr 1fr; }
   .terms__body { grid-template-columns: 1fr 1fr; }
@@ -636,6 +657,10 @@ ol, ul { list-style: none; }
   .prize--rest { grid-column: 2 / span 2; grid-row: 2; }
   .faq__grid { grid-template-columns: 4fr 7fr; gap: 4rem; }
   .faq__head { position: sticky; top: 104px; }
+}
+
+@media (min-width: 1200px) {
+  .talks__inner { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
 }
 
 @media (min-width: 1280px) {
