@@ -291,6 +291,7 @@ ol, ul { list-style: none; }
   content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--red-light);
   box-shadow: 0 0 0 0 oklch(0.7 0.19 25 / .6); animation: pulse 1.8s var(--ease-out) infinite;
 }
+.status__closed { color: var(--on-ink); font-weight: 600; line-height: 1.5; max-width: 44ch; }
 @keyframes pulse { to { box-shadow: 0 0 0 10px oklch(0.7 0.19 25 / 0); } }
 
 .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
@@ -553,7 +554,6 @@ ol, ul { list-style: none; }
 }
 .dock .btn { min-height: 48px; padding-inline: .5rem; font-size: .9375rem; text-transform: none; letter-spacing: 0; white-space: nowrap; }
 .dock.is-visible { transform: translateY(0); }
-[data-state="closed"] .dock { display: none; }
 
 /* ---------- Reveal motion ---------- */
 .js [data-reveal] {

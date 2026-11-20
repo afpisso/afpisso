@@ -98,7 +98,7 @@ function update() {
     sr.textContent =
       state === "before" ? `Faltan ${spell(left)} para que comience el concurso.` :
       state === "live" ? `El concurso está abierto. Faltan ${spell(left)} para el cierre.` :
-      "El concurso finalizó.";
+      "El concurso terminó, pero todavía puedes jugar. Gracias a todos los que participaron.";
   }
 
   // Al terminar, el contador se detiene (salvo que falte cerrar el formulario)
