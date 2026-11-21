@@ -2614,9 +2614,20 @@ export default function CasePage({ onMenuOpen }) {
             <p style={{ fontFamily: '"Play", sans-serif', fontSize: '14px', color: 'var(--color-fg-dim)', maxWidth: '52ch', lineHeight: 1.75 }}>
               {t.casePage_cta?.body}
             </p>
+            {caseData.slug === 'roblox-game-ui-system' && (
+              <p className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm" style={{ color: FG }}>
+                <Link className="underline underline-offset-4" to="/about">
+                  {lang === 'es' ? 'Sobre Andrés Pisso' : 'About Andrés Pisso'}
+                </Link>
+                <Link className="underline underline-offset-4" to="/case/zombie-dragon-adventure">
+                  {lang === 'es' ? 'Cómo diseñé la primera experiencia en D&D' : 'How I designed the first-time experience in D&D'}
+                </Link>
+              </p>
+            )}
           </div>
           <a
             href="mailto:hi@byandresfe.com"
+            onClick={() => analytics.emailClick(caseData.slug)}
             className="flex-shrink-0 flex items-center gap-2 px-6 py-3 text-[11px] tracking-widest uppercase transition-colors duration-200"
             style={{
               fontFamily: '"Play", sans-serif',
