@@ -24,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { fieldNotes } from '../src/data/fieldNotes.js'
 import { cases }      from '../src/data/cases.js'
 import { pageMeta } from '../src/data/pageMeta.js'
+import { buildNoteSchema, NOTE_SCHEMA_ID } from '../src/utils/noteSchema.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root      = path.resolve(__dirname, '..')
@@ -146,35 +147,6 @@ function buildNotesIndexSchema() {
 // Spanish-only notes publish their Spanish title/summary as the primary metadata
 const noteTitle = (note) => (note.language === 'es' ? note.titleEs : note.title)
 const noteSummary = (note) => (note.language === 'es' ? note.summaryEs : note.summary)
-
-function buildNoteSchema(note) {
-  const posting = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    '@id': `${BASE}/notes/${note.slug}#article`,
-    headline: noteTitle(note),
-    description: noteSummary(note),
-    url: `${BASE}/notes/${note.slug}`,
-    datePublished: note.date,
-    dateModified: note.dateModified || note.date,
-    inLanguage: note.language ? [note.language] : ['en', 'es'],
-    keywords: note.keywords || [note.category, 'Game UX', 'Game UI', 'UX Design'].join(', '),
-    author: PERSON_REF,
-    publisher: PERSON_REF,
-    isPartOf: { '@id': `${BASE}/notes#blog` },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/notes/${note.slug}` },
-  }
-  if (noteImage(note)) posting.image = `${BASE}${noteImage(note)}`
-  if (note.titleEs && !note.language)   posting.alternativeHeadline = note.titleEs
-  if (note.summaryEs && !note.language) posting.abstract = note.summaryEs
-  return [
-    breadcrumb(
-      { name: 'Field Notes', url: `${BASE}/notes` },
-      { name: noteTitle(note), url: `${BASE}/notes/${note.slug}` }
-    ),
-    posting,
-  ]
-}
 
 function buildCaseSchema(c) {
   const work = {
@@ -321,6 +293,7 @@ function buildPageMeta() {
       ogImage: noteImage(note) && `${BASE}${noteImage(note)}`,
       ogImageAlt: noteTitle(note),
       schema: buildNoteSchema(note),
+      schemaId: NOTE_SCHEMA_ID,
     }
   }
 
@@ -347,7 +320,7 @@ function buildPageMeta() {
 
 // ── HTML meta injection ─────────────────────────────────────────────────────
 function injectMeta(html, pageMeta) {
-  const { title, description, canonical, ogType, schema, ogImage, ogImageAlt, socialTitle, socialDescription, lang } = pageMeta
+  const { title, description, canonical, ogType, schema, schemaId, ogImage, ogImageAlt, socialTitle, socialDescription, lang } = pageMeta
 
   const t = escTitle(title)
   const d = escAttr(description)
@@ -448,7 +421,8 @@ function injectMeta(html, pageMeta) {
 
   // Inject page-specific schema before </head>
   if (schema) {
-    const tag = `\n    <script type="application/ld+json">\n    ${JSON.stringify(schema, null, 2)}\n    </script>`
+    const id = schemaId ? ` id="${schemaId}"` : ''
+    const tag = `\n    <script type="application/ld+json"${id}>\n    ${JSON.stringify(schema, null, 2)}\n    </script>`
     html = html.replace('</head>', `${tag}\n  </head>`)
   }
 

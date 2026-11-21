@@ -7,11 +7,10 @@ import { noteArticles } from '../data/noteArticles';
 import { cases } from '../data/cases';
 import { useLang } from '../contexts/LangContext';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { buildNoteSchema, NOTE_SCHEMA_ID } from '../utils/noteSchema.js';
 import SectionTag from '../components/SectionTag';
 import { m, useScroll, useTransform } from 'framer-motion';
 import { ZoomableImage } from '../components/ZoomModal';
-
-const BASE_URL = 'https://byandresfe.com';
 
 // ─── Block renderers ──────────────────────────────────────────────────────
 
@@ -233,11 +232,11 @@ export default function NotePage({ onMenuOpen }) {
 
   const meta    = fieldNotes.find((n) => n.slug === slug);
   const article = noteArticles?.[slug];
-  // Single-language notes (e.g. Spanish only) fall back to whatever exists
-  const blocks  = article?.[lang] ?? article?.en ?? article?.es ?? [];
+  const contentLang = meta?.language || lang;
+  const blocks = article?.[contentLang] ?? article?.en ?? article?.es ?? [];
 
-  const title = meta ? getNoteTitle(meta, lang) : 'Field Note';
-  const dateLocale = lang === 'es' ? 'es-CO' : 'en-US';
+  const title = meta ? getNoteTitle(meta, contentLang) : 'Field Note';
+  const dateLocale = contentLang === 'es' ? 'es-CO' : 'en-US';
 
   usePageMeta({
     // Mirrors the prerender: long titles drop the section label to avoid truncation
@@ -245,35 +244,22 @@ export default function NotePage({ onMenuOpen }) {
       ? `${meta.seoTitle} | ByAndresFe`
       : (`${title} — Field Notes | ByAndresFe`.length > 60 ? `${title} | ByAndresFe` : `${title} — Field Notes | ByAndresFe`),
     robots: meta ? 'index, follow' : 'noindex, follow',
-    description: meta
-      ? (lang === 'es' && meta.summaryEs ? meta.summaryEs : meta.summary)
-      : '',
-    article: meta ? { datePublished: meta.date, dateModified: meta.dateModified || meta.date } : undefined,
+    description: meta ? getNoteSummary(meta, contentLang) : '',
   });
 
-  // Inject BreadcrumbList schema for note pages
+  // Reuse the script emitted by the static build, or create it on client navigation.
   useEffect(() => {
     if (!meta) return;
-    const schemaId = `ld-json-note-${meta.slug}`;
-    let el = document.getElementById(schemaId);
-    const schema = {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL + '/' },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Field Notes', 'item': BASE_URL + '/notes' },
-        { '@type': 'ListItem', 'position': 3, 'name': title, 'item': `${BASE_URL}/notes/${meta.slug}` },
-      ],
-    };
+    let el = document.getElementById(NOTE_SCHEMA_ID);
     if (!el) {
       el = document.createElement('script');
       el.type = 'application/ld+json';
-      el.id = schemaId;
+      el.id = NOTE_SCHEMA_ID;
       document.head.appendChild(el);
     }
-    el.textContent = JSON.stringify(schema);
-    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
-  }, [meta, title]);
+    el.textContent = JSON.stringify(buildNoteSchema(meta, contentLang));
+    return () => el.remove();
+  }, [meta, contentLang]);
 
   // Next note in the list (circular)
   const idx      = fieldNotes.findIndex((n) => n.slug === slug);
@@ -315,7 +301,7 @@ export default function NotePage({ onMenuOpen }) {
       <main id="main-content">
 
         {/* ── Hero ─────────────────────────────────────────── */}
-        <section className="pt-40 pb-16 relative overflow-hidden" style={{ borderBottom: '1px solid var(--color-rule)' }}>
+        <section lang={meta.language} className="pt-40 pb-16 relative overflow-hidden" style={{ borderBottom: '1px solid var(--color-rule)' }}>
           {meta.cover && (
             <m.div
               style={{ y: coverY }}
@@ -378,11 +364,11 @@ export default function NotePage({ onMenuOpen }) {
                 letterSpacing: '0.16em', textTransform: 'uppercase', padding: '4px 10px',
                 ...typeStyle,
               }}>
-                {getNoteType(meta, lang)}
+                {getNoteType(meta, contentLang)}
               </span>
               <span className="sys-label">{meta.readTime}</span>
               <span className="sys-label">·</span>
-              <span className="sys-label">{getNoteCategory(meta, lang)}</span>
+              <span className="sys-label">{getNoteCategory(meta, contentLang)}</span>
               {meta.date && (
                 <>
                   <span className="sys-label">·</span>
@@ -419,8 +405,12 @@ export default function NotePage({ onMenuOpen }) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 }}
             >
-              {getNoteSummary(meta, lang)}
+              {getNoteSummary(meta, contentLang)}
             </m.p>
+            <p className="mt-4 text-sm">
+              {contentLang === 'es' ? 'Por ' : 'By '}
+              <Link to="/about" style={LINK_STYLE}>Andrés Felipe Pisso</Link>
+            </p>
           </div>
         </section>
 
